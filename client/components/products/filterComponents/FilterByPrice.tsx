@@ -64,7 +64,7 @@ export default function FilterByPrice({
                   (
                   {getFilterCount(
                     (product) =>
-                      product.price >= range.min && product.price <= range.max,
+                      product.price >= range.min && product.price <= range.max
                   )}
                   )
                 </span>

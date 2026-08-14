@@ -1,4 +1,4 @@
-import { CurvedArrowIcon } from '../../svg-icons';
+import { CurvedArrowIcon } from "../../svg-icons";
 import Link from "next/link";
 
 function TitlesStylesLargerTenDark() {

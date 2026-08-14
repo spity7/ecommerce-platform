@@ -1,4 +1,4 @@
-import { WaveShortIcon } from '../../svg-icons';
+import { WaveShortIcon } from "../../svg-icons";
 import Link from "next/link";
 import Image from "next/image";
 function BrandsStyle01() {

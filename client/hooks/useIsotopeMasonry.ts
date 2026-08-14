@@ -21,7 +21,7 @@ export type UseIsotopeMasonryOptions = {
 
 function unbindImagesLoaded(
   instance: ImagesLoadedInstance | null,
-  handler: (() => void) | null,
+  handler: (() => void) | null
 ) {
   if (!instance || !handler) return;
   instance.off("progress", handler);
@@ -38,7 +38,7 @@ export function useIsotopeMasonry(
     onReady,
     onRelayout,
   }: UseIsotopeMasonryOptions,
-  relayoutDeps: unknown[] = [],
+  relayoutDeps: unknown[] = []
 ): RefObject<IsotopeInstance | null> {
   const isotopeRef = useRef<IsotopeInstance | null>(null);
   const layoutRafRef = useRef<number | null>(null);
@@ -63,7 +63,7 @@ export function useIsotopeMasonry(
     const bindImagesLoaded = (grid: HTMLElement) => {
       unbindImagesLoaded(
         imagesLoadedInstanceRef.current,
-        imagesLoadedHandlerRef.current,
+        imagesLoadedHandlerRef.current
       );
 
       const handler = () => scheduleLayout();
@@ -84,7 +84,7 @@ export function useIsotopeMasonry(
       const { default: IsotopeCtor } = await import("isotope-layout");
       const Isotope = IsotopeCtor as unknown as new (
         element: Element,
-        options?: IsotopeOptions,
+        options?: IsotopeOptions
       ) => IsotopeInstance;
 
       if (!isMounted || !gridRef.current) return;
@@ -112,7 +112,7 @@ export function useIsotopeMasonry(
       }
       unbindImagesLoaded(
         imagesLoadedInstanceRef.current,
-        imagesLoadedHandlerRef.current,
+        imagesLoadedHandlerRef.current
       );
       imagesLoadedInstanceRef.current = null;
       imagesLoadedHandlerRef.current = null;
@@ -140,7 +140,7 @@ export function useIsotopeMasonry(
 
     unbindImagesLoaded(
       imagesLoadedInstanceRef.current,
-      imagesLoadedHandlerRef.current,
+      imagesLoadedHandlerRef.current
     );
 
     const handler = () => scheduleLayout();

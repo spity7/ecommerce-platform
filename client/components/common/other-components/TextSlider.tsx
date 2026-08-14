@@ -1,11 +1,17 @@
 export default function TextSlider({
-  parentClass = "rbt-component-area rbt-categories-scroll-area rbt-bg-color-white", bgClass
-}: { parentClass?: string; bgClass?: string }) {
+  parentClass = "rbt-component-area rbt-categories-scroll-area rbt-bg-color-white",
+  bgClass,
+}: {
+  parentClass?: string;
+  bgClass?: string;
+}) {
   return (
     <div className={parentClass}>
       <div className="wrapper">
         <div className="rbt-scroll-animation-container">
-          <div className={`rbt-scroll-animation-wrapper rbt-no-overlay ${bgClass}`}>
+          <div
+            className={`rbt-scroll-animation-wrapper rbt-no-overlay ${bgClass}`}
+          >
             <div className="rbt-scroll-animation rbt-scroll-right-left">
               {/* Start Single Testimonial  */}
               <div className="rbt-single-column-100">

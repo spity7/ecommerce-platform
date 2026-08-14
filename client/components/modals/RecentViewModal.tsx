@@ -1,4 +1,4 @@
-import { CloseIcon } from '../svg-icons';
+import { CloseIcon } from "../svg-icons";
 import ProductRating from "@/components/common/ui/ProductRating";
 import Image from "next/image";
 import { recentViewProducts } from "@/data/products/others";
@@ -70,8 +70,12 @@ export default function RecentViewModal() {
                             <Link
                               href={`/product-single-default/${product.id}`}
                             >
-                              <Image src={product.imgSrc} width={100}
-                                height={100} alt="Card Image" />
+                              <Image
+                                src={product.imgSrc}
+                                width={100}
+                                height={100}
+                                alt="Card Image"
+                              />
                             </Link>
                           </div>
                         </div>

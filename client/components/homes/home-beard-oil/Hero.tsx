@@ -81,7 +81,10 @@ export default function Hero() {
                                   : Number(item.price ?? 0)
                                 ).toFixed(2)}
                               </span>
-                              <OfferBadge price={item.price} oldPrice={item.oldPrice} />
+                              <OfferBadge
+                                price={item.price}
+                                oldPrice={item.oldPrice}
+                              />
                             </div>
                             <h1 className="title rbt-text-color-white">
                               {item.productTitle}

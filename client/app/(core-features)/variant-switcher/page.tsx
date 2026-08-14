@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 export default function VariantSwitcherPage() {
   return (
     <>
-            <VariantSwitcherBanner />
-            <VariantSwitcherComponents />
+      <VariantSwitcherBanner />
+      <VariantSwitcherComponents />
     </>
   );
 }

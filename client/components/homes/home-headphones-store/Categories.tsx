@@ -33,13 +33,19 @@ export default function Categories() {
                     />
                   </Link>
                 </div>
-                <Link href={`/shop-by-category`} className="rbt-btn rbt-btn-white rbt-btn-md">
+                <Link
+                  href={`/shop-by-category`}
+                  className="rbt-btn rbt-btn-white rbt-btn-md"
+                >
                   On Ear Headphone
                 </Link>
               </div>
               <div className="rbt-right-corner-portion">
                 <div className="rbt-corner-portion-wrapper">
-                  <Link href={`/shop-by-category`} className="rbt-card-link-btn">
+                  <Link
+                    href={`/shop-by-category`}
+                    className="rbt-card-link-btn"
+                  >
                     <i className="fa-solid fa-arrow-up-right" />
                   </Link>
                 </div>
@@ -59,13 +65,19 @@ export default function Categories() {
                     />
                   </Link>
                 </div>
-                <Link href={`/shop-by-category`} className="rbt-btn rbt-btn-white rbt-btn-md">
+                <Link
+                  href={`/shop-by-category`}
+                  className="rbt-btn rbt-btn-white rbt-btn-md"
+                >
                   Party Speakers
                 </Link>
               </div>
               <div className="rbt-right-corner-portion">
                 <div className="rbt-corner-portion-wrapper">
-                  <Link href={`/shop-by-category`} className="rbt-card-link-btn">
+                  <Link
+                    href={`/shop-by-category`}
+                    className="rbt-card-link-btn"
+                  >
                     <i className="fa-solid fa-arrow-up-right" />
                   </Link>
                 </div>
@@ -85,13 +97,19 @@ export default function Categories() {
                     />
                   </Link>
                 </div>
-                <Link href={`/shop-by-category`} className="rbt-btn rbt-btn-white rbt-btn-md">
+                <Link
+                  href={`/shop-by-category`}
+                  className="rbt-btn rbt-btn-white rbt-btn-md"
+                >
                   Sport Speakers
                 </Link>
               </div>
               <div className="rbt-right-corner-portion">
                 <div className="rbt-corner-portion-wrapper">
-                  <Link href={`/shop-by-category`} className="rbt-card-link-btn">
+                  <Link
+                    href={`/shop-by-category`}
+                    className="rbt-card-link-btn"
+                  >
                     <i className="fa-solid fa-arrow-up-right" />
                   </Link>
                 </div>
@@ -123,7 +141,10 @@ export default function Categories() {
                     </h5>
                   </div>
                   <div className="bottom-content">
-                    <Link href={`/shop-by-category`} className="rbt-btn rbt-btn-white rbt-btn-md">
+                    <Link
+                      href={`/shop-by-category`}
+                      className="rbt-btn rbt-btn-white rbt-btn-md"
+                    >
                       All In One System
                     </Link>
                   </div>
@@ -131,7 +152,10 @@ export default function Categories() {
               </div>
               <div className="rbt-right-corner-portion">
                 <div className="rbt-corner-portion-wrapper">
-                  <Link href={`/shop-by-category`} className="rbt-card-link-btn">
+                  <Link
+                    href={`/shop-by-category`}
+                    className="rbt-card-link-btn"
+                  >
                     <i className="fa-solid fa-arrow-up-right" />
                   </Link>
                 </div>
@@ -151,13 +175,19 @@ export default function Categories() {
                     />
                   </Link>
                 </div>
-                <Link href={`/shop-by-category`} className="rbt-btn rbt-btn-white rbt-btn-md">
+                <Link
+                  href={`/shop-by-category`}
+                  className="rbt-btn rbt-btn-white rbt-btn-md"
+                >
                   Portable Speakers
                 </Link>
               </div>
               <div className="rbt-right-corner-portion">
                 <div className="rbt-corner-portion-wrapper">
-                  <Link href={`/shop-by-category`} className="rbt-card-link-btn">
+                  <Link
+                    href={`/shop-by-category`}
+                    className="rbt-card-link-btn"
+                  >
                     <i className="fa-solid fa-arrow-up-right" />
                   </Link>
                 </div>
@@ -199,7 +229,10 @@ export default function Categories() {
               </div>
               <div className="rbt-right-corner-portion">
                 <div className="rbt-corner-portion-wrapper">
-                  <Link href={`/shop-by-category`} className="rbt-card-link-btn">
+                  <Link
+                    href={`/shop-by-category`}
+                    className="rbt-card-link-btn"
+                  >
                     <i className="fa-solid fa-arrow-up-right" />
                   </Link>
                 </div>
@@ -219,13 +252,19 @@ export default function Categories() {
                     />
                   </Link>
                 </div>
-                <Link href={`/shop-by-category`} className="rbt-btn rbt-btn-white rbt-btn-md">
+                <Link
+                  href={`/shop-by-category`}
+                  className="rbt-btn rbt-btn-white rbt-btn-md"
+                >
                   Gaming Microphone
                 </Link>
               </div>
               <div className="rbt-right-corner-portion">
                 <div className="rbt-corner-portion-wrapper">
-                  <Link href={`/shop-by-category`} className="rbt-card-link-btn">
+                  <Link
+                    href={`/shop-by-category`}
+                    className="rbt-card-link-btn"
+                  >
                     <i className="fa-solid fa-arrow-up-right" />
                   </Link>
                 </div>
@@ -245,13 +284,19 @@ export default function Categories() {
                     />
                   </Link>
                 </div>
-                <Link href={`/shop-by-category`} className="rbt-btn rbt-btn-white rbt-btn-md">
+                <Link
+                  href={`/shop-by-category`}
+                  className="rbt-btn rbt-btn-white rbt-btn-md"
+                >
                   All Categories
                 </Link>
               </div>
               <div className="rbt-right-corner-portion">
                 <div className="rbt-corner-portion-wrapper">
-                  <Link href={`/shop-by-category`} className="rbt-card-link-btn">
+                  <Link
+                    href={`/shop-by-category`}
+                    className="rbt-card-link-btn"
+                  >
                     <i className="fa-solid fa-arrow-up-right" />
                   </Link>
                 </div>

@@ -1,4 +1,4 @@
-import { UnimartLogoIcon } from '../components/svg-icons';
+import { UnimartLogoIcon } from "../components/svg-icons";
 import Link from "next/link";
 import Image from "next/image";
 import Footer10 from "@/components/footers/Footer10";

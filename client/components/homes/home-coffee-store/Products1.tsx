@@ -17,8 +17,8 @@ export default function Products1() {
                   <span className="rbt-bold--text">Items For You</span>
                 </h2>
                 <p className="b1 rbt-text-color-gray-600 mb--24">
-                  Explore our best-loved coffees and treats, thoughtfully crafted
-                  to <br />
+                  Explore our best-loved coffees and treats, thoughtfully
+                  crafted to <br />
                   make every break feel warm and truly special.
                 </p>
               </div>
@@ -60,9 +60,7 @@ export default function Products1() {
               {/* Start Single Card  */}
               {coffeeProducts.map((product, i) => (
                 <SwiperSlide key={i} className="swiper-slide">
-                  <ProductCard5 product={product}
-                    animationOrder={i + 1}
-                  />
+                  <ProductCard5 product={product} animationOrder={i + 1} />
                 </SwiperSlide>
               ))}
               {/* End Single Card  */}

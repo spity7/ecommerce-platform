@@ -61,7 +61,9 @@ export default function CouponSelectionModal() {
                       />
                     </div>
                     <div className="coupon-details">
-                      <h2 className="rbt-coupon-info-title b1">UP TO 30% OFF</h2>
+                      <h2 className="rbt-coupon-info-title b1">
+                        UP TO 30% OFF
+                      </h2>
                       <p className="rbt-coupon-info-sub-title b3 mt--4">
                         For orders over $9.90
                       </p>
@@ -100,7 +102,9 @@ export default function CouponSelectionModal() {
                       />
                     </div>
                     <div className="coupon-details">
-                      <h2 className="rbt-coupon-info-title b1">UP TO 30% OFF</h2>
+                      <h2 className="rbt-coupon-info-title b1">
+                        UP TO 30% OFF
+                      </h2>
                       <p className="rbt-coupon-info-sub-title b3 mt--4">
                         For orders over $9.90
                       </p>

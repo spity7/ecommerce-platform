@@ -21,9 +21,7 @@ function CardStyleThirteen() {
                 key={i}
                 className="col-lg-3 col-xl-3 col-xxl-3 col-md-6 col-sm-6 col-6 mt--24 mt_sm--16"
               >
-                <ProductCard4 product={product}
-                      animationOrder={i + 1}
-                    />
+                <ProductCard4 product={product} animationOrder={i + 1} />
               </div>
             ))}
           </div>

@@ -9,7 +9,7 @@ import { useIsotopeMasonry } from "@/hooks/useIsotopeMasonry";
 
 function PortfolioGridIsotopWiderTwo() {
   const [activeFilter, setActiveFilter] = useState<string>(
-    isotopFilters.find((f) => f.isActive)?.filter ?? "*",
+    isotopFilters.find((f) => f.isActive)?.filter ?? "*"
   );
 
   const gridRef = useRef<HTMLDivElement | null>(null);
@@ -21,15 +21,15 @@ function PortfolioGridIsotopWiderTwo() {
       itemSelector: ".rbt-meso-item",
       onRelayout: (iso) => iso.arrange({ filter: activeFilterRef.current }),
     },
-    [activeFilter],
+    [activeFilter]
   );
 
   const filteredItems =
     activeFilter === "*"
       ? isotopPortfoliosWiderTwo
       : isotopPortfoliosWiderTwo.filter((item) =>
-        item.filterClassName?.includes(activeFilter.replace(".", "")),
-      );
+          item.filterClassName?.includes(activeFilter.replace(".", ""))
+        );
 
   const handleFilterClick = (filter: string) => {
     setActiveFilter(filter);
@@ -76,10 +76,11 @@ function PortfolioGridIsotopWiderTwo() {
                       return (
                         <div
                           key={`${item.title}-${item.img}-${idx}`}
-                          className={`rbt-meso-item transition${item.filterClassName
+                          className={`rbt-meso-item transition${
+                            item.filterClassName
                               ? ` ${item.filterClassName}`
                               : ""
-                            }`}
+                          }`}
                         >
                           <div className="rainbow-card rbt-portfolio-card">
                             <div className="inner">

@@ -15,7 +15,7 @@ export function swiperSsrLayoutClass(layout: SwiperSsrLayout): string {
 /** Append an SSR layout class to an existing Swiper className. */
 export function withSwiperSsrLayout(
   className: string,
-  layout?: SwiperSsrLayout,
+  layout?: SwiperSsrLayout
 ): string {
   if (!layout) return className;
   return `${className} ${swiperSsrLayoutClass(layout)}`.trim();

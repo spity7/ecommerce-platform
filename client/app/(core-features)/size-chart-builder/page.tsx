@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 export default function SizeChartBuilderPage() {
   return (
     <>
-            <SizeChartBuilderBanner />
-            <SizeChartBuilderComponents />
+      <SizeChartBuilderBanner />
+      <SizeChartBuilderComponents />
     </>
   );
 }

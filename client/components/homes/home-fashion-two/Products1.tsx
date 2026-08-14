@@ -18,9 +18,9 @@ export default function Products1({ wrapperBox }: { wrapperBox?: string }) {
                   You
                 </h2>
                 <p className="description rbt-scroll-trigger fade_in animation-order-2">
-                  Curated outfits chosen for comfort, fit, and easy everyday polish.
-                  Layer-friendly pieces, quality fabrics, and details that stay sharp.
-                  Shop more.
+                  Curated outfits chosen for comfort, fit, and easy everyday
+                  polish. Layer-friendly pieces, quality fabrics, and details
+                  that stay sharp. Shop more.
                 </p>
               </div>
             </div>
@@ -73,7 +73,7 @@ export default function Products1({ wrapperBox }: { wrapperBox?: string }) {
                           product={product}
                         />
                       </SwiperSlide>
-                    ),
+                    )
                   )}
 
                   <div className="rbt-swiper-pagination rbt-swiper-pagination-var-one has-hide-dot-swipe" />

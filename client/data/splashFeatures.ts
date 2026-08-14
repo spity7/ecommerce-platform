@@ -17,7 +17,11 @@ export const keyFeatures: KeyFeature[] = [
     title: "Launch Your Website in Minutes",
     items: [
       { icon: "fa-regular fa-laptop", text: "100+ Ready Demos" },
-      { icon: "fa-regular fa-code", text: "Make your own website with Unimart", marquee: true },
+      {
+        icon: "fa-regular fa-code",
+        text: "Make your own website with Unimart",
+        marquee: true,
+      },
       { icon: "fa-regular fa-sack-dollar", text: "Start Selling Instantly" },
     ],
     thumbSrc: "/assets/images/splash/feature/thumbnail-1.webp",
@@ -29,8 +33,15 @@ export const keyFeatures: KeyFeature[] = [
     title: "Effortless Client Success & Earn Quickly",
     items: [
       { icon: "fa-regular fa-gear", text: "1000+ built-in features" },
-      { icon: "fa-regular fa-bolt", text: "Fast, Client Ready Project", marquee: true },
-      { icon: "fa-regular fa-puzzle-piece-simple", text: "Unlimited Free Updates" },
+      {
+        icon: "fa-regular fa-bolt",
+        text: "Fast, Client Ready Project",
+        marquee: true,
+      },
+      {
+        icon: "fa-regular fa-puzzle-piece-simple",
+        text: "Unlimited Free Updates",
+      },
     ],
     thumbSrc: "/assets/images/splash/feature/thumbnail-3.webp",
     cardVariation: "rbt-card-var-3",
@@ -42,7 +53,11 @@ export const keyFeatures: KeyFeature[] = [
     items: [
       { icon: "fa-regular fa-cube", text: "All in one eCommerce Packages" },
       { icon: "fa-regular fa-truck-bolt", text: "Fast Client Deliveries" },
-      { icon: "fa-regular fa-check", text: "Complete in record time", marquee: true },
+      {
+        icon: "fa-regular fa-check",
+        text: "Complete in record time",
+        marquee: true,
+      },
     ],
     thumbSrc: "/assets/images/splash/feature/thumbnail-2.webp",
     cardVariation: "rbt-card-var-2",
@@ -58,8 +73,18 @@ export const elevateFeatures: ElevateFeature[] = [
     desc: "Provide seamless technology support. Ensuring reliable solutions for all your technical challenges",
     mainImg: "/assets/images/splash/feature/image1.webp",
     icons: [
-      { src: "/assets/images/splash/feature/check-icon.png", className: "icon", width: 64, height: 64 },
-      { src: "/assets/images/splash/feature/icon3.png", className: "icon icon-2", width: 267, height: 70 },
+      {
+        src: "/assets/images/splash/feature/check-icon.png",
+        className: "icon",
+        width: 64,
+        height: 64,
+      },
+      {
+        src: "/assets/images/splash/feature/icon3.png",
+        className: "icon icon-2",
+        width: 267,
+        height: 70,
+      },
     ],
     cardClass: "rbt-feature-card-1 rbt-curved-style-box",
   },
@@ -88,7 +113,12 @@ export const elevateFeatures: ElevateFeature[] = [
     desc: "Higher in search results and drive organic traffic.",
     mainImg: "/assets/images/splash/feature/image4.webp",
     icons: [
-      { src: "/assets/images/splash/feature/icon1.png", className: "icon", width: 102, height: 112 },
+      {
+        src: "/assets/images/splash/feature/icon1.png",
+        className: "icon",
+        width: 102,
+        height: 112,
+      },
     ],
     cardClass: "rbt-feature-card-4",
   },
@@ -100,7 +130,12 @@ export const elevateFeatures: ElevateFeature[] = [
     desc: "Our templates are compatible with all major browsers. Choose your favorite browser.",
     mainImg: "/assets/images/splash/feature/image5.webp",
     icons: [
-      { src: "/assets/images/splash/feature/icon4.png", className: "icon", width: 170, height: 171 },
+      {
+        src: "/assets/images/splash/feature/icon4.png",
+        className: "icon",
+        width: 170,
+        height: 171,
+      },
     ],
     cardClass: "rbt-feature-card-7 h-100",
   },

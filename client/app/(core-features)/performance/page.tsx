@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 export default function PerformancePage() {
   return (
     <>
-            <PerformanceBanner />
-            <PerformanceComponents />
+      <PerformanceBanner />
+      <PerformanceComponents />
     </>
   );
 }

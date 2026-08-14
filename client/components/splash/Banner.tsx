@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import SplashScrollLink from "@/components/splash/SplashScrollLink";
@@ -9,7 +9,10 @@ export default function Banner() {
 
   return (
     <>
-      <div ref={parallaxRef} className="rbt-splash-banner-area rbt-product-banner position-relative overflow-hidden">
+      <div
+        ref={parallaxRef}
+        className="rbt-splash-banner-area rbt-product-banner position-relative overflow-hidden"
+      >
         <div className="container">
           <div className="row">
             <div className="col-12">
@@ -151,7 +154,6 @@ export default function Banner() {
           </div>
         </div>
       </div>
-     
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { WaveDividerIcon } from '../../svg-icons';
+import { WaveDividerIcon } from "../../svg-icons";
 import { bakeryItems } from "@/data/categories";
 
 import Image from "next/image";
@@ -45,7 +45,10 @@ export default function Categories() {
               BAKERY_CATEGORY_ANIMATION_CLASSES[index] ?? "animation-order-1";
 
             return (
-              <div className="col-lg-2 col-md-4 col-sm-4 col-4 mt--16" key={index}>
+              <div
+                className="col-lg-2 col-md-4 col-sm-4 col-4 mt--16"
+                key={index}
+              >
                 <Link
                   className={`rbt-cat-box rbt-cat-box-1 rbt-cat-box-1-rounded text-center rbt-scroll-trigger fade_in ${animationClass}`}
                   href={`/shop-by-categories`}

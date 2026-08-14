@@ -3,8 +3,16 @@ import Image from "next/image";
 const brandItems = [
   { src: "/assets/images/brands/brand-e-01.webp", title: "Timeless", order: 1 },
   { src: "/assets/images/brands/brand-e-02.webp", title: "Iconic", order: 2 },
-  { src: "/assets/images/brands/brand-e-03.webp", title: "Conscious", order: 3 },
-  { src: "/assets/images/brands/brand-e-04.webp", title: "Specialty", order: 4 },
+  {
+    src: "/assets/images/brands/brand-e-03.webp",
+    title: "Conscious",
+    order: 3,
+  },
+  {
+    src: "/assets/images/brands/brand-e-04.webp",
+    title: "Specialty",
+    order: 4,
+  },
   { src: "/assets/images/brands/brand-e-05.webp", title: "Active", order: 5 },
   {
     src: "/assets/images/brands/brand-e-06.webp",
@@ -36,7 +44,10 @@ export default function Brands({
         {/* Start Brands Area */}
         <div className="row row--12 mt_dec--24">
           {brandItems.map((brand) => (
-            <div className="col-lg-2 col-md-4 col-sm-4 col-6 mt--24" key={brand.src}>
+            <div
+              className="col-lg-2 col-md-4 col-sm-4 col-6 mt--24"
+              key={brand.src}
+            >
               <div
                 className={`rbt-brand text-center style-three rbt-scroll-trigger fade_in animation-order-${brand.order}`}
               >

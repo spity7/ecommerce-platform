@@ -21,7 +21,10 @@ export default function VideoBanner() {
             playsInline
             preload="metadata"
           >
-            <source src="/assets/videos/prd-single-dtls-video-01.mp4" type="video/mp4" />
+            <source
+              src="/assets/videos/prd-single-dtls-video-01.mp4"
+              type="video/mp4"
+            />
           </video>
           <button className="rbt-btn rbt-btn-round pause-btn" data-pause-btn>
             Pause Button

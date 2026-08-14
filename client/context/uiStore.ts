@@ -78,7 +78,7 @@ function clearEveryModalCloseTimer() {
 function nextStackAfterOpen(
   state: Pick<UiState, "activeBsModal" | "closingBsModal">,
   modalName: ModalNameType,
-  shouldAnimateOpen: boolean,
+  shouldAnimateOpen: boolean
 ): ModalStackSlice {
   return {
     activeBsModal: [
@@ -93,7 +93,7 @@ function nextStackAfterOpen(
 
 function nextClosingAfterRequest(
   closingBsModal: ModalNameType[],
-  modalName: ModalNameType,
+  modalName: ModalNameType
 ): Pick<UiState, "closingBsModal"> {
   if (closingBsModal.includes(modalName)) {
     return { closingBsModal };
@@ -103,7 +103,7 @@ function nextClosingAfterRequest(
 
 function nextStackAfterCloseAnimation(
   state: Pick<UiState, "activeBsModal" | "closingBsModal">,
-  modalName: ModalNameType,
+  modalName: ModalNameType
 ): ModalStackSlice {
   const nextActive = state.activeBsModal.filter((name) => name !== modalName);
   const nextClosing = state.closingBsModal.filter((name) => name !== modalName);
@@ -118,7 +118,7 @@ function nextStackAfterCloseAnimation(
 
 function isModalOpenOnStack(
   state: Pick<UiState, "activeBsModal" | "closingBsModal">,
-  modalName: ModalNameType,
+  modalName: ModalNameType
 ) {
   return (
     state.activeBsModal.includes(modalName) &&
@@ -129,7 +129,7 @@ function isModalOpenOnStack(
 /** After `nextClosingAfterRequest`, run CSS close then drop from stacks. */
 function armModalCloseCompletion(
   modalName: ModalNameType,
-  onComplete: () => void,
+  onComplete: () => void
 ) {
   clearModalCloseTimer(modalName);
   const timer = setTimeout(() => {
@@ -165,14 +165,14 @@ export const useUiStore = create<UiState>((set, _get) => ({
     set({ toasterCompareVisible: true });
     setTimeout(
       () => set({ toasterCompareVisible: false }),
-      TOASTER_DURATION_MS,
+      TOASTER_DURATION_MS
     );
   },
   showToaster: (message = "Added in Wishlist") => {
     set({ toasterWishlistVisible: true, wishlistMessage: message });
     setTimeout(
       () => set({ toasterWishlistVisible: false }),
-      TOASTER_DURATION_MS,
+      TOASTER_DURATION_MS
     );
   },
   showCartToaster: () => {
@@ -230,7 +230,7 @@ export const useUiStore = create<UiState>((set, _get) => ({
       menuHoverOpen: false,
       cartToasterVisible: false,
       closingBsModal: Array.from(
-        new Set([...prev.closingBsModal, ...activeModalNames]),
+        new Set([...prev.closingBsModal, ...activeModalNames])
       ),
       showBsModal: activeModalNames.length > 0,
       delayedShowBsModal: activeModalNames.length > 0,

@@ -31,7 +31,9 @@ export default function Lookbook() {
                   {lookbookBannerProducts.map((item, idx) => (
                     <div
                       key={idx}
-                      className={getHotspotClassName(`home-ceramics-${item.id}`)}
+                      className={getHotspotClassName(
+                        `home-ceramics-${item.id}`
+                      )}
                       data-rbt-position-horigental={item.left}
                       data-rbt-position-vertical={item.top}
                     >

@@ -28,7 +28,7 @@ export default function Countdown({
 
   // "initial" = not yet mounted on client, so render null to avoid hydration issues
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null | "initial">(
-    "initial",
+    "initial"
   );
 
   useEffect(() => {

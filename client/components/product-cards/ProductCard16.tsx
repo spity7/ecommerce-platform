@@ -31,7 +31,7 @@ export default function ProductCard16({
         <div
           className={`rbt-card-img rbt-bg-color-white rbt-scroll-trigger zoom_in animation-order-${animationOrder}`}
         >
-        <Link href={detailsPageLink}>
+          <Link href={detailsPageLink}>
             <Image
               className="rbt-prd-img"
               alt="Product"
@@ -101,10 +101,7 @@ export default function ProductCard16({
                   </li>
                 ))}
               </ul>
-              <Link
-                className="prd-link-text"
-                href={detailsPageLink}
-              >
+              <Link className="prd-link-text" href={detailsPageLink}>
                 +{product.moreItemsLink} More Items
               </Link>
             </div>
@@ -124,9 +121,7 @@ export default function ProductCard16({
             )}
 
             <h6 className="rbt-card-title">
-            <Link href={detailsPageLink}>
-                {product.title}
-              </Link>
+              <Link href={detailsPageLink}>{product.title}</Link>
             </h6>
 
             <div className="rbt-card-rating">

@@ -8,7 +8,10 @@ export default function CategoriesWider() {
       <div className="rbt-full-width-wrapper">
         <div className="row row--12 align-items-end">
           {widerSixCategories.map((category, index) => (
-            <div key={`${category.title}-${index}`} className="col-lg-1 col-md-3 col-sm-3 col-3 mt--12">
+            <div
+              key={`${category.title}-${index}`}
+              className="col-lg-1 col-md-3 col-sm-3 col-3 mt--12"
+            >
               <Link
                 href="/shop-by-categories"
                 className={`rbt-cat-box rbt-cat-box-1 text-center rbt-scroll-trigger fade_in animation-order-${index + 1}`}

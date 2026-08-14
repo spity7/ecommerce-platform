@@ -19,7 +19,7 @@ export default function Products1() {
     if (activeTab === "view-all") return beardOilProducts;
 
     return beardOilProducts.filter((product) =>
-      product.demoTab?.includes(activeTab),
+      product.demoTab?.includes(activeTab)
     );
   }, [activeTab]);
 
@@ -57,9 +57,7 @@ export default function Products1() {
                 key={i}
                 className="col-lg-3 col-xl-3 col-xxl-3 col-md-4 col-6 mt--24"
               >
-                <ProductCard14 product={product}
-                      animationOrder={i + 1}
-                    />
+                <ProductCard14 product={product} animationOrder={i + 1} />
               </div>
             ))}
             {/* End Single Card  */}

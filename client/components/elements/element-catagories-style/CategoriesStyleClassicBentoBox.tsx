@@ -56,7 +56,7 @@ function CategoriesStyleClassicBentoBox() {
                                       {link.title}
                                     </Link>
                                   </li>
-                                ),
+                                )
                               )}
                             </ul>
                           </div>

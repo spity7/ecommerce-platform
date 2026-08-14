@@ -70,7 +70,8 @@ export const instaModalProducts: Product[] = [
 export const welcomeBannerProducts: Product[] = [
   {
     id: 1005,
-    imgSrc: "/assets/images/product-img/electronics/electronics-bg-trans-01-a-1.webp",
+    imgSrc:
+      "/assets/images/product-img/electronics/electronics-bg-trans-01-a-1.webp",
     width: 1024,
     height: 793,
     imgWidth: 1024,
@@ -83,7 +84,8 @@ export const welcomeBannerProducts: Product[] = [
   },
   {
     id: 1006,
-    imgSrc: "/assets/images/product-img/electronics/electronics-bg-trans-01-a-2.webp",
+    imgSrc:
+      "/assets/images/product-img/electronics/electronics-bg-trans-01-a-2.webp",
     width: 1024,
     height: 793,
     imgWidth: 1024,
@@ -96,7 +98,8 @@ export const welcomeBannerProducts: Product[] = [
   },
   {
     id: 1007,
-    imgSrc: "/assets/images/product-img/electronics/electronics-bg-trans-01-a-3.webp",
+    imgSrc:
+      "/assets/images/product-img/electronics/electronics-bg-trans-01-a-3.webp",
     width: 1024,
     height: 793,
     imgWidth: 1024,
@@ -109,7 +112,8 @@ export const welcomeBannerProducts: Product[] = [
   },
   {
     id: 1008,
-    imgSrc: "/assets/images/product-img/electronics/electronics-bg-trans-01-a-4.webp",
+    imgSrc:
+      "/assets/images/product-img/electronics/electronics-bg-trans-01-a-4.webp",
     width: 1026,
     height: 793,
     imgWidth: 1026,
@@ -122,7 +126,8 @@ export const welcomeBannerProducts: Product[] = [
   },
   {
     id: 1009,
-    imgSrc: "/assets/images/product-img/electronics/electronics-bg-trans-01-a-1.webp",
+    imgSrc:
+      "/assets/images/product-img/electronics/electronics-bg-trans-01-a-1.webp",
     width: 1024,
     height: 793,
     imgWidth: 1024,
@@ -135,7 +140,8 @@ export const welcomeBannerProducts: Product[] = [
   },
   {
     id: 1010,
-    imgSrc: "/assets/images/product-img/electronics/electronics-bg-trans-01-a-2.webp",
+    imgSrc:
+      "/assets/images/product-img/electronics/electronics-bg-trans-01-a-2.webp",
     width: 1024,
     height: 793,
     imgWidth: 1024,
@@ -148,7 +154,8 @@ export const welcomeBannerProducts: Product[] = [
   },
   {
     id: 1011,
-    imgSrc: "/assets/images/product-img/electronics/electronics-bg-trans-01-a-3.webp",
+    imgSrc:
+      "/assets/images/product-img/electronics/electronics-bg-trans-01-a-3.webp",
     width: 1024,
     height: 793,
     imgWidth: 1024,
@@ -161,7 +168,8 @@ export const welcomeBannerProducts: Product[] = [
   },
   {
     id: 1012,
-    imgSrc: "/assets/images/product-img/electronics/electronics-bg-trans-01-a-4.webp",
+    imgSrc:
+      "/assets/images/product-img/electronics/electronics-bg-trans-01-a-4.webp",
     width: 1026,
     height: 793,
     imgWidth: 1026,

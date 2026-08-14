@@ -14,13 +14,13 @@ const RenderStars = (rating: number) => {
       stars.push(
         <li key={i}>
           <i className="fa-solid fa-star rbt-rated-icon" />
-        </li>,
+        </li>
       );
     } else {
       stars.push(
         <li key={i}>
           <i className="fa-solid fa-star" />
-        </li>,
+        </li>
       );
     }
   }

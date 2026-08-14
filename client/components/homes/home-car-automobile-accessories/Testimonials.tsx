@@ -23,8 +23,7 @@ export default function Testimonials() {
                 Our Customer Say!
               </span>
               <h2 className="rbt-title rbt-scroll-trigger fade_in animation-order-1">
-                Customers loved{" "}
-                <span className="rbt-bold--text">products</span>
+                Customers loved <span className="rbt-bold--text">products</span>
               </h2>
             </div>
           </div>

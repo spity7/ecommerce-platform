@@ -27,9 +27,7 @@ export default function Products1() {
                 key={index}
                 className="col-lg-3 col-xl-3 col-xxl-3 col-md-6 col-sm-6 col-6 mt--24 cyber-monday-product"
               >
-                <ProductCard21 product={product}
-                  animationOrder={index + 1}
-                />
+                <ProductCard21 product={product} animationOrder={index + 1} />
               </div>
             ))}
           </div>

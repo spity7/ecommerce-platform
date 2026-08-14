@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useParallax } from "@/hooks/useParallax";
 import Image from "next/image";
@@ -106,7 +106,10 @@ function AccordionBlock01() {
                 <div className="accordion" id="accordionExamplea1">
                   {accordionData.map((item) => (
                     <div className="accordion-item card" key={item.id}>
-                      <h2 className="accordion-header card-header" id={item.headerId}>
+                      <h2
+                        className="accordion-header card-header"
+                        id={item.headerId}
+                      >
                         <button
                           className={`accordion-button${item.isOpen ? "" : " collapsed"}`}
                           type="button"
@@ -124,7 +127,9 @@ function AccordionBlock01() {
                         aria-labelledby={item.headerId}
                         data-bs-parent="#accordionExamplea1"
                       >
-                        <div className="accordion-body card-body">{item.content}</div>
+                        <div className="accordion-body card-body">
+                          {item.content}
+                        </div>
                       </div>
                     </div>
                   ))}

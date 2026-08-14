@@ -65,7 +65,9 @@ export default function BreadCrumb({
                     </div>
                   </li>
                 )}
-                <li className="rbt-breadcrumb-item active text-nowrap text-truncate flex-grow-1">{product.title}</li>
+                <li className="rbt-breadcrumb-item active text-nowrap text-truncate flex-grow-1">
+                  {product.title}
+                </li>
               </ul>
               <div className="rbt-single-nav">
                 <div className="rbt-products-nav">
@@ -101,7 +103,9 @@ export default function BreadCrumb({
                             </div>
                           </div>
                           <div className="rbt-card-img rbt-bg-color-default">
-                            <Link href={`/product-single-default/${prevProduct.id}`}>
+                            <Link
+                              href={`/product-single-default/${prevProduct.id}`}
+                            >
                               <Image
                                 alt="Card Image"
                                 src={prevProduct.imgSrc}
@@ -149,12 +153,14 @@ export default function BreadCrumb({
                                 </del>
                               )}
                               <span className="price-text">
-                                 ${nextProduct.price.toFixed(2)}
+                                ${nextProduct.price.toFixed(2)}
                               </span>
                             </div>
                           </div>
                           <div className="rbt-card-img rbt-bg-color-default">
-                            <Link href={`/product-single-default/${nextProduct.id}`}>
+                            <Link
+                              href={`/product-single-default/${nextProduct.id}`}
+                            >
                               <Image
                                 alt="Card Image"
                                 src={nextProduct.imgSrc}

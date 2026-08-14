@@ -82,7 +82,8 @@ export default function Hero() {
                               <span className="rbt-bold--text">
                                 {product.title?.split("\n")[0] ?? ""}
                               </span>{" "}
-                              {product.title?.split("\n").slice(1).join(" ") ?? ""}
+                              {product.title?.split("\n").slice(1).join(" ") ??
+                                ""}
                             </h2>
                             <div className="rbt-pricing-part">
                               <del className="rbt-dis-price-text">
@@ -92,7 +93,11 @@ export default function Hero() {
                                 <span className="rbt-price-text offer-price">
                                   {formatCurrency(product.price)}
                                 </span>
-                                <OfferBadge price={product.price} oldPrice={product.oldPrice} variant="minus" />
+                                <OfferBadge
+                                  price={product.price}
+                                  oldPrice={product.oldPrice}
+                                  variant="minus"
+                                />
                               </div>
                             </div>
                           </div>

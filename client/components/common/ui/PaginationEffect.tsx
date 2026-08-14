@@ -27,12 +27,12 @@ export default function PaginationEffect({
 }: PaginationEffectProps) {
   const totalPages = Math.max(
     1,
-    Math.ceil(totalItems > 0 ? totalItems / perPage : 1),
+    Math.ceil(totalItems > 0 ? totalItems / perPage : 1)
   );
 
   const pages = useMemo(
     () => Array.from({ length: totalPages }, (_, i) => i + 1),
-    [totalPages],
+    [totalPages]
   );
 
   const [highlightStyle, setHighlightStyle] = useState<

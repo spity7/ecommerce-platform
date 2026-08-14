@@ -11,7 +11,12 @@ export default function Features() {
                   <div className="row row--12 mt_dec--24 justify-content-center">
                     <div className="col-xl-6 col-md-6 col-12 mt--24">
                       <div className="rbt-banner-content m--0 align-items-start">
-                        <a href="#" className="rbt-card-subtitle rbt-card-catagories-text mt--0 rbt-scroll-trigger fade_in animation-order-1">The Biggest View!</a>
+                        <a
+                          href="#"
+                          className="rbt-card-subtitle rbt-card-catagories-text mt--0 rbt-scroll-trigger fade_in animation-order-1"
+                        >
+                          The Biggest View!
+                        </a>
                         <h2 className="rbt-lg-title h1 rbt-scroll-trigger rbt-text-regular fade_in animation-order-2 rbt-text-regular">
                           <span className="rbt-bold--text d-block">
                             Majestic Colors. <br />
@@ -64,7 +69,12 @@ export default function Features() {
                     </div>
                     <div className="col-xl-6 col-md-6 col-12 mt--24 order-1 order-md-2">
                       <div className="rbt-banner-content m--0 align-items-start">
-                        <a href="#" className="rbt-card-subtitle rbt-card-catagories-text mt--0 rbt-scroll-trigger fade_in animation-order-1">The Biggest View!</a>
+                        <a
+                          href="#"
+                          className="rbt-card-subtitle rbt-card-catagories-text mt--0 rbt-scroll-trigger fade_in animation-order-1"
+                        >
+                          The Biggest View!
+                        </a>
                         <h2 className="rbt-lg-title h1 rbt-scroll-trigger rbt-text-regular fade_in animation-order-2 rbt-text-regular">
                           <span className="rbt-bold--text d-block">
                             Majestic Colors. <br />

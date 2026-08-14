@@ -22,7 +22,7 @@ export default function InnerPages() {
       itemSelector: ".rbt-meso-item",
       onRelayout: (iso) => iso.arrange({ filter: activeFilterRef.current }),
     },
-    [visibleCount, activeFilter],
+    [visibleCount, activeFilter]
   );
 
   const handleFilterClick = (filter: string) => {

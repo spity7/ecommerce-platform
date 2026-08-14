@@ -139,7 +139,7 @@ export default function CartModal2() {
                                     onClick={() =>
                                       updateQuantity(
                                         product.id,
-                                        product.quantity - 1,
+                                        product.quantity - 1
                                       )
                                     }
                                   >
@@ -151,7 +151,7 @@ export default function CartModal2() {
                                     onChange={(e) =>
                                       updateQuantity(
                                         product.id,
-                                        Number(e.target.value),
+                                        Number(e.target.value)
                                       )
                                     }
                                     min={1}
@@ -164,7 +164,7 @@ export default function CartModal2() {
                                     onClick={() =>
                                       updateQuantity(
                                         product.id,
-                                        product.quantity + 1,
+                                        product.quantity + 1
                                       )
                                     }
                                   >

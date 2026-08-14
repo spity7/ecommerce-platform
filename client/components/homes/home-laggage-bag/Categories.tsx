@@ -9,7 +9,7 @@ import { useState } from "react";
 
 export default function Categories() {
   const [activeTab, setActiveTab] = useState<"categories" | "collections">(
-    "categories",
+    "categories"
   );
   return (
     <div className="rbt-component-area rbt-categories-area rbt-bg-color-white rbt-section-gap2Top">

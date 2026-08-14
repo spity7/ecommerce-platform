@@ -47,11 +47,11 @@ export default function ShopListSidebar({ rightSidebar = false }) {
   const visibleProducts = useMemo(() => {
     return state.sorted.slice(
       (state.currentPage - 1) * state.itemPerPage,
-      state.currentPage * state.itemPerPage,
+      state.currentPage * state.itemPerPage
     );
   }, [state.sorted, state.currentPage, state.itemPerPage]);
   function getFilterCount(
-    filterFunction: (product: (typeof electronicsListViewData2)[0]) => boolean,
+    filterFunction: (product: (typeof electronicsListViewData2)[0]) => boolean
   ) {
     return electronicsListViewData2.filter((product) => filterFunction(product))
       .length;
@@ -118,7 +118,7 @@ export default function ShopListSidebar({ rightSidebar = false }) {
                       Showing {(state.currentPage - 1) * state.itemPerPage + 1}–
                       {Math.min(
                         state.currentPage * state.itemPerPage,
-                        state.sorted.length,
+                        state.sorted.length
                       )}{" "}
                       of {state.sorted.length ?? 0} results
                     </h6>
@@ -145,7 +145,7 @@ export default function ShopListSidebar({ rightSidebar = false }) {
                           onChange={(value) =>
                             setItemPerPage(
                               Number(value.split(" ")[0]),
-                              dispatch,
+                              dispatch
                             )
                           }
                         />
@@ -179,9 +179,7 @@ export default function ShopListSidebar({ rightSidebar = false }) {
                   key={i}
                   className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mt--24"
                 >
-                  <ProductCard11 product={product}
-                      animationOrder={i + 1}
-                    />
+                  <ProductCard11 product={product} animationOrder={i + 1} />
                 </div>
               ))}
               {/* End Single Card  */}

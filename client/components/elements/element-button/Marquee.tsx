@@ -1,4 +1,4 @@
-import { ExternalLinkIcon } from '../../svg-icons';
+import { ExternalLinkIcon } from "../../svg-icons";
 function Marquee() {
   return (
     <>

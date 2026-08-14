@@ -1,5 +1,5 @@
 "use client";
-import { GiftIcon } from '../../svg-icons';
+import { GiftIcon } from "../../svg-icons";
 import Image from "next/image";
 
 import Link from "next/link";

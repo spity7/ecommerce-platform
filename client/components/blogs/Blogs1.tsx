@@ -114,7 +114,7 @@ export default function Blogs1({ isLoadMore = false }) {
                           className="rbt-btn"
                           onClick={() =>
                             setVisibleCount((prev) =>
-                              Math.min(prev + LOAD_MORE_STEP, blogCards.length),
+                              Math.min(prev + LOAD_MORE_STEP, blogCards.length)
                             )
                           }
                         >

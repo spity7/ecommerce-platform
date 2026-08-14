@@ -80,9 +80,7 @@ export default function Features() {
                 <div className="rbt-timeline-content">
                   <span className="rbt-timeline-count-digit">03</span>
                   <div className="rbt-timeline-info">
-                    <h3 className="rbt-timeline-title">
-                      Print your logo
-                    </h3>
+                    <h3 className="rbt-timeline-title">Print your logo</h3>
                     <ul className="rbt-timeline-info-list">
                       <li>Instantly generate 100s of custom logo mockups</li>
                       <li>Change colors, symbols, sizing, and more</li>

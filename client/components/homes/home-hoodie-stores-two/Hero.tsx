@@ -61,7 +61,9 @@ export default function Hero() {
                                   {item.category}
                                 </Link>
                                 <h4 className="rbt-card-title">
-                                  <Link href="/shop-by-category">{item.title}</Link>
+                                  <Link href="/shop-by-category">
+                                    {item.title}
+                                  </Link>
                                 </h4>
                               </div>
                               <div className="rbt-card-element">
@@ -72,7 +74,11 @@ export default function Hero() {
                                   <span className="price-text">
                                     ${item.price.toFixed(2)}
                                   </span>
-                                  <OfferBadge price={item.price} oldPrice={item.oldPrice} variant="minus" />
+                                  <OfferBadge
+                                    price={item.price}
+                                    oldPrice={item.oldPrice}
+                                    variant="minus"
+                                  />
                                 </div>
                               </div>
                               <div className="rbt-card-element">

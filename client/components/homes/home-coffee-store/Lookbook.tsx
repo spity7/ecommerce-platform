@@ -90,9 +90,7 @@ export default function Lookbook() {
               >
                 {coffeeProductsB.map((product, i) => (
                   <SwiperSlide key={i} className="swiper-slide">
-                    <ProductCard5 product={product}
-                      animationOrder={i + 1}
-                    />
+                    <ProductCard5 product={product} animationOrder={i + 1} />
                   </SwiperSlide>
                 ))}
 

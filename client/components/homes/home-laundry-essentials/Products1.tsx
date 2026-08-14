@@ -21,7 +21,7 @@ export default function Products1() {
   const filteredProducts = useMemo(() => {
     if (activeTab === "view-all") return laundryAccessoryProducts;
     return laundryAccessoryProducts.filter((product) =>
-      product.demoTab?.includes(activeTab),
+      product.demoTab?.includes(activeTab)
     );
   }, [activeTab]);
 
@@ -82,9 +82,7 @@ export default function Products1() {
               {/* Start Single Card  */}
               {filteredProducts.map((product, i) => (
                 <div key={i} className="col-lg-6 col-6 mt--24">
-                  <ProductCard6 product={product}
-                    animationOrder={i + 1}
-                  />
+                  <ProductCard6 product={product} animationOrder={i + 1} />
                 </div>
               ))}
               {/* End Single Card  */}

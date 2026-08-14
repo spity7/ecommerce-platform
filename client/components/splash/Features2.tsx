@@ -31,7 +31,10 @@ export default function Features2() {
         </div>
         <div className="row row--12 mt_dec-24 rbt-splash-scroll flex-lg-wrap">
           {featureCards.map((card, idx) => (
-            <div key={card.cardBg} className="col-8 col-md-5 col-lg-4 col-xl-3 mt--24">
+            <div
+              key={card.cardBg}
+              className="col-8 col-md-5 col-lg-4 col-xl-3 mt--24"
+            >
               <div
                 className={`rbt-feature-presentation-card rbt-scroll-trigger slide_in animation-order-${idx + 1}`}
               >

@@ -77,7 +77,9 @@ export default function SplashElementBuilderSection({
                     <div className="rbt-card-content">
                       <div className="content-inner">
                         <span className="overlay-text">{card.number}</span>
-                        <h2 className="rbt-title rbt-text-bold">{card.title}</h2>
+                        <h2 className="rbt-title rbt-text-bold">
+                          {card.title}
+                        </h2>
                         <p className="rbt-description">{card.description}</p>
                         <div className="mt--32">
                           <a

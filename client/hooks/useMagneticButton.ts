@@ -19,7 +19,7 @@ export interface UseMagneticButtonReturn {
 }
 
 export function useMagneticButton(
-  options: UseMagneticButtonOptions = {},
+  options: UseMagneticButtonOptions = {}
 ): UseMagneticButtonReturn {
   const { strength = DEFAULT_STRENGTH } = options;
   const ref = useRef<HTMLElement | null>(null);
@@ -32,7 +32,7 @@ export function useMagneticButton(
       const offset = getMagneticOffset(e.clientX, e.clientY, rect, strength);
       setTransform(getMagneticTransform(offset));
     },
-    [strength],
+    [strength]
   );
 
   const handleMouseLeave = useCallback(() => {

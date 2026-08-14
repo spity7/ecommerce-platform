@@ -72,9 +72,7 @@ export default function BoughtTogether6() {
               >
                 {similerAccessories.map((product, i) => (
                   <SwiperSlide key={i} className="swiper-slide">
-                    <ProductCard2 product={product}
-                      animationOrder={i + 1}
-                    />
+                    <ProductCard2 product={product} animationOrder={i + 1} />
                   </SwiperSlide>
                 ))}
 

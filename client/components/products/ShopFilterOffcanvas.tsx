@@ -126,7 +126,7 @@ export default function ShopFilterOffcanvas({
                             onChange={(value) =>
                               setItemPerPage(
                                 Number(value.split(" ")[0]),
-                                dispatch,
+                                dispatch
                               )
                             }
                           />

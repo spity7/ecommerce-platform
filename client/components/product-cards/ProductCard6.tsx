@@ -51,9 +51,7 @@ const ProductCard6 = ({
       </div>
       <div className="rbt-card-body">
         <h6 className="rbt-card-title">
-          <Link href={detailsPageLink}>
-            {product.title}
-          </Link>
+          <Link href={detailsPageLink}>{product.title}</Link>
         </h6>
         <div className="pricing-part">
           <del className="price-text">${product.oldPrice?.toFixed(2)}</del>

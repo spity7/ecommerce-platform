@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { IntegrationsPage } from "@/components/workspace/simple-pages";
 
 export const metadata: Metadata = {
-	title: "Integrations",
+  title: "Integrations",
 };
 
 export default function Page() {
-	return <IntegrationsPage />;
+  return <IntegrationsPage />;
 }

@@ -7,7 +7,7 @@ import { useState } from "react";
 
 export default function Categories() {
   const [activeTab, setActiveTab] = useState<"categories" | "collections">(
-    "categories",
+    "categories"
   );
   return (
     <div className="rbt-component-area rbt-categories-area rbt-bg-color-white rbt-section-gapTop">
@@ -34,8 +34,9 @@ export default function Categories() {
                     <li role="presentation">
                       <button
                         type="button"
-                        className={`tab-button${activeTab === "categories" ? " active" : ""
-                          }`}
+                        className={`tab-button${
+                          activeTab === "categories" ? " active" : ""
+                        }`}
                         onClick={() => {
                           setActiveTab("categories");
                         }}
@@ -46,8 +47,9 @@ export default function Categories() {
                     <li role="presentation">
                       <button
                         type="button"
-                        className={`tab-button${activeTab === "collections" ? " active" : ""
-                          }`}
+                        className={`tab-button${
+                          activeTab === "collections" ? " active" : ""
+                        }`}
                         onClick={() => {
                           setActiveTab("collections");
                         }}
@@ -71,8 +73,9 @@ export default function Categories() {
                               key={index}
                             >
                               <div
-                                className={`rbt-cat-box rbt-cat-box-3 cat-var-two text-center rbt-scroll-trigger fade_in animation-order-${index + 1
-                                  }`}
+                                className={`rbt-cat-box rbt-cat-box-3 cat-var-two text-center rbt-scroll-trigger fade_in animation-order-${
+                                  index + 1
+                                }`}
                               >
                                 <div className="inner">
                                   <div className="rbt-image-portion">
@@ -86,7 +89,9 @@ export default function Categories() {
                                     </Link>
                                   </div>
                                   <div className="content mt--24">
-                                    <h6 className="title mb--0">{item.title}</h6>
+                                    <h6 className="title mb--0">
+                                      {item.title}
+                                    </h6>
                                   </div>
                                 </div>
                               </div>
@@ -108,8 +113,9 @@ export default function Categories() {
                               key={index}
                             >
                               <div
-                                className={`rbt-cat-box rbt-cat-box-3 cat-var-two text-center rbt-scroll-trigger fade_in animation-order-${index + 1
-                                  }`}
+                                className={`rbt-cat-box rbt-cat-box-3 cat-var-two text-center rbt-scroll-trigger fade_in animation-order-${
+                                  index + 1
+                                }`}
                               >
                                 <div className="inner">
                                   <div className="rbt-image-portion">
@@ -123,7 +129,9 @@ export default function Categories() {
                                     </Link>
                                   </div>
                                   <div className="content mt--24">
-                                    <h6 className="title mb--0">{item.title}</h6>
+                                    <h6 className="title mb--0">
+                                      {item.title}
+                                    </h6>
                                   </div>
                                 </div>
                               </div>

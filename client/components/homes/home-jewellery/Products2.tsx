@@ -17,7 +17,7 @@ export default function Products2() {
   const filteredProducts = useMemo(() => {
     if (activeTab === "view-all") return jewelryGridData;
     return jewelryGridData.filter((product) =>
-      product.demoTab?.includes(activeTab),
+      product.demoTab?.includes(activeTab)
     );
   }, [activeTab]);
 

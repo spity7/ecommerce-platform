@@ -183,9 +183,7 @@ export default function ProductCard13({
             </div>
           )}
           <h6 className="rbt-card-title mt--4">
-            <Link href={detailsPageLink}>
-              {product.title}
-            </Link>
+            <Link href={detailsPageLink}>{product.title}</Link>
           </h6>
 
           <div className="rbt-card-rating justify-content-center">

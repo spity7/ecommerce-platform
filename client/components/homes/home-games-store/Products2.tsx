@@ -1,4 +1,4 @@
-import { WaveSideIcon } from '../../svg-icons';
+import { WaveSideIcon } from "../../svg-icons";
 import ProductRating from "@/components/common/ui/ProductRating";
 import { gameProductCards } from "@/data/products/electronics";
 import Link from "next/link";

@@ -13,8 +13,7 @@ export default function VideosSection() {
           <div className="col-lg-12">
             <div className="rbt-component-section-title rbt-gap--4 text-center border-0 p-0 mb--32 align-items-center">
               <h2 className="rbt-title rbt-scroll-trigger fade_in animation-order-2">
-                Meet The{" "}
-                <span className="rbt-bold--text">Skin Influencer</span>
+                Meet The <span className="rbt-bold--text">Skin Influencer</span>
               </h2>
             </div>
           </div>

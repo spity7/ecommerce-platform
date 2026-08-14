@@ -451,7 +451,8 @@
     border-bottom: 2px solid var(--color-gray-200);
   }
 }
-.tab-button-style-2.tab-button-style-secondary li a, .tab-button-style-2.tab-button-style-secondary li button {
+.tab-button-style-2.tab-button-style-secondary li a,
+.tab-button-style-2.tab-button-style-secondary li button {
   &.active {
     color: var(--color-secondary);
   }

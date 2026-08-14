@@ -1,4 +1,4 @@
-import { BadgeQualityIcon } from '../../svg-icons';
+import { BadgeQualityIcon } from "../../svg-icons";
 import Image from "next/image";
 import Link from "next/link";
 

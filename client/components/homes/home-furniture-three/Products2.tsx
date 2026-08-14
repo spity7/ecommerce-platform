@@ -20,7 +20,7 @@ export default function Products2() {
   const filteredProducts = useMemo(() => {
     if (activeTab === "view-all") return furnitureProductsLarge;
     return furnitureProductsLarge.filter((product) =>
-      product.demoTab?.includes(activeTab),
+      product.demoTab?.includes(activeTab)
     );
   }, [activeTab]);
 

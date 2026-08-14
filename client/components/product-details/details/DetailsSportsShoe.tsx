@@ -60,14 +60,19 @@ export default function DetailsSportsShoe({ product }: { product: Product }) {
                       {" "}
                       ${product.price.toFixed(2)}
                     </span>
-                    <OfferBadge product={product} className="rbt-offer-badge-md" />
+                    <OfferBadge
+                      product={product}
+                      className="rbt-offer-badge-md"
+                    />
                   </div>
                 </div>
               </div>
               <div className="rbt-info-wrapper d-flex">
-                <ProductRating product={product}><span className="icon">
+                <ProductRating product={product}>
+                  <span className="icon">
                     <i className="fa-sharp fa-solid fa-truck-fast" />
-                  </span></ProductRating>
+                  </span>
+                </ProductRating>
                 <div className="prd-info-section has-left-separator">
                   <div className="rbt-badge rbt-badge-bg-green rbt-badge-border rbt-badge-small rbt-badge-rounded">
                     9 in Stock

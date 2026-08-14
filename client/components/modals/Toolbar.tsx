@@ -80,7 +80,10 @@ export default function Toolbar() {
                               <WishlistLength />
                             </div>
                           )}
-                          <span className="rbt-toolbar-label"> {item.label}</span>
+                          <span className="rbt-toolbar-label">
+                            {" "}
+                            {item.label}
+                          </span>
                         </ModalTriggerButton>
                       ) : (
                         <div className="rbt-round-btn has-rbt-md-fsize">
@@ -95,7 +98,10 @@ export default function Toolbar() {
                               <WishlistLength />
                             </div>
                           )}
-                          <span className="rbt-toolbar-label"> {item.label}</span>
+                          <span className="rbt-toolbar-label">
+                            {" "}
+                            {item.label}
+                          </span>
                         </div>
                       )}
                     </>

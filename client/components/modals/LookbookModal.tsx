@@ -6,7 +6,9 @@ import type { BlocsImageEntry } from "@/data/splash";
 import { useManagedModalPanel } from "@/hooks/useManagedModalPanel";
 import type { ModalNameType } from "@/types/modal";
 import {
-  blocsLookbookCol1, blocsLookbookCol2, blocsLookbookCol3,
+  blocsLookbookCol1,
+  blocsLookbookCol2,
+  blocsLookbookCol3,
 } from "@/data/splash";
 
 interface LookbookModalProps {
@@ -38,7 +40,11 @@ function BlocsEntry({ entry }: { entry: BlocsImageEntry }) {
   );
 }
 
-export default function LookbookModal({ id, title, count }: LookbookModalProps) {
+export default function LookbookModal({
+  id,
+  title,
+  count,
+}: LookbookModalProps) {
   const { close } = useManagedModalPanel(id as ModalNameType);
 
   return (

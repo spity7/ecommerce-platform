@@ -16,40 +16,40 @@ const Demos = dynamic(() => import("@/components/splash/Demos"), {
 });
 const HeaderVariations = dynamic(
   () => import("@/components/splash/HeaderVariations"),
-  { ssr: false },
+  { ssr: false }
 );
 const FooterVariations = dynamic(
   () => import("@/components/splash/FooterVariations"),
-  { ssr: false },
+  { ssr: false }
 );
 const InnerPages = dynamic(() => import("@/components/splash/InnerPages"), {
   ssr: false,
 });
 const CartOptionArea = dynamic(
   () => import("@/components/splash/CartOptionArea"),
-  { ssr: false },
+  { ssr: false }
 );
 const Blocs = dynamic(() => import("@/components/splash/Blocs"), {
   ssr: false,
 });
 const MobileViewArea = dynamic(
   () => import("@/components/splash/MobileViewArea"),
-  { ssr: false },
+  { ssr: false }
 );
 const Flexibility = dynamic(() => import("@/components/splash/Flexibility"), {
   ssr: false,
 });
 const MobileResponsive = dynamic(
   () => import("@/components/splash/MobileResponsive"),
-  { ssr: false },
+  { ssr: false }
 );
 const SpeedPerformance = dynamic(
   () => import("@/components/splash/SpeedPerformance"),
-  { ssr: false },
+  { ssr: false }
 );
 const AdminDashboard = dynamic(
   () => import("@/components/splash/AdminDashboard"),
-  { ssr: false },
+  { ssr: false }
 );
 const Costing = dynamic(() => import("@/components/splash/Costing"), {
   ssr: false,
@@ -59,7 +59,7 @@ const Features2 = dynamic(() => import("@/components/splash/Features2"), {
 });
 const FeaturesSlider = dynamic(
   () => import("@/components/splash/FeaturesSlider"),
-  { ssr: false },
+  { ssr: false }
 );
 const Testimonials = dynamic(() => import("@/components/splash/Testimonials"), {
   ssr: false,
@@ -71,7 +71,7 @@ const Variations = dynamic(() => import("@/components/splash/Variations"), {
 const Cta = dynamic(() => import("@/components/splash/Cta"), { ssr: false });
 const MarqueeSection = dynamic(
   () => import("@/components/splash/MarqueeSection"),
-  { ssr: false },
+  { ssr: false }
 );
 const Support = dynamic(() => import("@/components/splash/Support"), {
   ssr: false,
@@ -106,7 +106,7 @@ function RenderOnView({
         scrollTargetRef.current = node;
       }
     },
-    [scrollTargetRef],
+    [scrollTargetRef]
   );
 
   const mounted = isVisible || (eagerThrough > 0 && stepIndex <= eagerThrough);
@@ -138,7 +138,7 @@ function RenderOnView({
           observer.disconnect();
         }
       },
-      { rootMargin: "200px 0px", threshold: 0.08 },
+      { rootMargin: "200px 0px", threshold: 0.08 }
     );
 
     observer.observe(node);
@@ -261,9 +261,6 @@ export default function SplashClientContent() {
       >
         <SpeedPerformance />
       </RenderOnView>
-
-
-      
 
       <RenderOnView
         stepIndex={11}

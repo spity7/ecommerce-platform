@@ -19,7 +19,7 @@ const parsed = envSchema.safeParse(process.env);
 if (!parsed.success) {
   console.error(
     "Invalid environment variables:",
-    parsed.error.flatten().fieldErrors,
+    parsed.error.flatten().fieldErrors
   );
   process.exit(1);
 }
@@ -36,7 +36,7 @@ export const env = {
     bucketName: data.GCS_BUCKET_NAME,
     keyFile: data.GCS_KEY_FILE,
     isConfigured: Boolean(
-      data.GCS_PROJECT_ID && data.GCS_BUCKET_NAME && data.GCS_KEY_FILE,
+      data.GCS_PROJECT_ID && data.GCS_BUCKET_NAME && data.GCS_KEY_FILE
     ),
   },
 } as const;

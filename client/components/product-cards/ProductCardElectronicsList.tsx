@@ -13,7 +13,7 @@ const renderStars = (rating: number) => {
         <i
           className={`fa-solid fa-star${i < rating ? " rbt-rated-icon" : ""}`}
         />
-      </li>,
+      </li>
     );
   }
   return stars;
@@ -42,9 +42,7 @@ export default function ProductSmallCard({
             <p className="rating-digit">({product.ratingCount})</p>
           </div>
           <h6 className="rbt-card-title">
-            <Link href={detailsPageLink}>
-              {product.title}
-            </Link>
+            <Link href={detailsPageLink}>{product.title}</Link>
           </h6>
           <div className="pricing-part">
             <del className="price-text">
@@ -67,4 +65,3 @@ export default function ProductSmallCard({
     </div>
   );
 }
-

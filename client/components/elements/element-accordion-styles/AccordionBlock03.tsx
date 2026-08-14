@@ -49,17 +49,20 @@ function AccordionBlock03() {
                     Unimart E-commerce Website?
                   </h2>
                   <p className="description has-medium-font-size mt--20 plr--80 plr_sm--0 plr_md--0">
-                    <strong>It&apos;s an e-commerce platform.</strong> Unimart helps
-                    you launch modern online stores quickly with reusable sections,
-                    responsive layouts, and prebuilt shop flows for categories,
-                    product details, cart, and checkout.
+                    <strong>It&apos;s an e-commerce platform.</strong> Unimart
+                    helps you launch modern online stores quickly with reusable
+                    sections, responsive layouts, and prebuilt shop flows for
+                    categories, product details, cart, and checkout.
                   </p>
                 </div>
                 <div className="rbt-accordion-style rbt-accordion-04 accordion">
                   <div className="accordion" id="accordionExamplec3">
                     {accordionData.map((item) => (
                       <div className="accordion-item card" key={item.id}>
-                        <h2 className="accordion-header card-header" id={item.headerId}>
+                        <h2
+                          className="accordion-header card-header"
+                          id={item.headerId}
+                        >
                           <button
                             className={`accordion-button${item.isOpen ? "" : " collapsed"}`}
                             type="button"
@@ -77,7 +80,9 @@ function AccordionBlock03() {
                           aria-labelledby={item.headerId}
                           data-bs-parent="#accordionExamplec3"
                         >
-                          <div className="accordion-body card-body">{item.content}</div>
+                          <div className="accordion-body card-body">
+                            {item.content}
+                          </div>
                         </div>
                       </div>
                     ))}

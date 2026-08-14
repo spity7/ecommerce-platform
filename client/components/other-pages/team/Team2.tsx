@@ -60,7 +60,7 @@ export default function Team2() {
               }}
               className="swiper team-slide-activation rbt-arrow-between rbt-dot-bottom-center pl--24 pr--24 pt--32 pb--60 rbt-swiper-lr-shadow rbt-arrow-show-dfl"
             >
-              {teamMembers.slice(0,10).map((member) => (
+              {teamMembers.slice(0, 10).map((member) => (
                 <SwiperSlide key={member.id} className="swiper-slide">
                   <div className="rbt-team team-style-default style-three rbt-hover">
                     <div className="inner">

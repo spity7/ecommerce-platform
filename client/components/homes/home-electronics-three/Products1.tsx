@@ -23,7 +23,7 @@ export default function Products1({ productSectionSpace }: ProductsProps) {
     if (activeTab === "view-all") return electronicsComponentsData;
 
     return electronicsComponentsData.filter((product) =>
-      product.demoTab?.includes(activeTab),
+      product.demoTab?.includes(activeTab)
     );
   }, [activeTab]);
   return (

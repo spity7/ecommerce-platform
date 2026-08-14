@@ -28,12 +28,12 @@ export default function Banner() {
                   Discover Lamplight—a platform to brighten your journey with
                   innovative solutions. Join today for a brighter future!
                 </p>
-                  <Link
-                    className="rbt-btn rbt-scroll-trigger text-left fade_in animation-order-3"
-                    href={`/shop-by-category`}
-                  >
-                    Contact Us
-                  </Link>
+                <Link
+                  className="rbt-btn rbt-scroll-trigger text-left fade_in animation-order-3"
+                  href={`/shop-by-category`}
+                >
+                  Contact Us
+                </Link>
               </div>
             </div>
           </div>

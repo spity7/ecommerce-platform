@@ -1,5 +1,5 @@
 "use client";
-import { WaveMediumIcon } from '../../svg-icons';
+import { WaveMediumIcon } from "../../svg-icons";
 import ProductRating from "@/components/common/ui/ProductRating";
 import Link from "next/link";
 import Image from "next/image";

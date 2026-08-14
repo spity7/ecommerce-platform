@@ -20,7 +20,7 @@ export default function Products2() {
     if (activeTab === "view-all") return accessoriesProducts2;
 
     return accessoriesProducts2.filter((product) =>
-      product.demoTab?.includes(activeTab),
+      product.demoTab?.includes(activeTab)
     );
   }, [activeTab]);
 

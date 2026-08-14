@@ -23,8 +23,8 @@ export default function Banner() {
                   <h3 className="title">Real Brides</h3>
                   <p>
                     We are inspired by our KAREN WILLIS HOLMES Real Brides. We
-                    love seeing women in our gowns, showcasing their style. It&apos;s
-                    a privilege to be their wedding dress designer
+                    love seeing women in our gowns, showcasing their style.
+                    It&apos;s a privilege to be their wedding dress designer
                   </p>
                 </div>
               </div>

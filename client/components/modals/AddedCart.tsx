@@ -17,7 +17,7 @@ export default function AddedCart() {
 
   const totalItems = cartProducts.reduce(
     (sum, product) => sum + product.quantity,
-    0,
+    0
   );
 
   return (

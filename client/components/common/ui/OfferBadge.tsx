@@ -28,7 +28,9 @@ export default function OfferBadge({
     return null;
   }
 
-  const badgeClassName = ["rbt-offer-badge", className].filter(Boolean).join(" ");
+  const badgeClassName = ["rbt-offer-badge", className]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <span className={badgeClassName}>

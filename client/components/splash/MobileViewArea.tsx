@@ -31,7 +31,7 @@ const MOBILE_SLIDES = [
   {
     src: "/assets/images/splash/others/mobile-view-7.webp",
     title: "Home Fragrance",
-  }
+  },
 ];
 
 export default function MobileViewArea() {

@@ -31,7 +31,9 @@ export default function LayoutModals() {
       >
     )
       .filter((e): e is [ModalNameType, ComponentType] => e[1] != null)
-      .map(([modalName, Comp]) => [modalName, <Comp key={modalName} />] as const);
+      .map(
+        ([modalName, Comp]) => [modalName, <Comp key={modalName} />] as const
+      );
   }, []);
 
   useEffect(() => {

@@ -16,7 +16,7 @@ export default function Team4() {
         </div>
         <div className="row row--16 mt_dec--32">
           {/* Start Single Team  */}
-          {teamMembers.slice(0,12).map((member, index) => (
+          {teamMembers.slice(0, 12).map((member, index) => (
             <div
               key={index}
               className="col-xl-3 col-lg-4 col-md-6 col-12 mt--32"

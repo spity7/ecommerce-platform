@@ -75,9 +75,7 @@ export default function Products1() {
               >
                 {jewelryProducts.map((product, i) => (
                   <SwiperSlide className="swiper-slide" key={i}>
-                    <ProductCard13 product={product}
-                      animationOrder={i + 1}
-                    />
+                    <ProductCard13 product={product} animationOrder={i + 1} />
                   </SwiperSlide>
                 ))}
                 <div className="rbt-swiper-pagination rbt-swiper-pagination-var-one has-hide-dot-swipe" />

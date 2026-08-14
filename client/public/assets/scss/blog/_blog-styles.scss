@@ -87,9 +87,9 @@
   }
 }
 .rbt-blog-post-margin {
-    @media #{$small-mobile} {
-      .row--12>[class*="col"].mt--24 {
-          margin-top: 24px !important;
-      }
+  @media #{$small-mobile} {
+    .row--12 > [class*="col"].mt--24 {
+      margin-top: 24px !important;
+    }
   }
 }

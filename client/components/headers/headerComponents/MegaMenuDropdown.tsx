@@ -1,9 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import {
-  megaMenuCategories,
-  type MegaMenuCategory,
-} from "@/data/megaMenu";
+import { megaMenuCategories, type MegaMenuCategory } from "@/data/megaMenu";
 import MegaMenuFlameIcon from "./MegaMenuFlameIcon";
 
 // ─── Sub-components ────────────────────────────────────────────────────────────
@@ -75,9 +72,7 @@ function MegaPanelItem({
                     {/* Flame shipping tag */}
                     <div className="col-lg-12">
                       <div className="rbt-quick-info-tag d-flex mt--16">
-                        <MegaMenuFlameIcon
-                          id={`mega-flame-${index}`}
-                        />
+                        <MegaMenuFlameIcon id={`mega-flame-${index}`} />
                         <p>
                           <strong className="mr--4">
                             Free Express Shipping
@@ -92,7 +87,9 @@ function MegaPanelItem({
                 {/* Right: promotional banner card */}
                 {cat.banner && (
                   <div className="col-lg-6 col-xl-5 col-xxl-5 single-mega-item rbt-scroll-trigger fade_in animation-order-1">
-                    <div className={cat.banner.cardClass ?? "rbt-menu-offer-card"}>
+                    <div
+                      className={cat.banner.cardClass ?? "rbt-menu-offer-card"}
+                    >
                       <div className="mega-top-banner">
                         <div className="rbt-banner-inner flex-column justify-content-center rbt-gap--8 align-items-center text-center">
                           <div className="rbt-banner-content">
@@ -106,7 +103,10 @@ function MegaPanelItem({
                             )}
                           </div>
                           <Link
-                            className={cat.banner.btnClass ?? "rbt-btn rbt-btn-sm rbt-btn-black"}
+                            className={
+                              cat.banner.btnClass ??
+                              "rbt-btn rbt-btn-sm rbt-btn-black"
+                            }
                             href={cat.banner.btnHref}
                           >
                             {cat.banner.btnLabel}

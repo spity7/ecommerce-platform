@@ -113,7 +113,10 @@ function HeroSlidersSeven() {
                                   <span className="rbt-title-bold mr--4">
                                     {product.title?.split("\n")[0] ?? ""}
                                   </span>
-                                  {product.title?.split("\n").slice(1).join(" ") ?? ""}
+                                  {product.title
+                                    ?.split("\n")
+                                    .slice(1)
+                                    .join(" ") ?? ""}
                                 </Link>
                               </h4>
                               <Link

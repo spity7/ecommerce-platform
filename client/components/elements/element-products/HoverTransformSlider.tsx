@@ -41,9 +41,7 @@ function HoverTransformSlider() {
                 {furnitureSliderProducts.map((product, i) => (
                   <SwiperSlide key={i} className="swiper-slide">
                     <div className="single-slide">
-                      <ProductCard2 product={product}
-                      animationOrder={i + 1}
-                    />
+                      <ProductCard2 product={product} animationOrder={i + 1} />
                     </div>
                   </SwiperSlide>
                 ))}

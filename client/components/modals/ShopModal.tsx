@@ -5,9 +5,7 @@ import Link from "next/link";
 import type { BlocsImageEntry } from "@/data/splash";
 import { useManagedModalPanel } from "@/hooks/useManagedModalPanel";
 import type { ModalNameType } from "@/types/modal";
-import {
-  blocsShopCol1, blocsShopCol2, blocsShopCol3,
-} from "@/data/splash";
+import { blocsShopCol1, blocsShopCol2, blocsShopCol3 } from "@/data/splash";
 
 interface ShopModalProps {
   id: string;

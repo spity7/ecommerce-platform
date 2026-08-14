@@ -21,7 +21,7 @@ export default function Categories() {
   const categorySidebarOpen = isAnimatedOpen;
   const categorySidebarLayerZIndex = getStackedModalZIndex(
     activeBsModal,
-    "categorySidebar",
+    "categorySidebar"
   );
 
   return (

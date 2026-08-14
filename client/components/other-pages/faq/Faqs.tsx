@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import { useParallax } from "@/hooks/useParallax";
@@ -43,7 +43,10 @@ export default function Faqs() {
   ];
 
   return (
-    <div ref={parallaxRef} className="rbt-accordion-area accordion-style-1 rbt-bg-color-white rbt-section-gap">
+    <div
+      ref={parallaxRef}
+      className="rbt-accordion-area accordion-style-1 rbt-bg-color-white rbt-section-gap"
+    >
       <div className="container">
         <div className="row gx-5 gy-0 align-items-center">
           <div className="col-lg-6 order-2 order-lg-1">
@@ -64,7 +67,10 @@ export default function Faqs() {
                 <div className="accordion" id="accordionExampleb2">
                   {accordionData.map((item) => (
                     <div className="accordion-item card" key={item.id}>
-                      <h2 className="accordion-header card-header" id={item.headerId}>
+                      <h2
+                        className="accordion-header card-header"
+                        id={item.headerId}
+                      >
                         <button
                           className={`accordion-button${item.isOpen ? "" : " collapsed"}`}
                           type="button"
@@ -82,7 +88,9 @@ export default function Faqs() {
                         aria-labelledby={item.headerId}
                         data-bs-parent="#accordionExampleb2"
                       >
-                        <div className="accordion-body card-body">{item.content}</div>
+                        <div className="accordion-body card-body">
+                          {item.content}
+                        </div>
                       </div>
                     </div>
                   ))}

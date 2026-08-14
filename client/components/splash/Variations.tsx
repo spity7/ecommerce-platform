@@ -21,7 +21,10 @@ export default function Variations() {
         </div>
         <div className="row row--12 mt_dec--24 justify-content-center">
           {variationCards.map((card, idx) => (
-            <div key={card.href + idx} className="col-12 col-md-6 col-lg-4 col-xl-3 mt--24">
+            <div
+              key={card.href + idx}
+              className="col-12 col-md-6 col-lg-4 col-xl-3 mt--24"
+            >
               <Link
                 href={card.href}
                 className={`rbt-feature-navigation-card ${card.colorVar} rbt-scroll-trigger fade_in animation-order-1`}

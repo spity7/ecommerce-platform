@@ -148,7 +148,7 @@ export default function CartModal() {
                               onChange={(e) =>
                                 updateQuantity(
                                   product.id,
-                                  Number(e.target.value),
+                                  Number(e.target.value)
                                 )
                               }
                               min={1}

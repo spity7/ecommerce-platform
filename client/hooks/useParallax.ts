@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 interface ParallaxConfig {
   x?: number;
@@ -13,22 +13,33 @@ interface ParallaxConfig {
   scaleY?: number;
   scaleZ?: number;
   scale?: number;
-  'from-scroll'?: number;
-  'to-scroll'?: number;
+  "from-scroll"?: number;
+  "to-scroll"?: number;
   distance?: number;
   duration?: number;
-  'duration-return'?: number;
+  "duration-return"?: number;
   easing?: string;
-  'easing-return'?: string;
+  "easing-return"?: string;
   smoothness?: number;
   perspective?: number;
 }
 
-const PROPERTIES = ['x', 'y', 'z', 'rotateX', 'rotateY', 'rotateZ', 'scaleX', 'scaleY', 'scaleZ', 'scale'] as const;
+const PROPERTIES = [
+  "x",
+  "y",
+  "z",
+  "rotateX",
+  "rotateY",
+  "rotateZ",
+  "scaleX",
+  "scaleY",
+  "scaleZ",
+  "scale",
+] as const;
 const ROUND = 1000;
 
 const toNumber = (value: unknown, fallback = 0) => {
-  if (typeof value === 'number' && !Number.isNaN(value)) {
+  if (typeof value === "number" && !Number.isNaN(value)) {
     return value;
   }
   const parsed = Number(value ?? fallback);
@@ -48,35 +59,36 @@ export function useParallax() {
       const scroll = window.scrollY;
       const windowHeight = window.innerHeight;
 
-      const parallaxElements = container.querySelectorAll('[data-parallax]');
+      const parallaxElements = container.querySelectorAll("[data-parallax]");
 
       parallaxElements.forEach((el) => {
         const element = el as HTMLElement;
-        
+
         // Get or cache the original style
         let cache = elementDataCache.current.get(el);
         if (!cache) {
           cache = {
-            originalStyle: element.getAttribute('style') || '',
+            originalStyle: element.getAttribute("style") || "",
             elementData: new Map(),
           };
           elementDataCache.current.set(el, cache);
         }
 
         const { originalStyle, elementData } = cache;
-        let properties: Partial<Record<typeof PROPERTIES[number], number>> = {};
+        let properties: Partial<Record<(typeof PROPERTIES)[number], number>> =
+          {};
         let applyProperties = false;
 
         // Parse data-parallax attributes
         const dataAttributes: ParallaxConfig[] = [];
-        
+
         // Get the main data-parallax
-        const parallaxAttr = element.getAttribute('data-parallax');
+        const parallaxAttr = element.getAttribute("data-parallax");
         if (parallaxAttr) {
           try {
             dataAttributes.push(JSON.parse(parallaxAttr));
           } catch (e) {
-            console.warn('Failed to parse data-parallax:', parallaxAttr);
+            console.warn("Failed to parse data-parallax:", parallaxAttr);
           }
         }
 
@@ -93,14 +105,17 @@ export function useParallax() {
 
         // Process each parallax data config
         dataAttributes.forEach((data) => {
-          let scrollFrom = data['from-scroll'];
+          let scrollFrom = data["from-scroll"];
           if (scrollFrom === undefined) {
-            scrollFrom = Math.max(0, element.getBoundingClientRect().top + scroll - windowHeight);
+            scrollFrom = Math.max(
+              0,
+              element.getBoundingClientRect().top + scroll - windowHeight
+            );
           }
           scrollFrom = Math.floor(scrollFrom);
 
-          let scrollDistance = data['distance'];
-          let scrollTo = data['to-scroll'];
+          let scrollDistance = data["distance"];
+          let scrollTo = data["to-scroll"];
 
           if (scrollDistance === undefined && scrollTo === undefined) {
             scrollDistance = windowHeight;
@@ -115,7 +130,7 @@ export function useParallax() {
           }
           scrollTo = Math.floor(scrollTo || 0);
 
-          const smoothness = Math.floor(data['smoothness'] ?? 30) || 1;
+          const smoothness = Math.floor(data["smoothness"] ?? 30) || 1;
 
           let scrollCurrent = scroll;
           scrollCurrent = Math.max(scrollCurrent, scrollFrom);
@@ -133,7 +148,12 @@ export function useParallax() {
             let to = toNumber(toRaw);
 
             let defaultProp = 0;
-            if (prop === 'scale' || prop === 'scaleX' || prop === 'scaleY' || prop === 'scaleZ') {
+            if (
+              prop === "scale" ||
+              prop === "scaleX" ||
+              prop === "scaleY" ||
+              prop === "scaleZ"
+            ) {
               defaultProp = 1;
             }
 
@@ -177,14 +197,15 @@ export function useParallax() {
           const cssTransform = `${translate3d} ${rotate3d} ${scale3d}`;
 
           element.setAttribute(
-            'style',
+            "style",
             `transform: ${cssTransform}; -webkit-transform: ${cssTransform}; ${originalStyle}`
           );
         }
       });
 
       if (window.requestAnimationFrame) {
-        requestAnimationFrameId.current = window.requestAnimationFrame(applyParallaxEffect);
+        requestAnimationFrameId.current =
+          window.requestAnimationFrame(applyParallaxEffect);
       }
     };
 

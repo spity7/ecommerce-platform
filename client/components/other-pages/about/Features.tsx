@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useParallax } from "@/hooks/useParallax";
 import Image from "next/image";

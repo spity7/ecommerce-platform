@@ -1,5 +1,5 @@
-'use client'
-import { ScaleEmptyIcon } from '../../svg-icons';
+"use client";
+import { ScaleEmptyIcon } from "../../svg-icons";
 import Image from "next/image";
 import Link from "next/link";
 import { accessoriesProducts } from "@/data/products/accessories";
@@ -39,7 +39,10 @@ export default function EmptyCompare() {
                 </div>
                 <div className="rbt-compare-product-search-area">
                   <div className="compare-product-search-field-wrap">
-                    <form onSubmit={(e) => e.preventDefault()} className="rbt-search-form">
+                    <form
+                      onSubmit={(e) => e.preventDefault()}
+                      className="rbt-search-form"
+                    >
                       <div className="rbt-inner-search-field border-0">
                         <div className="rbt-search-input-section">
                           <input
@@ -56,34 +59,37 @@ export default function EmptyCompare() {
                         </div>
                         <ul className="rbt-product-search-dropdown">
                           {compareSuggestions.map((product) => (
-                          <li key={product.id}>
-                            <div className="rbt-product">
-                              <Image
-                                alt="Product Image"
-                                src={product.imgSrc}
-                                width={93}
-                                height={93}
-                              />
-                            </div>
-                            <div className="rbt-product-info">
-                              <h6 className="rbt-title">{product.title}</h6>
-                              <span className="pricing-part">
-                                {product.oldPrice ? (
-                                  <del className="price-text">
-                                    {formatCurrency(product.oldPrice)}
-                                  </del>
-                                ) : null}
-                                <span className="price-text">
-                                  {formatCurrency(product.price)}
+                            <li key={product.id}>
+                              <div className="rbt-product">
+                                <Image
+                                  alt="Product Image"
+                                  src={product.imgSrc}
+                                  width={93}
+                                  height={93}
+                                />
+                              </div>
+                              <div className="rbt-product-info">
+                                <h6 className="rbt-title">{product.title}</h6>
+                                <span className="pricing-part">
+                                  {product.oldPrice ? (
+                                    <del className="price-text">
+                                      {formatCurrency(product.oldPrice)}
+                                    </del>
+                                  ) : null}
+                                  <span className="price-text">
+                                    {formatCurrency(product.price)}
+                                  </span>
                                 </span>
-                              </span>
-                            </div>
-                          </li>
+                              </div>
+                            </li>
                           ))}
                         </ul>
                       </div>
                     </form>
-                    <form onSubmit={(e) => e.preventDefault()} className="rbt-search-form">
+                    <form
+                      onSubmit={(e) => e.preventDefault()}
+                      className="rbt-search-form"
+                    >
                       <div className="rbt-inner-search-field border-0">
                         <div className="rbt-search-input-section">
                           <input
@@ -100,8 +106,12 @@ export default function EmptyCompare() {
                       </div>
                     </form>
                   </div>
-                  <Link className="rbt-btn rbt-btn-md radius" href="/compare-product">
-                    <i className="fa-regular fa-scale-balanced" /> View Comparison
+                  <Link
+                    className="rbt-btn rbt-btn-md radius"
+                    href="/compare-product"
+                  >
+                    <i className="fa-regular fa-scale-balanced" /> View
+                    Comparison
                   </Link>
                 </div>
               </div>

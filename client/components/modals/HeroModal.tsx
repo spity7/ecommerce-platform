@@ -5,9 +5,7 @@ import Link from "next/link";
 import type { BlocsImageEntry } from "@/data/splash";
 import { useManagedModalPanel } from "@/hooks/useManagedModalPanel";
 import type { ModalNameType } from "@/types/modal";
-import {
-  blocsHeroCol1, blocsHeroCol2, blocsHeroCol3,
-} from "@/data/splash";
+import { blocsHeroCol1, blocsHeroCol2, blocsHeroCol3 } from "@/data/splash";
 
 interface HeroModalProps {
   id: string;

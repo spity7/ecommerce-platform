@@ -576,8 +576,8 @@ Card Area
   }
 }
 .cyber-monday-product {
-    .rbt-card .rbt-card-body .rbt-card-subtitle:hover {
-      color: var(--color-white);
+  .rbt-card .rbt-card-body .rbt-card-subtitle:hover {
+    color: var(--color-white);
   }
 }
 /*----------------------------- 
@@ -606,12 +606,14 @@ Card Area
     background: var(--color-secondary);
   }
   &.rbt-product-badge-bg-primary-gradient {
-    background: linear-gradient(90deg, #215ada 2.66%, #001a53 100%),
+    background:
+      linear-gradient(90deg, #215ada 2.66%, #001a53 100%),
       linear-gradient(90deg, #fe3d06 0%, #f1a800 100%),
       linear-gradient(90deg, #feedde 0%, #feedde 100%);
   }
   &.rbt-product-badge-bg-secondary-gradient {
-    background: linear-gradient(90deg, #fe3d06 0%, #f1a800 100%),
+    background:
+      linear-gradient(90deg, #fe3d06 0%, #f1a800 100%),
       linear-gradient(90deg, #feedde 0%, #feedde 100%);
   }
   &.rbt-product-badge-bg-yellow {

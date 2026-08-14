@@ -30,7 +30,10 @@ export default function Hero() {
                       clothing made.
                     </p>
                     <div className="rbt-banner-btn-grp">
-                      <Link href="/shop" className="rbt-btn rbt-bg-color-secondary">
+                      <Link
+                        href="/shop"
+                        className="rbt-btn rbt-bg-color-secondary"
+                      >
                         <i className="fa-regular fa-cart-shopping mr--8" />
                         Shop for Baby
                       </Link>

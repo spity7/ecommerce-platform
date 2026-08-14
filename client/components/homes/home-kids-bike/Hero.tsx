@@ -3,7 +3,13 @@ import { kidsBikeBanners } from "@/data/heroSlides";
 import { formatCurrency } from "@/lib/price";
 import OfferBadge from "@/components/common/ui/OfferBadge";
 
-import { Autoplay, EffectFade, Navigation, Pagination, Parallax } from "swiper/modules";
+import {
+  Autoplay,
+  EffectFade,
+  Navigation,
+  Pagination,
+  Parallax,
+} from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Image from "next/image";
 import Link from "next/link";

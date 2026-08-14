@@ -18,7 +18,7 @@ export default function Products1() {
   const filteredProducts = useMemo(() => {
     if (activeTab === "view-all") return smartwatchProducts;
     return smartwatchProducts.filter((product) =>
-      product.demoTab?.includes(activeTab),
+      product.demoTab?.includes(activeTab)
     );
   }, [activeTab]);
 
@@ -56,9 +56,7 @@ export default function Products1() {
                 key={i}
                 className="col-lg-3 col-xl-3 col-xxl-3 col-md-6 col-sm-6 col-6 mt--24"
               >
-                <ProductCard14 product={product}
-                      animationOrder={i + 1}
-                    />
+                <ProductCard14 product={product} animationOrder={i + 1} />
               </div>
             ))}
             {/* End Single Card  */}

@@ -1,6 +1,5 @@
 import Image from "next/image";
 
-
 import DescriptionTab1 from "./DescriptionTab1";
 import RecomendedProducts from "../recommandedProducts/RecomendedProducts";
 

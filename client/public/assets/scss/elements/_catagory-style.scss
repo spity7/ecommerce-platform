@@ -528,7 +528,7 @@ Catagory Styles
         }
 
         .bottom-content {
-          >.rbt-btn {
+          > .rbt-btn {
             position: static;
             transform: none;
             top: 0;
@@ -671,9 +671,11 @@ Catagory Styles
             transform: translate(-50%, -50%);
             z-index: 1;
             border-radius: 10px;
-            background: linear-gradient(180deg,
-                rgba(0, 0, 0, 0) 23.85%,
-                rgba(0, 0, 0, 0.6) 100%);
+            background: linear-gradient(
+              180deg,
+              rgba(0, 0, 0, 0) 23.85%,
+              rgba(0, 0, 0, 0.6) 100%
+            );
           }
 
           img {
@@ -958,8 +960,10 @@ Catagory Styles
         width: 100%;
         left: 0;
         top: 0;
-        background: linear-gradient(rgba(118, 65, 31, 0.1) 0%,
-            rgba(49, 19, 0, 0.7) 100%);
+        background: linear-gradient(
+          rgba(118, 65, 31, 0.1) 0%,
+          rgba(49, 19, 0, 0.7) 100%
+        );
         opacity: 0.9;
       }
 
@@ -973,18 +977,22 @@ Catagory Styles
       &.rbt-section-overlay-white {
         &::after {
           opacity: 0.7;
-          background: linear-gradient(180deg,
-              rgba(0, 0, 0, 0.1) 0%,
-              rgba(0, 0, 0, 0.5) 100%);
+          background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.1) 0%,
+            rgba(0, 0, 0, 0.5) 100%
+          );
         }
       }
 
       &.rbt-section-overlay-black-reverse {
         &::after {
           opacity: 1;
-          background: linear-gradient(180deg,
-              rgba(3, 14, 3, 0) 22.08%,
-              rgba(3, 14, 3, 0.8) 86.53%);
+          background: linear-gradient(
+            180deg,
+            rgba(3, 14, 3, 0) 22.08%,
+            rgba(3, 14, 3, 0.8) 86.53%
+          );
         }
       }
     }
@@ -1288,7 +1296,6 @@ Catagory Styles
 
 /* Tea stores collection row */
 .rbt-tea-loose-leafs-section {
-
   .rbt-tea-leaf-type-list {
     list-style: none;
     margin: 0;
@@ -1302,7 +1309,6 @@ Catagory Styles
       flex-wrap: wrap;
       justify-content: center;
       gap: 18px;
-
     }
 
     @media #{$sm-layout} {
@@ -1319,7 +1325,6 @@ Catagory Styles
     li {
       margin: 0;
     }
-
   }
 
   .rbt-tea-leaf-type-item {
@@ -1476,12 +1481,18 @@ Catagory Styles
 }
 
 .rbt-bg-color-gray-light {
-  .rbt-cat-box.rbt-cat-box-5 .rbt-right-corner-portion .rbt-corner-portion-wrapper {
+  .rbt-cat-box.rbt-cat-box-5
+    .rbt-right-corner-portion
+    .rbt-corner-portion-wrapper {
     background-color: var(--color-gray-light);
   }
 
-  .rbt-cat-box.rbt-cat-box-5 .rbt-right-corner-portion.bottom--position .rbt-corner-portion-wrapper::before,
-  .rbt-cat-box.rbt-cat-box-5 .rbt-right-corner-portion.bottom--position .rbt-corner-portion-wrapper:after {
+  .rbt-cat-box.rbt-cat-box-5
+    .rbt-right-corner-portion.bottom--position
+    .rbt-corner-portion-wrapper::before,
+  .rbt-cat-box.rbt-cat-box-5
+    .rbt-right-corner-portion.bottom--position
+    .rbt-corner-portion-wrapper:after {
     box-shadow: 15px 15px 0 0 var(--color-gray-light);
   }
 }
@@ -1554,11 +1565,11 @@ Catagory Styles
           margin: 0;
           position: relative;
 
-          &+.dropdown-parent-list {
+          & + .dropdown-parent-list {
             border-top: 2px solid var(--color-gray-light);
           }
 
-          &>a {
+          & > a {
             font-weight: var(--f-medium);
             padding: 12px 16px;
             font-size: var(--font-size-b3);
@@ -1723,7 +1734,7 @@ Catagory Styles
           }
 
           &.active {
-            &>a {
+            & > a {
               color: var(--color-primary);
               background: var(--color-brand-100);
             }

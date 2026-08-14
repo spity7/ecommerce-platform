@@ -16,11 +16,7 @@ import CompareQuickLinkTrigger from "@/components/action-buttons/CompareQuickLin
 import WishlistQuickLinkTrigger from "@/components/action-buttons/WishlistQuickLinkTrigger";
 import { formatCurrency } from "@/lib/price";
 
-export default function DetailsStickyThumbs({
-  product,
-}: {
-  product: Product;
-}) {
+export default function DetailsStickyThumbs({ product }: { product: Product }) {
   return (
     <div className="rbt-component-area rbt-single-product-area rbt-bg-color-white rbt-section-gapBottom">
       <div className="container">
@@ -49,9 +45,11 @@ export default function DetailsStickyThumbs({
                     blanditiis praesentium voluptatu atque...
                   </p>
                   <div className="rbt-info-wrapper d-flex">
-                    <ProductRating product={product} className="mt--0"><span className="icon">
+                    <ProductRating product={product} className="mt--0">
+                      <span className="icon">
                         <i className="fa-sharp fa-solid fa-truck-fast" />
-                      </span></ProductRating>
+                      </span>
+                    </ProductRating>
                     <div className="prd-info-section has-left-separator">
                       <div className="prd-id-text">
                         <p className="text-bold">SKU:</p>
@@ -72,7 +70,10 @@ export default function DetailsStickyThumbs({
                       <span className="price-text">
                         {formatCurrency(product.price)}
                       </span>
-                      <OfferBadge product={product} className="rbt-offer-badge-md" />
+                      <OfferBadge
+                        product={product}
+                        className="rbt-offer-badge-md"
+                      />
                     </div>
                     <div className="rbt-quick-access-banner-action-btn d-flex align-items-center">
                       <ModalTriggerButton

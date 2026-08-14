@@ -33,9 +33,7 @@ export default function Products3() {
           {/* Start Single Card  */}
           {bookProductsFinal.map((product, i) => (
             <div key={i} className="col-xxl-1-8 col-md-3 col-6 mt--24">
-              <ProductCard20 product={product}
-                      animationOrder={i + 1}
-                    />
+              <ProductCard20 product={product} animationOrder={i + 1} />
             </div>
           ))}
           {/* End Single Card  */}

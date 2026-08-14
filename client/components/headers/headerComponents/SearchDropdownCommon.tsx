@@ -66,7 +66,10 @@ export default function SearchDropdownCommon() {
                   aria-label="Search by image"
                   className="media-search-btn media-search-popup-activation"
                 >
-                  <i className="fa-sharp fa-regular fa-camera" aria-hidden="true" />
+                  <i
+                    className="fa-sharp fa-regular fa-camera"
+                    aria-hidden="true"
+                  />
                 </button>
               </div>
               <div className="submit-btn">

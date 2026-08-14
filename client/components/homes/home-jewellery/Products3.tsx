@@ -20,7 +20,7 @@ export default function Products3() {
   const filteredProducts = useMemo(() => {
     if (activeTab === "view-all") return jewelryHalfWidthData;
     return jewelryHalfWidthData.filter((product) =>
-      product.demoTab?.includes(activeTab),
+      product.demoTab?.includes(activeTab)
     );
   }, [activeTab]);
 

@@ -199,7 +199,7 @@ export default function Reviews() {
                                       }
                                     />
                                   </li>
-                                ),
+                                )
                               )}
                             </ul>
                             <div className="ordered-item more-icon ms-auto">

@@ -1,5 +1,5 @@
- "use client";
-import { CircleProgressIcon } from '../svg-icons';
+"use client";
+import { CircleProgressIcon } from "../svg-icons";
 import { useEffect, useRef, useState } from "react";
 
 type CircleProgressProps = {
@@ -86,4 +86,3 @@ export default function CircleProgress({ percent }: CircleProgressProps) {
     </div>
   );
 }
-

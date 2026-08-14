@@ -83,10 +83,15 @@ export default function ReturnPolicy() {
                 </p>
                 <p>
                   Email:
-                  <a href="mailto:support@unimart.com" className="ml--4">support@unimart.com</a>
+                  <a href="mailto:support@unimart.com" className="ml--4">
+                    support@unimart.com
+                  </a>
                 </p>
                 <p>
-                  Phone: <a href="tel:+11234567890" className="ml--4">+1 123 456 7890</a>
+                  Phone:{" "}
+                  <a href="tel:+11234567890" className="ml--4">
+                    +1 123 456 7890
+                  </a>
                 </p>
               </div>
             </div>

@@ -95,7 +95,8 @@ function HeroSlidersOne() {
                               <span className="rbt-bold--text d-block">
                                 {slide.title?.split("\n")[0] ?? ""}
                               </span>
-                              {slide.title?.split("\n").slice(1).join(" ") ?? ""}
+                              {slide.title?.split("\n").slice(1).join(" ") ??
+                                ""}
                             </h2>
                             <div className="rbt-pricing-part d-flex align-items-center flex-row">
                               <p className="rbt-price-desc-text">

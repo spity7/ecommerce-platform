@@ -22,9 +22,7 @@ export default function NavProducts() {
     >
       {navroducts.map((product, i) => (
         <SwiperSlide key={i}>
-          <ProductCard14 product={product}
-                      animationOrder={i + 1}
-                    />
+          <ProductCard14 product={product} animationOrder={i + 1} />
         </SwiperSlide>
       ))}
 

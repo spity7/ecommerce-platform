@@ -19,7 +19,7 @@ export default function Products() {
     if (activeTab === "view-all") return electronicsCardData;
 
     return electronicsCardData.filter((product) =>
-      product.demoTab?.includes(activeTab),
+      product.demoTab?.includes(activeTab)
     );
   }, [activeTab]);
 

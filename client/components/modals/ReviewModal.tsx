@@ -1,5 +1,5 @@
-'use client'
-import { CloseIcon } from '../svg-icons';
+"use client";
+import { CloseIcon } from "../svg-icons";
 import Image from "next/image";
 import Link from "next/link";
 import { useManagedModalPanel } from "@/hooks/useManagedModalPanel";

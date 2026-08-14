@@ -90,7 +90,7 @@ export default function FilterByBrand({
                 (
                 {getFilterCount(
                   (product) =>
-                    !!(product.filterBrands?.includes(brand.name) ?? false),
+                    !!(product.filterBrands?.includes(brand.name) ?? false)
                 )}
                 )
               </span>

@@ -102,7 +102,7 @@ export default function LookbookBanner({
                               <li key={j}>
                                 <i className="fa-solid fa-star rbt-rated-icon" />
                               </li>
-                            ),
+                            )
                           )}
                         </ul>
                         <p className="rating-digit">({item.ratingCount})</p>

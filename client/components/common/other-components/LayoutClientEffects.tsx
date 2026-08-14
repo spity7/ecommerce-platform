@@ -17,7 +17,7 @@ export default function LayoutClientEffects() {
     // Handle intersection events for scroll animations
     function onIntersection(
       entries: IntersectionObserverEntry[],
-      observer: IntersectionObserver,
+      observer: IntersectionObserver
     ) {
       entries.forEach((entry: IntersectionObserverEntry, index: number) => {
         if (entry.isIntersecting) {
@@ -29,7 +29,7 @@ export default function LayoutClientEffects() {
             if (elementTarget.dataset.cascade) {
               elementTarget.style.setProperty(
                 "--animation-order",
-                String(index),
+                String(index)
               );
             }
           }
@@ -43,10 +43,10 @@ export default function LayoutClientEffects() {
 
     function initializeScrollAnimationTrigger(
       rootEl: Document | HTMLElement = document,
-      isDesignModeEvent = false,
+      isDesignModeEvent = false
     ) {
       const animationTriggerElements = rootEl.querySelectorAll(
-        `.${RBT_SCROLL_ACTIVATION}`,
+        `.${RBT_SCROLL_ACTIVATION}`
       );
       if (animationTriggerElements.length === 0) return;
 
@@ -69,7 +69,7 @@ export default function LayoutClientEffects() {
     function percentageSeen(
       element: Element,
       scrollY: number,
-      viewportHeight: number,
+      viewportHeight: number
     ) {
       const elementRect = element.getBoundingClientRect();
       const elementPositionY = elementRect.top + scrollY;
@@ -94,7 +94,7 @@ export default function LayoutClientEffects() {
       }
 
       const nodeList = document.querySelectorAll(
-        `.${RBT_SCROLL_ZOOM_IN_ACTIVATION}`,
+        `.${RBT_SCROLL_ZOOM_IN_ACTIVATION}`
       );
       if (nodeList.length === 0) return () => {};
 
@@ -109,7 +109,7 @@ export default function LayoutClientEffects() {
             else visible.delete(entry.target);
           });
         },
-        { root: null, threshold: 0, rootMargin: "0px" },
+        { root: null, threshold: 0, rootMargin: "0px" }
       );
       elements.forEach((el) => intersectionObserver.observe(el));
 
@@ -122,7 +122,8 @@ export default function LayoutClientEffects() {
         const ratios: number[] = new Array(targets.length);
         for (let i = 0; i < targets.length; i++) {
           ratios[i] =
-            1 + scaleAmount * percentageSeen(targets[i], scrollY, viewportHeight);
+            1 +
+            scaleAmount * percentageSeen(targets[i], scrollY, viewportHeight);
         }
         for (let i = 0; i < targets.length; i++) {
           targets[i].style.setProperty("--zoom-in-ratio", String(ratios[i]));
@@ -178,7 +179,7 @@ export default function LayoutClientEffects() {
         };
         animate.addEventListener("animationend", handler);
         cleanupAnimates.push(() =>
-          animate.removeEventListener("animationend", handler),
+          animate.removeEventListener("animationend", handler)
         );
       });
     }

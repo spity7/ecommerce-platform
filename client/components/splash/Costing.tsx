@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import { pluginItems } from "@/data/splash";
@@ -8,7 +8,10 @@ export default function Costing() {
   const parallaxRef = useParallax();
 
   return (
-    <div ref={parallaxRef} className="splash-section-gap rbt-plugin-presentation-area rbt-splash-common-sec-bg-2 position-relative">
+    <div
+      ref={parallaxRef}
+      className="splash-section-gap rbt-plugin-presentation-area rbt-splash-common-sec-bg-2 position-relative"
+    >
       <div className="container">
         <div className="row">
           <div className="col-12">

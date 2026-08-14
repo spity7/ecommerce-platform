@@ -57,9 +57,7 @@ function ProductCarouselsOne() {
                 >
                   {phoneProducts.map((product, i) => (
                     <SwiperSlide key={i} className="swiper-slide">
-                      <ProductCard7 product={product}
-                      animationOrder={i + 1}
-                    />
+                      <ProductCard7 product={product} animationOrder={i + 1} />
                     </SwiperSlide>
                   ))}
                 </Swiper>

@@ -23,7 +23,9 @@ function LoginRegisterForPrice() {
                 key={i}
                 className="col-xxl-3 col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6 mt--24"
               >
-                <ProductCard23 product={product} loginRequired={true}
+                <ProductCard23
+                  product={product}
+                  loginRequired={true}
                   animationOrder={i + 1}
                 />
               </div>

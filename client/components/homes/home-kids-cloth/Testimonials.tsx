@@ -93,10 +93,11 @@ export default function Testimonials() {
                               {[...Array(5)].map((_, starIndex) => (
                                 <li key={starIndex}>
                                   <i
-                                    className={`fa-solid fa-star ${starIndex < (review.rating ?? 0)
+                                    className={`fa-solid fa-star ${
+                                      starIndex < (review.rating ?? 0)
                                         ? "rbt-rated-icon"
                                         : ""
-                                      }`}
+                                    }`}
                                   />
                                 </li>
                               ))}

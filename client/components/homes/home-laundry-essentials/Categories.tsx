@@ -208,7 +208,8 @@ export default function Categories() {
                     <span className="rbt-badge rbt-badge-small">Trending</span>
                     <p className="subtitle">ONLINE EXCLUSIVE</p>
                     <h5 className="title">
-                      <span className="rbt-bold--text">Laundry </span> Drying Rack
+                      <span className="rbt-bold--text">Laundry </span> Drying
+                      Rack
                     </h5>
                   </div>
                   <div className="bottom-content">

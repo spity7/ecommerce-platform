@@ -153,7 +153,7 @@ export default function Cart() {
                                 if (product.quantity > 1) {
                                   updateQuantity(
                                     product.id,
-                                    product.quantity - 1,
+                                    product.quantity - 1
                                   );
                                 }
                               }}
@@ -372,7 +372,9 @@ export default function Cart() {
                                     <div className="inner rbt-text-copy-activation">
                                       <div className="left-part">
                                         <input
-                                          ref={registerInputRef("cart-coupon-1")}
+                                          ref={registerInputRef(
+                                            "cart-coupon-1"
+                                          )}
                                           type="text"
                                           defaultValue="WELCOME100"
                                           readOnly
@@ -409,7 +411,9 @@ export default function Cart() {
                                         <button
                                           type="button"
                                           className="copy-icon rbt-round-btn rbt-bg-primary rbt-copy-btn"
-                                          onClick={() => void copyFromRef("cart-coupon-1")}
+                                          onClick={() =>
+                                            void copyFromRef("cart-coupon-1")
+                                          }
                                         >
                                           <i className="fa-sharp fa-regular fa-copy" />
                                         </button>
@@ -422,7 +426,9 @@ export default function Cart() {
                                     <div className="inner rbt-text-copy-activation">
                                       <div className="left-part">
                                         <input
-                                          ref={registerInputRef("cart-coupon-2")}
+                                          ref={registerInputRef(
+                                            "cart-coupon-2"
+                                          )}
                                           type="text"
                                           defaultValue="WELCOME100"
                                           readOnly
@@ -459,7 +465,9 @@ export default function Cart() {
                                         <button
                                           type="button"
                                           className="copy-icon rbt-round-btn rbt-bg-primary rbt-copy-btn"
-                                          onClick={() => void copyFromRef("cart-coupon-2")}
+                                          onClick={() =>
+                                            void copyFromRef("cart-coupon-2")
+                                          }
                                         >
                                           <i className="fa-sharp fa-regular fa-copy" />
                                         </button>
@@ -472,7 +480,9 @@ export default function Cart() {
                                     <div className="inner rbt-text-copy-activation">
                                       <div className="left-part">
                                         <input
-                                          ref={registerInputRef("cart-coupon-3")}
+                                          ref={registerInputRef(
+                                            "cart-coupon-3"
+                                          )}
                                           type="text"
                                           defaultValue="WELCOME100"
                                           readOnly
@@ -509,7 +519,9 @@ export default function Cart() {
                                         <button
                                           type="button"
                                           className="copy-icon rbt-round-btn rbt-bg-primary rbt-copy-btn"
-                                          onClick={() => void copyFromRef("cart-coupon-3")}
+                                          onClick={() =>
+                                            void copyFromRef("cart-coupon-3")
+                                          }
                                         >
                                           <i className="fa-sharp fa-regular fa-copy" />
                                         </button>

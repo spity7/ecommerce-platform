@@ -89,7 +89,9 @@ export default function Faqs() {
                                 href={part.href}
                                 target={part.external ? "_blank" : undefined}
                                 rel={
-                                  part.external ? "noopener noreferrer" : undefined
+                                  part.external
+                                    ? "noopener noreferrer"
+                                    : undefined
                                 }
                               >
                                 {part.label}

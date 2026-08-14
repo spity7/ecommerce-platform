@@ -27,9 +27,7 @@ import {
 
 export default function QuickView2() {
   const [thumbSlider, setThumbSlider] = useState<SwiperClass | null>(null);
-  const {
-    quickViewItem,
-  } = useContextElement();
+  const { quickViewItem } = useContextElement();
   const { close } = useManagedModalPanel("quickViewModal");
   const { quantity, setQuantity, buttonLabel, isDisabled, applyCartAction } =
     useCartQuantityAction(quickViewItem);
@@ -183,7 +181,10 @@ export default function QuickView2() {
                                     {" "}
                                     ${quickViewItem.price.toFixed(2)}
                                   </span>
-                                  <OfferBadge product={quickViewItem} variant="minus" />
+                                  <OfferBadge
+                                    product={quickViewItem}
+                                    variant="minus"
+                                  />
                                 </div>
                                 <div className="prd-info-section has-left-separator">
                                   <div className="prd-id-text">
@@ -193,7 +194,12 @@ export default function QuickView2() {
                                 </div>
                               </div>
                               <div className="rbt-info-wrapper d-flex mt--16">
-                                <ProductRating product={quickViewItem} className="mt--0"><Facts /></ProductRating>
+                                <ProductRating
+                                  product={quickViewItem}
+                                  className="mt--0"
+                                >
+                                  <Facts />
+                                </ProductRating>
                                 <div className="prd-info-section has-left-separator">
                                   <div className="rbt-badge rbt-badge-bg-green rbt-badge-border rbt-badge-small rbt-badge-rounded">
                                     9 in Stock
@@ -317,7 +323,9 @@ export default function QuickView2() {
                                 <CompareQuickLinkTrigger
                                   product={quickViewItem}
                                 />
-                                <WishlistQuickLinkTrigger product={quickViewItem} />
+                                <WishlistQuickLinkTrigger
+                                  product={quickViewItem}
+                                />
                                 <ModalTriggerButton
                                   className="rbt-quick-link"
                                   openModalName="socialShareModal"

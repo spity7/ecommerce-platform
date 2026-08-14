@@ -21,7 +21,7 @@ export default function Products() {
     if (activeTab === "view-all") return furnitureProducts;
 
     return furnitureProducts.filter((product) =>
-      product.demoTab?.includes(activeTab),
+      product.demoTab?.includes(activeTab)
     );
   }, [activeTab]);
 

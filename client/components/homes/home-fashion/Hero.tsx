@@ -68,7 +68,8 @@ export default function Hero() {
                         </Link>
                         <div className="rbt-right-corner-portion rbt-right-corner-portion-lg show-rbt-right-corner-portion">
                           <div className="rbt-corner-portion-wrapper">
-                            <Link href={`/shop`}
+                            <Link
+                              href={`/shop`}
                               className="rbt-icon-overlay-link-btn rbt-icon-overlay-link-btn-"
                             >
                               <span className="rbt-btn-overlay">
@@ -91,7 +92,8 @@ export default function Hero() {
                             <span className="rbt-title-bold mr--4">
                               {product.title?.split("\n")[0] ?? ""}
                             </span>
-                            {product.title?.split("\n").slice(1).join(" ") ?? ""}
+                            {product.title?.split("\n").slice(1).join(" ") ??
+                              ""}
                           </Link>
                         </h4>
                         <Link

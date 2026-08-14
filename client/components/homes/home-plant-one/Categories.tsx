@@ -77,7 +77,10 @@ export default function Categories() {
                     </Link>
                     <div className="rbt-right-corner-portion bottom--position">
                       <div className="rbt-corner-portion-wrapper">
-                        <Link href="/shop-by-category" className="rbt-card-link-btn">
+                        <Link
+                          href="/shop-by-category"
+                          className="rbt-card-link-btn"
+                        >
                           <i className="fa-solid fa-arrow-up-right" />
                         </Link>
                       </div>

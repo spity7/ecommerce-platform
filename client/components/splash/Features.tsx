@@ -12,7 +12,7 @@ import { keyFeatures, elevateFeatures } from "@/data/splashFeatures";
 
 const FeatureKeyNotifySwiper = dynamic(
   () => import("./FeatureKeyNotifySwiper"),
-  { ssr: false },
+  { ssr: false }
 );
 const FeatureOceanSwiper = dynamic(() => import("./FeatureOceanSwiper"), {
   ssr: false,

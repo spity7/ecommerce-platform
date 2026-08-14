@@ -56,7 +56,9 @@ export default function MiniCartDropdown() {
                       </h6>
                       <span className="quantity">
                         {item.quantity}x{" "}
-                        <span className="price">{formatCurrency(item.price)}</span>
+                        <span className="price">
+                          {formatCurrency(item.price)}
+                        </span>
                       </span>
                     </div>
                     <div className="close-btn">
@@ -66,7 +68,7 @@ export default function MiniCartDropdown() {
                         className="rbt-round-btn"
                         onClick={() =>
                           setCartProducts(
-                            cartProducts.filter((elm) => elm.id !== item.id),
+                            cartProducts.filter((elm) => elm.id !== item.id)
                           )
                         }
                       >

@@ -1,5 +1,5 @@
-'use client'
-import { CloseIcon } from '../svg-icons';
+"use client";
+import { CloseIcon } from "../svg-icons";
 import { useManagedModalPanel } from "@/hooks/useManagedModalPanel";
 
 export default function RequestPageModal() {

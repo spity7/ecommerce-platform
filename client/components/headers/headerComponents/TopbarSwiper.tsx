@@ -41,7 +41,9 @@ export default function TopbarSwiper({
           <div
             className={`rbt-fancy-item fancy-menu-text fancy-menu-${position}`}
           >
-            <span className={`mr--4 rbt-fancy-text ${hasFancyText ? "rbt-fancy-text" : ""} rbt-text-color-${color}`}>
+            <span
+              className={`mr--4 rbt-fancy-text ${hasFancyText ? "rbt-fancy-text" : ""} rbt-text-color-${color}`}
+            >
               <i className="fa-sharp fa-solid fa-bolt"></i>
             </span>
             <span

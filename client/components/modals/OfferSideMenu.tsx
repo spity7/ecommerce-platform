@@ -7,8 +7,11 @@ import { offerCardItems } from "@/data/offerModal";
 import { getStackedModalZIndex } from "@/lib/modalStack";
 
 export default function OffersSideMenu() {
-  const { activeBsModal, isAnimatedOpen: offerSideMenuOpen, close } =
-    useManagedModalPanel("offerSideMenu");
+  const {
+    activeBsModal,
+    isAnimatedOpen: offerSideMenuOpen,
+    close,
+  } = useManagedModalPanel("offerSideMenu");
 
   return (
     <div
@@ -73,7 +76,10 @@ export default function OffersSideMenu() {
                             <p className="rbt-ofr-card-text mb--12 b1 rbt-text-color-gray-500">
                               {offer.desc}
                             </p>
-                            <Link className="rbt-btn rbt-btn-md active" href={offer.href}>
+                            <Link
+                              className="rbt-btn rbt-btn-md active"
+                              href={offer.href}
+                            >
                               View Details
                             </Link>
                           </div>

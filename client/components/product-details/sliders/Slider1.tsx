@@ -59,7 +59,7 @@ export default function Slider1({ product }: { product: Product }) {
       { ...BASE_EARPHONE_IMAGES[0], src: product.imgSrc },
       ...BASE_EARPHONE_IMAGES.slice(1),
     ],
-    [product.imgSrc],
+    [product.imgSrc]
   );
 
   const [swiperThumb, setSwiperThumb] = useState<SwiperClass | null>(null);

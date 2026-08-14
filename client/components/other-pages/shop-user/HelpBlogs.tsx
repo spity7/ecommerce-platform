@@ -73,7 +73,7 @@ export default function HelpBlogs() {
                             </span>
                             {blog.readMins != null
                               ? `${blog.readMins} Min To Read`
-                              : blog.readTime ?? ""}
+                              : (blog.readTime ?? "")}
                           </p>
                         </li>
                         <li>

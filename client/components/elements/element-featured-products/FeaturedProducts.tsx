@@ -27,7 +27,9 @@ function FeaturedProducts() {
                 key={i}
                 className="col-xl-1-5 col-xl-4 col-lg-6 col-md-6 col-6 mt--24"
               >
-                <ProductCard9 showPricingBadge={false} product={product}
+                <ProductCard9
+                  showPricingBadge={false}
+                  product={product}
                   animationOrder={i + 1}
                 />
               </div>

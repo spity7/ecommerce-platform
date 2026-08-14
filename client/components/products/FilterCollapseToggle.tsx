@@ -20,8 +20,9 @@ export default function FilterCollapseToggle({
       aria-controls={controlsId}
     >
       <i className="fa-sharp fa-regular fa-filter mr--4" />
-      <span className="filter-text">{open ? "Hide Filter" : "Show Filter"}</span>
+      <span className="filter-text">
+        {open ? "Hide Filter" : "Show Filter"}
+      </span>
     </button>
   );
 }
-

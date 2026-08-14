@@ -7,23 +7,24 @@
 ------------------------*/
 
 .lg-backdrop {
-    background-color: rgba(0, 0, 0, .7) !important;
-    backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  backdrop-filter: blur(5px);
 }
-.lg-outer .lg-thumb-outer{
-    background-color: transparent !important;
+.lg-outer .lg-thumb-outer {
+  background-color: transparent !important;
 }
-.lg-outer .lg-thumb-item img{
-    background: var(--color-brand-50);
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center;
+.lg-outer .lg-thumb-item img {
+  background: var(--color-brand-50);
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
 }
 .lg-outer .lg-image,
-.lg-outer .lg-dummy-img{
-    background: var(--color-brand-50) !important;
+.lg-outer .lg-dummy-img {
+  background: var(--color-brand-50) !important;
 }
-.lg-outer .lg-thumb-item.active, .lg-outer .lg-thumb-item:hover{
-    border-color: var(--color-primary) !important;
+.lg-outer .lg-thumb-item.active,
+.lg-outer .lg-thumb-item:hover {
+  border-color: var(--color-primary) !important;
 }

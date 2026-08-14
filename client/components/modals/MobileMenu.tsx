@@ -102,35 +102,35 @@ export default function MobileMenu() {
   const pathname = usePathname();
   const [openMenuIds, setOpenMenuIds] = useState<Set<string>>(new Set());
   const [activeRootTab, setActiveRootTab] = useState<"menu" | "categories">(
-    "menu",
+    "menu"
   );
 
   const isHomeActive = demoData.some((item) =>
-    isPathActive(pathname, item.href),
+    isPathActive(pathname, item.href)
   );
 
   const shopPagesItems = shopPages.flatMap((section) => section.items);
   const isShopActive = shopPagesItems.some((item) =>
-    isPathActive(pathname, item.href),
+    isPathActive(pathname, item.href)
   );
 
   const pagesItems = innerPageMenuColumns.flatMap((section) => section.items);
   const isPagesActive = pagesItems.some((item) =>
-    isPathActive(pathname, item.href),
+    isPathActive(pathname, item.href)
   );
 
   const elementsItems = elementsMenuColumns.flatMap((section) => section.items);
   const isElementsActive = elementsItems.some((item) =>
-    isPathActive(pathname, item.href),
+    isPathActive(pathname, item.href)
   );
 
   const coreFeaturesItems = uxMenuColumns.flatMap((section) => section.items);
   const isCoreFeaturesActive = coreFeaturesItems.some((item) =>
-    isPathActive(pathname, item.href),
+    isPathActive(pathname, item.href)
   );
 
   const isMoreActive = supportMenuItems.some((item) =>
-    isPathActive(pathname, item.href),
+    isPathActive(pathname, item.href)
   );
 
   const closeMenu = () => {
@@ -271,7 +271,7 @@ export default function MobileMenu() {
                                 {demoData.map((item, index) => {
                                   const itemIsActive = isPathActive(
                                     pathname,
-                                    item.href,
+                                    item.href
                                   );
 
                                   return (
@@ -377,12 +377,14 @@ export default function MobileMenu() {
                                     <div className="pricing-action d-flex flex-column align-items-center rbt-gap--8">
                                       <div className="rbt-pricing-part d-flex">
                                         <span className="rbt-price-text offer-price">
-                                          {formatCurrency(menuBannerProduct.price)}
+                                          {formatCurrency(
+                                            menuBannerProduct.price
+                                          )}
                                         </span>
                                         {menuBannerProduct.oldPrice ? (
                                           <del className="rbt-dis-price-text">
                                             {formatCurrency(
-                                              menuBannerProduct.oldPrice,
+                                              menuBannerProduct.oldPrice
                                             )}
                                           </del>
                                         ) : null}
@@ -414,7 +416,7 @@ export default function MobileMenu() {
                                 const sectionIsActive = section.items.some(
                                   (item) =>
                                     isInternalHref(item.href) &&
-                                    isPathActive(pathname, item.href),
+                                    isPathActive(pathname, item.href)
                                 );
                                 return (
                                   <div
@@ -494,7 +496,7 @@ export default function MobileMenu() {
                                               ))}
                                             </ul>
                                           </div>
-                                        ),
+                                        )
                                       )}
                                     </div>
                                     <div className="row">
@@ -576,7 +578,7 @@ export default function MobileMenu() {
                                             ))}
                                           </ul>
                                         </div>
-                                      ),
+                                      )
                                     )}
                                   </div>
                                   <div className="row row--12 d-none d-xl-flex">
@@ -691,7 +693,7 @@ export default function MobileMenu() {
                                               ))}
                                             </ul>
                                           </div>
-                                        ),
+                                        )
                                       )}
                                     </div>
                                   </div>
@@ -826,7 +828,7 @@ export default function MobileMenu() {
                                               </p>
                                             </div>
                                             {cat.banner.btnHref.startsWith(
-                                              "http",
+                                              "http"
                                             ) || cat.banner.btnHref === "#" ? (
                                               <a
                                                 className="rbt-btn rbt-btn-sm rbt-btn-black"

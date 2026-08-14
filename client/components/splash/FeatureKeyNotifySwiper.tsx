@@ -15,12 +15,22 @@ export default function FeatureKeyNotifySwiper() {
       spaceBetween={16}
       speed={1500}
       loop={true}
-      autoplay={{ delay: 1500, disableOnInteraction: false, pauseOnMouseEnter: true }}
+      autoplay={{
+        delay: 1500,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      }}
     >
       {featureNotifySlides.map((slide, idx) => (
         <SwiperSlide key={idx} className="swiper-slide">
           <div className="rbt-slide">
-            <Image alt={slide.alt} src={slide.src} width={slide.width} height={slide.height} className="image-auto" />
+            <Image
+              alt={slide.alt}
+              src={slide.src}
+              width={slide.width}
+              height={slide.height}
+              className="image-auto"
+            />
           </div>
         </SwiperSlide>
       ))}

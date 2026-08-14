@@ -1,6 +1,6 @@
 "use client";
 
-import { CloseIcon } from '../svg-icons';
+import { CloseIcon } from "../svg-icons";
 import Image from "next/image";
 import Link from "next/link";
 import { instaModalProducts } from "@/data/products/modalProducts";
@@ -39,7 +39,7 @@ export default function InstaModal() {
                   <div className="col-lg-6 col-md-12 col-12">
                     <div className="rbt-single-insta-img">
                       <Image
-                      className='image-auto'
+                        className="image-auto"
                         alt="Unimart instagram Single Post Image"
                         src="/assets/images/insta-posts/insta-post-single-01.webp"
                         width={1408}
@@ -61,15 +61,22 @@ export default function InstaModal() {
                     <div className="rbt-right-modal-content">
                       <div className="row row--12 mb--24 mt_dec--24">
                         {instaModalProducts.map((item) => (
-                          <div className="col-lg-6 col-xl-6 col-6 mt--24" key={item.id}>
+                          <div
+                            className="col-lg-6 col-xl-6 col-6 mt--24"
+                            key={item.id}
+                          >
                             <div className="rbt-card rbt-product-card">
                               <div className="rbt-card-img top-rounded-md rbt-bg-color-gray-light">
-                                <Link href={`/product-single-default/${item.id}`}>
+                                <Link
+                                  href={`/product-single-default/${item.id}`}
+                                >
                                   <Image
                                     alt="Card Image"
                                     src={item.imgSrc}
                                     width={item.imgWidth || item.width || 548}
-                                    height={item.imgHeight || item.height || 462}
+                                    height={
+                                      item.imgHeight || item.height || 462
+                                    }
                                   />
                                 </Link>
                                 {item.badge && (
@@ -88,19 +95,25 @@ export default function InstaModal() {
                                   {item.category?.join(", ")}
                                 </Link>
                                 <h6 className="rbt-card-title">
-                                  <Link href={`/product-single-default/${item.id}`}>
+                                  <Link
+                                    href={`/product-single-default/${item.id}`}
+                                  >
                                     {item.title}
                                   </Link>
                                 </h6>
                                 <div className="rbt-card-rating">
                                   <ul className="rbt-rating-icon-list">
-                                    {[...Array(item.rating || 5)].map((_, i) => (
-                                      <li key={i}>
-                                        <i className="fa-solid fa-star rbt-rated-icon" />
-                                      </li>
-                                    ))}
+                                    {[...Array(item.rating || 5)].map(
+                                      (_, i) => (
+                                        <li key={i}>
+                                          <i className="fa-solid fa-star rbt-rated-icon" />
+                                        </li>
+                                      )
+                                    )}
                                   </ul>
-                                  <p className="rating-digit">({item.reviewCount})</p>
+                                  <p className="rating-digit">
+                                    ({item.reviewCount})
+                                  </p>
                                 </div>
                                 <div className="pricing-part">
                                   {item.oldPrice && (

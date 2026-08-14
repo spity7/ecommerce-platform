@@ -1626,7 +1626,7 @@ header {
   .rbt-header-sec {
     min-height: 76px;
   }
-  .rbt-gap--48{
+  .rbt-gap--48 {
     @media #{$laptop-device} {
       gap: 24px !important;
     }

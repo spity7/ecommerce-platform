@@ -68,9 +68,10 @@ export default function BoughtTogether2() {
                   >
                     {products.map((product, i) => (
                       <SwiperSlide className="swiper-slide" key={i}>
-                        <ProductCard1 product={product}
-                      animationOrder={i + 1}
-                    />
+                        <ProductCard1
+                          product={product}
+                          animationOrder={i + 1}
+                        />
                       </SwiperSlide>
                     ))}
                     <div className="rbt-swiper-pagination rbt-swiper-pagination-var-one has-hide-dot-swipe" />

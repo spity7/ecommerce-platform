@@ -19,7 +19,7 @@ export default function Products3() {
     if (activeTab === "view-all") return fashionProducts3;
 
     return fashionProducts3.filter((product) =>
-      product.demoTab?.includes(activeTab),
+      product.demoTab?.includes(activeTab)
     );
   }, [activeTab]);
 

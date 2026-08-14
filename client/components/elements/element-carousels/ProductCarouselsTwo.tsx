@@ -54,9 +54,7 @@ function ProductCarouselsTwo() {
                 {printingServiceProducts.map((product, i) => (
                   <SwiperSlide key={i} className="swiper-slide">
                     {/* Start Card Area */}
-                    <ProductCard3 product={product}
-                      animationOrder={i + 1}
-                    />
+                    <ProductCard3 product={product} animationOrder={i + 1} />
                     {/* End Card Area */}
                   </SwiperSlide>
                 ))}

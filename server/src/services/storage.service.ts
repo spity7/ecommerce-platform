@@ -9,7 +9,7 @@ type UploadFileOptions = {
 export async function uploadFile(
   buffer: Buffer,
   originalName: string,
-  options: UploadFileOptions = {},
+  options: UploadFileOptions = {}
 ): Promise<{ fileName: string; publicUrl: string }> {
   const bucket = getGcsBucket();
   const safeName = originalName.replace(/[^\w.-]/g, "_");
@@ -47,7 +47,7 @@ export async function deleteFile(fileName: string): Promise<void> {
 
 export async function getSignedReadUrl(
   fileName: string,
-  expiresInMinutes = 15,
+  expiresInMinutes = 15
 ): Promise<string> {
   const bucket = getGcsBucket();
   const file = bucket.file(fileName);

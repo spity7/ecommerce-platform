@@ -7,7 +7,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 });
 const slimClientPolyfill = path.join(
   process.cwd(),
-  "lib/next-client-polyfill-slim.js",
+  "lib/next-client-polyfill-slim.js"
 );
 
 const nextConfig: NextConfig = {
@@ -22,8 +22,8 @@ const nextConfig: NextConfig = {
       config.plugins.push(
         new webpack.NormalModuleReplacementPlugin(
           /[\\/]next[\\/]dist[\\/]build[\\/]polyfills[\\/]polyfill-module\.js$/,
-          slimClientPolyfill,
-        ),
+          slimClientPolyfill
+        )
       );
     }
     return config;

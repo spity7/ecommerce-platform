@@ -17,8 +17,9 @@ export default function Banner() {
                       Now
                     </h2>
                     <p className="rbt-banner-description">
-                    Don’t miss this limited-time offer! Grab your favorite items 
-                    at half price and upgrade your shopping experience today.
+                      Don’t miss this limited-time offer! Grab your favorite
+                      items at half price and upgrade your shopping experience
+                      today.
                     </p>
                     <div className="rbt-banner-btn">
                       <Link className="rbt-btn" href={`/shop`}>

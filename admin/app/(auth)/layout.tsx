@@ -2,9 +2,9 @@ import type { ReactNode } from "react";
 import { AuthShell } from "@/components/layout/auth-shell";
 
 type AuthLayoutProps = {
-	children: ReactNode;
+  children: ReactNode;
 };
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
-	return <AuthShell>{children}</AuthShell>;
+  return <AuthShell>{children}</AuthShell>;
 }

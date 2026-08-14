@@ -37,7 +37,8 @@ export function useCopyToClipboard({
   const getTooltip = (key: CopyKey = "default") =>
     tooltipState[toKey(key)] ?? defaultTooltip;
 
-  const isCopied = (key: CopyKey = "default") => copiedState[toKey(key)] ?? false;
+  const isCopied = (key: CopyKey = "default") =>
+    copiedState[toKey(key)] ?? false;
 
   const scheduleReset = (key: string) => {
     if (resetTimers.current[key]) {

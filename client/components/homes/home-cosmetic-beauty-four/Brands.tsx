@@ -10,7 +10,8 @@ export default function Brands() {
               <div className="col-lg-12">
                 <div className="rbt-component-section-title rbt-gap--4 mb--40 p-0 border-0 text-center align-items-center">
                   <span className="rbt-card-subtitle b1 rbt-text-color-heading mt--0 rbt-scroll-trigger zoom_in animation-order-1">
-                    Today’s Best Deals                  </span>
+                    Today’s Best Deals{" "}
+                  </span>
                   <h2 className="rbt-title rbt-scroll-trigger zoom_in animation-order-2">
                     <span className="rbt-bold--text">Trending </span>Brands
                   </h2>

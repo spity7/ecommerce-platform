@@ -64,7 +64,7 @@ export default function FilterByColor({
                 (
                 {getFilterCount(
                   (product) =>
-                    !!(product.filterColor?.includes(color.name) ?? false),
+                    !!(product.filterColor?.includes(color.name) ?? false)
                 )}
                 )
               </span>

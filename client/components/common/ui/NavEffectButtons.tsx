@@ -84,10 +84,11 @@ export default function NavEffectButtons({
     };
   }, [scheduleHighlightUpdate]);
 
-  const handleClick = (id: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setActive(id);
-  };
+  const handleClick =
+    (id: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      setActive(id);
+    };
 
   return (
     <div

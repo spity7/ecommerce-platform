@@ -53,7 +53,10 @@ export default function Faqs2() {
                 <div className="accordion" id="accordionExamplec3">
                   {accordionData.map((item) => (
                     <div className="accordion-item card" key={item.id}>
-                      <h2 className="accordion-header card-header" id={item.headerId}>
+                      <h2
+                        className="accordion-header card-header"
+                        id={item.headerId}
+                      >
                         <button
                           className={`accordion-button${item.isOpen ? "" : " collapsed"}`}
                           type="button"
@@ -71,7 +74,9 @@ export default function Faqs2() {
                         aria-labelledby={item.headerId}
                         data-bs-parent="#accordionExamplec3"
                       >
-                        <div className="accordion-body card-body">{item.content}</div>
+                        <div className="accordion-body card-body">
+                          {item.content}
+                        </div>
                       </div>
                     </div>
                   ))}

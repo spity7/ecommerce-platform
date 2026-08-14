@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import Image from "next/image";
 import VideoModal from "@/components/common/ui/VideoModal";
 

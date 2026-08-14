@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
 import { useParallax } from "@/hooks/useParallax";
 import Image from "next/image";
 
 function AccordionBlock04() {
   const paralaxRef = useParallax();
-  
+
   const accordionData = [
     {
       id: "collapseFour1",
@@ -42,7 +42,7 @@ function AccordionBlock04() {
     <>
       {/* Start Accordion Area  */}
       <div
-      ref={paralaxRef}
+        ref={paralaxRef}
         id="rbt-accordion-block-04"
         className="rbt-accordion-area accordion-style-1 rbt-bg-color-gray-light rbt-section-gap"
       >
@@ -57,17 +57,20 @@ function AccordionBlock04() {
                     Unimart E-commerce Website?
                   </h2>
                   <p className="description has-medium-font-size mt--20 mb--40">
-                    <strong>It&apos;s an e-commerce platform.</strong> Unimart helps
-                    you launch modern online stores quickly with reusable sections,
-                    responsive layouts, and prebuilt shop flows for categories,
-                    product details, cart, and checkout.
+                    <strong>It&apos;s an e-commerce platform.</strong> Unimart
+                    helps you launch modern online stores quickly with reusable
+                    sections, responsive layouts, and prebuilt shop flows for
+                    categories, product details, cart, and checkout.
                   </p>
                 </div>
                 <div className="rbt-accordion-style rbt-accordion-05 accordion">
                   <div className="accordion" id="accordionExampleb4">
                     {accordionData.map((item) => (
                       <div className="accordion-item card" key={item.id}>
-                        <h2 className="accordion-header card-header" id={item.headerId}>
+                        <h2
+                          className="accordion-header card-header"
+                          id={item.headerId}
+                        >
                           <button
                             className={`accordion-button${item.isOpen ? "" : " collapsed"}`}
                             type="button"
@@ -85,7 +88,9 @@ function AccordionBlock04() {
                           aria-labelledby={item.headerId}
                           data-bs-parent="#accordionExampleb4"
                         >
-                          <div className="accordion-body card-body">{item.content}</div>
+                          <div className="accordion-body card-body">
+                            {item.content}
+                          </div>
                         </div>
                       </div>
                     ))}

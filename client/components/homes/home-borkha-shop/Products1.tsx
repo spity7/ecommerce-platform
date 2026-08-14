@@ -16,9 +16,10 @@ export default function Products1() {
                 <span className="rbt-bold--text">Items For You</span>
               </h2>
               <p className="b1 rbt-text-color-gray-600">
-                Elegant abayas tailored for comfort, drape, and smooth daily wear
-                with trims. <br />
-                Breathable weaves. Elegant drape. Confident modest style for you.
+                Elegant abayas tailored for comfort, drape, and smooth daily
+                wear with trims. <br />
+                Breathable weaves. Elegant drape. Confident modest style for
+                you.
               </p>
             </div>
           </div>
@@ -57,9 +58,7 @@ export default function Products1() {
             >
               {abayaProducts.map((product, i) => (
                 <SwiperSlide key={i} className="swiper-slide">
-                  <ProductCard5 product={product}
-                      animationOrder={i + 1}
-                    />
+                  <ProductCard5 product={product} animationOrder={i + 1} />
                 </SwiperSlide>
               ))}
 

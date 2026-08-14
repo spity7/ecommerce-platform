@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useParallax } from "@/hooks/useParallax";
 import Image from "next/image";
@@ -7,7 +7,10 @@ export default function SplashCallToActionSection() {
   return (
     <>
       {/* Start Call to Action Area */}
-      <div ref={paralaxRef} className="splash-section-gap rbt-splash-call-to-action-area position-relative overflow-hidden">
+      <div
+        ref={paralaxRef}
+        className="splash-section-gap rbt-splash-call-to-action-area position-relative overflow-hidden"
+      >
         <div className="container">
           <div className="row">
             <div className="col-12">

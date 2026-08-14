@@ -82,7 +82,11 @@ export default function Hero() {
                       <span className="price-text">
                         ${book.price.toFixed(2)}
                       </span>
-                      <OfferBadge price={book.price} oldPrice={book.oldPrice} variant="minus" />
+                      <OfferBadge
+                        price={book.price}
+                        oldPrice={book.oldPrice}
+                        variant="minus"
+                      />
                     </div>
                   </div>
                 </div>

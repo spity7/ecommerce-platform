@@ -229,7 +229,7 @@ export default function DescriptionTab1({
                         <span className="desc">{spec.value}</span>
                       </div>
                     </div>
-                  ),
+                  )
                 )}
               </div>
             </div>
@@ -398,7 +398,7 @@ export default function DescriptionTab1({
                                             />
                                           </a>
                                         </li>
-                                      ),
+                                      )
                                     )}
                                   </ul>
                                 </LightGallery>

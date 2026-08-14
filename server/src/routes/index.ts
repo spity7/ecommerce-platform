@@ -19,7 +19,7 @@ apiRouter.post("/uploads", upload.single("file"), async (req, res, next) => {
     if (!env.gcs.isConfigured) {
       throw new AppError(
         503,
-        "File uploads are unavailable until GCS is configured.",
+        "File uploads are unavailable until GCS is configured."
       );
     }
 

@@ -54,13 +54,13 @@ export default function ShopFilterCollapse() {
     () =>
       state.sorted.slice(
         (state.currentPage - 1) * state.itemPerPage,
-        state.currentPage * state.itemPerPage,
+        state.currentPage * state.itemPerPage
       ),
-    [state.sorted, state.currentPage, state.itemPerPage],
+    [state.sorted, state.currentPage, state.itemPerPage]
   );
 
   function getFilterCount(
-    filterFunction: (product: (typeof electronicsCardData)[0]) => boolean,
+    filterFunction: (product: (typeof electronicsCardData)[0]) => boolean
   ) {
     return electronicsCardData.filter((product) => filterFunction(product))
       .length;
@@ -104,7 +104,7 @@ export default function ShopFilterCollapse() {
                       Showing {(state.currentPage - 1) * state.itemPerPage + 1}–
                       {Math.min(
                         state.currentPage * state.itemPerPage,
-                        state.sorted.length,
+                        state.sorted.length
                       )}{" "}
                       of {state.sorted.length} results
                     </h6>
@@ -137,7 +137,7 @@ export default function ShopFilterCollapse() {
                           onChange={(value) =>
                             setItemPerPage(
                               Number(value.split(" ")[0]),
-                              dispatch,
+                              dispatch
                             )
                           }
                         />

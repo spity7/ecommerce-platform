@@ -1,6 +1,6 @@
 "use client";
 
-import { WaveThinIcon } from '../../svg-icons';
+import { WaveThinIcon } from "../../svg-icons";
 export default function AddReviewForm() {
   return (
     <div className="rbt-reviews-form">

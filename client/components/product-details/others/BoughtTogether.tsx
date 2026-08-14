@@ -6,9 +6,15 @@ import ProductCard10 from "@/components/product-cards/ProductCard10";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 
-export default function BoughtTogether({ spaceClass }: { spaceClass?: string }) {
+export default function BoughtTogether({
+  spaceClass,
+}: {
+  spaceClass?: string;
+}) {
   return (
-    <div className={`rbt-component-area rbt-bg-color-white ${spaceClass ? spaceClass : "rbt-section-gap"}`}>
+    <div
+      className={`rbt-component-area rbt-bg-color-white ${spaceClass ? spaceClass : "rbt-section-gap"}`}
+    >
       <div className="container">
         <div className="rbt-fshape-box-outline-style rbt-fshape-box-outline-style-primary-stroke rbt-fshape-box-outline-style-extend-width rbt-product-fshape-box-outline-style">
           <div className="row pt--0">
@@ -72,9 +78,10 @@ export default function BoughtTogether({ spaceClass }: { spaceClass?: string }) 
                       ...electronicsHoverVideoData,
                     ].map((product, i) => (
                       <SwiperSlide key={i} className="swiper-slide">
-                        <ProductCard10 product={product}
-                      animationOrder={i + 1}
-                    />
+                        <ProductCard10
+                          product={product}
+                          animationOrder={i + 1}
+                        />
                       </SwiperSlide>
                     ))}
                   </Swiper>

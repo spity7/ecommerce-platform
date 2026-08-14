@@ -1,4 +1,4 @@
-import { WaveMediumIcon } from '../../svg-icons';
+import { WaveMediumIcon } from "../../svg-icons";
 import Image from "next/image";
 
 export default function AboutUs() {

@@ -23,7 +23,7 @@ interface StoreState {
   totalPrice: number;
   activeCartProduct: CartProduct | null;
   setCartProducts: (
-    value: CartProduct[] | ((prev: CartProduct[]) => CartProduct[]),
+    value: CartProduct[] | ((prev: CartProduct[]) => CartProduct[])
   ) => void;
   setWishList: (value: Product[] | ((prev: Product[]) => Product[])) => void;
   setQuickViewItem: (item: Product) => void;
@@ -105,7 +105,7 @@ export const useStore = create<StoreState>()(
         const { cartProducts, isAddedToCartProducts } = get();
         if (!isAddedToCartProducts(id) || qty < 1) return;
         const items = cartProducts.map((item) =>
-          item.id === id ? { ...item, quantity: qty } : item,
+          item.id === id ? { ...item, quantity: qty } : item
         );
         set({ cartProducts: items, totalPrice: getTotalPrice(items) });
       },
@@ -158,7 +158,7 @@ export const useStore = create<StoreState>()(
       }),
       storage: {
         getItem: (
-          name,
+          name
         ): StorageValue<{
           cartProducts: CartProduct[];
           wishList: Product[];
@@ -186,10 +186,10 @@ export const useStore = create<StoreState>()(
                 : [];
               parsed.state.cartProducts = cart;
               parsed.state.wishList = normalizeStoredProductList(
-                parsed.state.wishList,
+                parsed.state.wishList
               );
               parsed.state.compareItem = normalizeStoredProductList(
-                parsed.state.compareItem,
+                parsed.state.compareItem
               );
               parsed.state.totalPrice = getTotalPrice(cart);
               return parsed as StorageValue<PersistedSlice>;
@@ -207,7 +207,7 @@ export const useStore = create<StoreState>()(
             wishList: Product[];
             compareItem: Product[];
             totalPrice: number;
-          }>,
+          }>
         ) => {
           if (typeof window !== "undefined") {
             window.localStorage.setItem(name, JSON.stringify(value));
@@ -219,8 +219,8 @@ export const useStore = create<StoreState>()(
           }
         },
       },
-    },
-  ),
+    }
+  )
 );
 
 function normalizeStoredProductList(value: unknown): Product[] {
@@ -230,7 +230,7 @@ function normalizeStoredProductList(value: unknown): Product[] {
     .map((item) =>
       typeof item === "object" && item !== null && "id" in item
         ? (item as Product)
-        : undefined,
+        : undefined
     )
     .filter((item): item is Product => Boolean(item));
 }

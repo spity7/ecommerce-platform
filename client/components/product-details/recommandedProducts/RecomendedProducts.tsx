@@ -1,6 +1,6 @@
 "use client";
 
-import { GridMatrixIcon, WaveSquareIcon } from '../../svg-icons';
+import { GridMatrixIcon, WaveSquareIcon } from "../../svg-icons";
 import Image from "next/image";
 import {
   recentlyViewed as defaultRecentlyViewed,
@@ -16,7 +16,7 @@ export default function RecomendedProducts({
   parentClass = "rbt-tab rbt-product-single-details-tab rbt-fshape-tab",
 }) {
   const [activeTab, setActiveTab] = useState<"viewed" | "recommended">(
-    "viewed",
+    "viewed"
   );
   return (
     <div className={parentClass}>

@@ -1,4 +1,4 @@
-import { WaveFatIcon } from '../svg-icons';
+import { WaveFatIcon } from "../svg-icons";
 import Image from "next/image";
 import { recentBlogs } from "@/data/blogs";
 import Link from "next/link";

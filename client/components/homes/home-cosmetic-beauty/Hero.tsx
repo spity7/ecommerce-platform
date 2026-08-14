@@ -56,7 +56,10 @@ export default function Hero() {
                                   <span className="rbt-bold--text d-block">
                                     {banner.title?.split("\n")[0] ?? ""}
                                   </span>
-                                  {banner.title?.split("\n").slice(1).join(" ") ?? ""}
+                                  {banner.title
+                                    ?.split("\n")
+                                    .slice(1)
+                                    .join(" ") ?? ""}
                                 </h2>
                                 <div className="rbt-pricing-part d-flex align-items-center flex-row">
                                   <p className="rbt-price-desc-text">
@@ -65,7 +68,11 @@ export default function Hero() {
                                   <span className="rbt-price-text offer-price">
                                     {formatCurrency(banner.price)}
                                   </span>
-                                  <OfferBadge price={banner.price} oldPrice={banner.oldPrice} variant="minus" />
+                                  <OfferBadge
+                                    price={banner.price}
+                                    oldPrice={banner.oldPrice}
+                                    variant="minus"
+                                  />
                                 </div>
                                 <div className="rbt-banner-btn">
                                   <Link className="rbt-btn" href={`/shop`}>

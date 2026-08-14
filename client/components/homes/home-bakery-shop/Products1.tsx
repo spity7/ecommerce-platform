@@ -19,7 +19,7 @@ export default function Products1() {
     if (activeTab === "view-all") return bakeryProducts;
 
     return bakeryProducts.filter((product) =>
-      product.demoTab?.includes(activeTab),
+      product.demoTab?.includes(activeTab)
     );
   }, [activeTab]);
   return (

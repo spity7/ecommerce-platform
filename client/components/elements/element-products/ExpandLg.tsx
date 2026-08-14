@@ -20,9 +20,7 @@ function ExpandLg() {
             {printingServiceProducts.slice(0, 2).map((product, i) => (
               <div key={i} className="col-lg-6 col-md-6 col-12 mt--24">
                 {/* Start Card Area */}
-                <ProductCard3 product={product}
-                      animationOrder={i + 1}
-                    />
+                <ProductCard3 product={product} animationOrder={i + 1} />
                 {/* End Card Area */}
               </div>
             ))}

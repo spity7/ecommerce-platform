@@ -1,5 +1,5 @@
 "use client";
-import { CheckmarkSmallIcon } from '../../svg-icons';
+import { CheckmarkSmallIcon } from "../../svg-icons";
 import { simpleTextReviews } from "@/data/testimonials";
 
 import { Navigation, Pagination } from "swiper/modules";
@@ -110,22 +110,22 @@ export default function Testimonials() {
                         </div>
 
                         {review.product && (
-                        <div className="rbt-review-bottom-section rbt-bg-color-gray-100">
-                          <div className="rbt-review-bottom-left-part">
-                            <p className="rbt-review-prd-title">
-                              <Link
-                                href={`/product-single-tech-accessories/${review.product.id}`}
-                              >
-                                {review.product.title}
+                          <div className="rbt-review-bottom-section rbt-bg-color-gray-100">
+                            <div className="rbt-review-bottom-left-part">
+                              <p className="rbt-review-prd-title">
+                                <Link
+                                  href={`/product-single-tech-accessories/${review.product.id}`}
+                                >
+                                  {review.product.title}
+                                </Link>
+                              </p>
+                            </div>
+                            <div className="rbt-review-bottom-right-part">
+                              <Link href={`/cart`} className="rbt-cart-button">
+                                <i className="fa-regular fa-cart-shopping" />
                               </Link>
-                            </p>
+                            </div>
                           </div>
-                          <div className="rbt-review-bottom-right-part">
-                            <Link href={`/cart`} className="rbt-cart-button">
-                              <i className="fa-regular fa-cart-shopping" />
-                            </Link>
-                          </div>
-                        </div>
                         )}
                       </div>
                     </div>
@@ -153,4 +153,3 @@ export default function Testimonials() {
     </div>
   );
 }
-

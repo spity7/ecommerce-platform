@@ -42,8 +42,9 @@ export default function Lookbook() {
                 <div className="rbt-lookbook-banner hover-appear-dot-style rbt-lookbook-banner-five">
                   {bannerImg ? (
                     <Image
-                      className={`rbt-scroll-trigger zoom_in animation-order-${idx + 1
-                        }`}
+                      className={`rbt-scroll-trigger zoom_in animation-order-${
+                        idx + 1
+                      }`}
                       alt="Lookbook Image"
                       src={bannerImg}
                       width={848}
@@ -56,7 +57,7 @@ export default function Lookbook() {
                       <div
                         key={i}
                         className={getHotspotClassName(
-                          `hotspot-five-${bannerId}-${p.id}`,
+                          `hotspot-five-${bannerId}-${p.id}`
                         )}
                         data-rbt-position-vertical={p.top}
                         data-rbt-position-horigental={p.left}

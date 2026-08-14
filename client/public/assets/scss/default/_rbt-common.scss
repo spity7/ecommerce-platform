@@ -189,23 +189,23 @@
   padding: 0 7.5px;
 
   @media (min-width: 576px) {
-      max-width: 540px;
+    max-width: 540px;
   }
 
   @media (min-width: 768px) {
-      max-width: 720px;
+    max-width: 720px;
   }
 
   @media (min-width: 992px) {
-      max-width: 960px;
+    max-width: 960px;
   }
 
   @media (min-width: 1200px) {
-      max-width: 1140px;
+    max-width: 1140px;
   }
 
   @media (min-width: 1400px) {
-      max-width: calc(1320px + 160px);
+    max-width: calc(1320px + 160px);
   }
 }
 
@@ -215,23 +215,23 @@
   padding: 0 7.5px;
 
   @media (min-width: 576px) {
-      max-width: 540px;
+    max-width: 540px;
   }
 
   @media (min-width: 768px) {
-      max-width: 720px;
+    max-width: 720px;
   }
 
   @media (min-width: 992px) {
-      max-width: 960px;
+    max-width: 960px;
   }
 
   @media (min-width: 1200px) {
-      max-width: 1140px;
+    max-width: 1140px;
   }
 
   @media (min-width: 1400px) {
-      max-width: calc(1320px + 190px);
+    max-width: calc(1320px + 190px);
   }
 }
 
@@ -394,7 +394,10 @@
       top: 50%;
       left: 50%;
       transform: translateX(-50%) translateY(-50%) translateZ(0);
-      transition: margin 0.2s ease, transform 0.2s ease 1s, opacity 0.3s ease;
+      transition:
+        margin 0.2s ease,
+        transform 0.2s ease 1s,
+        opacity 0.3s ease;
       height: var(--icon-line-height);
       width: var(--icon-line-width);
       display: block;
@@ -410,7 +413,9 @@
         border-radius: 5px;
         top: 0;
         left: 7px;
-        transition: opacity 0.2s ease, background-color 0.2s ease;
+        transition:
+          opacity 0.2s ease,
+          background-color 0.2s ease;
         animation-duration: 0.4s;
         animation-timing-function: cubic-bezier(0.5, 0.01, 0.15, 1);
         animation-fill-mode: forwards;
@@ -2677,14 +2682,19 @@ hr.rbt-separator {
       content: "";
       transform-origin: 50% 50%;
       border-radius: 5%;
-      transition: top 0.4s 0.45s ease, transform 0.3s ease,
-        background-color 0.2s ease, opacity 0.2s ease;
+      transition:
+        top 0.4s 0.45s ease,
+        transform 0.3s ease,
+        background-color 0.2s ease,
+        opacity 0.2s ease;
     }
     &::after {
       top: 5px;
       width: calc(100% - 4px);
-      transition: transform 0.65s cubic-bezier(0.3, 1, 0.3, 1) 80ms,
-        background-color 0.2s ease, opacity 0.2s ease !important;
+      transition:
+        transform 0.65s cubic-bezier(0.3, 1, 0.3, 1) 80ms,
+        background-color 0.2s ease,
+        opacity 0.2s ease !important;
     }
     &::before {
       top: -5px;
@@ -2707,12 +2717,18 @@ hr.rbt-separator {
       &::before,
       &::after {
         transform: translateX(30px);
-        transition: top 0.4s 0.45s ease, width 0.3s ease, transform 0.3s ease,
-          background-color 0.2s ease, opacity 0.2s ease;
+        transition:
+          top 0.4s 0.45s ease,
+          width 0.3s ease,
+          transform 0.3s ease,
+          background-color 0.2s ease,
+          opacity 0.2s ease;
       }
       &::before {
-        transition: transform 0.65s cubic-bezier(0.3, 1, 0.3, 1) 80ms,
-          background-color 0.2s ease, opacity 0.2s ease !important;
+        transition:
+          transform 0.65s cubic-bezier(0.3, 1, 0.3, 1) 80ms,
+          background-color 0.2s ease,
+          opacity 0.2s ease !important;
       }
     }
   }
@@ -2756,7 +2772,7 @@ hr.rbt-separator {
       position: relative;
       overflow: hidden;
       width: 100%;
-      
+
       @media #{$md-layout, $extra-device} {
         min-height: 540px;
       }
@@ -2872,7 +2888,7 @@ hr.rbt-separator {
   cursor: pointer;
 }
 .rbt-bg-color-chocolate-50 {
-  background: #F9F3FF !important;
+  background: #f9f3ff !important;
 }
 .rbt-width-100 {
   width: 100% !important;

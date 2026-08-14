@@ -70,7 +70,9 @@ export default function DetailsOutOfStock({ product }: { product: Product }) {
                 praesentium voluptatu atque...
               </p>
               <div className="rbt-info-wrapper d-flex mt--16">
-                <ProductRating product={product} className="mt--0"><Facts /></ProductRating>
+                <ProductRating product={product} className="mt--0">
+                  <Facts />
+                </ProductRating>
               </div>
               <div className="rbt-info-wrapper d-flex mt--16">
                 <div className="prd-info-section">
@@ -128,7 +130,10 @@ export default function DetailsOutOfStock({ product }: { product: Product }) {
                     <span className="price-text">
                       ${product.price.toFixed(2)}
                     </span>
-                    <OfferBadge product={product} className="rbt-offer-badge-md" />
+                    <OfferBadge
+                      product={product}
+                      className="rbt-offer-badge-md"
+                    />
                   </div>
                 </div>
                 <div className="rbt-quick-access-banner-action-btn d-flex align-items-center">

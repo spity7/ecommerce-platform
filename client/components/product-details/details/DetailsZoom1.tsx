@@ -41,9 +41,11 @@ export default function DetailsZoom1({ product }: { product: Product }) {
                     blanditiis praesentium voluptatu atque...
                   </p>
                   <div className="rbt-info-wrapper d-flex">
-                    <ProductRating product={product} className="mt--0"><span className="icon">
+                    <ProductRating product={product} className="mt--0">
+                      <span className="icon">
                         <i className="fa-sharp fa-solid fa-truck-fast" />
-                      </span></ProductRating>
+                      </span>
+                    </ProductRating>
                     <div className="prd-info-section has-left-separator">
                       <div className="prd-id-text">
                         <p className="text-bold">SKU:</p>
@@ -67,7 +69,10 @@ export default function DetailsZoom1({ product }: { product: Product }) {
                         {" "}
                         ${product.price.toFixed(2)}
                       </span>
-                      <OfferBadge product={product} className="rbt-offer-badge-md" />
+                      <OfferBadge
+                        product={product}
+                        className="rbt-offer-badge-md"
+                      />
                     </div>
                     <div className="rbt-quick-access-banner-action-btn d-flex align-items-center">
                       <ModalTriggerButton

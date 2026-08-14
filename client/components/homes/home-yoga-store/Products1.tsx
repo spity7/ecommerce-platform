@@ -73,9 +73,7 @@ export default function Products1() {
                   key={i}
                   className="col-lg-6 col-xl-6 col-xxl-6 col-md-6 col-sm-6 col-6 mt--24"
                 >
-                  <ProductCard8 product={product}
-                      animationOrder={i + 1}
-                    />
+                  <ProductCard8 product={product} animationOrder={i + 1} />
                 </div>
               ))}
               {/* End Single Card  */}
@@ -89,9 +87,7 @@ export default function Products1() {
               key={i}
               className="col-lg-3 col-xl-3 col-xxl-3 col-md-6 col-sm-6 col-6 mt--24"
             >
-              <ProductCard8 product={product}
-                      animationOrder={i + 1}
-                    />
+              <ProductCard8 product={product} animationOrder={i + 1} />
             </div>
           ))}
           {/* End Single Card  */}

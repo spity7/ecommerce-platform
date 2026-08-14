@@ -10,8 +10,8 @@ export default function Blogs() {
           <div className="col-lg-12">
             <div className="rbt-component-section-title rbt-gap--4 mb--40 p-0 border-0 text-center align-items-center">
               <h2 className="rbt-title">
-                <span className="rbt-bold--text">News Updates </span>And
-                Blog post
+                <span className="rbt-bold--text">News Updates </span>And Blog
+                post
               </h2>
               <Link
                 className="rbt-btn-link rbt-text-color-primary d-flex rbt-text-medium rbt-gap--8 mt--8 justify-content-center"

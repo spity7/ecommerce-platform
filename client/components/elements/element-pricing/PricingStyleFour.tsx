@@ -1,4 +1,4 @@
-import { StarFillIcon } from '../../svg-icons';
+import { StarFillIcon } from "../../svg-icons";
 import { pricingStyleFourData } from "@/data/pricing";
 
 function PricingStyleFour() {
@@ -23,8 +23,12 @@ function PricingStyleFour() {
               <div className="row row--0">
                 <div className="col-lg-6 col-md-6 col-12">
                   <div className="pricing-left">
-                    <h3 className="main-title">{pricingStyleFourData.mainTitle}</h3>
-                    <p className="description">{pricingStyleFourData.description}</p>
+                    <h3 className="main-title">
+                      {pricingStyleFourData.mainTitle}
+                    </h3>
+                    <p className="description">
+                      {pricingStyleFourData.description}
+                    </p>
                     <div className="price-wrapper">
                       <span className="price-amount">
                         ${pricingStyleFourData.price}
@@ -40,45 +44,49 @@ function PricingStyleFour() {
                       </button>
                     </div>
                     <div className="rating">
-                      {Array.from({ length: pricingStyleFourData.ratingCount }).map(
-                        (_, idx) => (
-                          <a key={`rating-star-${idx}`} href="#rating">
-                            <StarFillIcon />
-                          </a>
-                        ),
-                      )}
+                      {Array.from({
+                        length: pricingStyleFourData.ratingCount,
+                      }).map((_, idx) => (
+                        <a key={`rating-star-${idx}`} href="#rating">
+                          <StarFillIcon />
+                        </a>
+                      ))}
                     </div>
-                    <small className="subtitle">{pricingStyleFourData.ratingSubtitle}</small>
+                    <small className="subtitle">
+                      {pricingStyleFourData.ratingSubtitle}
+                    </small>
                   </div>
                 </div>
                 <div className="col-lg-6 col-md-6 col-12">
                   <div className="pricing-right position-relative">
                     <div className="pricing-offer">
-                      {pricingStyleFourData.sections.map((section, sectionIdx) => (
-                        <div
-                          key={`${section.title}-${sectionIdx}`}
-                          className={`single-list${sectionIdx > 0 ? " mt--40" : ""}`}
-                        >
-                          <h4 className="price-title">{section.title}</h4>
-                          <ul className="plan-offer-list">
-                            {section.items.map((item) => (
-                              <li
-                                key={`${section.title}-${item.text}`}
-                                className={item.included ? "" : "off"}
-                              >
-                                <i
-                                  className={
-                                    item.included
-                                      ? "fa-regular fa-check"
-                                      : "fa-solid fa-xmark"
-                                  }
-                                />{" "}
-                                {item.text}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      ))}
+                      {pricingStyleFourData.sections.map(
+                        (section, sectionIdx) => (
+                          <div
+                            key={`${section.title}-${sectionIdx}`}
+                            className={`single-list${sectionIdx > 0 ? " mt--40" : ""}`}
+                          >
+                            <h4 className="price-title">{section.title}</h4>
+                            <ul className="plan-offer-list">
+                              {section.items.map((item) => (
+                                <li
+                                  key={`${section.title}-${item.text}`}
+                                  className={item.included ? "" : "off"}
+                                >
+                                  <i
+                                    className={
+                                      item.included
+                                        ? "fa-regular fa-check"
+                                        : "fa-solid fa-xmark"
+                                    }
+                                  />{" "}
+                                  {item.text}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )
+                      )}
                     </div>
                     <div className="pricing-badge">
                       <span>Popular</span>

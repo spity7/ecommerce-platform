@@ -61,7 +61,9 @@ export default function Lookbook() {
                     .map((item, i) => (
                       <div
                         key={i}
-                        className={getHotspotClassName(`hotspot-three-1-${item.id}`)}
+                        className={getHotspotClassName(
+                          `hotspot-three-1-${item.id}`
+                        )}
                         data-rbt-position-vertical={item.top}
                         data-rbt-position-horigental={item.left}
                       >
@@ -163,7 +165,9 @@ export default function Lookbook() {
                     .map((item, i) => (
                       <div
                         key={i}
-                        className={getHotspotClassName(`hotspot-three-2-${item.id}`)}
+                        className={getHotspotClassName(
+                          `hotspot-three-2-${item.id}`
+                        )}
                         data-rbt-position-vertical={item.top}
                         data-rbt-position-horigental={item.left}
                       >
@@ -279,7 +283,9 @@ export default function Lookbook() {
                     .map((item, i) => (
                       <div
                         key={i}
-                        className={getHotspotClassName(`hotspot-three-3-${item.id}`)}
+                        className={getHotspotClassName(
+                          `hotspot-three-3-${item.id}`
+                        )}
                         data-rbt-position-vertical={item.top}
                         data-rbt-position-horigental={item.left}
                       >
@@ -393,7 +399,9 @@ export default function Lookbook() {
                     .map((item, i) => (
                       <div
                         key={i}
-                        className={getHotspotClassName(`hotspot-three-4-${item.id}`)}
+                        className={getHotspotClassName(
+                          `hotspot-three-4-${item.id}`
+                        )}
                         data-rbt-position-vertical={item.top}
                         data-rbt-position-horigental={item.left}
                       >
@@ -496,7 +504,9 @@ export default function Lookbook() {
                     .map((item, i) => (
                       <div
                         key={i}
-                        className={getHotspotClassName(`hotspot-three-5-${item.id}`)}
+                        className={getHotspotClassName(
+                          `hotspot-three-5-${item.id}`
+                        )}
                         data-rbt-position-vertical={item.top}
                         data-rbt-position-horigental={item.left}
                       >

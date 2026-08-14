@@ -18,7 +18,8 @@ export default function Products1() {
               </h2>
               <p className="desc mt--8 mb--0 rbt-scroll-trigger fade_in animation-order-2">
                 Top stroller picks for comfort, safety, and smooth daily strolls
-                 Recline. <br />One-hand folds. Roomy basket for daily trips.
+                Recline. <br />
+                One-hand folds. Roomy basket for daily trips.
               </p>
             </div>
           </div>
@@ -65,9 +66,7 @@ export default function Products1() {
               >
                 {strallerProducts.map((product, i) => (
                   <SwiperSlide key={i} className="swiper-slide">
-                    <ProductCard13 product={product}
-                      animationOrder={i + 1}
-                    />
+                    <ProductCard13 product={product} animationOrder={i + 1} />
                   </SwiperSlide>
                 ))}
 

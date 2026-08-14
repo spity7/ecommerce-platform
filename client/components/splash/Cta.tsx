@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import { useParallax } from "@/hooks/useParallax";
@@ -6,7 +6,10 @@ import { useParallax } from "@/hooks/useParallax";
 export default function Cta() {
   const parallaxRef = useParallax();
   return (
-    <div ref={parallaxRef} className="splash-section-gap rbt-splash-call-to-action-area position-relative overflow-hidden">
+    <div
+      ref={parallaxRef}
+      className="splash-section-gap rbt-splash-call-to-action-area position-relative overflow-hidden"
+    >
       <div className="container">
         <div className="row">
           <div className="col-12">

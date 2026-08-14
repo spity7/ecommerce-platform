@@ -253,7 +253,9 @@ export default function Signup() {
                         </div>
                       </div>
                       {passwordError && (
-                        <p className="rbt-form-error mt--8 mb--0">{passwordError}</p>
+                        <p className="rbt-form-error mt--8 mb--0">
+                          {passwordError}
+                        </p>
                       )}
                       {password.length > 0 && (
                         <PasswordStrengthIndicator
@@ -264,7 +266,11 @@ export default function Signup() {
                       <button
                         type="submit"
                         className="rbt-btn d-block w-100 mt--24 mb--16"
-                        disabled={Boolean(passwordError) || !password || !confirmPassword}
+                        disabled={
+                          Boolean(passwordError) ||
+                          !password ||
+                          !confirmPassword
+                        }
                       >
                         Continue
                       </button>

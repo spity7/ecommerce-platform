@@ -9,7 +9,7 @@ import { useIsotopeMasonry } from "@/hooks/useIsotopeMasonry";
 
 function PortfolioGridIsotopWiderOne() {
   const [activeFilter, setActiveFilter] = useState<string>(
-    isotopFilters.find((f) => f.isActive)?.filter ?? "*",
+    isotopFilters.find((f) => f.isActive)?.filter ?? "*"
   );
 
   const gridRef = useRef<HTMLDivElement | null>(null);
@@ -21,7 +21,7 @@ function PortfolioGridIsotopWiderOne() {
       itemSelector: ".rbt-meso-item",
       onRelayout: (iso) => iso.arrange({ filter: activeFilterRef.current }),
     },
-    [activeFilter],
+    [activeFilter]
   );
 
   const handleFilterClick = (filter: string) => {
@@ -33,7 +33,7 @@ function PortfolioGridIsotopWiderOne() {
     activeFilter === "*"
       ? isotopPortfolios
       : isotopPortfolios.filter((item) =>
-          item.filterClassName?.includes(activeFilter.replace(".", "")),
+          item.filterClassName?.includes(activeFilter.replace(".", ""))
         );
 
   return (

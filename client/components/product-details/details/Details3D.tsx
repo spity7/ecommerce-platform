@@ -48,7 +48,10 @@ export default function Details({ product }: { product: Product }) {
                       <span className="price-text">
                         {formatCurrency(product.price)}
                       </span>
-                      <OfferBadge product={product} className="rbt-offer-badge-md" />
+                      <OfferBadge
+                        product={product}
+                        className="rbt-offer-badge-md"
+                      />
                     </div>
                     <div className="rbt-quick-access-banner-action-btn d-flex align-items-center">
                       <ModalTriggerButton
@@ -61,9 +64,11 @@ export default function Details({ product }: { product: Product }) {
                     </div>
                   </div>
                   <div className="rbt-info-wrapper d-flex">
-                    <ProductRating product={product}><span className="icon">
+                    <ProductRating product={product}>
+                      <span className="icon">
                         <i className="fa-sharp fa-solid fa-truck-fast" />
-                      </span></ProductRating>
+                      </span>
+                    </ProductRating>
                     <div className="prd-info-section has-left-separator">
                       <div className="rbt-badge rbt-badge-bg-green rbt-badge-border rbt-badge-small rbt-badge-rounded">
                         9 in Stock

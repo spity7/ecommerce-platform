@@ -12,7 +12,7 @@ export default function Products1() {
           <div className="col-lg-12">
             <div className="rbt-component-section-title text-center border-0 p-0 align-items-center">
               <h2 className="rbt-title rbt-scroll-trigger fade_in animation-order-1">
-                <span className="rbt-bold--text">Trending </span>  Products
+                <span className="rbt-bold--text">Trending </span> Products
               </h2>
               <Link
                 className="rbt-btn rbt-btn-secondary rbt-btn-sm-2 rbt-scroll-trigger fade_in animation-order-2"
@@ -70,9 +70,7 @@ export default function Products1() {
               >
                 {hoodieProductData.map((product, i) => (
                   <SwiperSlide key={i} className="swiper-slide">
-                    <ProductCard13 product={product}
-                      animationOrder={i + 1}
-                    />
+                    <ProductCard13 product={product} animationOrder={i + 1} />
                   </SwiperSlide>
                 ))}
 

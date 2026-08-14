@@ -6,7 +6,9 @@ import type { BlocsImageEntry } from "@/data/splash";
 import { useManagedModalPanel } from "@/hooks/useManagedModalPanel";
 import type { ModalNameType } from "@/types/modal";
 import {
-  blocsContentCol1, blocsContentCol2, blocsContentCol3,
+  blocsContentCol1,
+  blocsContentCol2,
+  blocsContentCol3,
 } from "@/data/splash";
 
 interface BlocsModalProps {

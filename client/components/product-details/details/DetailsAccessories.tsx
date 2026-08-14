@@ -77,7 +77,9 @@ export default function DetailsAccessories({ product }: { product: Product }) {
                     blanditiis praesentium voluptatu atque...
                   </p>
                   <div className="rbt-info-wrapper d-flex mt--28">
-                    <ProductRating product={product} className="mt--0"><Facts /></ProductRating>
+                    <ProductRating product={product} className="mt--0">
+                      <Facts />
+                    </ProductRating>
                   </div>
                   <div className="rbt-info-wrapper d-flex justify-content-between mt--16">
                     <div className="rbt-store-price-1">
@@ -92,7 +94,10 @@ export default function DetailsAccessories({ product }: { product: Product }) {
                         <span className="price-text">
                           ${product.price.toFixed(2)}
                         </span>
-                        <OfferBadge product={product} className="rbt-offer-badge-md" />
+                        <OfferBadge
+                          product={product}
+                          className="rbt-offer-badge-md"
+                        />
                       </div>
                     </div>
                     <div className="prd-info-section">

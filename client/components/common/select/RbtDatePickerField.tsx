@@ -47,7 +47,7 @@ const DatePickerInput = forwardRef<HTMLInputElement, DatePickerInputProps>(
       className={className}
       autoComplete="off"
     />
-  ),
+  )
 );
 
 DatePickerInput.displayName = "DatePickerInput";
@@ -68,7 +68,8 @@ function parseDefaultDate(value: string | undefined, variant: PickerVariant) {
   const month = Number(monthText) - 1;
   const day = Number(dayText);
   const year = Number(yearText);
-  if (Number.isNaN(month) || Number.isNaN(day) || Number.isNaN(year)) return null;
+  if (Number.isNaN(month) || Number.isNaN(day) || Number.isNaN(year))
+    return null;
   return new Date(year, month, day);
 }
 
@@ -83,7 +84,7 @@ export default function RbtDatePickerField({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const initialDate = useMemo(
     () => parseDefaultDate(defaultValue, variant),
-    [defaultValue, variant],
+    [defaultValue, variant]
   );
   const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate);
 
@@ -98,7 +99,9 @@ export default function RbtDatePickerField({
   };
 
   return (
-    <div className={`input-group date ${variantClass} ${wrapperClassName}`.trim()}>
+    <div
+      className={`input-group date ${variantClass} ${wrapperClassName}`.trim()}
+    >
       <DatePicker
         id={id}
         selected={selectedDate}

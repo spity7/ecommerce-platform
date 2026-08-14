@@ -24,9 +24,7 @@ function HoverTransformFullwidth() {
                 key={i}
                 className="col-lg-4 col-xl-4 col-xxl-4 col-lg-6 col-md-6 col-sm-12 col-12 mt--32"
               >
-                <ProductCard2 product={product}
-                      animationOrder={i + 1}
-                    />
+                <ProductCard2 product={product} animationOrder={i + 1} />
               </div>
             ))}
           </div>

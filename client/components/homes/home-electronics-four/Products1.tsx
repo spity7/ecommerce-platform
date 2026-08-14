@@ -18,7 +18,7 @@ export default function Products1() {
   const filteredProducts = useMemo(() => {
     if (activeTab === "view-all") return electronicsProducts4;
     return electronicsProducts4.filter((product) =>
-      product.demoTab?.includes(activeTab),
+      product.demoTab?.includes(activeTab)
     );
   }, [activeTab]);
 

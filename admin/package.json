@@ -6,10 +6,12 @@
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start -H 0.0.0.0 -p 3001",
-    "check": "biome check .",
-    "check:fix": "biome check --write .",
-    "format": "biome format --write .",
-    "lint": "biome lint ."
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "check": "npm run format:check && npm run lint",
+    "check:fix": "npm run format && npm run lint:fix"
   },
   "dependencies": {
     "@radix-ui/react-select": "^2.3.1",
@@ -26,6 +28,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "prettier": "^3.6.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

@@ -50,28 +50,28 @@ export default function Nav() {
   };
 
   const isDemosActive = demoData.some((item) =>
-    isPathActive(pathname, item.href),
+    isPathActive(pathname, item.href)
   );
 
   const pagesMenuItems = innerPageMenuColumns.flatMap((column) => column.items);
   const isPagesActive = pagesMenuItems.some((item) =>
-    isPathActive(pathname, item.href),
+    isPathActive(pathname, item.href)
   );
 
   const elementsMenuItems = elementsMenuColumns.flatMap(
-    (column) => column.items,
+    (column) => column.items
   );
   const isElementsActive = elementsMenuItems.some((item) =>
-    isPathActive(pathname, item.href),
+    isPathActive(pathname, item.href)
   );
 
   const coreFeaturesItems = uxMenuColumns.flatMap((column) => column.items);
   const isCoreFeaturesActive = coreFeaturesItems.some((item) =>
-    isPathActive(pathname, item.href),
+    isPathActive(pathname, item.href)
   );
 
   const isMoreActive = supportMenuItems.some((item) =>
-    isPathActive(pathname, item.href),
+    isPathActive(pathname, item.href)
   );
 
   return (

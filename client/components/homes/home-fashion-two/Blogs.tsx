@@ -3,10 +3,14 @@ import { blogPosts22 } from "@/data/blogs";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Blogs({wrapperBox}: {wrapperBox?: string}) {
+export default function Blogs({ wrapperBox }: { wrapperBox?: string }) {
   return (
-    <div className={`rbt-component-area rbt-Blog-grid-area rbt-bg-color-white ${wrapperBox ? "" : "rbt-section-gap3"}`}>
-      <div className={`${wrapperBox ? wrapperBox : "wrapper plr--56 plr_lg--60 plr_md--20 plr_sm--20"}`}>
+    <div
+      className={`rbt-component-area rbt-Blog-grid-area rbt-bg-color-white ${wrapperBox ? "" : "rbt-section-gap3"}`}
+    >
+      <div
+        className={`${wrapperBox ? wrapperBox : "wrapper plr--56 plr_lg--60 plr_md--20 plr_sm--20"}`}
+      >
         <div className="rbt-gray-contain-box rbt-gray-contain-box-style-one rbt-bg-color-gray-light">
           <div className="row">
             <div className="col-lg-12 d-flex justify-content-between flex-row align-items-center flex-wrap rbt-gap--16 rbt-section-gap2-half-Bottom">

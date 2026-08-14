@@ -5,7 +5,7 @@ import "@cloudimage/360-view/css";
 
 const CI360Viewer = dynamic(
   () => import("@cloudimage/360-view/react").then((mod) => mod.CI360Viewer),
-  { ssr: false },
+  { ssr: false }
 );
 
 export default function Slider3D() {

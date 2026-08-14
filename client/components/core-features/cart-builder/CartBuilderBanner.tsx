@@ -1,4 +1,4 @@
-import { CurvedArrowIcon } from '../../svg-icons';
+import { CurvedArrowIcon } from "../../svg-icons";
 import Image from "next/image";
 
 function CartBuilderBanner() {

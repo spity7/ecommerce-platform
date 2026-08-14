@@ -19,7 +19,7 @@ export default function Products1() {
   const filteredProducts = useMemo(() => {
     if (activeTab === "view-all") return shoeProducts;
     return shoeProducts.filter((product) =>
-      product.demoTab?.includes(activeTab),
+      product.demoTab?.includes(activeTab)
     );
   }, [activeTab]);
 
@@ -58,9 +58,7 @@ export default function Products1() {
               key={i}
               className="col-lg-3 col-xl-3 col-xxl-3 col-md-6 col-sm-12 col-12 mt--24"
             >
-              <ProductCard1 product={product}
-                      animationOrder={i + 1}
-                    />
+              <ProductCard1 product={product} animationOrder={i + 1} />
             </div>
           ))}
           {/* End Single Card  */}

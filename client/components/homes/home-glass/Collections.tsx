@@ -34,7 +34,8 @@ export default function Collections() {
                       </Link>
                     </div>
                     <div className="content">
-                      <Link href="/shop-by-category"
+                      <Link
+                        href="/shop-by-category"
                         className="rbt-btn rbt-btn-gray icon-hover rbt-btn-md"
                       >
                         <span className="btn-text">Men Sunglasses</span>
@@ -62,7 +63,8 @@ export default function Collections() {
                       </Link>
                     </div>
                     <div className="content">
-                      <Link href="/shop-by-category"
+                      <Link
+                        href="/shop-by-category"
                         className="rbt-btn rbt-btn-gray icon-hover rbt-btn-md"
                       >
                         <span className="btn-text">Women Sunglasses</span>
@@ -90,7 +92,8 @@ export default function Collections() {
                       </Link>
                     </div>
                     <div className="content">
-                      <Link href="/shop-by-category"
+                      <Link
+                        href="/shop-by-category"
                         className="rbt-btn rbt-btn-gray icon-hover rbt-btn-md"
                       >
                         <span className="btn-text">Kids Sunglasses</span>

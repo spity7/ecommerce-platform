@@ -41,7 +41,9 @@ export default function DetailsCosmetic({ product }: { product: Product }) {
                   </a>
                   <h2 className="rbt-card-title mt--12">{product.title}</h2>
                   <div className="rbt-info-wrapper d-flex mt--28">
-                    <ProductRating product={product} className="mt--0"><Facts /></ProductRating>
+                    <ProductRating product={product} className="mt--0">
+                      <Facts />
+                    </ProductRating>
                   </div>
                   <div className="rbt-info-wrapper d-flex mt--24">
                     <div className="prd-info-section">
@@ -103,7 +105,10 @@ export default function DetailsCosmetic({ product }: { product: Product }) {
                         <span className="price-text">
                           {formatCurrency(product.price)}
                         </span>
-                        <OfferBadge product={product} className="rbt-offer-badge-md" />
+                        <OfferBadge
+                          product={product}
+                          className="rbt-offer-badge-md"
+                        />
                       </div>
                     </div>
                   </div>

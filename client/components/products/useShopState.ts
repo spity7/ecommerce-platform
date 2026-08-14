@@ -65,7 +65,7 @@ export function useShopState({
     }
     return state.sorted.slice(
       (state.currentPage - 1) * state.itemPerPage,
-      state.currentPage * state.itemPerPage,
+      state.currentPage * state.itemPerPage
     );
   }, [state.sorted, state.currentPage, state.itemPerPage, isLoadMore]);
 
@@ -78,7 +78,7 @@ export function useShopState({
     dispatch,
     visibleProducts,
     getFilterCount: getFilterCount as (
-      fn: (product: Product) => boolean,
+      fn: (product: Product) => boolean
     ) => number,
     isLoadMore,
   };

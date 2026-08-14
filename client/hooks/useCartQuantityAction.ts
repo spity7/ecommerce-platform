@@ -6,8 +6,12 @@ import { Product } from "@/types";
 
 export function useCartQuantityAction(product: Product) {
   const [quantityDraft, setQuantityDraft] = useState<number | null>(null);
-  const { addProductToCart, isAddedToCartProducts, updateQuantity, quantityInCart } =
-    useContextElement();
+  const {
+    addProductToCart,
+    isAddedToCartProducts,
+    updateQuantity,
+    quantityInCart,
+  } = useContextElement();
 
   const isInCart = isAddedToCartProducts(product.id);
   const cartQty = quantityInCart(product.id);

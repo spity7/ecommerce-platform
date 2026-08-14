@@ -9,7 +9,7 @@ import DropdownSelect from "@/components/common/select/DropdownSelect";
 export default function ComboProducts({ products = comboProducts }) {
   const [selected, setSelected] = useState<Product[]>([]);
   const [selectedSizes, setSelectedSizes] = useState<Record<number, string>>(
-    {},
+    {}
   );
   const sizeOptions = [
     "Extra Large",
@@ -37,7 +37,7 @@ export default function ComboProducts({ products = comboProducts }) {
                     setSelected((pre) =>
                       pre.includes(img)
                         ? [...pre].filter((elm) => elm != img)
-                        : [...pre, img],
+                        : [...pre, img]
                     )
                   }
                   className={`rbt-img ${
@@ -102,7 +102,7 @@ export default function ComboProducts({ products = comboProducts }) {
                     setSelected((pre) =>
                       pre.includes(product)
                         ? [...pre].filter((elm) => elm != product)
-                        : [...pre, product],
+                        : [...pre, product]
                     )
                   }
                 >

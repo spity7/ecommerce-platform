@@ -72,9 +72,11 @@ export default function DetailsBuyMoreOption({
                 praesentium voluptatum deleniti atque...
               </p>
               <div className="rbt-info-wrapper d-flex">
-                <ProductRating product={product}><span className="icon">
+                <ProductRating product={product}>
+                  <span className="icon">
                     <i className="fa-sharp fa-solid fa-truck-fast" />
-                  </span></ProductRating>
+                  </span>
+                </ProductRating>
                 <div className="prd-info-section has-left-separator">
                   <span>
                     <span className="rbt-text-bold rbt-text-color-heading">
@@ -100,7 +102,10 @@ export default function DetailsBuyMoreOption({
                     {" "}
                     ${product.price.toFixed(2)}
                   </span>
-                  <OfferBadge product={product} className="rbt-offer-badge-md" />
+                  <OfferBadge
+                    product={product}
+                    className="rbt-offer-badge-md"
+                  />
                 </div>
               </div>
               <ProductActionPanel product={product} />

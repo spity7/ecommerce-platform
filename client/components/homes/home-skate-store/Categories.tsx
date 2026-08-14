@@ -44,34 +44,34 @@ export default function Categories() {
                 <div
                   className={`rbt-cat-box rbt-cat-box-5 variation-one rbt-scroll-trigger fade_in ${animationClass}`}
                 >
-                <div className="inner">
-                  <div className="rbt-image-portion position-relative overflow-hidden">
-                    <Link href={`/shop-by-categories`}>
-                      <Image
-                        className={`rbt-scroll-trigger zoom_in ${animationClass}`}
-                        alt={item.alt || ""}
-                        src={item.imgSrc || ""}
-                        width={624}
-                        height={796}
-                      />
-                    </Link>
-                    <div className="rbt-right-corner-portion bottom--position">
-                      <div className="rbt-corner-portion-wrapper">
-                        <Link
-                          href={`/shop-by-categories`}
-                          className="rbt-card-link-btn"
-                        >
-                          <i className="fa-solid fa-arrow-up-right" />
-                        </Link>
+                  <div className="inner">
+                    <div className="rbt-image-portion position-relative overflow-hidden">
+                      <Link href={`/shop-by-categories`}>
+                        <Image
+                          className={`rbt-scroll-trigger zoom_in ${animationClass}`}
+                          alt={item.alt || ""}
+                          src={item.imgSrc || ""}
+                          width={624}
+                          height={796}
+                        />
+                      </Link>
+                      <div className="rbt-right-corner-portion bottom--position">
+                        <div className="rbt-corner-portion-wrapper">
+                          <Link
+                            href={`/shop-by-categories`}
+                            className="rbt-card-link-btn"
+                          >
+                            <i className="fa-solid fa-arrow-up-right" />
+                          </Link>
+                        </div>
                       </div>
                     </div>
+                    <div className="content text-center">
+                      <h6 className="title">
+                        <Link href={`/shop-by-categories`}>{item.title}</Link>
+                      </h6>
+                    </div>
                   </div>
-                  <div className="content text-center">
-                    <h6 className="title">
-                      <Link href={`/shop-by-categories`}>{item.title}</Link>
-                    </h6>
-                  </div>
-                </div>
                 </div>
               </div>
             );

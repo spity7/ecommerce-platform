@@ -1,4 +1,4 @@
-import { ScaleIcon } from '../../svg-icons';
+import { ScaleIcon } from "../../svg-icons";
 import Link from "next/link";
 import Image from "next/image";
 function HeaderStyleTwentyOne() {

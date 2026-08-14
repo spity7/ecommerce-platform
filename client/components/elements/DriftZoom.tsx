@@ -16,7 +16,6 @@ type DriftZoomProps = Omit<ImageProps, "width" | "height"> & {
   zoomType?: ZoomType;
 };
 
-
 const DriftZoom: React.FC<DriftZoomProps> = ({
   dataZoom,
   width = 400,
@@ -48,7 +47,8 @@ const DriftZoom: React.FC<DriftZoomProps> = ({
             containInline: true,
             inlineOffsetX: 0,
             inlineOffsetY: 0,
-            namespace: zoomType === "magnifying" ? MAGNIFY_NAMESPACE : undefined,
+            namespace:
+              zoomType === "magnifying" ? MAGNIFY_NAMESPACE : undefined,
           });
         }
       } else {

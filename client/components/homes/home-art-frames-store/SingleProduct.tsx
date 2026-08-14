@@ -102,9 +102,7 @@ export default function SingleProduct() {
                 Art &amp; Frame
               </a>
               <h3 className="rbt-card-title">
-                <Link
-                  href={`/product-single-fashion/${product.id}`}
-                >
+                <Link href={`/product-single-fashion/${product.id}`}>
                   {product.title}
                 </Link>
               </h3>
@@ -114,9 +112,11 @@ export default function SingleProduct() {
                 space that elevate every room.
               </p>
               <div className="rbt-info-wrapper d-flex flex-wrap">
-                <ProductRating product={product} className="mt--0"><span className="icon">
+                <ProductRating product={product} className="mt--0">
+                  <span className="icon">
                     <i className="fa-sharp fa-solid fa-truck-fast" />
-                  </span></ProductRating>
+                  </span>
+                </ProductRating>
                 <div className="prd-info-section has-left-separator">
                   <div className="prd-id-text">
                     <p className="text-bold">SKU:</p>

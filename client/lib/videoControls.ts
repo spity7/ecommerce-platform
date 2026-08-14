@@ -4,7 +4,9 @@ const PAUSE_BTN_ATTR = "data-pause-btn";
 const VIDEO_SELECTOR = `[${VIDEO_ATTR}]`;
 const PAUSE_BTN_SELECTOR = `[${PAUSE_BTN_ATTR}]`;
 
-export function initVideoControls(container: HTMLElement | null): void | (() => void) {
+export function initVideoControls(
+  container: HTMLElement | null
+): void | (() => void) {
   if (!container) return;
 
   const videoEls = container.querySelectorAll<HTMLVideoElement>(VIDEO_SELECTOR);

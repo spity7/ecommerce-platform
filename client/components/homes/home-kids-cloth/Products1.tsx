@@ -29,9 +29,7 @@ export default function Products1() {
                 {/* start single card */}
                 {babyClothingProducts.map((product, i) => (
                   <div key={i} className="col-12 col-lg-6 mt--24">
-                    <ProductCard19 product={product}
-                      animationOrder={i + 1}
-                    />
+                    <ProductCard19 product={product} animationOrder={i + 1} />
                   </div>
                 ))}
                 {/* end single card */}

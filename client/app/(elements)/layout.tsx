@@ -4,10 +4,9 @@ import Footer10 from "@/components/footers/Footer10";
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      
-        <Header1 sticky={true} />
-        {children}
-      
+      <Header1 sticky={true} />
+      {children}
+
       <Footer10 />
     </>
   );

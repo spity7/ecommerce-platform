@@ -9,7 +9,11 @@ export default function Categories() {
           <div className="col-lg-12 d-flex justify-content-between flex-row align-items-end mb--40 flex-wrap rbt-gap--16">
             <div className="rbt-component-section-title rbt-gap--4 mb--0 p-0 border-0">
               <h2 className="rbt-title rbt-scroll-trigger fade_in animation-order-1">
-                Popular by <span className="rbt-bold--text rbt-text-capitalize"> Categories</span>
+                Popular by{" "}
+                <span className="rbt-bold--text rbt-text-capitalize">
+                  {" "}
+                  Categories
+                </span>
               </h2>
             </div>
             <Link

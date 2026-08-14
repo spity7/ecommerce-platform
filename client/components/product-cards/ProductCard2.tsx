@@ -26,7 +26,7 @@ export default function ProductCard2({
           <i
             className={`fa-solid fa-star${i < rating ? " rbt-rated-icon" : ""}`}
           />
-        </li>,
+        </li>
       );
     }
     return stars;
@@ -73,9 +73,7 @@ export default function ProductCard2({
               </div>
             )}
             <h6 className="rbt-card-title">
-              <Link href={detailsPageLink}>
-                {product.title}
-              </Link>
+              <Link href={detailsPageLink}>{product.title}</Link>
             </h6>
             <div className="rbt-card-rating">
               <ul className="rbt-rating-icon-list">
@@ -95,7 +93,11 @@ export default function ProductCard2({
                 <span className="price-text">${product.price.toFixed(2)}</span>
               </div>
             </div>
-            {product.oldPrice ? (<div className="bottom-part"><OfferBadge product={product} className="mt--12" /></div>) : null}
+            {product.oldPrice ? (
+              <div className="bottom-part">
+                <OfferBadge product={product} className="mt--12" />
+              </div>
+            ) : null}
           </div>
         </div>
         <div className="rbt-card-footer d-flex footer-content-btn">

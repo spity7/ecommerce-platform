@@ -146,7 +146,10 @@ export default function Signin() {
                         </div>
                         <p className="mb--0 b2">
                           Forget password?{" "}
-                          <Link className="rbt-switch-btn ml--4" href="/forgot-password">
+                          <Link
+                            className="rbt-switch-btn ml--4"
+                            href="/forgot-password"
+                          >
                             Reset
                           </Link>
                         </p>

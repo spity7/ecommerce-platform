@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 export default function ProductFilteringPage() {
   return (
     <>
-            <ProductFilteringBanner />
+      <ProductFilteringBanner />
 
-            <ProductFilteringComponents />
+      <ProductFilteringComponents />
     </>
   );
 }

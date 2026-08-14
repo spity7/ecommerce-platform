@@ -3,9 +3,9 @@ import { ProductForm } from "@/components/products/product-form";
 import { productFormDefaults } from "@/data/products/data";
 
 export const metadata: Metadata = {
-	title: "Edit Product",
+  title: "Edit Product",
 };
 
 export default function EditProductPage() {
-	return <ProductForm mode="edit" {...productFormDefaults.edit} />;
+  return <ProductForm mode="edit" {...productFormDefaults.edit} />;
 }

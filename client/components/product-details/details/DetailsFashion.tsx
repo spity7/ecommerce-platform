@@ -103,7 +103,10 @@ export default function DetailsFashion({ product }: { product: Product }) {
                           {" "}
                           ${product.price.toFixed(2)}
                         </span>
-                        <OfferBadge product={product} className="rbt-offer-badge-md" />
+                        <OfferBadge
+                          product={product}
+                          className="rbt-offer-badge-md"
+                        />
                       </div>
                     </div>
                     <div className="prd-info-section">
@@ -124,7 +127,9 @@ export default function DetailsFashion({ product }: { product: Product }) {
                     </div>
                   </div>
                   <div className="rbt-info-wrapper d-flex mt--28">
-                    <ProductRating product={product} className="mt--0"><Facts /></ProductRating>
+                    <ProductRating product={product} className="mt--0">
+                      <Facts />
+                    </ProductRating>
                   </div>
                   <div className="rbt-info-wrapper d-flex mt--24 rbt-gap--12 flex-wrap">
                     <div className="prd-info-section">

@@ -1,10 +1,11 @@
 "use client";
 
-import { CircleBorderIcon } from '../svg-icons';
+import { CircleBorderIcon } from "../svg-icons";
 import { useUiElement } from "@/context/uiStore";
 
 export default function Toasters() {
-  const { toasterCompareVisible, toasterWishlistVisible, wishlistMessage } = useUiElement();
+  const { toasterCompareVisible, toasterWishlistVisible, wishlistMessage } =
+    useUiElement();
   return (
     <>
       <div

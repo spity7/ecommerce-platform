@@ -51,7 +51,7 @@ export default function FilterByCategories({
                     (product) =>
                       !!(
                         product.filterCategory?.includes(category.name) ?? false
-                      ),
+                      )
                   )}
                   )
                 </span>

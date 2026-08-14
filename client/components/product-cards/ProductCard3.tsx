@@ -28,14 +28,14 @@ export default function ProductCard3({
           <i
             className={`fa-solid fa-star${i < rating ? " rbt-rated-icon" : ""}`}
           />
-        </li>,
+        </li>
       );
     }
     return stars;
   };
 
   const renderColorVariants = (
-    variants: import("@/types").ProductVariant[],
+    variants: import("@/types").ProductVariant[]
   ) => {
     return variants.map((variant, index) => (
       <li
@@ -110,9 +110,7 @@ export default function ProductCard3({
               </div>
             )}
             <h6 className="rbt-card-title">
-              <Link href={detailsPageLink}>
-                {product.title}
-              </Link>
+              <Link href={detailsPageLink}>{product.title}</Link>
             </h6>
             <div className="rbt-card-rating">
               <ul className="rbt-rating-icon-list">
@@ -136,10 +134,7 @@ export default function ProductCard3({
                     {renderColorVariants(product.variants)}
                   </ul>
                   {product.moreItemsLink && (
-                    <Link
-                      className="prd-link-text"
-                      href={detailsPageLink}
-                    >
+                    <Link className="prd-link-text" href={detailsPageLink}>
                       +{product.moreItemsLink} More Items
                     </Link>
                   )}

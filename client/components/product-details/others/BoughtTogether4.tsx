@@ -140,9 +140,11 @@ export default function BoughtTogether4() {
                             Royal Canin Puppy Growth Formula
                           </Link>
                         </h6>
-                        <ProductRating product={featuredProduct}><span className="icon">
+                        <ProductRating product={featuredProduct}>
+                          <span className="icon">
                             <i className="fa-sharp fa-solid fa-truck-fast" />
-                          </span></ProductRating>
+                          </span>
+                        </ProductRating>
                         <div className="pricing-part">
                           {featuredProduct.oldPrice ? (
                             <del className="price-text">
@@ -152,7 +154,10 @@ export default function BoughtTogether4() {
                           <span className="price-text">
                             {formatCurrency(featuredProduct.price)}
                           </span>
-                          <OfferBadge product={featuredProduct} variant="minus" />
+                          <OfferBadge
+                            product={featuredProduct}
+                            variant="minus"
+                          />
                         </div>
                       </div>
                     </div>

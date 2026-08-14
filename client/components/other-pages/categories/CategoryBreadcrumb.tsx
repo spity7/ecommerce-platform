@@ -15,8 +15,9 @@ export default function CategoryBreadcrumb({
 }: CategoryBreadcrumbProps) {
   return (
     <div
-      className={`rbt-breadcrumb-default ptb--48 ptb_md--24 ptb_sm--24 ${backgroundClassName || ""
-        }`}
+      className={`rbt-breadcrumb-default ptb--48 ptb_md--24 ptb_sm--24 ${
+        backgroundClassName || ""
+      }`}
     >
       <div className="container">
         <div className="row">

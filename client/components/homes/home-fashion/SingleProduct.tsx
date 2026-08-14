@@ -117,9 +117,11 @@ export default function SingleProduct() {
                 zipper detail.
               </p>
               <div className="rbt-info-wrapper d-flex flex-wrap">
-                <ProductRating product={product} className="mt--0"><span className="icon">
+                <ProductRating product={product} className="mt--0">
+                  <span className="icon">
                     <i className="fa-sharp fa-solid fa-truck-fast" />
-                  </span></ProductRating>
+                  </span>
+                </ProductRating>
                 <div className="prd-info-section has-left-separator">
                   <div className="prd-id-text">
                     <p className="text-bold">SKU:</p>
@@ -168,10 +170,7 @@ export default function SingleProduct() {
             </div>
             <div className="product-btn-grp">
               <div className="rbt-qty-area">
-                <QuantitySelect
-                  quantity={quantity}
-                  setQuantity={setQuantity}
-                />
+                <QuantitySelect quantity={quantity} setQuantity={setQuantity} />
               </div>
               <button
                 type="button"
@@ -183,8 +182,7 @@ export default function SingleProduct() {
                 disabled={isDisabled}
                 suppressHydrationWarning
               >
-                <i className="fa-regular fa-cart-shopping" />{" "}
-                {buttonLabel}
+                <i className="fa-regular fa-cart-shopping" /> {buttonLabel}
               </button>
             </div>
           </div>

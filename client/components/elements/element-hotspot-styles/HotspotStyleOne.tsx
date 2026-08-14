@@ -126,9 +126,7 @@ export default function LookbookProducts() {
               >
                 {fashionProducts2.map((product, i) => (
                   <SwiperSlide key={i} className="swiper-slide">
-                    <ProductCard1 product={product}
-                      animationOrder={i + 1}
-                    />
+                    <ProductCard1 product={product} animationOrder={i + 1} />
                   </SwiperSlide>
                 ))}
 

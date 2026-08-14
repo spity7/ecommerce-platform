@@ -1,5 +1,5 @@
-'use client'
-import { WaveThinIcon } from '../../svg-icons';
+"use client";
+import { WaveThinIcon } from "../../svg-icons";
 export default function Contact() {
   return (
     <div className="rbt-component-area rbt-section-gap rbt-bg-color-gray-light">
@@ -8,7 +8,10 @@ export default function Contact() {
           <div className="col-12">
             <div className="row row--12">
               <div className="col-12 col-lg-8">
-                <form onSubmit={(e) => e.preventDefault()} className="rbt-contact-form">
+                <form
+                  onSubmit={(e) => e.preventDefault()}
+                  className="rbt-contact-form"
+                >
                   <div className="rbt-fshape-box-outline-style">
                     <div className="row">
                       <div className="col-lg-12">

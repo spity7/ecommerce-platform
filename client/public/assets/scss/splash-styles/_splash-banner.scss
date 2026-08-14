@@ -6,13 +6,15 @@
             Banner Style
 ***************************************/
 .rbt-splash-banner-bg-var-1 {
-  background: url(/assets/images/splash/section/section-bg-line9.png),
+  background:
+    url(/assets/images/splash/section/section-bg-line9.png),
     var(--color-brand-50);
   background-size: cover;
 }
 
 .rbt-splash-banner-bg-var-2 {
-  background: url(/assets/images/splash/section/section-bg-line10.png),
+  background:
+    url(/assets/images/splash/section/section-bg-line10.png),
     url(/assets/images/splash/section/section-bg-img2.webp),
     var(--color-brand-50);
   background-size: 100% 100%;
@@ -397,7 +399,8 @@
 
     .rbt-banner-part-right {
       .rbt-content {
-        background: linear-gradient(
+        background:
+          linear-gradient(
             0deg,
             rgba(33, 90, 218, 0) -520.76%,
             rgba(33, 90, 218, 0.95) 83.74%

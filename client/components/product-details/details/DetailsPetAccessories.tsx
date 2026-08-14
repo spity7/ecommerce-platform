@@ -33,7 +33,9 @@ export default function DetailsPetAccessories({
             <div className="row row--12 rbt-single-product-content rbt-content-top-sticky-on-img rbt-product-variations rbt-content-top-sticky-on-img-vr">
               <div className="col-lg-6">
                 <div className="rbt-info-wrapper d-flex mt--0">
-                  <ProductRating product={product} className="mt--0"><Facts /></ProductRating>
+                  <ProductRating product={product} className="mt--0">
+                    <Facts />
+                  </ProductRating>
                 </div>
                 <h2 className="rbt-card-title mt--12">{product.title} </h2>
                 <div className="rbt-info-wrapper d-flex mt--16">
@@ -105,7 +107,10 @@ export default function DetailsPetAccessories({
                         {" "}
                         ${product.price.toFixed(2)}
                       </span>
-                      <OfferBadge product={product} className="rbt-offer-badge-md" />
+                      <OfferBadge
+                        product={product}
+                        className="rbt-offer-badge-md"
+                      />
                     </div>
                   </div>
                 </div>

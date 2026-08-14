@@ -74,68 +74,70 @@ export default function Hero() {
                   "animation-order-1";
 
                 return (
-                <SwiperSlide className="swiper-slide" key={index}>
-                  <div
-                    className={`rbt-product-banner rbt-rounded--0 rbt-product-banner-style-four rbt-product-banner-style-four-hv-one rbt-hero-banner rbt-banner-four-var-two rbt-banner-four-var-two-smaller rbt-bg-color-brand-100 rbt-scroll-trigger fade_in ${animationClass}`}
-                  >
-                    <div className="rbt-banner-inner">
-                      <div className="rbt-product-banner-content text-center d-flex justify-content-center align-items-center">
-                        <div className="rbt-content-section rbt-content-wider rbt-slideshow-content-inner effect_fadeindown">
-                          <h6
-                            className={`rbt-banner-subtitle-two h4 mb-0  ${
-                              index != 0 ? "rbt-text-color-white" : ""
-                            } `}
-                          >
-                            {item.subtitle}
-                          </h6>
-                          <h2
-                            className={`rbt-banner-title rbt-banner-title-lg mb-0 ${
-                              index != 0 ? "rbt-text-color-white" : ""
-                            } `}
-                          >
-                            <span className="rbt-bold--text d-block">
-                              {item.title?.split("\n")[0] ?? ""}
-                            </span>
-                            {item.title?.split("\n").slice(1).join(" ") ?? ""}
-                          </h2>
-                          <div className="rbt-pricing-part d-flex align-items-center flex-row justify-content-center">
-                            <p className={`rbt-price-desc-text  ${
-                              index != 0 ? "rbt-text-color-white" : ""
-                            } `}>
-                              Just Starting From
-                            </p>
-                            <span className="rbt-price-text offer-price">
-                              {formatCurrency(item.price)}
-                            </span>
-                            <OfferBadge
-                              price={item.price}
-                              oldPrice={item.oldPrice}
-                            />
-                          </div>
-                          <div className="rbt-banner-btn-grp d-flex rbt-gap--16 mt--32 mt_sm--16 justify-content-center">
-                            <Link
-                              className="rbt-btn"
-                              href={`/shop-by-categories`}
+                  <SwiperSlide className="swiper-slide" key={index}>
+                    <div
+                      className={`rbt-product-banner rbt-rounded--0 rbt-product-banner-style-four rbt-product-banner-style-four-hv-one rbt-hero-banner rbt-banner-four-var-two rbt-banner-four-var-two-smaller rbt-bg-color-brand-100 rbt-scroll-trigger fade_in ${animationClass}`}
+                    >
+                      <div className="rbt-banner-inner">
+                        <div className="rbt-product-banner-content text-center d-flex justify-content-center align-items-center">
+                          <div className="rbt-content-section rbt-content-wider rbt-slideshow-content-inner effect_fadeindown">
+                            <h6
+                              className={`rbt-banner-subtitle-two h4 mb-0  ${
+                                index != 0 ? "rbt-text-color-white" : ""
+                              } `}
                             >
-                              Shop Now
-                            </Link>
+                              {item.subtitle}
+                            </h6>
+                            <h2
+                              className={`rbt-banner-title rbt-banner-title-lg mb-0 ${
+                                index != 0 ? "rbt-text-color-white" : ""
+                              } `}
+                            >
+                              <span className="rbt-bold--text d-block">
+                                {item.title?.split("\n")[0] ?? ""}
+                              </span>
+                              {item.title?.split("\n").slice(1).join(" ") ?? ""}
+                            </h2>
+                            <div className="rbt-pricing-part d-flex align-items-center flex-row justify-content-center">
+                              <p
+                                className={`rbt-price-desc-text  ${
+                                  index != 0 ? "rbt-text-color-white" : ""
+                                } `}
+                              >
+                                Just Starting From
+                              </p>
+                              <span className="rbt-price-text offer-price">
+                                {formatCurrency(item.price)}
+                              </span>
+                              <OfferBadge
+                                price={item.price}
+                                oldPrice={item.oldPrice}
+                              />
+                            </div>
+                            <div className="rbt-banner-btn-grp d-flex rbt-gap--16 mt--32 mt_sm--16 justify-content-center">
+                              <Link
+                                className="rbt-btn"
+                                href={`/shop-by-categories`}
+                              >
+                                Shop Now
+                              </Link>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div
-                        className={`rbt-product-img rbt-scroll-trigger zoom_in ${animationClass}`}
-                      >
-                        <Image
-                          alt="eCommerce Product Banner Background"
-                          src={item.imgSrc || ""}
-                          width={3520}
-                          height={1106}
-                          priority
-                        />
+                        <div
+                          className={`rbt-product-img rbt-scroll-trigger zoom_in ${animationClass}`}
+                        >
+                          <Image
+                            alt="eCommerce Product Banner Background"
+                            src={item.imgSrc || ""}
+                            width={3520}
+                            height={1106}
+                            priority
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </SwiperSlide>
+                  </SwiperSlide>
                 );
               })}
               <div className="rbt-swiper-arrow-wrapper-style-one rbt-swiper-arrow-wrapper-style-one-col-style rbt-swiper-arrow-wrapper-style-one-sm-style rbt-bg-color-white">

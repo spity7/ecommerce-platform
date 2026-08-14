@@ -1,4 +1,4 @@
-import { CloseIcon } from '../svg-icons';
+import { CloseIcon } from "../svg-icons";
 import { useState } from "react";
 import { sizeGuideIn, sizeGuideCm } from "@/data/sizeGuide";
 import { useManagedModalPanel } from "@/hooks/useManagedModalPanel";
@@ -82,64 +82,64 @@ export default function QuickViewSizeGuide() {
                     {/* Start tabs content */}
                     <div className="tab-content">
                       {activeTab === "in" && (
-                      <div className="tab-pane fade show active">
-                        <div className="rbt-responsive-table">
-                          <table className="rbt-sizeguide-table">
-                            <thead>
-                              <tr>
-                                <th>Size</th>
-                                <th>US Size</th>
-                                <th>Chest</th>
-                                <th>Waist</th>
-                                <th>Low Hip</th>
-                                <th>Inseam</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {sizeGuideIn.map((row) => (
-                                <tr key={row.id}>
-                                  <td>{row.size}</td>
-                                  <td>{row.usSize}</td>
-                                  <td>{row.chest}</td>
-                                  <td>{row.waist}</td>
-                                  <td>{row.lowHip}</td>
-                                  <td>{row.inseam}</td>
+                        <div className="tab-pane fade show active">
+                          <div className="rbt-responsive-table">
+                            <table className="rbt-sizeguide-table">
+                              <thead>
+                                <tr>
+                                  <th>Size</th>
+                                  <th>US Size</th>
+                                  <th>Chest</th>
+                                  <th>Waist</th>
+                                  <th>Low Hip</th>
+                                  <th>Inseam</th>
                                 </tr>
-                              ))}
-                            </tbody>
-                          </table>
+                              </thead>
+                              <tbody>
+                                {sizeGuideIn.map((row) => (
+                                  <tr key={row.id}>
+                                    <td>{row.size}</td>
+                                    <td>{row.usSize}</td>
+                                    <td>{row.chest}</td>
+                                    <td>{row.waist}</td>
+                                    <td>{row.lowHip}</td>
+                                    <td>{row.inseam}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
-                      </div>
                       )}
                       {activeTab === "cm" && (
-                      <div className="tab-pane fade show active">
-                        <div className="rbt-responsive-table">
-                          <table className="rbt-sizeguide-table">
-                            <thead>
-                              <tr>
-                                <th>Size</th>
-                                <th>US Size</th>
-                                <th>Chest</th>
-                                <th>Waist</th>
-                                <th>Low Hip</th>
-                                <th>Inseam</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {sizeGuideCm.map((row) => (
-                                <tr key={row.id}>
-                                  <td>{row.size}</td>
-                                  <td>{row.usSize}</td>
-                                  <td>{row.chest}</td>
-                                  <td>{row.waist}</td>
-                                  <td>{row.lowHip}</td>
-                                  <td>{row.inseam}</td>
+                        <div className="tab-pane fade show active">
+                          <div className="rbt-responsive-table">
+                            <table className="rbt-sizeguide-table">
+                              <thead>
+                                <tr>
+                                  <th>Size</th>
+                                  <th>US Size</th>
+                                  <th>Chest</th>
+                                  <th>Waist</th>
+                                  <th>Low Hip</th>
+                                  <th>Inseam</th>
                                 </tr>
-                              ))}
-                            </tbody>
-                          </table>
+                              </thead>
+                              <tbody>
+                                {sizeGuideCm.map((row) => (
+                                  <tr key={row.id}>
+                                    <td>{row.size}</td>
+                                    <td>{row.usSize}</td>
+                                    <td>{row.chest}</td>
+                                    <td>{row.waist}</td>
+                                    <td>{row.lowHip}</td>
+                                    <td>{row.inseam}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
-                      </div>
                       )}
                     </div>
                     {/* End tabs content */}

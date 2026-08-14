@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useParallax } from '@/hooks/useParallax';
-import { WaveSplashIcon } from '../../svg-icons';
+import { useParallax } from "@/hooks/useParallax";
+import { WaveSplashIcon } from "../../svg-icons";
 import Image from "next/image";
 
 function HeaderBuilderBanner() {

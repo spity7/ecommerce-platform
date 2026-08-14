@@ -68,7 +68,9 @@ export default function Products2() {
                         <div
                           className={`rbt-card-img rbt-bg-color-default rbt-scroll-trigger zoom_in animation-order-${index + 1}`}
                         >
-                          <Link href={`/product-single-furniture/${product.id}`}>
+                          <Link
+                            href={`/product-single-furniture/${product.id}`}
+                          >
                             <Image
                               className="rbt-prd-img"
                               alt="Card Image"

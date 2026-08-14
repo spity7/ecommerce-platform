@@ -26,9 +26,7 @@ function RecentProducts() {
                 key={i}
                 className="col-xxl-3 col-lg-4 col-md-6 col-sm-6 col-6 mt--24"
               >
-                <ProductCard9 product={product}
-                  animationOrder={i + 1}
-                />
+                <ProductCard9 product={product} animationOrder={i + 1} />
               </div>
             ))}
             {/* End Single Card  */}

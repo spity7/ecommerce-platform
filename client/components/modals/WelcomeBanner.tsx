@@ -127,7 +127,11 @@ export default function WelcomeBanner() {
                         <span className="price-text">
                           ${welcomeBannerSlides[0]?.price}
                         </span>
-                        <OfferBadge price={welcomeBannerSlides[0]?.price} oldPrice={welcomeBannerSlides[0]?.oldPrice} variant="minus" />
+                        <OfferBadge
+                          price={welcomeBannerSlides[0]?.price}
+                          oldPrice={welcomeBannerSlides[0]?.oldPrice}
+                          variant="minus"
+                        />
                       </div>
                       <div className="prd-info-section">
                         <div className="prd-id-text">
@@ -141,7 +145,12 @@ export default function WelcomeBanner() {
                       </div>
                     </div>
                     <div className="rbt-info-wrapper d-flex mt--24">
-                      <ProductRating product={welcomeBannerSlides[0]} className="mt--0"><Facts /></ProductRating>
+                      <ProductRating
+                        product={welcomeBannerSlides[0]}
+                        className="mt--0"
+                      >
+                        <Facts />
+                      </ProductRating>
                     </div>
                     <div className="rbt-info-wrapper d-flex mt--24">
                       <div className="prd-info-section">

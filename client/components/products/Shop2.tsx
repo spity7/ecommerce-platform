@@ -143,7 +143,7 @@ export default function Shop2({
                           onChange={(value) =>
                             setItemPerPage(
                               Number(value.split(" ")[0]),
-                              dispatch,
+                              dispatch
                             )
                           }
                         />
@@ -193,9 +193,7 @@ export default function Shop2({
                     key={i}
                     className="col-xxl-4 col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mt--24"
                   >
-                    <ProductCard10 product={product}
-                      animationOrder={i + 1}
-                    />
+                    <ProductCard10 product={product} animationOrder={i + 1} />
                   </div>
                 ))
               )}

@@ -46,24 +46,35 @@ function PricingStyleThree() {
         </div>
         <div className="row g-3 g-md-5">
           {pricingStyleThreePlans.map((plan, idx) => (
-            <div key={`${plan.title}-${idx}`} className="col-xl-4 col-lg-6 col-md-6 col-12">
-              <div className={`pricing-table style-2${plan.isActive ? " active" : ""}`}>
+            <div
+              key={`${plan.title}-${idx}`}
+              className="col-xl-4 col-lg-6 col-md-6 col-12"
+            >
+              <div
+                className={`pricing-table style-2${plan.isActive ? " active" : ""}`}
+              >
                 <div className="pricing-header">
                   {plan.pricingBadge ? (
                     <div className="pricing-badge">
                       <span>{plan.pricingBadge}</span>
                     </div>
                   ) : null}
-                  <h3 className={`title ${plan.titleColorClassName ?? ""}`.trim()}>
+                  <h3
+                    className={`title ${plan.titleColorClassName ?? ""}`.trim()}
+                  >
                     {plan.title}
                   </h3>
-                  <span className="rbt-static-badge mb--32">{plan.badgeText}</span>
+                  <span className="rbt-static-badge mb--32">
+                    {plan.badgeText}
+                  </span>
                   <div className="price-wrap">
                     <div
                       className="yearly-pricing"
                       style={{ display: isYearlyPlan ? "block" : "none" }}
                     >
-                      <span className={`amount ${plan.amountColorClassName ?? ""}`.trim()}>
+                      <span
+                        className={`amount ${plan.amountColorClassName ?? ""}`.trim()}
+                      >
                         ${plan.yearlyPrice.toFixed(2)}
                       </span>
                       <span
@@ -76,7 +87,9 @@ function PricingStyleThree() {
                       className="monthly-pricing"
                       style={{ display: isYearlyPlan ? "none" : "block" }}
                     >
-                      <span className={`amount ${plan.amountColorClassName ?? ""}`.trim()}>
+                      <span
+                        className={`amount ${plan.amountColorClassName ?? ""}`.trim()}
+                      >
                         ${plan.monthlyPrice.toFixed(2)}
                       </span>
                       <span

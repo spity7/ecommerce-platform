@@ -63,9 +63,10 @@ export default function Products1() {
                   >
                     {ceramicsProducts.map((product, i) => (
                       <SwiperSlide key={i} className="swiper-slide">
-                        <ProductCard8 product={product}
-                      animationOrder={i + 1}
-                    />
+                        <ProductCard8
+                          product={product}
+                          animationOrder={i + 1}
+                        />
                       </SwiperSlide>
                     ))}
 

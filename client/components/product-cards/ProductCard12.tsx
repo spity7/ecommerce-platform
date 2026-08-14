@@ -110,10 +110,7 @@ export default function ProductCard12({
                 </li>
               ))}
             </ul>
-            <Link
-              className="prd-link-text"
-              href={detailsPageLink}
-            >
+            <Link className="prd-link-text" href={detailsPageLink}>
               +12 More
             </Link>
           </div>
@@ -131,9 +128,7 @@ export default function ProductCard12({
             </div>
           )}
           <h6 className="rbt-card-title mt--4">
-            <Link href={detailsPageLink}>
-              {product.title}
-            </Link>
+            <Link href={detailsPageLink}>{product.title}</Link>
           </h6>
           <div className="rbt-card-rating">
             <ul className="rbt-rating-icon-list">

@@ -67,7 +67,7 @@ export default function Demos() {
         },
       });
     },
-    [],
+    []
   );
 
   updateCategoryRef.current = updateCategory;
@@ -84,7 +84,7 @@ export default function Demos() {
       setVisibleLimit(21);
       updateCategory(activeFilter, term, 21);
     },
-    [activeFilter, updateCategory],
+    [activeFilter, updateCategory]
   );
 
   const handleLoadMore = () => {
@@ -196,7 +196,7 @@ export default function Demos() {
                       key={i}
                       data-title={demo.title}
                       className={`rbt-meso-item rbt-single-demo-item transition ${demo.filterClass.join(
-                        " ",
+                        " "
                       )}`}
                     >
                       <div className="rbt-demo-wrapper">

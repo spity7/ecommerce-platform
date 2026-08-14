@@ -464,7 +464,7 @@
       gap: 16px;
       flex-wrap: wrap;
       @media #{$small-mobile} {
-          gap: 6px;
+        gap: 6px;
       }
       li {
         @media #{$md-layout, $sm-layout} {

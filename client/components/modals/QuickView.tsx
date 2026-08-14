@@ -1,4 +1,4 @@
-import { CloseIcon } from '../svg-icons';
+import { CloseIcon } from "../svg-icons";
 import Image from "next/image";
 import Link from "next/link";
 import { useManagedModalPanel } from "@/hooks/useManagedModalPanel";
@@ -56,7 +56,8 @@ export default function QuickView() {
                     Successfully You have added <br />
                     your product comparison!
                   </p>
-                  <Link href="/compare-product"
+                  <Link
+                    href="/compare-product"
                     className="rbt-btn rbt-btn-sm rbt-square-btn d-block has-left-icon mb--12"
                   >
                     <i className="fa-regular fa-scale-balanced" /> Compare Now

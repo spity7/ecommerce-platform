@@ -1,5 +1,5 @@
-'use client'
-import { WaveLongIcon } from '../../svg-icons';
+"use client";
+import { WaveLongIcon } from "../../svg-icons";
 import Image from "next/image";
 
 export default function Contact3() {
@@ -10,7 +10,10 @@ export default function Contact3() {
           <div className="col-10 mx-auto">
             <div className="row row--12">
               <div className="col-12 col-lg-8">
-                <form onSubmit={(e) => e.preventDefault()} className="rbt-contact-form">
+                <form
+                  onSubmit={(e) => e.preventDefault()}
+                  className="rbt-contact-form"
+                >
                   <div className="rbt-fshape-box-outline-style">
                     <div className="row">
                       <div className="col-lg-12">

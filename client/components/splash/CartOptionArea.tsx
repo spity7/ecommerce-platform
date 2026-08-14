@@ -1,5 +1,5 @@
 "use client";
-import { CurvedArrowIcon } from '../svg-icons';
+import { CurvedArrowIcon } from "../svg-icons";
 import Link from "next/link";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";

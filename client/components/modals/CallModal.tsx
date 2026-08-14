@@ -15,7 +15,7 @@ export default function CallModal() {
     "Spain",
   ];
   const [selectedCountry, setSelectedCountry] = useState(
-    "United States Of America",
+    "United States Of America"
   );
   const [activeTab, setActiveTab] = useState<"instant" | "request">("instant");
   const { close } = useManagedModalPanel("makecallModal");
@@ -98,7 +98,10 @@ export default function CallModal() {
                             <div className="tab-pane fade show active">
                               <div className="rbt-btn-grp flex-column rbt-gap--24">
                                 {/* Call via Phone */}
-                                <Tooltip content="Call via Phone" placement="top">
+                                <Tooltip
+                                  content="Call via Phone"
+                                  placement="top"
+                                >
                                   <a
                                     href="tel:+958445612564"
                                     className="rbt-btn d-block w-100 text-center rbt-btn-modern-hover rbt-bg-color-phone tooltips"
@@ -142,7 +145,10 @@ export default function CallModal() {
                                   </a>
                                 </Tooltip>
                                 {/* Call via Signal */}
-                                <Tooltip content="Call via Signal" placement="top">
+                                <Tooltip
+                                  content="Call via Signal"
+                                  placement="top"
+                                >
                                   <a
                                     href="https://signal.me/#p/+958445612564"
                                     target="_blank"

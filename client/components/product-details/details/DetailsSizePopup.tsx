@@ -98,7 +98,10 @@ export default function DetailsSizePopup({ product }: { product: Product }) {
                       {" "}
                       ${product.price.toFixed(2)}
                     </span>
-                    <OfferBadge product={product} className="rbt-offer-badge-md" />
+                    <OfferBadge
+                      product={product}
+                      className="rbt-offer-badge-md"
+                    />
                   </div>
                 </div>
                 <div className="rbt-quick-access-banner-action-btn d-flex align-items-center">
@@ -112,7 +115,9 @@ export default function DetailsSizePopup({ product }: { product: Product }) {
                 </div>
               </div>
               <div className="rbt-info-wrapper d-flex mt--28">
-                <ProductRating product={product} className="mt--0"><Facts /></ProductRating>
+                <ProductRating product={product} className="mt--0">
+                  <Facts />
+                </ProductRating>
                 <div className="prd-info-section has-left-separator">
                   <div className="prd-id-text">
                     <p className="text-bold">SKU:</p>

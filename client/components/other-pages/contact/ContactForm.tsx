@@ -12,7 +12,7 @@ export default function ContactForm() {
   const formspreeEndpoint = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT;
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (
-    event,
+    event
   ) => {
     event.preventDefault();
     const form = event.currentTarget;
@@ -25,7 +25,7 @@ export default function ContactForm() {
 
     if (!formspreeEndpoint) {
       setSubmitError(
-        "Form submission is not configured. Set NEXT_PUBLIC_FORMSPREE_ENDPOINT.",
+        "Form submission is not configured. Set NEXT_PUBLIC_FORMSPREE_ENDPOINT."
       );
       setSubmitSuccess(false);
       setValidated(true);

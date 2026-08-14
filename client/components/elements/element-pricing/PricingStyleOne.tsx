@@ -49,7 +49,10 @@ function PricingStyleOne() {
         </div>
         <div className="row g-3 g-md-5">
           {pricingStyleOnePlans.map((plan, idx) => (
-            <div key={`${plan.title}-${idx}`} className="col-xl-4 col-lg-6 col-md-6 col-12">
+            <div
+              key={`${plan.title}-${idx}`}
+              className="col-xl-4 col-lg-6 col-md-6 col-12"
+            >
               <div
                 className={`pricing-table rbt-scroll-trigger fade_in animation-order-${idx + 1}${
                   plan.isActive ? " active" : ""
@@ -57,20 +60,26 @@ function PricingStyleOne() {
               >
                 <div className="pricing-header">
                   <h3 className="title">{plan.title}</h3>
-                  <span className="rbt-static-badge mb--32">{plan.badgeText}</span>
+                  <span className="rbt-static-badge mb--32">
+                    {plan.badgeText}
+                  </span>
                   <div className="price-wrap">
                     <div
                       className="yearly-pricing"
                       style={{ display: isYearlyPlan ? "block" : "none" }}
                     >
-                      <span className="amount">${plan.yearlyPrice.toFixed(2)}</span>
+                      <span className="amount">
+                        ${plan.yearlyPrice.toFixed(2)}
+                      </span>
                       <span className="duration">/yearly</span>
                     </div>
                     <div
                       className="monthly-pricing"
                       style={{ display: isYearlyPlan ? "none" : "block" }}
                     >
-                      <span className="amount">${plan.monthlyPrice.toFixed(2)}</span>
+                      <span className="amount">
+                        ${plan.monthlyPrice.toFixed(2)}
+                      </span>
                       <span className="duration">/monthly</span>
                     </div>
                   </div>

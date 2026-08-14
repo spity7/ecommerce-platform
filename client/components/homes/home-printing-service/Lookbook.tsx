@@ -34,7 +34,7 @@ export default function Lookbook() {
                     <div
                       key={index}
                       className={getHotspotClassName(
-                        `home-printing-service-${item.id}`,
+                        `home-printing-service-${item.id}`
                       )}
                       data-rbt-position-horigental={item.left}
                       data-rbt-position-vertical={item.top}

@@ -68,7 +68,7 @@ export default function BottomStickyProduct() {
                 <del className="price-text rbt-text-semi-bold rbt-text-color-gray-400">
                   $
                   {((stickyBottomProducts[0].oldPrice ?? 0) as number).toFixed(
-                    2,
+                    2
                   )}
                 </del>
                 <span className="price-text rbt-text-bold rbt-text-color-heading">

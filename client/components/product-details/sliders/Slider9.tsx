@@ -60,7 +60,7 @@ export default function Slider9() {
                   <Image
                     className={`${
                       ["product-new-c-2", "product-new-c-3"].some((file) =>
-                        src.includes(file),
+                        src.includes(file)
                       ) && index >= 4
                         ? "w-200"
                         : "w-100"

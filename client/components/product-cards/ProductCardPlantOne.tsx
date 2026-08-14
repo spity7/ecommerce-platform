@@ -128,9 +128,7 @@ export default function ProductCardPlantOne({
         )}
 
         <h6 className="rbt-card-title">
-            <Link href={detailsPageLink}>
-            {product.title}
-          </Link>
+          <Link href={detailsPageLink}>{product.title}</Link>
         </h6>
 
         <div className="rbt-card-rating">

@@ -27,7 +27,7 @@ export default function SingleManagedModalLayer({
       stackIndex: s.activeBsModal.indexOf(modalName),
       isClosing: s.closingBsModal.includes(modalName),
       delayedShowBsModal: s.delayedShowBsModal,
-    })),
+    }))
   );
 
   const closeSpecificBsModal = useUiStore((s) => s.closeSpecificBsModal);
@@ -37,7 +37,7 @@ export default function SingleManagedModalLayer({
     mountedModalNameCounts.set(modalName, nextCount);
     if (nextCount > 1) {
       throw new Error(
-        `[SingleManagedModalLayer] Duplicate modal layer for "${modalName}". This modal id is mounted more than once in the current page tree. Fix: keep exactly one <SingleManagedModalLayer modalName="${modalName}" /> and keep as many trigger buttons as needed with openModalName="${modalName}".`,
+        `[SingleManagedModalLayer] Duplicate modal layer for "${modalName}". This modal id is mounted more than once in the current page tree. Fix: keep exactly one <SingleManagedModalLayer modalName="${modalName}" /> and keep as many trigger buttons as needed with openModalName="${modalName}".`
       );
     }
     return () => {

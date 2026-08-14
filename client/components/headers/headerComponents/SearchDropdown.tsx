@@ -68,7 +68,10 @@ export default function SearchDropdown() {
                     aria-label="Search by image"
                     className="media-search-btn media-search-popup-activation"
                   >
-                    <i className="fa-sharp fa-regular fa-camera" aria-hidden="true" />
+                    <i
+                      className="fa-sharp fa-regular fa-camera"
+                      aria-hidden="true"
+                    />
                   </button>
                 </div>
                 <div className="submit-btn">
@@ -93,10 +96,10 @@ export default function SearchDropdown() {
                       <div className="file-upload-area fileUploadArea">
                         <div className="file-upload-content">
                           <span className="rbt-icon">
-                          <i
-                            className="fa-solid fa-cloud-arrow-up"
-                            aria-hidden="true"
-                          />
+                            <i
+                              className="fa-solid fa-cloud-arrow-up"
+                              aria-hidden="true"
+                            />
                           </span>
                           <p className="rbt-title">
                             Drag &amp; Drop Files Here
@@ -134,7 +137,10 @@ export default function SearchDropdown() {
                             void copyFromRef("search-dropdown-link");
                           }}
                         >
-                          <i className="fa-regular fa-copy" aria-hidden="true" />
+                          <i
+                            className="fa-regular fa-copy"
+                            aria-hidden="true"
+                          />
                           <span className="rbt-btn-text">Copy</span>
                         </button>
                       </Tooltip>

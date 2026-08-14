@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import { useParallax } from "@/hooks/useParallax";
@@ -6,7 +6,10 @@ import { useParallax } from "@/hooks/useParallax";
 export default function MobileResponsive() {
   const parallaxRef = useParallax();
   return (
-    <div ref={parallaxRef} className="splash-sticky-section splash-section-bg-blue rbt-sticky-section sticky-sec-2 pb_sm--60">
+    <div
+      ref={parallaxRef}
+      className="splash-sticky-section splash-section-bg-blue rbt-sticky-section sticky-sec-2 pb_sm--60"
+    >
       <div className="container">
         <div className="row row--24 mt_dec--24">
           <div className="col-12 col-xl-6 mt--24">

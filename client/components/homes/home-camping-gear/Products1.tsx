@@ -60,9 +60,10 @@ export default function Products1() {
                   >
                     {campingProducts.map((product, i) => (
                       <SwiperSlide key={i} className="swiper-slide">
-                        <ProductCard15 product={product}
-                      animationOrder={i + 1}
-                    />
+                        <ProductCard15
+                          product={product}
+                          animationOrder={i + 1}
+                        />
                       </SwiperSlide>
                     ))}
                     <div className="swiper-scrollbar" />

@@ -1,12 +1,15 @@
-'use client';
+"use client";
 
 import { useParallax } from "@/hooks/useParallax";
 import Image from "next/image";
 export default function Hero() {
   const paralaxRef = useParallax();
-  
+
   return (
-    <div ref={paralaxRef} className="rbt-component-area rbt-products-banner-area rbt-dog-hero-section-area rbt-floating-hero-banner rbt-bg-color-white">
+    <div
+      ref={paralaxRef}
+      className="rbt-component-area rbt-products-banner-area rbt-dog-hero-section-area rbt-floating-hero-banner rbt-bg-color-white"
+    >
       <div className="wrapper plr--0">
         <div className="rbt-product-banner rbt-product-banner-style-four rbt-product-banner-style-four-hv-one rbt-hero-banner rbt-banner-four-var-two rbt-rounded--0 rbt-banner-four-var-two-larger-static rbt-bg-color-brand-100 rbt-scroll-trigger fade_in animation-order-3">
           <div className="rbt-banner-inner">

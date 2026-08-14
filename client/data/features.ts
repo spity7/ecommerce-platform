@@ -20,7 +20,12 @@ export const features: Feature[] = [
   },
 ];
 
-export const timelineData: { id: number; image: string; title: string; points: string[] }[] = [
+export const timelineData: {
+  id: number;
+  image: string;
+  title: string;
+  points: string[];
+}[] = [
   {
     id: 1,
     image: "/assets/images/timeline-image/timeline-img-b-01.webp",

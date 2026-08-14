@@ -9,8 +9,8 @@ export const metadata: Metadata = {
 export default function BoostFeaturesPage() {
   return (
     <>
-            <BoostFeaturesBanner />
-            <BoostFeaturesComponents />
+      <BoostFeaturesBanner />
+      <BoostFeaturesComponents />
     </>
   );
 }

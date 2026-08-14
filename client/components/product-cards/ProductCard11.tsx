@@ -131,10 +131,7 @@ export default function ProductCard11({
                 ))}
               </ul>
               {product.moreVariantsText && (
-                <Link
-                  className="prd-link-text"
-                  href={detailsPageLink}
-                >
+                <Link className="prd-link-text" href={detailsPageLink}>
                   +{product.moreVariantsText} More Items
                 </Link>
               )}
@@ -154,9 +151,7 @@ export default function ProductCard11({
             </div>
           )}
           <h6 className="rbt-card-title">
-            <Link href={detailsPageLink}>
-              {product.title}
-            </Link>
+            <Link href={detailsPageLink}>{product.title}</Link>
           </h6>
           <div className="rbt-card-rating">
             <ul className="rbt-rating-icon-list">

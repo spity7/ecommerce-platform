@@ -57,7 +57,7 @@ export default function Lookbook() {
                       <div
                         key={i}
                         className={getHotspotClassName(
-                          `home-sports-${bannerId}-${p.id}`,
+                          `home-sports-${bannerId}-${p.id}`
                         )}
                         data-rbt-position-vertical={p.top}
                         data-rbt-position-horigental={p.left}

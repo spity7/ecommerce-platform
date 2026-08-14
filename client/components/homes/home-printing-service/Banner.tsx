@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Image from "next/image";
 import VideoModal from "@/components/common/ui/VideoModal";
@@ -7,7 +7,10 @@ import { useParallax } from "@/hooks/useParallax";
 export default function Banner() {
   const parallaxRef = useParallax();
   return (
-    <div ref={parallaxRef} className="rbt-component-area rbt-lookbook-area rbt-bg-color-brand-200">
+    <div
+      ref={parallaxRef}
+      className="rbt-component-area rbt-lookbook-area rbt-bg-color-brand-200"
+    >
       <div className="container">
         <div className="row">
           <div className="col-md-12">

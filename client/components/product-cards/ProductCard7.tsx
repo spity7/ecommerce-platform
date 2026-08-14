@@ -27,7 +27,7 @@ const ProductCard7 = ({
           <i
             className={`fa-solid fa-star ${i < rating ? "rbt-rated-icon" : ""}`}
           />
-        </li>,
+        </li>
       );
     }
     return stars;
@@ -93,9 +93,7 @@ const ProductCard7 = ({
             </div>
           )}
           <h6 className="rbt-card-title">
-            <Link href={detailsPageLink}>
-              {product.title}
-            </Link>
+            <Link href={detailsPageLink}>{product.title}</Link>
           </h6>
           <div className="rbt-card-rating">
             <ul className="rbt-rating-icon-list">

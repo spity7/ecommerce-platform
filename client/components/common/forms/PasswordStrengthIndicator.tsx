@@ -17,7 +17,9 @@ export default function PasswordStrengthIndicator({
   const toneClass = `is-${label.toLowerCase()}`;
 
   return (
-    <div className={`rbt-password-strength ${toneClass} ${compact ? "is-compact" : ""}`}>
+    <div
+      className={`rbt-password-strength ${toneClass} ${compact ? "is-compact" : ""}`}
+    >
       <div className="rbt-password-strength__bar">
         {[1, 2, 3].map((segment) => (
           <span

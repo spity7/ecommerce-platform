@@ -19,7 +19,7 @@ export default function Products2() {
     if (activeTab === "view-all") return glassProducts2;
 
     return glassProducts2.filter((product) =>
-      product.demoTab?.includes(activeTab),
+      product.demoTab?.includes(activeTab)
     );
   }, [activeTab]);
 

@@ -67,7 +67,7 @@ function MiniStandard() {
                           </div>
                         </div>
                       </div>
-                    ),
+                    )
                   )}
                 </div>
               </div>

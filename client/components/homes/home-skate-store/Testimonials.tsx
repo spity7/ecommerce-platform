@@ -68,8 +68,9 @@ export default function Testimonials() {
                 {skateReviews.map((review, index) => (
                   <SwiperSlide className="swiper-slide" key={index}>
                     <div
-                      className={`rbt-product-review rbt-review-wth-product rbt-scroll-trigger fade_in animation-order-${index + 1
-                        }`}
+                      className={`rbt-product-review rbt-review-wth-product rbt-scroll-trigger fade_in animation-order-${
+                        index + 1
+                      }`}
                     >
                       <div className="rbt-product-review-inner rbt-bg-color-gray-light">
                         <div className="rbt-review-top-section">
@@ -81,10 +82,11 @@ export default function Testimonials() {
                             {[...Array(5)].map((_, i) => (
                               <li key={i}>
                                 <i
-                                  className={`fa-solid fa-star ${i < (review.rating ?? 0)
+                                  className={`fa-solid fa-star ${
+                                    i < (review.rating ?? 0)
                                       ? "rbt-rated-icon"
                                       : ""
-                                    }`}
+                                  }`}
                                 />
                               </li>
                             ))}

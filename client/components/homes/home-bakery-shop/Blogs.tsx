@@ -10,7 +10,7 @@ export default function Blogs() {
           <div className="col-lg-12 d-flex justify-content-between flex-row align-items-center rbt-section-gap3Bottom flex-wrap rbt-gap--16">
             <div className="rbt-component-section-title rbt-gap--4 p-0 mb--0 border-0">
               <h2 className="rbt-title rbt-scroll-trigger fade_in animation-order-2 rbt-text-capitalize">
-              News &amp;
+                News &amp;
                 <span className="rbt-bold--text ml--4">updates</span>
               </h2>
             </div>

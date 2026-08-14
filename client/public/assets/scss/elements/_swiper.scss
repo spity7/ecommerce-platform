@@ -18,7 +18,7 @@
   background: transparent;
 }
 
-.swiper-horizontal>.swiper-pagination-bullets,
+.swiper-horizontal > .swiper-pagination-bullets,
 .swiper-pagination-bullets.swiper-pagination-horizontal,
 .swiper-pagination-custom,
 .swiper-pagination-fraction {
@@ -102,7 +102,6 @@
 }
 
 .rbt-single-product-media-area {
-
   .product-single-slider-two-thumb-activation,
   .rbt-thumb-slide-part {
     .swiper-slide {
@@ -116,7 +115,6 @@
   }
 
   &.rbt-single-product-media-has-folder-shape {
-
     .product-single-slider-two-thumb-activation,
     .rbt-product-thumb-slider-activation {
       .swiper-slide {
@@ -193,9 +191,9 @@
       -webkit-mask-repeat: no-repeat;
       border: 0;
 
-      .rbt-product-single-img{
+      .rbt-product-single-img {
         aspect-ratio: 582 / 448;
-  
+
         img {
           max-height: 100%;
           object-fit: cover;
@@ -203,7 +201,6 @@
       }
     }
 
-    
     // .rbt-product-single-img{
     //   img{
     //     width: max-content !important;
@@ -338,13 +335,15 @@
 
       &.rbt-icon {
         transition: var(--transition);
-        transition: transform 0.4s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+        transition:
+          transform 0.4s cubic-bezier(0.785, 0.135, 0.15, 0.86),
           -webkit-transform 0.4s cubic-bezier(0.785, 0.135, 0.15, 0.86);
       }
 
       &.rbt-icon-top {
         position: absolute;
-        transition: transform 0.4s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+        transition:
+          transform 0.4s cubic-bezier(0.785, 0.135, 0.15, 0.86),
           -webkit-transform 0.4s cubic-bezier(0.785, 0.135, 0.15, 0.86);
         transform: translateX(300%);
       }
@@ -826,7 +825,7 @@
   }
 
   &.rbt-arrow-between-lg-dis {
-    >.rbt-swiper-arrow {
+    > .rbt-swiper-arrow {
       opacity: 1;
 
       &.rbt-arrow-left,
@@ -849,7 +848,7 @@
     }
   }
   &.rbt-arrow-between-lg-dis-80 {
-    >.rbt-swiper-arrow {
+    > .rbt-swiper-arrow {
       opacity: 1;
 
       &.rbt-arrow-left,
@@ -958,7 +957,7 @@
         position: relative;
         margin: 0;
 
-        &+li {
+        & + li {
           &::before {
             content: "";
             position: absolute;
@@ -1090,76 +1089,76 @@
 // Reusable pre-hydration Swiper layouts — add rbt-swiper-ssr--* to any <Swiper>.
 // Or use withSwiperSsrLayout() from @/lib/swiperSsr in TSX.
 .rbt-swiper-ssr--1-1 {
-	@include rbt-swiper-ssr-layout(
-		$visible-default: 1,
-		$visible-lg: 1,
-		$cols-default: 1,
-		$cols-lg: 1
-	);
+  @include rbt-swiper-ssr-layout(
+    $visible-default: 1,
+    $visible-lg: 1,
+    $cols-default: 1,
+    $cols-lg: 1
+  );
 }
 
 .rbt-swiper-ssr--1-2 {
-	@include rbt-swiper-ssr-layout(
-		$visible-default: 1,
-		$visible-lg: 2,
-		$cols-default: 1,
-		$cols-lg: 2
-	);
+  @include rbt-swiper-ssr-layout(
+    $visible-default: 1,
+    $visible-lg: 2,
+    $cols-default: 1,
+    $cols-lg: 2
+  );
 }
 
 .rbt-swiper-ssr--1-3 {
-	@include rbt-swiper-ssr-layout(
-		$visible-default: 1,
-		$visible-lg: 2,
-		$cols-default: 1,
-		$cols-lg: 2
-	);
+  @include rbt-swiper-ssr-layout(
+    $visible-default: 1,
+    $visible-lg: 2,
+    $cols-default: 1,
+    $cols-lg: 2
+  );
 
-	&:not(.swiper-initialized) {
-		@media (min-width: 1200px) {
-			.swiper-wrapper {
-				grid-template-columns: repeat(3, minmax(0, 1fr));
-			}
+  &:not(.swiper-initialized) {
+    @media (min-width: 1200px) {
+      .swiper-wrapper {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
 
-			.swiper-slide:nth-child(n + 3) {
-				display: block;
-			}
+      .swiper-slide:nth-child(n + 3) {
+        display: block;
+      }
 
-			.swiper-slide:nth-child(n + 4) {
-				display: none;
-			}
-		}
-	}
+      .swiper-slide:nth-child(n + 4) {
+        display: none;
+      }
+    }
+  }
 }
 
 // Hero activation classes — auto SSR layout (no per-component class needed).
 .rbt-hero-banner-activation-1 {
-	@include rbt-swiper-ssr-layout(
-		$visible-default: 1,
-		$visible-lg: 2,
-		$cols-default: 1,
-		$cols-lg: 2
-	);
+  @include rbt-swiper-ssr-layout(
+    $visible-default: 1,
+    $visible-lg: 2,
+    $cols-default: 1,
+    $cols-lg: 2
+  );
 }
 
 .rbt-hero-banner-activation-2 {
-	@extend .rbt-swiper-ssr--1-3;
+  @extend .rbt-swiper-ssr--1-3;
 }
 
 .rbt-hero-banner-activation-2-version-center {
-	@extend .rbt-swiper-ssr--1-2;
+  @extend .rbt-swiper-ssr--1-2;
 }
 
 .rbt-cs-hero-banner-activation,
 .rbt-jwellery-hero-activation-1,
 .rbt-sports-hero-activation-1,
 .rbt-product-slider-activation-1 {
-	@include rbt-swiper-ssr-layout(
-		$visible-default: 1,
-		$visible-lg: 1,
-		$cols-default: 1,
-		$cols-lg: 1
-	);
+  @include rbt-swiper-ssr-layout(
+    $visible-default: 1,
+    $visible-lg: 1,
+    $cols-default: 1,
+    $cols-lg: 1
+  );
 }
 
 .rbt-elctro-hero-banner {
@@ -1548,10 +1547,12 @@
       height: 100%;
       z-index: 0;
       width: 200px;
-      background: linear-gradient(90deg,
-          rgba(255, 255, 255, 0.1) 0%,
-          rgba(255, 255, 255, 0.9) 45.02%,
-          #fff 86.62%);
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.9) 45.02%,
+        #fff 86.62%
+      );
       z-index: 2;
       max-height: 120px;
     }
@@ -1582,20 +1583,24 @@
       bottom: 0;
       width: 100%;
       height: 50px;
-      background: linear-gradient(180deg,
-          rgba(255, 255, 255, 0.1) 0%,
-          rgba(255, 255, 255, 0.9) 45.02%,
-          #fff 86.62%);
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.1) 0%,
+        rgba(255, 255, 255, 0.9) 45.02%,
+        #fff 86.62%
+      );
       z-index: 2;
       max-height: 120px;
 
       @media #{$sm-layout,$md-layout} {
         width: 50px;
         height: 100%;
-        background: linear-gradient(90deg,
-            rgba(255, 255, 255, 0.1) 0%,
-            rgba(255, 255, 255, 0.9) 45.02%,
-            #fff 86.62%);
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(255, 255, 255, 0.9) 45.02%,
+          #fff 86.62%
+        );
         max-height: unset;
       }
     }
@@ -1623,9 +1628,11 @@
     bottom: 0;
     width: 10%;
     height: 100%;
-    background: linear-gradient(270deg,
-        #f9f9f9 0%,
-        rgba(249, 249, 249, 0) 100%);
+    background: linear-gradient(
+      270deg,
+      #f9f9f9 0%,
+      rgba(249, 249, 249, 0) 100%
+    );
     z-index: 2;
   }
 }

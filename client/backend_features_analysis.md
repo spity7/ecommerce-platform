@@ -7,6 +7,7 @@
 ## 1. Authentication & User Management
 
 ### 1.1 Auth
+
 - `POST /api/auth/register` — Register with email/password (name, email, password, phone)
 - `POST /api/auth/login` — Login, return JWT + refresh token
 - `POST /api/auth/logout` — Invalidate session/token
@@ -17,6 +18,7 @@
 - `POST /api/auth/social` — OAuth (Google, Facebook)
 
 ### 1.2 User Profile
+
 - `GET /api/users/me` — Get current user profile
 - `PATCH /api/users/me` — Update name, phone, avatar
 - `PATCH /api/users/me/password` — Change password
@@ -32,6 +34,7 @@
 ## 2. Product Catalog
 
 ### 2.1 Products
+
 - `GET /api/products` — List products with query params:
   - `page`, `limit`, `sort` (price_asc, price_desc, title_asc, title_desc)
   - `minPrice`, `maxPrice`
@@ -42,25 +45,28 @@
 - `GET /api/products/:id` — Single product detail
 - `GET /api/products/:id/related` — Related/recommended products
 - `GET /api/products/:id/reviews` — Product reviews
-- `POST /api/products` — Create product *(admin)*
-- `PATCH /api/products/:id` — Update product *(admin)*
-- `DELETE /api/products/:id` — Delete product *(admin)*
+- `POST /api/products` — Create product _(admin)_
+- `PATCH /api/products/:id` — Update product _(admin)_
+- `DELETE /api/products/:id` — Delete product _(admin)_
 
 ### 2.2 Product Variants
+
 - `GET /api/products/:id/variants` — List variants (color, size combinations)
-- `POST /api/products/:id/variants` — Add variant *(admin)*
-- `PATCH /api/products/:id/variants/:variantId` — Update variant *(admin)*
-- `DELETE /api/products/:id/variants/:variantId` — Delete variant *(admin)*
+- `POST /api/products/:id/variants` — Add variant _(admin)_
+- `PATCH /api/products/:id/variants/:variantId` — Update variant _(admin)_
+- `DELETE /api/products/:id/variants/:variantId` — Delete variant _(admin)_
 
 ### 2.3 Product Images
-- `POST /api/products/:id/images` — Upload images *(admin)*
-- `DELETE /api/products/:id/images/:imageId` — Remove image *(admin)*
-- `PATCH /api/products/:id/images/:imageId/primary` — Set primary image *(admin)*
+
+- `POST /api/products/:id/images` — Upload images _(admin)_
+- `DELETE /api/products/:id/images/:imageId` — Remove image _(admin)_
+- `PATCH /api/products/:id/images/:imageId/primary` — Set primary image _(admin)_
 
 ### 2.4 Inventory
-- `GET /api/products/:id/inventory` — Get stock levels *(admin)*
-- `PATCH /api/products/:id/inventory` — Update stock count *(admin)*
-- `POST /api/products/:id/inventory/adjust` — Adjust by delta *(admin)*
+
+- `GET /api/products/:id/inventory` — Get stock levels _(admin)_
+- `PATCH /api/products/:id/inventory` — Update stock count _(admin)_
+- `POST /api/products/:id/inventory/adjust` — Adjust by delta _(admin)_
 
 ---
 
@@ -69,9 +75,9 @@
 - `GET /api/categories` — List all categories (supports `tree` param for nested)
 - `GET /api/categories/:slug` — Single category with products
 - `GET /api/categories/:slug/children` — Subcategories
-- `POST /api/categories` — Create *(admin)*
-- `PATCH /api/categories/:id` — Update *(admin)*
-- `DELETE /api/categories/:id` — Delete *(admin)*
+- `POST /api/categories` — Create _(admin)_
+- `PATCH /api/categories/:id` — Update _(admin)_
+- `DELETE /api/categories/:id` — Delete _(admin)_
 
 ---
 
@@ -79,9 +85,9 @@
 
 - `GET /api/brands` — List brands (with `productCount`, `location`, `logo`)
 - `GET /api/brands/:slug` — Brand detail + products
-- `POST /api/brands` — Create *(admin)*
-- `PATCH /api/brands/:id` — Update *(admin)*
-- `DELETE /api/brands/:id` — Delete *(admin)*
+- `POST /api/brands` — Create _(admin)_
+- `PATCH /api/brands/:id` — Update _(admin)_
+- `DELETE /api/brands/:id` — Delete _(admin)_
 
 ---
 
@@ -90,6 +96,7 @@
 > Cart can be user-scoped (DB) or session-scoped (guest). Needs merge on login.
 
 ### 5.1 Cart CRUD
+
 - `GET /api/cart` — Get current cart (auth or guest via session token)
 - `POST /api/cart/items` — Add item `{ productId, variantId?, quantity }`
 - `PATCH /api/cart/items/:itemId` — Update quantity
@@ -97,12 +104,14 @@
 - `DELETE /api/cart` — Clear entire cart
 
 ### 5.2 Cart Utilities
+
 - `POST /api/cart/merge` — Merge guest cart into user cart on login
 - `POST /api/cart/coupon` — Apply coupon code
 - `DELETE /api/cart/coupon` — Remove coupon
 - `GET /api/cart/shipping-estimate` — Estimate shipping cost by zip/city
 
 ### 5.3 Shareable Cart
+
 - `POST /api/cart/share` — Generate shareable cart link token
 - `GET /api/cart/share/:token` — Load shared cart
 
@@ -121,6 +130,7 @@
 ## 7. Orders & Checkout
 
 ### 7.1 Checkout Session
+
 - `POST /api/checkout/session` — Initialize checkout session, validate cart, lock stock
 - `GET /api/checkout/session/:id` — Get checkout state
 - `PATCH /api/checkout/session/:id/shipping` — Set shipping address + method
@@ -128,38 +138,45 @@
 - `POST /api/checkout/session/:id/confirm` — Place order
 
 ### 7.2 Shipping Methods
+
 - `GET /api/shipping/methods` — List available shipping methods (Courier, Pickup)
 - `GET /api/shipping/time-slots` — Available delivery time slots for a date
 
 ### 7.3 Orders
+
 - `GET /api/orders` — User order history (paginated)
 - `GET /api/orders/:id` — Order detail (items, status, tracking)
 - `POST /api/orders/:id/cancel` — Cancel order (if not shipped)
 - `GET /api/orders/:id/invoice` — Download invoice PDF
 
 ### 7.4 Order Returns
+
 - `POST /api/orders/:id/return` — Request return/refund
 - `GET /api/orders/:id/return` — Return status
-- `PATCH /api/orders/:id/return` — Update return *(admin)*
+- `PATCH /api/orders/:id/return` — Update return _(admin)_
 
 ### 7.5 Admin Order Management
-- `GET /api/admin/orders` — All orders with filters (status, date, user) *(admin)*
-- `PATCH /api/admin/orders/:id/status` — Update order status *(admin)*
-- `POST /api/admin/orders/:id/tracking` — Add tracking number *(admin)*
+
+- `GET /api/admin/orders` — All orders with filters (status, date, user) _(admin)_
+- `PATCH /api/admin/orders/:id/status` — Update order status _(admin)_
+- `POST /api/admin/orders/:id/tracking` — Add tracking number _(admin)_
 
 ---
 
 ## 8. Payments
 
 ### 8.1 Payment Processing
+
 - `POST /api/payments/intent` — Create payment intent (Stripe/etc.), return `clientSecret`
 - `POST /api/payments/confirm` — Confirm payment, attach to order
 - `POST /api/payments/webhook` — Stripe webhook handler (payment events)
 
 ### 8.2 Refunds
-- `POST /api/payments/:paymentId/refund` — Issue full/partial refund *(admin)*
+
+- `POST /api/payments/:paymentId/refund` — Issue full/partial refund _(admin)_
 
 ### 8.3 Saved Payment Methods
+
 - `GET /api/users/me/payment-methods` — List saved cards
 - `POST /api/users/me/payment-methods` — Save new card
 - `DELETE /api/users/me/payment-methods/:id` — Remove card
@@ -170,10 +187,10 @@
 ## 9. Coupons & Discounts
 
 - `POST /api/coupons/validate` — Validate coupon code, return discount info
-- `GET /api/admin/coupons` — List coupons *(admin)*
-- `POST /api/admin/coupons` — Create coupon *(admin)*
-- `PATCH /api/admin/coupons/:id` — Update coupon *(admin)*
-- `DELETE /api/admin/coupons/:id` — Delete coupon *(admin)*
+- `GET /api/admin/coupons` — List coupons _(admin)_
+- `POST /api/admin/coupons` — Create coupon _(admin)_
+- `PATCH /api/admin/coupons/:id` — Update coupon _(admin)_
+- `DELETE /api/admin/coupons/:id` — Delete coupon _(admin)_
 
 **Coupon fields:** code, type (percent/fixed/free_shipping), value, minOrderAmount, maxUses, expiresAt, perUserLimit
 
@@ -186,8 +203,8 @@
 - `PATCH /api/reviews/:id` — Edit own review
 - `DELETE /api/reviews/:id` — Delete own review
 - `POST /api/reviews/:id/helpful` — Mark review as helpful
-- `GET /api/admin/reviews` — All reviews with moderation status *(admin)*
-- `PATCH /api/admin/reviews/:id/approve` — Approve/reject review *(admin)*
+- `GET /api/admin/reviews` — All reviews with moderation status _(admin)_
+- `PATCH /api/admin/reviews/:id/approve` — Approve/reject review _(admin)_
 
 ---
 
@@ -196,9 +213,9 @@
 - `GET /api/blog/posts` — List posts (with `category`, `author`, `search`, pagination)
 - `GET /api/blog/posts/:slug` — Single post
 - `GET /api/blog/categories` — Blog categories
-- `POST /api/admin/blog/posts` — Create post *(admin)*
-- `PATCH /api/admin/blog/posts/:id` — Update post *(admin)*
-- `DELETE /api/admin/blog/posts/:id` — Delete post *(admin)*
+- `POST /api/admin/blog/posts` — Create post _(admin)_
+- `PATCH /api/admin/blog/posts/:id` — Update post _(admin)_
+- `DELETE /api/admin/blog/posts/:id` — Delete post _(admin)_
 
 ---
 
@@ -255,17 +272,17 @@
 
 ## 17. Cross-Cutting Concerns
 
-| Concern | Details |
-|---|---|
+| Concern             | Details                                                                                             |
+| ------------------- | --------------------------------------------------------------------------------------------------- |
 | **Auth middleware** | JWT Bearer on all `/api/users/me/*`, `/api/orders/*`, `/api/wishlist`, `/api/cart` (when logged in) |
-| **Admin guard** | Role check on all `/api/admin/*` routes |
-| **Rate limiting** | Auth endpoints (register, login, forgot-password), search suggestions |
-| **Pagination** | Consistent `{ data, meta: { page, limit, total, totalPages } }` envelope |
-| **Error format** | `{ error: { code, message, details? } }` |
-| **File uploads** | Product images, review images, user avatars → S3/Cloudflare R2 |
-| **Webhooks** | Payment provider (Stripe), inventory sync |
-| **Caching** | Products list, categories, brands, collections → Redis or Next.js `revalidate` |
-| **Localization** | `Accept-Language` header; currency via `?currency=USD` |
+| **Admin guard**     | Role check on all `/api/admin/*` routes                                                             |
+| **Rate limiting**   | Auth endpoints (register, login, forgot-password), search suggestions                               |
+| **Pagination**      | Consistent `{ data, meta: { page, limit, total, totalPages } }` envelope                            |
+| **Error format**    | `{ error: { code, message, details? } }`                                                            |
+| **File uploads**    | Product images, review images, user avatars → S3/Cloudflare R2                                      |
+| **Webhooks**        | Payment provider (Stripe), inventory sync                                                           |
+| **Caching**         | Products list, categories, brands, collections → Redis or Next.js `revalidate`                      |
+| **Localization**    | `Accept-Language` header; currency via `?currency=USD`                                              |
 
 ---
 

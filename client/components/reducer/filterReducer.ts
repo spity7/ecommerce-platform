@@ -57,7 +57,10 @@ function matchesAllFilters(product: Product, state: FilterState): boolean {
   )
     return false;
 
-  if (state.activeFilterOnSale && (product.oldPrice == null || product.oldPrice <= product.price))
+  if (
+    state.activeFilterOnSale &&
+    (product.oldPrice == null || product.oldPrice <= product.price)
+  )
     return false;
 
   if (state.activeFilterInStock) {
@@ -109,7 +112,7 @@ export function reducer(state: FilterState, action: FilterAction): FilterState {
     case "FILTER_PRODUCTS": {
       const productsToFilter = [...action.payload];
       const filtered = productsToFilter.filter((product) =>
-        matchesAllFilters(product, state),
+        matchesAllFilters(product, state)
       );
       return { ...state, filtered, currentPage: 1 };
     }

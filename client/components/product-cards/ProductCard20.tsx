@@ -17,8 +17,12 @@ export default function ProductCard20({
 }) {
   const detailsPageLink = `${detailsPageUrl}/${product.id}`;
   return (
-    <div className={`rbt-card rbt-product-card rbt-scroll-trigger fade_in animation-order-${animationOrder}`}>
-      <div className={`rbt-card-img top-rounded-md rbt-scroll-trigger zoom_in animation-order-${animationOrder}`}>
+    <div
+      className={`rbt-card rbt-product-card rbt-scroll-trigger fade_in animation-order-${animationOrder}`}
+    >
+      <div
+        className={`rbt-card-img top-rounded-md rbt-scroll-trigger zoom_in animation-order-${animationOrder}`}
+      >
         <Link href={detailsPageLink}>
           <Image
             alt="Card Image"
@@ -64,9 +68,7 @@ export default function ProductCard20({
 
       <div className="rbt-card-body rbt-card-body-center-align">
         <h6 className="rbt-card-title">
-              <Link href={detailsPageLink}>
-            {product.title}
-          </Link>
+          <Link href={detailsPageLink}>{product.title}</Link>
         </h6>
 
         <ProductRating product={product} />

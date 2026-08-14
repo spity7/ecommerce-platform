@@ -30,9 +30,7 @@ export default function Products1() {
         <div className="row row--12 mt_dec--24">
           {bookProducts.map((book, index) => (
             <div className="col-xxl-1-8 col-md-3 col-6 mt--24" key={index}>
-              <ProductCard20 product={book}
-                      animationOrder={index + 1}
-                    />
+              <ProductCard20 product={book} animationOrder={index + 1} />
             </div>
           ))}
         </div>

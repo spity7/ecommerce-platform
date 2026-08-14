@@ -20,7 +20,7 @@ type Options = {
  */
 export function useManagedModalPanel(
   modalId: ModalNameType,
-  options?: Options,
+  options?: Options
 ) {
   const {
     delayedShowBsModal,
@@ -35,9 +35,7 @@ export function useManagedModalPanel(
   const slideReady = usePanelSlideInReady(useSlideIn ? isOpen : false);
 
   const isAnimatedOpen =
-    Boolean(delayedShowBsModal) &&
-    isOpen &&
-    (!useSlideIn || slideReady);
+    Boolean(delayedShowBsModal) && isOpen && (!useSlideIn || slideReady);
 
   return {
     modalId,

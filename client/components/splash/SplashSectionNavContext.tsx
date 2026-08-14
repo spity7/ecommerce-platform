@@ -43,7 +43,11 @@ export function useSplashSectionNav() {
   return useContext(SplashSectionNavContext);
 }
 
-export function SplashSectionNavProvider({ children }: { children: ReactNode }) {
+export function SplashSectionNavProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const [unlockedStep, setUnlockedStep] = useState(1);
   const [deepestEagerStep, setDeepestEagerStep] = useState(0);
   const demoSectionRef = useRef<HTMLDivElement | null>(null);
@@ -81,9 +85,9 @@ export function SplashSectionNavProvider({ children }: { children: ReactNode }) 
   useEffect(() => {
     const hash = window.location.hash.replace(/^#/, "");
     const target: SplashScrollTarget | null =
-      (Object.entries(SPLASH_SECTION_HASH) as [SplashScrollTarget, string][]).find(
-        ([, sectionHash]) => hash === sectionHash,
-      )?.[0] ?? null;
+      (
+        Object.entries(SPLASH_SECTION_HASH) as [SplashScrollTarget, string][]
+      ).find(([, sectionHash]) => hash === sectionHash)?.[0] ?? null;
 
     const syncTimer =
       target != null ? setTimeout(() => scrollToSection(target), 0) : null;
@@ -104,7 +108,7 @@ export function SplashSectionNavProvider({ children }: { children: ReactNode }) 
       deepestEagerStep,
       unlockNext,
     }),
-    [scrollToSection, unlockedStep, deepestEagerStep, unlockNext],
+    [scrollToSection, unlockedStep, deepestEagerStep, unlockNext]
   );
 
   return (

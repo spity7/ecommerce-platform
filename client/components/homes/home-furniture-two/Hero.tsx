@@ -81,7 +81,10 @@ export default function Hero() {
                             <span className="rbt-price-text offer-price">
                               {formatCurrency(banner.price)}
                             </span>
-                            <OfferBadge price={banner.price} oldPrice={banner.oldPrice} />
+                            <OfferBadge
+                              price={banner.price}
+                              oldPrice={banner.oldPrice}
+                            />
                           </div>
                           <div className="rbt-banner-btn">
                             <Link className="rbt-btn" href={`/shop`}>

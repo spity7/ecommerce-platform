@@ -252,7 +252,7 @@ export default function ShopDefault({
                           onChange={(value) =>
                             setItemPerPage(
                               Number(value.split(" ")[0]),
-                              dispatch,
+                              dispatch
                             )
                           }
                         />

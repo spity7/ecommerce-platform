@@ -1,10 +1,12 @@
-export function isInternalHref(href: string | undefined | null): href is string {
+export function isInternalHref(
+  href: string | undefined | null
+): href is string {
   return typeof href === "string" && href.startsWith("/");
 }
 
 export function isPathActive(
   pathname: string | undefined | null,
-  href: string | undefined | null,
+  href: string | undefined | null
 ): boolean {
   if (typeof pathname !== "string" || !isInternalHref(href)) return false;
 
@@ -14,7 +16,9 @@ export function isPathActive(
 
   const getBasePath = (path: string) => {
     const parts = path.split("/").filter(Boolean);
-    return parts.length > 1 ? "/" + parts.slice(0, -1).join("/") : "/" + parts.join("/");
+    return parts.length > 1
+      ? "/" + parts.slice(0, -1).join("/")
+      : "/" + parts.join("/");
   };
 
   const pathnameBase = getBasePath(pathname);
@@ -26,4 +30,3 @@ export function isPathActive(
 
   return false;
 }
-

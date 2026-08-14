@@ -88,10 +88,10 @@
     .rbt-title.h6 {
       @media #{$md-layout} {
         font-size: 24px !important;
-    }
-        @media #{$sm-layout} {
-            font-size: 20px !important;
-        }
+      }
+      @media #{$sm-layout} {
+        font-size: 20px !important;
+      }
     }
   }
 
@@ -103,7 +103,7 @@
       font-weight: var(--f-semi-bold);
       line-height: var(--line-height-b2);
       @media #{$sm-layout} {
-          font-size: 14px;
+        font-size: 14px;
       }
     }
   }

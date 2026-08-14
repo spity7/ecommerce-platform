@@ -8,8 +8,8 @@ export const metadata: Metadata = {
 export default function PopupBuilderPage() {
   return (
     <>
-            <PopupBuilderBanner />
-            <PopupComponents />
+      <PopupBuilderBanner />
+      <PopupComponents />
     </>
   );
 }

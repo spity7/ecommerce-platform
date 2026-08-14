@@ -1,5 +1,5 @@
 "use client";
-import { CurvedArrowIcon } from '../svg-icons';
+import { CurvedArrowIcon } from "../svg-icons";
 import Image from "next/image";
 import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";

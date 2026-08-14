@@ -122,10 +122,7 @@ const ProductCard14 = ({
               ))}
             </ul>
             {product.moreItemsLink && (
-              <Link
-                className="prd-link-text"
-                href={detailsPageLink}
-              >
+              <Link className="prd-link-text" href={detailsPageLink}>
                 +{product.moreItemsLink} More Items
               </Link>
             )}
@@ -147,9 +144,7 @@ const ProductCard14 = ({
 
         {/* Title */}
         <h6 className="rbt-card-title">
-          <Link href={detailsPageLink}>
-            {product.title}
-          </Link>
+          <Link href={detailsPageLink}>{product.title}</Link>
         </h6>
 
         {/* Ratings */}

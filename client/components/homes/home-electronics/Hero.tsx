@@ -66,72 +66,76 @@ export default function Hero() {
                       PRODUCT_BANNER_ANIMATION_ORDERS[index] ??
                       String(index + 1);
                     return (
-                    <SwiperSlide className="swiper-slide" key={product.id}>
-                      <div
-                        className={`rbt-product-banner rbt-product-banner-style-four rbt-banner-four-var-one rbt-curved-style-box rbt-scroll-trigger fade_in animation-order-${
-                          animationOrder
-                        } ${
-                          product.hasCurvedPortion
-                            ? "rbt-curved-style-box-2"
-                            : ""
-                        }`}
-                      >
-                        <div className="rbt-banner-inner">
-                          <div
-                            className={`rbt-product-banner-img rbt-full-width-img rbt-scroll-trigger zoom_in animation-order-${animationOrder}`}
-                          >
-                            <Image
-                              alt="Ecommerce Product Banner Image"
-                              src={
-                                product.imgSrc || ""
-                              }
-                              width={product.width}
-                              height={product.height}
-                              priority
-                            />
-                          </div>
-                          <div className="rbt-product-banner-content">
-                            <div className="rbt-content-section">
-                              <h6 className="rbt-banner-subtitle mb-0">
-                                {product.subtitle}
-                              </h6>
-                              <h2 className="rbt-banner-title rbt-banner-title-lg mb-0">
-                                <span className="rbt-bold--text">
-                                  {product.title?.split("\n")[0] ?? ""}
-                                </span>{" "}
-                                {product.title?.split("\n").slice(1).join(" ") ?? ""}
-                              </h2>
-                              <div className="rbt-pricing-part">
-                                <del className="rbt-dis-price-text">
-                                  {formatCurrency(product.oldPrice)}
-                                </del>
-                                <span className="d-flex align-items-center rbt-gap--8">
-                                  <span className="rbt-price-text offer-price">
-                                    {formatCurrency(product.price)}
+                      <SwiperSlide className="swiper-slide" key={product.id}>
+                        <div
+                          className={`rbt-product-banner rbt-product-banner-style-four rbt-banner-four-var-one rbt-curved-style-box rbt-scroll-trigger fade_in animation-order-${
+                            animationOrder
+                          } ${
+                            product.hasCurvedPortion
+                              ? "rbt-curved-style-box-2"
+                              : ""
+                          }`}
+                        >
+                          <div className="rbt-banner-inner">
+                            <div
+                              className={`rbt-product-banner-img rbt-full-width-img rbt-scroll-trigger zoom_in animation-order-${animationOrder}`}
+                            >
+                              <Image
+                                alt="Ecommerce Product Banner Image"
+                                src={product.imgSrc || ""}
+                                width={product.width}
+                                height={product.height}
+                                priority
+                              />
+                            </div>
+                            <div className="rbt-product-banner-content">
+                              <div className="rbt-content-section">
+                                <h6 className="rbt-banner-subtitle mb-0">
+                                  {product.subtitle}
+                                </h6>
+                                <h2 className="rbt-banner-title rbt-banner-title-lg mb-0">
+                                  <span className="rbt-bold--text">
+                                    {product.title?.split("\n")[0] ?? ""}
+                                  </span>{" "}
+                                  {product.title
+                                    ?.split("\n")
+                                    .slice(1)
+                                    .join(" ") ?? ""}
+                                </h2>
+                                <div className="rbt-pricing-part">
+                                  <del className="rbt-dis-price-text">
+                                    {formatCurrency(product.oldPrice)}
+                                  </del>
+                                  <span className="d-flex align-items-center rbt-gap--8">
+                                    <span className="rbt-price-text offer-price">
+                                      {formatCurrency(product.price)}
+                                    </span>
+                                    <OfferBadge
+                                      price={product.price}
+                                      oldPrice={product.oldPrice}
+                                    />
                                   </span>
-                                  <OfferBadge price={product.price} oldPrice={product.oldPrice} />
-                                </span>
-                              </div>
-                              <div className="rbt-banner-btn">
-                                <MagneticButton
-                                  as={Link}
-                                  className="rbt-btn rbt-btn-round"
-                                  href={`/shop`}
-                                >
-                                  <i className="fa-solid fa-arrow-up-right" />{" "}
-                                  SHOP NOW
-                                </MagneticButton>
+                                </div>
+                                <div className="rbt-banner-btn">
+                                  <MagneticButton
+                                    as={Link}
+                                    className="rbt-btn rbt-btn-round"
+                                    href={`/shop`}
+                                  >
+                                    <i className="fa-solid fa-arrow-up-right" />{" "}
+                                    SHOP NOW
+                                  </MagneticButton>
+                                </div>
                               </div>
                             </div>
                           </div>
+                          {product.hasCurvedPortion && (
+                            <div className="rbt-curved-portion rbt-right-corner-portion">
+                              <div className="rbt-wrapper" />
+                            </div>
+                          )}
                         </div>
-                        {product.hasCurvedPortion && (
-                          <div className="rbt-curved-portion rbt-right-corner-portion">
-                            <div className="rbt-wrapper" />
-                          </div>
-                        )}
-                      </div>
-                    </SwiperSlide>
+                      </SwiperSlide>
                     );
                   })}
                   <div className="rbt-swiper-pagination rbt-swiper-pagination-var-one" />

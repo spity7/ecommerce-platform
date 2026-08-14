@@ -157,9 +157,9 @@ export default function PrivacyPolicy() {
                 <h5>8. Changes to This Privacy Policy</h5>
                 <p>
                   We may update this Privacy Policy from time to time. When we
-                  make changes, we will update the &quot;Last Updated&quot; date at the
-                  top of this page. We encourage you to review this Privacy
-                  Policy periodically to stay informed about how we are
+                  make changes, we will update the &quot;Last Updated&quot; date
+                  at the top of this page. We encourage you to review this
+                  Privacy Policy periodically to stay informed about how we are
                   protecting your personal information. Your continued use of
                   the website after any changes to this Privacy Policy will
                   constitute your acceptance of those changes.
@@ -172,10 +172,15 @@ export default function PrivacyPolicy() {
                 </p>
                 <p className="mb--16">
                   Email:
-                  <a href="mailto:support@unimart.com" className="ml--4">support@unimart.com</a>
+                  <a href="mailto:support@unimart.com" className="ml--4">
+                    support@unimart.com
+                  </a>
                 </p>
                 <p className="mb--0">
-                  Phone: <a href="tel:+11234567890" className="ml--4">+1 123 456 7890</a>
+                  Phone:{" "}
+                  <a href="tel:+11234567890" className="ml--4">
+                    +1 123 456 7890
+                  </a>
                 </p>
               </div>
             </div>

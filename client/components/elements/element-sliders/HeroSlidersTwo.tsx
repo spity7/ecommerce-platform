@@ -83,7 +83,11 @@ function HeroSlidersTwo() {
                                   <span className="rbt-price-text m-0 offer-price">
                                     {formatCurrency(slide.price)}
                                   </span>
-                                  <OfferBadge price={slide.price} oldPrice={slide.oldPrice} variant="minus" />
+                                  <OfferBadge
+                                    price={slide.price}
+                                    oldPrice={slide.oldPrice}
+                                    variant="minus"
+                                  />
                                 </div>
                                 <div className="rbt-banner-btn">
                                   <Link className="rbt-btn" href={`/shop`}>

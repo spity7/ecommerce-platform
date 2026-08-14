@@ -48,7 +48,7 @@ function toVimeoEmbedUrl(url: string): string | null {
 function isDirectMediaFile(url: string): boolean {
   const normalized = url.split("?")[0].toLowerCase();
   return [".mp4", ".webm", ".ogg", ".mov", ".m3u8"].some((ext) =>
-    normalized.endsWith(ext),
+    normalized.endsWith(ext)
   );
 }
 

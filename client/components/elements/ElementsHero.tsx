@@ -14,9 +14,7 @@ export default function ElementsHero({
   section = "Elements",
 }: ElementsHeroProps) {
   return (
-    <div
-      className="rbt-breadcrumb-default bg-image rbt-breadcrumb-bg-1"
-    >
+    <div className="rbt-breadcrumb-default bg-image rbt-breadcrumb-bg-1">
       <div className="container">
         <div className="row ptb--92 ptb_md--40 ptb_sm--40 position-relative">
           <div className="col-lg-12">

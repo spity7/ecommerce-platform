@@ -106,9 +106,15 @@ export default function Footer12() {
               <div className="col-md-6 col-12 mt--24 d-flex justify-content-center justify-content-md-start">
                 <p className="rbt-link-hover text-center text-lg-start">
                   Copyright {new Date().getFullYear()} ®
-                  <a href="https://rainbowthemes.net/" target="_blank"
-                  rel="noopener noreferrer" className="mr--4">Unimart</a> Nextjs
-                  Template.
+                  <a
+                    href="https://rainbowthemes.net/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mr--4"
+                  >
+                    Unimart
+                  </a>{" "}
+                  Nextjs Template.
                 </p>
               </div>
               <div className="col-md-6 col-12 mt--24">

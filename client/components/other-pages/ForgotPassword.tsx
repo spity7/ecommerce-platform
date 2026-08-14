@@ -47,7 +47,7 @@ export default function ForgotPassword() {
     confirmPassword,
     {
       requireStrong: true,
-    },
+    }
   );
 
   const handleSendCode = () => {

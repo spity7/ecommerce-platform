@@ -37,7 +37,7 @@ export default function Slider2({
       imagesProp && imagesProp.length > 0
         ? imagesProp
         : [product.imgSrc, ...BASE_PRODUCT_IMAGES.slice(1)],
-    [imagesProp, product.imgSrc],
+    [imagesProp, product.imgSrc]
   );
 
   const [swiperThumb, setSwiperThumb] = useState<SwiperClass | null>(null);

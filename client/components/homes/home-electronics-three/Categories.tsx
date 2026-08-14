@@ -7,7 +7,10 @@ export default function Categories() {
         <div className="row">
           <div className="col-lg-12">
             <div className="rbt-component-section-title rbt-gap--4 text-center border-0 p-0">
-              <span className="rbt-card-subtitle b1 rbt-text-color-heading mt--0 rbt-scroll-trigger fade_in animation-order-1"> Featured Categories</span>
+              <span className="rbt-card-subtitle b1 rbt-text-color-heading mt--0 rbt-scroll-trigger fade_in animation-order-1">
+                {" "}
+                Featured Categories
+              </span>
               <h2 className="rbt-title rbt-scroll-trigger fade_in animation-order-1">
                 <span className="rbt-bold--text">Categories</span> Your May
                 Interested

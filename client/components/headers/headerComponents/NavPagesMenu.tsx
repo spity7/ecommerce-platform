@@ -59,7 +59,7 @@ export default function NavPagesMenu({
                             {column.items.map((item, itemIndex) => {
                               const itemIsActive = isPathActive(
                                 pathname,
-                                item.href,
+                                item.href
                               );
                               const Wrapper = isInternalHref(item.href)
                                 ? Link

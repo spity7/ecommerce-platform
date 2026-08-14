@@ -29,7 +29,7 @@ interface PasswordErrorOptions {
 export function getPasswordValidationError(
   password: string,
   confirmPassword: string,
-  options: PasswordErrorOptions = {},
+  options: PasswordErrorOptions = {}
 ): string {
   const { requireStrong = true } = options;
   const strength = getPasswordStrength(password);

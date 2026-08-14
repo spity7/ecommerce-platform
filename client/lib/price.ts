@@ -1,11 +1,9 @@
 export function formatCurrency(
   value: number | string | null | undefined,
-  currency = "USD",
+  currency = "USD"
 ): string {
   const normalizedValue =
-    typeof value === "string"
-      ? Number(value.replace(/[^0-9.-]/g, ""))
-      : value;
+    typeof value === "string" ? Number(value.replace(/[^0-9.-]/g, "")) : value;
 
   if (typeof normalizedValue !== "number" || Number.isNaN(normalizedValue)) {
     return "$0.00";
@@ -21,7 +19,7 @@ export function formatCurrency(
 
 export function calculateDiscountPercentage(
   price: number | null | undefined,
-  oldPrice: number | null | undefined,
+  oldPrice: number | null | undefined
 ): number | null {
   if (
     typeof price !== "number" ||
@@ -45,7 +43,7 @@ export type DiscountBadgeVariant = "minus" | "save" | "off";
 
 export function formatDiscountLabel(
   percent: number,
-  variant: DiscountBadgeVariant = "save",
+  variant: DiscountBadgeVariant = "save"
 ): string {
   const label = formatDiscountPercent(percent);
 

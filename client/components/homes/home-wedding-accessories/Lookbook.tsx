@@ -7,7 +7,7 @@ export default function Lookbook() {
     ...new Set(
       lookbookProducts4
         .map((item) => item.bannerImg)
-        .filter((img): img is string => !!img),
+        .filter((img): img is string => !!img)
     ),
   ];
 

@@ -90,7 +90,10 @@ export default function AddPaymentMethod() {
                       </li>
                     </ul>
                     {/* End tabs */}
-                    <AddPaymentMethodForm activeTab={activeTab} onCancel={close} />
+                    <AddPaymentMethodForm
+                      activeTab={activeTab}
+                      onCancel={close}
+                    />
                   </div>
                 </div>
               </div>

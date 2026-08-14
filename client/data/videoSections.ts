@@ -182,4 +182,3 @@ export const SHOES_KIDS_VIDEOS: readonly VideoSectionItem[] = [
     caption: "Skin Influencer: nancy Glow",
   },
 ] as const;
-

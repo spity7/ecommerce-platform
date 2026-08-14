@@ -3,7 +3,7 @@ import type { NextFunction, Request, Response } from "express";
 export class AppError extends Error {
   constructor(
     public statusCode: number,
-    message: string,
+    message: string
   ) {
     super(message);
     this.name = "AppError";
@@ -14,7 +14,7 @@ export function errorHandler(
   error: unknown,
   _req: Request,
   res: Response,
-  _next: NextFunction,
+  _next: NextFunction
 ): void {
   if (error instanceof AppError) {
     res.status(error.statusCode).json({ error: error.message });

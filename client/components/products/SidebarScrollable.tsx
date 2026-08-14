@@ -16,7 +16,15 @@ import FilterByBrand from "./filterComponents/FilterByBrand";
 import FilterByService from "./filterComponents/FilterByService";
 import { FilterState, FilterAction } from "@/types";
 import { Product } from "@/types";
-export default function SidebarScrollable({ state, dispatch, getFilterCount }: { state: FilterState; dispatch: Dispatch<FilterAction>; getFilterCount: (fn: (product: Product) => boolean) => number }) {
+export default function SidebarScrollable({
+  state,
+  dispatch,
+  getFilterCount,
+}: {
+  state: FilterState;
+  dispatch: Dispatch<FilterAction>;
+  getFilterCount: (fn: (product: Product) => boolean) => number;
+}) {
   return (
     <div className="rbt-sidebar-bottom">
       {/* Start Widget Area  */}

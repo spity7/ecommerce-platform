@@ -135,7 +135,9 @@ export default function ThrowableCapsuleList() {
         {capsuleTexts.map((text, index) => (
           <div
             key={index}
-            ref={(el) => { capsuleRefs.current[index] = el; }}
+            ref={(el) => {
+              capsuleRefs.current[index] = el;
+            }}
             className={`rbt-capsule-item ${
               text === "24/7 Support" ? "rbt-capsule-highlight" : ""
             }`}

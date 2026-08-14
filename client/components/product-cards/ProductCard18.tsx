@@ -87,7 +87,11 @@ export default function ProductCard18({
           <div className="pricing-part justify-content-center">
             <del className="price-text">${oldPrice?.toFixed(2)}</del>
             <span className="price-text">${price.toFixed(2)}</span>
-            <OfferBadge price={product.price} oldPrice={product.oldPrice} variant="minus" />
+            <OfferBadge
+              price={product.price}
+              oldPrice={product.oldPrice}
+              variant="minus"
+            />
           </div>
 
           {/* Variant Images (if available) */}

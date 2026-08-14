@@ -8,7 +8,7 @@ export function getStackedModalZIndexForIndex(
     baseZIndex?: number;
     step?: number;
     modalOffset?: number;
-  },
+  }
 ): number | undefined {
   if (stackIndex < 0) return undefined;
 
@@ -26,10 +26,10 @@ export function getStackedModalZIndex(
     baseZIndex?: number;
     step?: number;
     modalOffset?: number;
-  },
+  }
 ): number | undefined {
   return getStackedModalZIndexForIndex(
     activeModalNames.indexOf(modalName),
-    options,
+    options
   );
 }

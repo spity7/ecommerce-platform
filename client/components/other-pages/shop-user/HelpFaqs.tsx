@@ -64,7 +64,10 @@ export default function HelpFaqs() {
               <div className="accordion" id="accordionExampleb2">
                 {accordionData.map((item) => (
                   <div className="accordion-item card" key={item.id}>
-                    <h2 className="accordion-header card-header" id={item.headerId}>
+                    <h2
+                      className="accordion-header card-header"
+                      id={item.headerId}
+                    >
                       <button
                         className={`accordion-button${item.isOpen ? "" : " collapsed"}`}
                         type="button"
@@ -82,7 +85,9 @@ export default function HelpFaqs() {
                       aria-labelledby={item.headerId}
                       data-bs-parent="#accordionExampleb2"
                     >
-                      <div className="accordion-body card-body">{item.content}</div>
+                      <div className="accordion-body card-body">
+                        {item.content}
+                      </div>
                     </div>
                   </div>
                 ))}

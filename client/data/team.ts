@@ -196,9 +196,15 @@ export const teamMembersGradient: GradientTeamMember[] = [
       "Yes, I am a Depertment Teacher. I have a passion for learning system.",
     image: "/assets/images/team/team-01.webp",
     socialLinks: [
-      { href: "https://www.facebook.com/", iconClassName: "fa-brands fa-facebook" },
+      {
+        href: "https://www.facebook.com/",
+        iconClassName: "fa-brands fa-facebook",
+      },
       { href: "https://www.twitter.com", iconClassName: "fa-brands fa-tiktok" },
-      { href: "https://www.instagram.com/", iconClassName: "fa-brands fa-instagram" },
+      {
+        href: "https://www.instagram.com/",
+        iconClassName: "fa-brands fa-instagram",
+      },
     ],
   },
   {
@@ -211,9 +217,15 @@ export const teamMembersGradient: GradientTeamMember[] = [
       "Yes, I am a Depertment Teacher. I have a passion for learning system.",
     image: "/assets/images/team/team-02.webp",
     socialLinks: [
-      { href: "https://www.facebook.com/", iconClassName: "fa-brands fa-facebook" },
+      {
+        href: "https://www.facebook.com/",
+        iconClassName: "fa-brands fa-facebook",
+      },
       { href: "https://www.twitter.com", iconClassName: "fa-brands fa-tiktok" },
-      { href: "https://www.instagram.com/", iconClassName: "fa-brands fa-instagram" },
+      {
+        href: "https://www.instagram.com/",
+        iconClassName: "fa-brands fa-instagram",
+      },
     ],
   },
   {
@@ -226,9 +238,15 @@ export const teamMembersGradient: GradientTeamMember[] = [
       "Yes, I am a Depertment Teacher. I have a passion for learning system.",
     image: "/assets/images/team/team-03.webp",
     socialLinks: [
-      { href: "https://www.facebook.com/", iconClassName: "fa-brands fa-facebook" },
+      {
+        href: "https://www.facebook.com/",
+        iconClassName: "fa-brands fa-facebook",
+      },
       { href: "https://www.twitter.com", iconClassName: "fa-brands fa-tiktok" },
-      { href: "https://www.instagram.com/", iconClassName: "fa-brands fa-instagram" },
+      {
+        href: "https://www.instagram.com/",
+        iconClassName: "fa-brands fa-instagram",
+      },
     ],
   },
 ];

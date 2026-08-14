@@ -1,6 +1,8 @@
-export default function Features({parentClass}: {parentClass?: string}) {
+export default function Features({ parentClass }: { parentClass?: string }) {
   return (
-    <div className={`rbt-component-area rbt-quick-inf-area rbt-bg-color-white rbt-section-gap ${parentClass || ''}`}>
+    <div
+      className={`rbt-component-area rbt-quick-inf-area rbt-bg-color-white rbt-section-gap ${parentClass || ""}`}
+    >
       <div className="container">
         <div className="row">
           <div className="col-md-12">

@@ -39,24 +39,24 @@ export default function NavShopPages() {
 
   const shopPagesItems = shopPages.flatMap((column) => column.items);
   const singleProductItems = productDetailPages.flatMap(
-    (column) => column.items,
+    (column) => column.items
   );
   const productVariantItems = productsVarientPage.flatMap(
-    (column) => column.items,
+    (column) => column.items
   );
   const featureItems = featureMenuColumns.flatMap((column) => column.items);
 
   const isShopPagesActive = shopPagesItems.some((item) =>
-    isPathActive(pathname, item.href),
+    isPathActive(pathname, item.href)
   );
   const isSingleProductActive = singleProductItems.some((item) =>
-    isPathActive(pathname, item.href),
+    isPathActive(pathname, item.href)
   );
   const isProductVariantActive = productVariantItems.some((item) =>
-    isPathActive(pathname, item.href),
+    isPathActive(pathname, item.href)
   );
   const isFeatureActive = featureItems.some((item) =>
-    isPathActive(pathname, item.href),
+    isPathActive(pathname, item.href)
   );
 
   const sectionActive = [
@@ -194,13 +194,13 @@ export default function NavShopPages() {
                                   {column.items.map((item, itemIndex) => {
                                     const isActive = isPathActive(
                                       pathname,
-                                      item.href,
+                                      item.href
                                     );
                                     const WrapperTag = isInternalHref(item.href)
                                       ? Link
                                       : "a";
                                     const wrapperProps = isInternalHref(
-                                      item.href,
+                                      item.href
                                     )
                                       ? {
                                           href: item.href,
@@ -281,7 +281,7 @@ export default function NavShopPages() {
                                 {col.items.map((item, itemIndex) => {
                                   const isActive = isPathActive(
                                     pathname,
-                                    item.href,
+                                    item.href
                                   );
                                   const isInternal = isInternalHref(item.href);
                                   const Wrapper = isInternal ? Link : "a";
@@ -350,10 +350,10 @@ export default function NavShopPages() {
                                   {column.items.map((item, itemIndex) => {
                                     const isActive = isPathActive(
                                       pathname,
-                                      item.href,
+                                      item.href
                                     );
                                     const isInternal = isInternalHref(
-                                      item.href,
+                                      item.href
                                     );
                                     const Wrapper = isInternal ? Link : "a";
                                     const props = isInternal
@@ -455,7 +455,7 @@ export default function NavShopPages() {
                                   {column.items.map((item, itemIndex) => {
                                     const isActive = isPathActive(
                                       pathname,
-                                      item.href,
+                                      item.href
                                     );
                                     const Wrapper = isInternalHref(item.href)
                                       ? Link

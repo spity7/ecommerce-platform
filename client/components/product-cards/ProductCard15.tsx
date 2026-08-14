@@ -60,9 +60,7 @@ export default function ProductCard15({
           </div>
         )}
         <h6 className="rbt-card-title">
-          <Link href={detailsPageLink}>
-            {product.title}
-          </Link>
+          <Link href={detailsPageLink}>{product.title}</Link>
         </h6>
         <div className="rbt-card-rating">
           <ul className="rbt-rating-icon-list">

@@ -23,7 +23,6 @@ export function useMenuHover() {
     lastWheelInsideAtRef.current = Date.now();
   }, []);
 
-
   const handleMouseEnter = useCallback(() => {
     // Local state for this specific menu item
     activeHoverCountRef.current += 1;
@@ -118,7 +117,8 @@ export function useMenuHover() {
     const onScroll = () => {
       const JUST_SCROLLED_INSIDE_MENU_MS = 220;
       const isRecentMenuWheel =
-        Date.now() - lastWheelInsideAtRef.current < JUST_SCROLLED_INSIDE_MENU_MS;
+        Date.now() - lastWheelInsideAtRef.current <
+        JUST_SCROLLED_INSIDE_MENU_MS;
 
       if (!isRecentMenuWheel && globalHoverCount > 0) {
         resetHoverState();

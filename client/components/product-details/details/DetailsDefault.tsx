@@ -88,7 +88,10 @@ export default function DetailsDefault({
                       {" "}
                       ${product.price.toFixed(2)}
                     </span>
-                    <OfferBadge product={product} className="rbt-offer-badge-md" />
+                    <OfferBadge
+                      product={product}
+                      className="rbt-offer-badge-md"
+                    />
                   </div>
                 </div>
                 <div className="rbt-quick-access-banner-action-btn d-flex align-items-center">

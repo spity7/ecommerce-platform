@@ -71,14 +71,15 @@ export default function Hero() {
                                 <span className="price-text">
                                   {formatCurrency(item.price)}
                                 </span>
-                                <OfferBadge price={item.price} oldPrice={item.oldPrice} variant="minus" />
+                                <OfferBadge
+                                  price={item.price}
+                                  oldPrice={item.oldPrice}
+                                  variant="minus"
+                                />
                               </div>
                             </div>
                             <div className="rbt-card-element">
-                              <Link
-                                className="rbt-btn"
-                                href={`/shop`}
-                              >
+                              <Link className="rbt-btn" href={`/shop`}>
                                 Shop Now
                               </Link>
                             </div>

@@ -26,7 +26,8 @@ export default function Banner() {
                       <span className="rbt-bold--text">Trends </span>to Style
                     </h2>
                     <p className="rbt-banner-description rbt-scroll-trigger fade_in animation-order-3">
-                    Discover curated fashion pieces designed for timeless style, and effortless confidence.
+                      Discover curated fashion pieces designed for timeless
+                      style, and effortless confidence.
                     </p>
                     <div className="rbt-banner-btn rbt-scroll-trigger fade_in animation-order-4">
                       <Link className="rbt-btn rbt-btn-md" href={`/shop`}>
@@ -58,7 +59,8 @@ export default function Banner() {
                       <span className="rbt-bold--text">Seal The</span> Deal Now
                     </h2>
                     <p className="rbt-banner-description rbt-scroll-trigger fade_in animation-order-3">
-                    Refresh your wardrobe with trend‑forward styles and exclusive deals made for you.
+                      Refresh your wardrobe with trend‑forward styles and
+                      exclusive deals made for you.
                     </p>
                     <div className="rbt-banner-btn rbt-scroll-trigger fade_in animation-order-4">
                       <Link className="rbt-btn rbt-btn-md" href={`/shop`}>

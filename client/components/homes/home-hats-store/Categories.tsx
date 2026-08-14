@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useState } from "react";
 export default function Categories() {
   const [activeTab, setActiveTab] = useState<"categories" | "collections">(
-    "categories",
+    "categories"
   );
   return (
     <div className="rbt-component-area rbt-categories-area rbt-bg-color-white rbt-section-gap">
@@ -64,77 +64,77 @@ export default function Categories() {
                 <div className="tab-content advance-tab-content-style-2">
                   {activeTab === "categories" && (
                     <div className="tab-pane fade active show">
-                    <div className="content">
-                      {/* Start Card Area */}
-                      <div className="row row--12 mt_dec--24 rbt-mobile-row">
-                        {capsCategories.map((item, index) => (
-                          <div
-                            className="col-lg-3 col-md-6 col-sm-6 col-6 mt--24"
-                            key={index}
-                          >
-                            <Link
-                              className={`rbt-cat-box rbt-cat-box-1 rbt-cat-box-1-lg rbt-cat-box-1-rounded text-center rbt-scroll-trigger fade_in animation-order-${index + 1}`}
-                              href={`/shop-by-categories`}
+                      <div className="content">
+                        {/* Start Card Area */}
+                        <div className="row row--12 mt_dec--24 rbt-mobile-row">
+                          {capsCategories.map((item, index) => (
+                            <div
+                              className="col-lg-3 col-md-6 col-sm-6 col-6 mt--24"
+                              key={index}
                             >
-                              <div className="inner">
-                                <div
-                                  className={`rbt-image-portion rbt-bg-color-brand-100 rbt-scroll-trigger zoom_in animation-order-${index + 1}`}
-                                >
-                                  <Image
-                                    alt="Category Product Images"
-                                    src={item.imgSrc || ""}
-                                    width={624}
-                                    height={624}
-                                  />
+                              <Link
+                                className={`rbt-cat-box rbt-cat-box-1 rbt-cat-box-1-lg rbt-cat-box-1-rounded text-center rbt-scroll-trigger fade_in animation-order-${index + 1}`}
+                                href={`/shop-by-categories`}
+                              >
+                                <div className="inner">
+                                  <div
+                                    className={`rbt-image-portion rbt-bg-color-brand-100 rbt-scroll-trigger zoom_in animation-order-${index + 1}`}
+                                  >
+                                    <Image
+                                      alt="Category Product Images"
+                                      src={item.imgSrc || ""}
+                                      width={624}
+                                      height={624}
+                                    />
+                                  </div>
+                                  <div className="content">
+                                    <h6 className="title">{item.title}</h6>
+                                  </div>
                                 </div>
-                                <div className="content">
-                                  <h6 className="title">{item.title}</h6>
-                                </div>
-                              </div>
-                            </Link>
-                          </div>
-                        ))}
+                              </Link>
+                            </div>
+                          ))}
+                        </div>
+                        {/* End Card Area */}
                       </div>
-                      {/* End Card Area */}
                     </div>
-                  </div>
                   )}
                   {activeTab === "collections" && (
                     <div className="tab-pane fade active show">
-                    <div className="content">
-                      {/* Start Card Area */}
-                      <div className="row row--12 mt_dec--24 rbt-mobile-row">
-                        {capsCategories.map((item, index) => (
-                          <div
-                            className="col-lg-3 col-md-6 col-sm-6 col-6 mt--24"
-                            key={index}
-                          >
-                            <Link
-                              className={`rbt-cat-box rbt-cat-box-1 rbt-cat-box-1-lg rbt-cat-box-1-rounded text-center rbt-scroll-trigger fade_in animation-order-${index + 1}`}
-                              href={`/shop-by-categories`}
+                      <div className="content">
+                        {/* Start Card Area */}
+                        <div className="row row--12 mt_dec--24 rbt-mobile-row">
+                          {capsCategories.map((item, index) => (
+                            <div
+                              className="col-lg-3 col-md-6 col-sm-6 col-6 mt--24"
+                              key={index}
                             >
-                              <div className="inner">
-                                <div
-                                  className={`rbt-image-portion rbt-bg-color-brand-100 rbt-scroll-trigger zoom_in animation-order-${index + 1}`}
-                                >
-                                  <Image
-                                    alt="Category Product Images"
-                                    src={item.imgSrc || ""}
-                                    width={624}
-                                    height={624}
-                                  />
+                              <Link
+                                className={`rbt-cat-box rbt-cat-box-1 rbt-cat-box-1-lg rbt-cat-box-1-rounded text-center rbt-scroll-trigger fade_in animation-order-${index + 1}`}
+                                href={`/shop-by-categories`}
+                              >
+                                <div className="inner">
+                                  <div
+                                    className={`rbt-image-portion rbt-bg-color-brand-100 rbt-scroll-trigger zoom_in animation-order-${index + 1}`}
+                                  >
+                                    <Image
+                                      alt="Category Product Images"
+                                      src={item.imgSrc || ""}
+                                      width={624}
+                                      height={624}
+                                    />
+                                  </div>
+                                  <div className="content">
+                                    <h6 className="title">{item.title}</h6>
+                                  </div>
                                 </div>
-                                <div className="content">
-                                  <h6 className="title">{item.title}</h6>
-                                </div>
-                              </div>
-                            </Link>
-                          </div>
-                        ))}
+                              </Link>
+                            </div>
+                          ))}
+                        </div>
+                        {/* End Card Area */}
                       </div>
-                      {/* End Card Area */}
                     </div>
-                  </div>
                   )}
                 </div>
               </div>

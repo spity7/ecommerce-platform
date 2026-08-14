@@ -8,9 +8,9 @@
 .tooltip {
   position: relative;
   display: inline-block;
-  opacity: 0; 
-  transition: opacity .15s linear;
-  z-index: 9999; 
+  opacity: 0;
+  transition: opacity 0.15s linear;
+  z-index: 9999;
   padding: 0 !important;
 }
 
@@ -34,7 +34,7 @@
   position: absolute;
   width: 0;
   height: 0;
-  &::before{
+  &::before {
     display: none;
   }
 }
@@ -45,9 +45,9 @@
 }
 
 .tooltip.top .tooltip-arrow {
-  bottom: 100%; 
+  bottom: 100%;
   left: 50%;
-  margin-left: -5px; 
+  margin-left: -5px;
   border-width: 5px 5px 0;
   border-color: var(--color-black) transparent transparent transparent; /* Arrow color */
   display: none;
@@ -58,9 +58,9 @@
 }
 
 .tooltip.right .tooltip-arrow {
-  left: 100%; 
+  left: 100%;
   top: 50%;
-  margin-top: -5px; 
+  margin-top: -5px;
   border-width: 5px 0 5px 5px;
   border-color: transparent transparent transparent var(--color-black); /* Arrow color */
 }
@@ -114,17 +114,16 @@
   background-color: #c0392b;
 }
 
-
-.tooltip-distance-lg{
-  .tooltip-inner{
+.tooltip-distance-lg {
+  .tooltip-inner {
     padding: 8px 16px;
     font-size: 14px;
     line-height: 1.4;
   }
-  &.bs-tooltip-top .tooltip-inner{
+  &.bs-tooltip-top .tooltip-inner {
     margin-bottom: 12px;
   }
-  &.bs-tooltip-bottom .tooltip-inner{
+  &.bs-tooltip-bottom .tooltip-inner {
     margin-top: 12px;
   }
 }
@@ -134,25 +133,25 @@
   border-radius: var(--radius-10);
   padding: 4px 0;
 
-  &.bs-popover-start>.popover-arrow {
+  &.bs-popover-start > .popover-arrow {
     &::before {
       border-left-color: var(--color-gray-200);
     }
   }
 
-  &.bs-popover-top>.popover-arrow {
+  &.bs-popover-top > .popover-arrow {
     &::before {
       border-top-color: var(--color-gray-200);
     }
   }
 
-  &.bs-popover-end>.popover-arrow {
+  &.bs-popover-end > .popover-arrow {
     &::before {
       border-right-color: var(--color-gray-200);
     }
   }
 
-  &.bs-popover-bottom>.popover-arrow {
+  &.bs-popover-bottom > .popover-arrow {
     &::before {
       border-bottom-color: var(--color-gray-200);
     }

@@ -1,0 +1,22 @@
+# Dependencies & build output
+node_modules
+dist
+coverage
+
+# Generated / cache
+*.tsbuildinfo
+
+# Lock files
+package-lock.json
+
+# Secrets & env
+.env*
+!.env.example
+gcs-key.json
+.gcs-key.json
+*-key.json
+*.pem
+
+# OS / logs
+.DS_Store
+*.log
