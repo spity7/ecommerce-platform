@@ -3,7 +3,11 @@ import multer from "multer";
 import { env } from "../config/env.js";
 import { AppError } from "../middleware/errorHandler.js";
 import { uploadFile } from "../services/storage.service.js";
+import { attributesRouter } from "./attributes.routes.js";
+import { brandsRouter } from "./brands.routes.js";
+import { categoriesRouter } from "./categories.routes.js";
 import { healthRouter } from "./health.routes.js";
+import { productsRouter } from "./products.routes.js";
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -13,6 +17,10 @@ const upload = multer({
 export const apiRouter = Router();
 
 apiRouter.use("/health", healthRouter);
+apiRouter.use("/products", productsRouter);
+apiRouter.use("/categories", categoriesRouter);
+apiRouter.use("/brands", brandsRouter);
+apiRouter.use("/attributes", attributesRouter);
 
 apiRouter.post("/uploads", upload.single("file"), async (req, res, next) => {
   try {

@@ -12,12 +12,12 @@ export default function SignInPage() {
   return (
     <form className="w-full max-w-[440px] rounded-card border border-surface-line bg-surface-card p-6 shadow-card relative">
       <Link
-        aria-label="Unimart dashboard"
+        aria-label="Beauty Station dashboard"
         className="inline-flex items-center lg:hidden"
         href={routes.dashboard}
       >
         <Image
-          alt="Unimart"
+          alt="Beauty Station"
           className="h-9 w-auto"
           height={36}
           priority
@@ -44,7 +44,7 @@ export default function SignInPage() {
           </span>
           <input
             className="mt-2 h-11 w-full rounded-base border border-surface-line bg-surface-body px-4 text-[14px] focus:border-brand-600"
-            defaultValue="admin@unimart.local"
+            defaultValue="admin@beautystation.com"
             type="email"
           />
         </label>

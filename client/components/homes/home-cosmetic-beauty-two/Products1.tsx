@@ -1,8 +1,25 @@
 import ProductCard5 from "@/components/product-cards/ProductCard5";
 import { cosmeticProducts } from "@/data/products/beauty";
-
+import { fetchPublishedProducts } from "@/lib/api/products";
+import { mapProductDtosToStorefront } from "@/lib/mappers/product";
+import type { Product } from "@/types/product";
 import Link from "next/link";
-export default function Products1() {
+
+async function loadProducts(): Promise<Product[]> {
+  try {
+    const response = await fetchPublishedProducts(8);
+    if (response.data.length === 0) {
+      return cosmeticProducts;
+    }
+    return mapProductDtosToStorefront(response.data);
+  } catch {
+    return cosmeticProducts;
+  }
+}
+
+export default async function Products1() {
+  const products = await loadProducts();
+
   return (
     <div className="rbt-component-area rbt-section-gapTop">
       <div className="container">
@@ -24,12 +41,10 @@ export default function Products1() {
             </Link>
           </div>
         </div>
-        {/* Start Card Area */}
         <div className="row row--12">
-          {/* Start Single Card  */}
-          {cosmeticProducts.map((product, i) => (
+          {products.map((product, i) => (
             <div
-              key={i}
+              key={String(product.id)}
               className="col-lg-3 col-xl-3 col-xxl-3 col-md-6 col-sm-6 col-6 mt--24"
             >
               <ProductCard5
@@ -40,9 +55,7 @@ export default function Products1() {
               />
             </div>
           ))}
-          {/* End Single Card  */}
         </div>
-        {/* End Card Area */}
       </div>
     </div>
   );

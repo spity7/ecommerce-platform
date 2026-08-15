@@ -1,8 +1,9 @@
 {
-  "name": "unimart-nextjs-admin",
+  "name": "@platform/admin",
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "npm run build:shared --prefix ..",
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start -H 0.0.0.0 -p 3001",
@@ -14,6 +15,8 @@
     "check:fix": "npm run format && npm run lint:fix"
   },
   "dependencies": {
+    "@platform/shared": "0.0.1",
+    "@platform/site-config": "0.0.1",
     "@radix-ui/react-select": "^2.3.1",
     "echarts": "6.1.0",
     "echarts-gl": "2.1.0",

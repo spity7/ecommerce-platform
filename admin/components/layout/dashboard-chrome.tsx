@@ -34,12 +34,12 @@ export function DashboardChrome({ children }: DashboardChromeProps) {
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
-    setCollapsed(localStorage.getItem("unimart-sidebar-collapsed") === "1");
+    setCollapsed(localStorage.getItem("admin-sidebar-collapsed") === "1");
   }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle("sidebar-collapsed", collapsed);
-    localStorage.setItem("unimart-sidebar-collapsed", collapsed ? "1" : "0");
+    localStorage.setItem("admin-sidebar-collapsed", collapsed ? "1" : "0");
   }, [collapsed]);
 
   useEffect(() => {

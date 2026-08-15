@@ -99,11 +99,11 @@ export default function Contact() {
                         </a>
                       </li>
                       <li>
-                        <a href="mailto:unimartabc@mail.com">
+                        <a href="mailto:hello@beautystation.com">
                           <span className="icon email">
                             <i className="fa-sharp fa-solid fa-envelope" />
                           </span>
-                          <span>unimartabc@mail.com</span>
+                          <span>hello@beautystation.com</span>
                         </a>
                       </li>
                       <li>

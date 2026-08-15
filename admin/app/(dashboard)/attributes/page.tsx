@@ -3,9 +3,29 @@ import { AttributeListTable } from "@/components/catalog/list-pages";
 import { Icon } from "@/components/layout/icon";
 import { PageHeader } from "@/components/layout/page-header";
 import { routes } from "@/config/routes";
-import { attributes } from "@/data/admin/catalog";
+import type { Attribute } from "@/data/admin/catalog";
+import { fetchAttributes } from "@/lib/api/catalog";
+import { mapAttributeDto } from "@/lib/mappers/catalog";
+import { getAdminSiteConfig } from "@/lib/site";
 
-export default function AttributesPage() {
+const site = getAdminSiteConfig();
+
+export const metadata = {
+  title: `Attributes | ${site.name} Admin`,
+};
+
+export default async function AttributesPage() {
+  let attributes: Attribute[] = [];
+  let loadError: string | null = null;
+
+  try {
+    const response = await fetchAttributes({ limit: 100 });
+    attributes = response.data.map(mapAttributeDto);
+  } catch (error) {
+    loadError =
+      error instanceof Error ? error.message : "Unable to load attributes.";
+  }
+
   return (
     <>
       <PageHeader
@@ -22,6 +42,11 @@ export default function AttributesPage() {
         eyebrow="Catalog"
         title="Attributes"
       />
+      {loadError ? (
+        <div className="mb-4 rounded-base border border-warning-200 bg-warning-50 px-4 py-3 text-[14px] text-warning-700">
+          {loadError}
+        </div>
+      ) : null}
       <AttributeListTable attributes={attributes} />
     </>
   );

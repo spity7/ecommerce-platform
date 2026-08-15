@@ -21,7 +21,7 @@ function ProductDisplayBanner() {
                   </h1>
                   <p className="rbt-description">
                     Showcase your products in a more interactive way with
-                    Unimart Product Video &amp; 3D View. Choose from a variety
+                    Beauty Station Product Video &amp; 3D View. Choose from a variety
                     of pre-built templates and customize them to match your
                     brand.
                   </p>

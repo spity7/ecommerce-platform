@@ -1,6 +1,6 @@
 "use client";
 import { CurvedArrowIcon, LayoutTemplateIcon } from "../svg-icons";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { demoData, splashFilters } from "@/data/splash";
@@ -67,10 +67,12 @@ export default function Demos() {
         },
       });
     },
-    []
+    [isotopRef]
   );
 
-  updateCategoryRef.current = updateCategory;
+  useEffect(() => {
+    updateCategoryRef.current = updateCategory;
+  }, [updateCategory]);
 
   const handleFilterClick = (dataFilter: string) => {
     setActiveFilter(dataFilter);

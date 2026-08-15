@@ -7,8 +7,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title:
-    "My Payment Methods || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Manage your saved Unimart payment methods and cards.",
+    "My Payment Methods | Beauty Station | Cosmetics & Skincare",
+  description: "Manage your saved Beauty Station payment methods and cards.",
 };
 
 export default function page() {

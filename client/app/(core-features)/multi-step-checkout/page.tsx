@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import MultiStepCheckoutBanner from "@/components/core-features/multi-step-checkout/MultiStepCheckoutBanner";
 export const metadata: Metadata = {
   title:
-    "Multi Step Checkout | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Multi Step Checkout | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function MultiStepCheckoutPage() {
   return (
@@ -24,7 +24,7 @@ export default function MultiStepCheckoutPage() {
             ),
             description: (
               <>
-                Compare your selected products in a table with Unimart Compare
+                Compare your selected products in a table with Beauty Station Compare
                 Table Builder. Choose from a variety of pre-built templates.
               </>
             ),

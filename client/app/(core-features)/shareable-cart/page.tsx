@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import ShareableCartBanner from "@/components/core-features/shareable-cart/ShareableCartBanner";
 export const metadata: Metadata = {
   title:
-    "Shareable Cart | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Shareable Cart | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function ShareableCartPage() {
   return (
@@ -32,7 +32,7 @@ export default function ShareableCartPage() {
             ),
             description: (
               <>
-                Compare your selected products in a table with Unimart Compare
+                Compare your selected products in a table with Beauty Station Compare
                 Table Builder. Choose from a variety of pre-built templates.
               </>
             ),

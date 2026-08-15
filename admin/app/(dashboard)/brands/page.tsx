@@ -4,9 +4,29 @@ import { ShowcaseStrip } from "@/components/catalog/showcase-strip";
 import { Icon } from "@/components/layout/icon";
 import { PageHeader } from "@/components/layout/page-header";
 import { routes } from "@/config/routes";
-import { brands } from "@/data/admin/catalog";
+import type { Brand } from "@/data/admin/catalog";
+import { fetchBrands } from "@/lib/api/catalog";
+import { mapBrandDto } from "@/lib/mappers/catalog";
+import { getAdminSiteConfig } from "@/lib/site";
 
-export default function BrandsPage() {
+const site = getAdminSiteConfig();
+
+export const metadata = {
+  title: `Brands | ${site.name} Admin`,
+};
+
+export default async function BrandsPage() {
+  let brands: Brand[] = [];
+  let loadError: string | null = null;
+
+  try {
+    const response = await fetchBrands({ limit: 100 });
+    brands = response.data.map(mapBrandDto);
+  } catch (error) {
+    loadError =
+      error instanceof Error ? error.message : "Unable to load brands.";
+  }
+
   return (
     <>
       <PageHeader
@@ -23,6 +43,11 @@ export default function BrandsPage() {
         eyebrow="Catalog"
         title="Brands"
       />
+      {loadError ? (
+        <div className="mb-4 rounded-base border border-warning-200 bg-warning-50 px-4 py-3 text-[14px] text-warning-700">
+          {loadError}
+        </div>
+      ) : null}
       <ShowcaseStrip items={brands} type="brand" />
       <BrandListTable brands={brands} />
     </>

@@ -7,8 +7,8 @@ import TeamGradientStyle from "@/components/elements/element-team-styles/TeamGra
 import ElementsHero from "@/components/elements/ElementsHero";
 export const metadata: Metadata = {
   title:
-    "Element Team Styles | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Element Team Styles | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function ElementTeamStylesPage() {
   return (

@@ -5,8 +5,8 @@ import HelpBlogs from "@/components/other-pages/shop-user/HelpBlogs";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Help Center || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Browse Unimart help topics, FAQs, and guides.",
+  title: "Help Center | Beauty Station | Cosmetics & Skincare",
+  description: "Browse Beauty Station help topics, FAQs, and guides.",
 };
 
 export default function page() {

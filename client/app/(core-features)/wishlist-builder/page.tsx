@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import WishlistBuilderBanner from "@/components/core-features/wishlist-builder/WishlistBuilderBanner";
 export const metadata: Metadata = {
   title:
-    "Wishlist Builder | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Wishlist Builder | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function WishlistBuilderPage() {
   return (
@@ -15,7 +15,7 @@ export default function WishlistBuilderPage() {
         sectionTitle="Fast Performance Across Platforms"
         sectionDescription={
           <>
-            Experience unparalleled speed and efficiency with Unimart, <br />
+            Experience unparalleled speed and efficiency with Beauty Station, <br />
             optimized for all platforms.
           </>
         }

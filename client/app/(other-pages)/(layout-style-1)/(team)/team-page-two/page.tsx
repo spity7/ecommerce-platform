@@ -4,8 +4,8 @@ import Team2 from "@/components/other-pages/team/Team2";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Team Page 02 || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Second team page layout highlighting Unimart team members.",
+  title: "Team Page 02 | Beauty Station | Cosmetics & Skincare",
+  description: "Second team page layout highlighting Beauty Station team members.",
 };
 
 export default function page() {

@@ -11,10 +11,10 @@ export default function Testimonials() {
                 <div className="col-12 col-md-7">
                   <div className="rbt-review-card-content">
                     <div className="rbt-review-text">
-                      Sometimes when feed my family Unimart Bakery Buy it chokes
+                      Sometimes when feed my family Beauty Station Bakery Buy it chokes
                       me up. My Bobby of blessed memory would serve it to us
                       from the freezer with a cold glass of milk. I always loved
-                      visiting. #unimartbakeryalways
+                      visiting. #beautystation
                     </div>
                     <div className="rbt-rating">
                       <ul className="rbt-rating-icon-list">

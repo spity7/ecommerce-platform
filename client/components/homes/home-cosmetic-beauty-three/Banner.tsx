@@ -17,7 +17,7 @@ export default function Banner() {
               </h6>
               <h2 className="rbt-title mb-0 rbt-text-color-white rbt-text-capitalize">
                 <span className="rbt-bold--text d-block">
-                  The Unimart skincare collection
+                  The Beauty Station skincare collection
                 </span>
                 glow-boosting for confident everyday radiance.
               </h2>

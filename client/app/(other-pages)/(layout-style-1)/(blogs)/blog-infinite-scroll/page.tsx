@@ -6,8 +6,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title:
-    "Blog Infinite Scroll || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart blog listing page with infinite scroll experience.",
+    "Blog Infinite Scroll | Beauty Station | Cosmetics & Skincare",
+  description: "Beauty Station blog listing page with infinite scroll experience.",
 };
 
 export default function page() {

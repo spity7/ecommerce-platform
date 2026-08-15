@@ -3,6 +3,7 @@ import { baseURL } from "@/utils/cn";
 export type ProductStatus = "draft" | "low stock" | "published";
 
 export type Product = {
+  id?: string;
   category: string;
   image: string;
   name: string;

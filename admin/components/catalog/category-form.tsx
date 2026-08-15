@@ -180,7 +180,7 @@ export function CategoryForm({ mode }: CategoryFormProps) {
               <div className="space-y-4">
                 <Field
                   defaultValue={
-                    mode === "edit" ? "Headphones - Unimart" : undefined
+                    mode === "edit" ? "Headphones - Beauty Station" : undefined
                   }
                   help="Recommended to be simple and precise keywords."
                   label="Meta Tag Title"

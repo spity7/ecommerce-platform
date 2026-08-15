@@ -5,8 +5,8 @@ import ContactMap from "@/components/other-pages/contact/ContactMap";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact Us || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Get in touch with the Unimart team via our contact page.",
+  title: "Contact Us | Beauty Station | Cosmetics & Skincare",
+  description: "Get in touch with the Beauty Station team via our contact page.",
 };
 
 export default function page() {

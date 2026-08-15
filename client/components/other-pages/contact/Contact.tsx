@@ -38,13 +38,13 @@ export default function Contact() {
               {/* Call via WhatsApp */}
               <Tooltip content="Email to" placement="top">
                 <a
-                  href="mailto:unimartabc@mail.com"
+                  href="mailto:hello@beautystation.com"
                   className="rbt-trns-modern-btn tooltips"
                 >
                   <span className="icon">
                     <EnvelopeIcon />
                   </span>
-                  unimartabc@mail.com
+                  hello@beautystation.com
                 </a>
               </Tooltip>
               {/* Call via Telegram */}
@@ -99,10 +99,10 @@ export default function Contact() {
                       <li>
                         <span>Email : </span>
                         <a
-                          href="mailto:unimartabc@mail.com"
+                          href="mailto:hello@beautystation.com"
                           className="rbt-contact-info-single color-primary"
                         >
-                          unimartabc@mail.com
+                          hello@beautystation.com
                         </a>
                       </li>
                     </ul>
@@ -134,10 +134,10 @@ export default function Contact() {
                       <li>
                         <span>Email : </span>
                         <a
-                          href="mailto:unimartabc@mail.com"
+                          href="mailto:hello@beautystation.com"
                           className="rbt-contact-info-single color-primary"
                         >
-                          unimartabc@mail.com
+                          hello@beautystation.com
                         </a>
                       </li>
                     </ul>
@@ -169,10 +169,10 @@ export default function Contact() {
                       <li>
                         <span>Email : </span>
                         <a
-                          href="mailto:unimartabc@mail.com"
+                          href="mailto:hello@beautystation.com"
                           className="rbt-contact-info-single color-primary"
                         >
-                          unimartabc@mail.com
+                          hello@beautystation.com
                         </a>
                       </li>
                     </ul>
@@ -204,10 +204,10 @@ export default function Contact() {
                       <li>
                         <span>Email : </span>
                         <a
-                          href="mailto:unimartabc@mail.com"
+                          href="mailto:hello@beautystation.com"
                           className="rbt-contact-info-single color-primary"
                         >
-                          unimartabc@mail.com
+                          hello@beautystation.com
                         </a>
                       </li>
                     </ul>

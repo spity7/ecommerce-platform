@@ -21,7 +21,7 @@ export default function Footer6() {
             <div className="row">
               <div className="col-12">
                 <div className="rbt-watermark-text rbt-watermark-lg">
-                  <span>Buy@Unimart</span>
+                  <span>Buy@Beauty Station</span>
                 </div>
               </div>
             </div>
@@ -216,7 +216,7 @@ export default function Footer6() {
                     rel="noopener noreferrer"
                     className="mr--4"
                   >
-                    Unimart
+                    Beauty Station
                   </a>{" "}
                   Nextjs Template.
                 </p>

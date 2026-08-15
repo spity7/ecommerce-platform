@@ -109,47 +109,47 @@ export default function Footer4() {
                   <div className="rbt-category-list">
                     <a href="#">
                       <span className="rbt-category-icon rbt-offer-icon-circle" />
-                      UNIMART - 10% OFF ON YOUR FIRST ORDER
+                      BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                     </a>
                     <a href="#">
                       <span className="rbt-category-icon rbt-offer-icon-circle" />
-                      UNIMART - 10% OFF ON YOUR FIRST ORDER
+                      BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                     </a>
                     <a href="#">
                       <span className="rbt-category-icon rbt-offer-icon-circle" />
-                      UNIMART - 10% OFF ON YOUR FIRST ORDER
+                      BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                     </a>
                     <a href="#">
                       <span className="rbt-category-icon rbt-offer-icon-circle" />
-                      UNIMART - 10% OFF ON YOUR FIRST ORDER
+                      BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                     </a>
                     <a href="#">
                       <span className="rbt-category-icon rbt-offer-icon-circle" />
-                      UNIMART - 10% OFF ON YOUR FIRST ORDER
+                      BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                     </a>
                     <a href="#">
                       <span className="rbt-category-icon rbt-offer-icon-circle" />
-                      UNIMART - 10% OFF ON YOUR FIRST ORDER
+                      BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                     </a>
                     <a href="#">
                       <span className="rbt-category-icon rbt-offer-icon-circle" />
-                      UNIMART - 10% OFF ON YOUR FIRST ORDER
+                      BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                     </a>
                     <a href="#">
                       <span className="rbt-category-icon rbt-offer-icon-circle" />
-                      UNIMART - 10% OFF ON YOUR FIRST ORDER
+                      BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                     </a>
                     <a href="#">
                       <span className="rbt-category-icon rbt-offer-icon-circle" />
-                      UNIMART - 10% OFF ON YOUR FIRST ORDER
+                      BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                     </a>
                     <a href="#">
                       <span className="rbt-category-icon rbt-offer-icon-circle" />
-                      UNIMART - 10% OFF ON YOUR FIRST ORDER
+                      BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                     </a>
                     <a href="#">
                       <span className="rbt-category-icon rbt-offer-icon-circle" />
-                      UNIMART - 10% OFF ON YOUR FIRST ORDER
+                      BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                     </a>
                   </div>
                 </div>
@@ -169,7 +169,7 @@ export default function Footer4() {
                   <div className="logo">
                     <Link href={`/`}>
                       <Image
-                        alt="Unimart Logo"
+                        alt="Beauty Station Logo"
                         src="/assets/images/logo/logo.webp"
                         width={1487}
                         height={334}
@@ -279,7 +279,7 @@ export default function Footer4() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Unimart
+                    Beauty Station
                   </a>
                   Nextjs Template.
                 </p>

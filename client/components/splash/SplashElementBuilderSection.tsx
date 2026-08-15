@@ -39,15 +39,15 @@ export default function SplashElementBuilderSection({
       title: "Pre-Order: Secure Your Purchase in Advance",
       description: (
         <>
-          Compare your selected products in a table with Unimart Compare Table
+          Compare your selected products in a table with Beauty Station Compare Table
           Builder. Choose from a variety of pre-built templates.
         </>
       ),
     },
   ],
-  primaryCtaHref = "https://nextjs.getunimart.com/docs",
+  primaryCtaHref = "/",
   primaryCtaLabel = "Check example",
-  docsHref = "https://nextjs.getunimart.com/docs",
+  docsHref = "/",
   docsLabel = "View Docs",
 }: SplashElementBuilderSectionProps) {
   return (

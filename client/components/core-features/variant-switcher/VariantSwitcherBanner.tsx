@@ -19,7 +19,7 @@ function VariantSwitcherBanner() {
                   </h1>
                   <p className="rbt-description">
                     Display product variants in a visually appealing way with
-                    Unimart Variant Swatches.
+                    Beauty Station Variant Swatches.
                   </p>
                 </div>
               </div>

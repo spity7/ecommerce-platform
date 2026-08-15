@@ -59,28 +59,33 @@ export function SplashSectionNavProvider({
     setUnlockedStep((p) => (p > step ? p : step + 1));
   }, []);
 
-  const sectionRefByTarget: Record<
-    SplashScrollTarget,
-    RefObject<HTMLDivElement | null>
-  > = {
-    demos: demoSectionRef,
-    features: featureListSectionRef,
-    "admin-dashboard": adminDashboardSectionRef,
-  };
+  const sectionRefByTarget = useMemo<
+    Record<SplashScrollTarget, RefObject<HTMLDivElement | null>>
+  >(
+    () => ({
+      demos: demoSectionRef,
+      features: featureListSectionRef,
+      "admin-dashboard": adminDashboardSectionRef,
+    }),
+    []
+  );
 
-  const scrollToSection = useCallback((target: SplashScrollTarget) => {
-    const step = STEP[target];
-    const elRef = sectionRefByTarget[target];
+  const scrollToSection = useCallback(
+    (target: SplashScrollTarget) => {
+      const step = STEP[target];
+      const elRef = sectionRefByTarget[target];
 
-    setUnlockedStep((s) => Math.max(s, step));
-    setDeepestEagerStep((d) => Math.max(d, step));
+      setUnlockedStep((s) => Math.max(s, step));
+      setDeepestEagerStep((d) => Math.max(d, step));
 
-    if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
-    scrollTimerRef.current = setTimeout(() => {
-      scrollTimerRef.current = null;
-      elRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, SCROLL_DELAY_MS);
-  }, []);
+      if (scrollTimerRef.current) clearTimeout(scrollTimerRef.current);
+      scrollTimerRef.current = setTimeout(() => {
+        scrollTimerRef.current = null;
+        elRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, SCROLL_DELAY_MS);
+    },
+    [sectionRefByTarget]
+  );
 
   useEffect(() => {
     const hash = window.location.hash.replace(/^#/, "");

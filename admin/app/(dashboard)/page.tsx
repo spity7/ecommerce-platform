@@ -104,7 +104,7 @@ function HeroBanner() {
         href={routes.products}
       >
         <Image
-          alt="Unimart product promotion"
+          alt="Beauty Station product promotion"
           className="h-auto w-full object-cover"
           height={288}
           priority

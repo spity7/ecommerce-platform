@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { create } from "zustand";
 import { persist, type StorageValue } from "zustand/middleware";
 import { useShallow } from "zustand/react/shallow";
@@ -148,7 +148,7 @@ export const useStore = create<StoreState>()(
         get().compareItem.some((elm) => elm.id == id),
     }),
     {
-      name: "unimart-store",
+      name: "beauty-station-store",
       partialize: (state) => ({
         cartProducts: state.cartProducts,
         wishList: state.wishList,
@@ -246,11 +246,11 @@ function getContextSnapshot(state: StoreState) {
  */
 export function useContextElement() {
   const store = useStore(useShallow(getContextSnapshot));
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   return {
     ...store,

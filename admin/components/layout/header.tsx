@@ -43,12 +43,12 @@ function MobileSidebarButton() {
 function MobileLogo() {
   return (
     <Link
-      aria-label="Unimart dashboard"
+      aria-label="Beauty Station dashboard"
       className="absolute left-1/2 -translate-x-1/2 lg:hidden"
       href={routes.dashboard}
     >
       <Image
-        alt="Unimart"
+        alt="Beauty Station"
         className="h-7 w-auto dark:hidden"
         height={32}
         priority
@@ -56,7 +56,7 @@ function MobileLogo() {
         width={142}
       />
       <Image
-        alt="Unimart"
+        alt="Beauty Station"
         className="hidden h-7 w-auto dark:block"
         height={32}
         src={`${baseURL}assets/images/logo/logo-blackbg.webp`}
@@ -76,7 +76,7 @@ export function SearchUi() {
         <input
           className="h-10 flex-1 rounded-l-card border border-r-0 border-surface-line bg-surface-body px-5 text-[15px] text-ink-700 placeholder:text-ink-400 focus:border-brand-600"
           id="global-search"
-          placeholder="Search Unimart .."
+          placeholder="Search Beauty Station .."
           type="search"
         />
         <button
@@ -117,7 +117,7 @@ export function ThemeToggle() {
     const nextDark = !dark;
     document.documentElement.classList.add("no-theme-transition");
     document.documentElement.classList.toggle("dark", nextDark);
-    localStorage.setItem("unimart-theme", nextDark ? "dark" : "light");
+    localStorage.setItem("site-theme", nextDark ? "dark" : "light");
     setDark(nextDark);
 
     requestAnimationFrame(() => {
@@ -198,7 +198,7 @@ export function UserProfileDropdown({ variant }: UserProfileDropdownProps) {
               Emay Walter
             </span>
             <span className="block truncate text-[12px] text-ink-400">
-              admin@unimart.local
+              admin@beautystation.com
             </span>
           </span>
           <Icon
@@ -278,7 +278,7 @@ function UserMenu({ id, open, placement }: UserMenuProps) {
             Emay Walter
           </span>
           <span className="block truncate text-[12px] text-ink-400">
-            admin@unimart.local
+            admin@beautystation.com
           </span>
         </span>
       </div>

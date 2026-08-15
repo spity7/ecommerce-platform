@@ -33,7 +33,7 @@ export default function InfoSection2() {
           </h5>
           <p className="rbt-collapsible-block-content b2 rbt-text-color-gray-500">
             Authorities in our business will tell in no uncertain terms that
-            Unimart is a modern e-commerce platform designed to make online
+            Beauty Station is a modern e-commerce platform designed to make online
             shopping simple, secure, and convenient.
           </p>
         </div>
@@ -46,7 +46,7 @@ export default function InfoSection2() {
             what’s not needed, you come to the point, make things clear, add
             value, you’re a content person, you like words. Design is no
             afterthought, far from it, but it comes in a deserved second.
-            Unimart helps you launch modern online stores quickly with reusable
+            Beauty Station helps you launch modern online stores quickly with reusable
             sections, responsive layouts, and prebuilt shop flows for
             categories, product details, cart, and checkout.
           </p>

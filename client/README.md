@@ -1,4 +1,4 @@
-# Unimart Next.js
+# Beauty Station Storefront
 
 A multi-demo eCommerce frontend template built with Next.js (App Router), React, TypeScript, and Zustand.
 

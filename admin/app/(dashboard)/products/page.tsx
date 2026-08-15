@@ -4,13 +4,31 @@ import { Icon } from "@/components/layout/icon";
 import { PageHeader } from "@/components/layout/page-header";
 import { ProductListTable } from "@/components/products/product-list-table";
 import { routes } from "@/config/routes";
-import { products } from "@/data/products/data";
+import type { Product } from "@/data/products/data";
+import { fetchProducts } from "@/lib/api/catalog";
+import { mapProductDto } from "@/lib/mappers/catalog";
+import { getAdminSiteConfig } from "@/lib/site";
+
+const site = getAdminSiteConfig();
 
 export const metadata: Metadata = {
-  title: "Products",
+  title: `Products | ${site.name} Admin`,
 };
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  let products: Array<Product & { id: string }> = [];
+  let loadError: string | null = null;
+
+  try {
+    const response = await fetchProducts({ limit: 100 });
+    products = response.data.map(mapProductDto);
+  } catch (error) {
+    loadError =
+      error instanceof Error
+        ? error.message
+        : "Unable to load products from the API.";
+  }
+
   return (
     <>
       <PageHeader
@@ -27,6 +45,13 @@ export default function ProductsPage() {
         eyebrow="Catalog"
         title="Products"
       />
+      {loadError ? (
+        <div className="mb-4 rounded-base border border-warning-200 bg-warning-50 px-4 py-3 text-[14px] text-warning-700">
+          {loadError} Start the API server and run{" "}
+          <code className="rounded bg-white/70 px-1">npm run seed</code> from
+          the repo root.
+        </div>
+      ) : null}
       <ProductListTable products={products} />
     </>
   );

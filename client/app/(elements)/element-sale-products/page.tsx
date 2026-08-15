@@ -3,8 +3,8 @@ import SaleProducts from "@/components/elements/element-sale-products/SaleProduc
 import ElementsHero from "@/components/elements/ElementsHero";
 export const metadata: Metadata = {
   title:
-    "Element Sale Products | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Element Sale Products | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function ElementSaleProductsPage() {
   return (

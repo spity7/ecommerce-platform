@@ -10,9 +10,9 @@ import AlternativeDelivery from "@/components/modals/AlternativeDelivery";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Account Info || Unimart - eCommerce React Nextjs Bootstrap5 Template",
+  title: "Account Info | Beauty Station | Cosmetics & Skincare",
   description:
-    "View and update your Unimart account information and addresses.",
+    "View and update your Beauty Station account information and addresses.",
 };
 
 export default function page() {

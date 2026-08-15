@@ -26,8 +26,8 @@ import TitlesStyleDefaultRight from "@/components/elements/element-titles/Titles
 import TitlesStyleDefaultCenterDark from "@/components/elements/element-titles/TitlesStyleDefaultCenterDark";
 export const metadata: Metadata = {
   title:
-    "Element Titles | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Element Titles | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function ElementTitlesPage() {
   return (

@@ -28,7 +28,7 @@ export default function Footer8() {
                     <div className="logo">
                       <Link href={`/`}>
                         <Image
-                          alt="Unimart Logo"
+                          alt="Beauty Station Logo"
                           src="/assets/images/logo/logo-blackbg.webp"
                           width={1487}
                           height={334}
@@ -162,7 +162,7 @@ export default function Footer8() {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        Unimart
+                        Beauty Station
                       </a>
                       Nextjs Template.
                     </p>

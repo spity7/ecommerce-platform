@@ -23,7 +23,7 @@ export default function Banner({ containerFull = false }) {
                       Buy One and Get 50% Off the Second Purchase Now
                     </h5>
                     <p className="b3 desc">
-                      Send us your idea, it may appear on Unimart.
+                      Send us your idea, it may appear on Beauty Station.
                     </p>
                   </div>
                   <div className="pricing-action d-flex align-items-center rbt-gap--8">

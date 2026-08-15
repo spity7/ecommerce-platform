@@ -25,7 +25,6 @@ export default function ProductCard18({
     title,
     price,
     oldPrice,
-    discount,
     rating,
     reviewCount,
     moreText,

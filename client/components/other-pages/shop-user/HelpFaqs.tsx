@@ -5,9 +5,9 @@ export default function HelpFaqs() {
     {
       id: "collapseTwo1",
       headerId: "headingTwo1",
-      title: "What is Unimart? How does it work?",
+      title: "What is Beauty Station? How does it work?",
       content:
-        "Unimart is a modern and versatile eCommerce template designed for online stores, businesses, and product-based websites. It includes all the necessary features to manage products, showcase items, handle orders, and run a complete online store efficiently.",
+        "Beauty Station is a modern and versatile eCommerce template designed for online stores, businesses, and product-based websites. It includes all the necessary features to manage products, showcase items, handle orders, and run a complete online store efficiently.",
       isOpen: true,
     },
     {
@@ -16,7 +16,7 @@ export default function HelpFaqs() {
       title: "How can I get customer support?",
       content: (
         <>
-          After purchasing the Unimart template, if you need any support, feel
+          After purchasing the Beauty Station template, if you need any support, feel
           free to reach out to us via email at{" "}
           <a href="mailto:rainbowit10@gmail.com">rainbowit10@gmail.com</a>.
           We’re here to help!
@@ -28,14 +28,14 @@ export default function HelpFaqs() {
       headerId: "headingTwo3",
       title: "Will I get regular updates? For how long?",
       content:
-        "Yes, Unimart receives regular updates with new features, performance improvements, and bug fixes. Once you purchase the template, you’ll get lifetime free updates, ensuring your website remains up-to-date with the latest trends.",
+        "Yes, Beauty Station receives regular updates with new features, performance improvements, and bug fixes. Once you purchase the template, you’ll get lifetime free updates, ensuring your website remains up-to-date with the latest trends.",
     },
     {
       id: "collapseTwo4",
       headerId: "headingTwo4",
       title: "15 Things to Know About E-commerce",
       content:
-        "E-commerce is evolving rapidly. From choosing the right platform to optimizing for SEO and mobile, understanding trends like AI integration, user experience, and secure payments is essential to running a successful online business. Unimart is built with these essentials in mind.",
+        "E-commerce is evolving rapidly. From choosing the right platform to optimizing for SEO and mobile, understanding trends like AI integration, user experience, and secure payments is essential to running a successful online business. Beauty Station is built with these essentials in mind.",
     },
   ];
 

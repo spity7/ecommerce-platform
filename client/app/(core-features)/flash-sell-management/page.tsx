@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import FlashSellManagementBanner from "@/components/core-features/flash-sell-management/FlashSellManagementBanner";
 export const metadata: Metadata = {
   title:
-    "Flash Sell Management | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Flash Sell Management | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function FlashSellManagementPage() {
   return (
@@ -25,7 +25,7 @@ export default function FlashSellManagementPage() {
             ),
             description: (
               <>
-                Compare your selected products in a table with Unimart Compare
+                Compare your selected products in a table with Beauty Station Compare
                 Table Builder. Choose from a variety of pre-built templates.
               </>
             ),

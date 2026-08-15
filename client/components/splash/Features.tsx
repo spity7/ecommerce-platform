@@ -70,7 +70,7 @@ export default function Features() {
                 <div className="desktop">
                   <video
                     className="rbt-splash-video"
-                    src="/assets/videos/splash/unimart-treaser-video-01.webm"
+                    src="/assets/videos/splash/beauty-station-treaser-video-01.webm"
                     poster={splashIntroVideoPoster.src}
                     autoPlay
                     muted

@@ -6,8 +6,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title:
-    "Checkout Delivery Step One || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Checkout Delivery Step One | Beauty Station | Cosmetics & Skincare",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 
 export default function page() {

@@ -40,7 +40,7 @@ export default function InstaModal() {
                     <div className="rbt-single-insta-img">
                       <Image
                         className="image-auto"
-                        alt="Unimart instagram Single Post Image"
+                        alt="Beauty Station instagram Single Post Image"
                         src="/assets/images/insta-posts/insta-post-single-01.webp"
                         width={1408}
                         height={1400}

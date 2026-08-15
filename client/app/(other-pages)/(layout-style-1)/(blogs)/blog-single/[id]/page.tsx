@@ -6,8 +6,8 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blog Single || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Single blog article page with related Unimart posts.",
+  title: "Blog Single | Beauty Station | Cosmetics & Skincare",
+  description: "Single blog article page with related Beauty Station posts.",
 };
 
 type BlogSinglePageProps = {

@@ -153,7 +153,7 @@ export default function Footer9({
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Unimart
+                      Beauty Station
                     </a>
                     Nextjs Template.
                   </p>

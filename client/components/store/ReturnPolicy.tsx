@@ -6,9 +6,9 @@ export default function ReturnPolicy() {
           <div className="col-lg-8">
             <div className="rbt-article-content-wrapper">
               <div className="content">
-                <h2>Welcome to Unimart Return Policy</h2>
+                <h2>Welcome to Beauty Station Return Policy</h2>
                 <p>
-                  At Unimart, we want you to be completely satisfied with your
+                  At Beauty Station, we want you to be completely satisfied with your
                   purchase. If you&apos;re not happy with your order, you can
                   return it within 30 days for a full refund or exchange.
                 </p>
@@ -31,7 +31,7 @@ export default function ReturnPolicy() {
                 <ol>
                   <li>
                     Contact our customer service at
-                    <a href="mailto:support@unimart.com">support@unimart.com</a>
+                    <a href="mailto:hello@beautystation.com">hello@beautystation.com</a>
                     to initiate the return.
                   </li>
                   <li>
@@ -83,8 +83,8 @@ export default function ReturnPolicy() {
                 </p>
                 <p>
                   Email:
-                  <a href="mailto:support@unimart.com" className="ml--4">
-                    support@unimart.com
+                  <a href="mailto:hello@beautystation.com" className="ml--4">
+                    hello@beautystation.com
                   </a>
                 </p>
                 <p>

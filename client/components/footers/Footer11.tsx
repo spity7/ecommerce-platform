@@ -23,47 +23,47 @@ export default function Footer11({
                     <div className="rbt-category-list">
                       <a href="#">
                         <span className="rbt-category-icon rbt-offer-icon-circle" />
-                        UNIMART - 10% OFF ON YOUR FIRST ORDER
+                        BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                       </a>
                       <a href="#">
                         <span className="rbt-category-icon rbt-offer-icon-circle" />
-                        UNIMART - 10% OFF ON YOUR FIRST ORDER
+                        BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                       </a>
                       <a href="#">
                         <span className="rbt-category-icon rbt-offer-icon-circle" />
-                        UNIMART - 10% OFF ON YOUR FIRST ORDER
+                        BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                       </a>
                       <a href="#">
                         <span className="rbt-category-icon rbt-offer-icon-circle" />
-                        UNIMART - 10% OFF ON YOUR FIRST ORDER
+                        BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                       </a>
                       <a href="#">
                         <span className="rbt-category-icon rbt-offer-icon-circle" />
-                        UNIMART - 10% OFF ON YOUR FIRST ORDER
+                        BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                       </a>
                       <a href="#">
                         <span className="rbt-category-icon rbt-offer-icon-circle" />
-                        UNIMART - 10% OFF ON YOUR FIRST ORDER
+                        BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                       </a>
                       <a href="#">
                         <span className="rbt-category-icon rbt-offer-icon-circle" />
-                        UNIMART - 10% OFF ON YOUR FIRST ORDER
+                        BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                       </a>
                       <a href="#">
                         <span className="rbt-category-icon rbt-offer-icon-circle" />
-                        UNIMART - 10% OFF ON YOUR FIRST ORDER
+                        BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                       </a>
                       <a href="#">
                         <span className="rbt-category-icon rbt-offer-icon-circle" />
-                        UNIMART - 10% OFF ON YOUR FIRST ORDER
+                        BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                       </a>
                       <a href="#">
                         <span className="rbt-category-icon rbt-offer-icon-circle" />
-                        UNIMART - 10% OFF ON YOUR FIRST ORDER
+                        BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                       </a>
                       <a href="#">
                         <span className="rbt-category-icon rbt-offer-icon-circle" />
-                        UNIMART - 10% OFF ON YOUR FIRST ORDER
+                        BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                       </a>
                     </div>
                   </div>
@@ -83,7 +83,7 @@ export default function Footer11({
                   <div className="logo">
                     <Link href={`/`}>
                       <Image
-                        alt="Unimart Logo"
+                        alt="Beauty Station Logo"
                         src="/assets/images/logo/logo.webp"
                         width={1487}
                         height={334}
@@ -91,7 +91,7 @@ export default function Footer11({
                     </Link>
                   </div>
                   <p className="description mt--24 pr--52 pr_sm--0">
-                    Unimart is your one‑stop marketplace for curated
+                    Beauty Station is your one‑stop marketplace for curated
                     electronics, everyday essentials, and lifestyle
                     products—delivered fast with trusted service and great
                     prices.
@@ -181,7 +181,7 @@ export default function Footer11({
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Unimart
+                    Beauty Station
                   </a>
                   Nextjs Template.
                 </p>

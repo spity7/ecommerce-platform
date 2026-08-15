@@ -17,6 +17,10 @@ type ProductListTableProps = {
   products: Product[];
 };
 
+function productKey(product: Product): string {
+  return product.id ?? product.sku;
+}
+
 const statusClass: Record<ProductStatus, string> = {
   draft: "bg-surface-muted text-ink-600",
   "low stock": "bg-warning-50 text-warning-600",
@@ -75,7 +79,7 @@ export function ProductListTable({ products }: ProductListTableProps) {
 
   const allVisibleSelected =
     filteredProducts.length > 0 &&
-    filteredProducts.every((product) => selected.has(product.sku));
+    filteredProducts.every((product) => selected.has(productKey(product)));
 
   function toggleSort(key: SortKey) {
     setSort((current) => ({
@@ -85,13 +89,14 @@ export function ProductListTable({ products }: ProductListTableProps) {
     }));
   }
 
-  function toggleSelected(sku: string, checked: boolean) {
+  function toggleSelected(product: Product, checked: boolean) {
+    const key = productKey(product);
     setSelected((current) => {
       const next = new Set(current);
       if (checked) {
-        next.add(sku);
+        next.add(key);
       } else {
-        next.delete(sku);
+        next.delete(key);
       }
       return next;
     });
@@ -101,10 +106,11 @@ export function ProductListTable({ products }: ProductListTableProps) {
     setSelected((current) => {
       const next = new Set(current);
       for (const product of filteredProducts) {
+        const key = productKey(product);
         if (checked) {
-          next.add(product.sku);
+          next.add(key);
         } else {
-          next.delete(product.sku);
+          next.delete(key);
         }
       }
       return next;
@@ -113,7 +119,7 @@ export function ProductListTable({ products }: ProductListTableProps) {
 
   function confirmDelete() {
     setRows((current) =>
-      current.filter((product) => !selected.has(product.sku))
+      current.filter((product) => !selected.has(productKey(product)))
     );
     setSelected(new Set());
     setConfirmOpen(false);
@@ -261,15 +267,15 @@ export function ProductListTable({ products }: ProductListTableProps) {
             {filteredProducts.map((product) => (
               <tr
                 className="border-b border-surface-line hover:bg-surface-body/70"
-                key={product.sku}
+                key={productKey(product)}
               >
                 <td className="py-4 pr-3">
                   <input
                     aria-label={`Select ${product.name}`}
-                    checked={selected.has(product.sku)}
+                    checked={selected.has(productKey(product))}
                     className="h-4 w-4 rounded border-surface-line text-brand-600 focus:ring-brand-600"
                     onChange={(event) =>
-                      toggleSelected(product.sku, event.target.checked)
+                      toggleSelected(product, event.target.checked)
                     }
                     type="checkbox"
                   />
@@ -354,7 +360,7 @@ export function ProductListTable({ products }: ProductListTableProps) {
                       aria-label="Delete product"
                       className="icon-button hover:bg-danger-50 hover:text-danger-500"
                       onClick={() => {
-                        setSelected(new Set([product.sku]));
+                        setSelected(new Set([productKey(product)]));
                         setConfirmOpen(true);
                       }}
                       type="button"

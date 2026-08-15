@@ -1,4 +1,4 @@
-# Backend API Feature Breakdown — Unimart
+# Backend API Feature Breakdown — Beauty Station
 
 > **Stack Context:** Next.js App Router, TypeScript. All current data is static mock data in `/data`. No backend exists yet.
 

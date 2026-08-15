@@ -10,9 +10,9 @@ function AccordionBlock04() {
     {
       id: "collapseFour1",
       headerId: "headingFour1",
-      title: "What is Unimart ? How does it work?",
+      title: "What is Beauty Station ? How does it work?",
       content:
-        "You can run Unimart easily. Any School, E-commerce Website, College can be use this Unimart e-Commerce template for their e-commerce purpose.",
+        "You can run Beauty Station easily. Any School, E-commerce Website, College can be use this Beauty Station e-Commerce template for their e-commerce purpose.",
       isOpen: true,
     },
     {
@@ -27,14 +27,14 @@ function AccordionBlock04() {
       headerId: "headingFour3",
       title: "Can I get update regularly?",
       content:
-        "Yes, We will get update the Unimart. And you can get it any time. Next time we will comes with more feature. You can be get update for unlimited times. Our dedicated team works for update.",
+        "Yes, We will get update the Beauty Station. And you can get it any time. Next time we will comes with more feature. You can be get update for unlimited times. Our dedicated team works for update.",
     },
     {
       id: "collapseFour4",
       headerId: "headingFour4",
-      title: "How can I run Unimart html template?",
+      title: "How can I run Beauty Station html template?",
       content:
-        "You can run Unimart easily. First You'll need to have node and npm on your machine. So Please open your command prompt then check your node.",
+        "You can run Beauty Station easily. First You'll need to have node and npm on your machine. So Please open your command prompt then check your node.",
     },
   ];
 
@@ -54,10 +54,10 @@ function AccordionBlock04() {
                   <span className="subtitle bg-pink-opacity">FAQ</span>
                   <h2 className="title">
                     Have a Question with <br />
-                    Unimart E-commerce Website?
+                    Beauty Station E-commerce Website?
                   </h2>
                   <p className="description has-medium-font-size mt--20 mb--40">
-                    <strong>It&apos;s an e-commerce platform.</strong> Unimart
+                    <strong>It&apos;s an e-commerce platform.</strong> Beauty Station
                     helps you launch modern online stores quickly with reusable
                     sections, responsive layouts, and prebuilt shop flows for
                     categories, product details, cart, and checkout.

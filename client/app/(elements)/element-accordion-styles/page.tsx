@@ -6,8 +6,8 @@ import AccordionBlock04 from "@/components/elements/element-accordion-styles/Acc
 import ElementsHero from "@/components/elements/ElementsHero";
 export const metadata: Metadata = {
   title:
-    "Element Accordion Styles | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Element Accordion Styles | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function ElementAccordionStylesPage() {
   return (

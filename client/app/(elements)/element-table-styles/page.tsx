@@ -3,8 +3,8 @@ import CompareTableOne from "@/components/elements/element-table-styles/CompareT
 import ElementsHero from "@/components/elements/ElementsHero";
 export const metadata: Metadata = {
   title:
-    "Element Table Styles | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Element Table Styles | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function ElementTableStylesPage() {
   return (

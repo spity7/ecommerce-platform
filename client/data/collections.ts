@@ -428,7 +428,7 @@ export const bannerData: Collection[] = [
   {
     subtitle: "Exclusive Offer Going",
     title:
-      "Discover the unimart Fragrance\nfloral & joyful accord of rose & cherry.",
+      "Discover the beauty-station Fragrance\nfloral & joyful accord of rose & cherry.",
     imgSrc: "/assets/images/product-banner/product-banner-purfume-lg-a1.webp",
   },
   {
@@ -463,7 +463,7 @@ export const collections4: Collection[] = [
 export const collections5: Collection[] = [
   {
     subtitle: "Luxury Leather Bags",
-    title: "The Unimart Monogram",
+    title: "The Beauty Station Monogram",
     imgSrc: "/assets/images/product-banner/tech-access-a-01.webp",
   },
   {
@@ -473,7 +473,7 @@ export const collections5: Collection[] = [
   },
   {
     subtitle: "Handcrafted Goods",
-    title: "Craft of Unimart Silk",
+    title: "Craft of Beauty Station Silk",
     imgSrc: "/assets/images/product-banner/tech-access-a-03.webp",
   },
 ];
@@ -634,7 +634,7 @@ export const cakeCards: Collection[] = [
 export const luxuryBagBanners: Collection[] = [
   {
     subtitle: "Luxury Leather Bags",
-    title: "The Unimart Monogram",
+    title: "The Beauty Station Monogram",
     imgSrc: "/assets/images/product-banner/ladies-bag-a-01.webp",
   },
   {
@@ -644,7 +644,7 @@ export const luxuryBagBanners: Collection[] = [
   },
   {
     subtitle: "Handcrafted Goods",
-    title: "Craft of Unimart Silk",
+    title: "Craft of Beauty Station Silk",
     imgSrc: "/assets/images/product-banner/ladies-bag-a-03.webp",
   },
   {
@@ -692,7 +692,7 @@ export const luggageItems: Collection[] = [
 export const fragranceBanners: Collection[] = [
   {
     imgSrc: "/assets/images/product-banner/straller-a-01.webp",
-    title: "Stroll in comfort with\nUnimart's premium stroller collection.",
+    title: "Stroll in comfort with\nBeauty Station's premium stroller collection.",
   },
   {
     imgSrc: "/assets/images/product-banner/straller-a-02.webp",
@@ -720,7 +720,7 @@ export const bannerItems: Collection[] = [
 export const fashionBanners: Collection[] = [
   {
     subtitle: "Luxury Leather Bags",
-    title: "The Unimart Monogram",
+    title: "The Beauty Station Monogram",
     imgSrc: "/assets/images/product-img/fashion/product-img-hat-md-01.webp",
   },
   {
@@ -730,7 +730,7 @@ export const fashionBanners: Collection[] = [
   },
   {
     subtitle: "Handcrafted Goods",
-    title: "Craft of Unimart Silk",
+    title: "Craft of Beauty Station Silk",
     imgSrc: "/assets/images/product-img/fashion/product-img-hat-md-03.webp",
   },
   {

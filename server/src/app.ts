@@ -18,7 +18,8 @@ export function createApp() {
 
   app.get("/", (_req, res) => {
     res.json({
-      message: "Beauty Station API",
+      message: `${env.site.name} API`,
+      siteId: env.site.id,
       health: "/api/health",
     });
   });

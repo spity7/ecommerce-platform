@@ -120,7 +120,7 @@ export default function NavElementsMenu({
                           New Aurora Watch
                         </h5>
                         <p className="b3 desc rbt-text-color-gray-200">
-                          Send your idea, appear Unimart.
+                          Send your idea, appear Beauty Station.
                         </p>
                       </div>
                       <Link

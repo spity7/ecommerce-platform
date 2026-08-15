@@ -30,22 +30,22 @@ function ProductDisplayComponents() {
                       <div className="content-inner">
                         <span className="overlay-text">01</span>
                         <h2 className="rbt-title rbt-text-bold">
-                          Showcase Your Product in a 3D View with Unimart 3D
+                          Showcase Your Product in a 3D View with Beauty Station 3D
                           Viewer.
                         </h2>
                         <p className="rbt-description">
                           Show your product in an interactive 3D view using
-                          Unimart 3D Viewer.
+                          Beauty Station 3D Viewer.
                         </p>
                         <div className="mt--32">
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn rbt-btn-md rbt-btn-secondary"
                           >
                             Check example
                           </a>
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn-link rbt-text-color-gray-500 ml--8"
                           >
                             <span className="btn-icon">
@@ -146,13 +146,13 @@ function ProductDisplayComponents() {
                         </p>
                         <div className="mt--32">
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn rbt-btn-md rbt-btn-secondary"
                           >
                             Check example
                           </a>
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn-link rbt-text-color-gray-500 ml--8"
                           >
                             <span className="btn-icon">

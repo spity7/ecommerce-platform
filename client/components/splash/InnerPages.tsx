@@ -3,10 +3,11 @@ import { CurvedArrowIcon } from "../svg-icons";
 import Link from "next/link";
 import Image from "next/image";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import NavEffectTabs from "@/components/common/ui/NavEffectTabs";
 import OdometerComponent from "../common/ui/OdometerComponent";
 import { useIsotopeMasonry } from "@/hooks/useIsotopeMasonry";
+import { useLatestRef } from "@/hooks/useLatestRef";
 
 import { FILTERS, INNER_PAGES, PAGE_SIZE } from "@/data/innerPages";
 
@@ -14,8 +15,7 @@ export default function InnerPages() {
   const [activeFilter, setActiveFilter] = useState<string>("*");
   const [visibleCount, setVisibleCount] = useState<number>(PAGE_SIZE);
   const gridRef = useRef<HTMLDivElement | null>(null);
-  const activeFilterRef = useRef(activeFilter);
-  activeFilterRef.current = activeFilter;
+  const activeFilterRef = useLatestRef(activeFilter);
   const isotopeRef = useIsotopeMasonry(
     gridRef,
     {
@@ -27,16 +27,13 @@ export default function InnerPages() {
 
   const handleFilterClick = (filter: string) => {
     setActiveFilter(filter);
+    setVisibleCount(PAGE_SIZE);
     isotopeRef.current?.arrange({ filter });
   };
 
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + PAGE_SIZE);
   };
-
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [activeFilter]);
 
   const filteredItems =
     activeFilter === "*"

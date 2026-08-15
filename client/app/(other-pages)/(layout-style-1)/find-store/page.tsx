@@ -4,8 +4,8 @@ import FindLocations from "@/components/other-pages/find-location/FindLocations"
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Find Store || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Locate nearby Unimart stores and view them on the map.",
+  title: "Find Store | Beauty Station | Cosmetics & Skincare",
+  description: "Locate nearby Beauty Station stores and view them on the map.",
 };
 
 export default function page() {

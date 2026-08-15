@@ -127,7 +127,7 @@ export default function Footer3() {
             <div className="row">
               <div className="col-12">
                 <div className="rbt-watermark-text rbt-watermark-color-var-1">
-                  <span>Follow@Unimart</span>
+                  <span>Follow@Beauty Station</span>
                 </div>
               </div>
             </div>
@@ -220,7 +220,7 @@ export default function Footer3() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Unimart
+                    Beauty Station
                   </a>
                   Nextjs Template.
                 </p>

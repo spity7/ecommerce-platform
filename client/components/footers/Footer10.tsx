@@ -15,7 +15,7 @@ export default function Footer10() {
           <div className="row">
             <div className="col-12">
               <div className="rbt-watermark-text rbt-watermark-color-var-1 text-center">
-                <span>Follow Us@Unimart</span>
+                <span>Follow Us@Beauty Station</span>
               </div>
             </div>
           </div>
@@ -30,7 +30,7 @@ export default function Footer10() {
                 <div className="logo">
                   <Link href={`/`}>
                     <Image
-                      alt="Unimart Logo"
+                      alt="Beauty Station Logo"
                       src="/assets/images/logo/logo.webp"
                       width={1487}
                       height={334}
@@ -38,7 +38,7 @@ export default function Footer10() {
                   </Link>
                 </div>
                 <p className="description pr--52 pr_sm--0">
-                  Unimart is a modern and user-friendly e-commerce platform
+                  Beauty Station is a modern and user-friendly e-commerce platform
                   designed to make online shopping simple, secure, and
                   convenient.
                 </p>
@@ -193,7 +193,7 @@ export default function Footer10() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Unimart
+                  Beauty Station
                 </a>
                 Nextjs Template.
               </p>

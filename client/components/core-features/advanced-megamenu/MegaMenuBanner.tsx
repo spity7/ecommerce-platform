@@ -20,7 +20,7 @@ function MegaMenuBanner() {
                     </span>
                   </h1>
                   <p className="rbt-description">
-                    Unimart Megamenu is a powerful tool for creating a better
+                    Beauty Station Megamenu is a powerful tool for creating a better
                     user experience and increasing your sales. It is a highly
                     customizable and easy-to-use tool that allows you to create
                     a beautiful and functional menu for your website.

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncedState } from "@/hooks/useSyncedState";
 import Image from "next/image";
 import Link from "next/link";
 import Tooltip from "@/components/common/ui/Tooltip";
@@ -16,10 +16,10 @@ export default function ProductCard19({
   animationOrder?: number;
 }) {
   const detailsPageLink = `${detailsPageUrl}/${product.id}`;
-  const [selectedVariant, setSelectedVariant] = useState(product.imgSrc);
-  useEffect(() => {
-    setSelectedVariant(product.imgSrc);
-  }, [product]);
+  const [selectedVariant, setSelectedVariant] = useSyncedState(
+    product.imgSrc,
+    product.id
+  );
   const renderRatingStars = (rating: number) => {
     const stars = [];
     for (let i = 0; i < 5; i++) {

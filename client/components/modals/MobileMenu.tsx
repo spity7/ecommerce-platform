@@ -168,7 +168,7 @@ export default function MobileMenu() {
               <div className="logo">
                 <Link href={`/`}>
                   <Image
-                    alt="Unimart Logo Images"
+                    alt="Beauty Station Logo Images"
                     src="/assets/images/logo/logo.webp"
                     width={1487}
                     height={334}
@@ -185,7 +185,7 @@ export default function MobileMenu() {
               </div>
             </div>
             <p className="description">
-              Unimart is a E-commerce Template. Worldwide electronics store
+              Beauty Station is a E-commerce Template. Worldwide electronics store
               since 1978.
             </p>
             <div className="rbt-inner-search-field style-one rbt-search-field-rounded rbt-search-field-sm-width">
@@ -371,7 +371,7 @@ export default function MobileMenu() {
                                       </h5>
                                       <p className="b3 desc">
                                         Send us your idea, it may appear on
-                                        Unimart.
+                                        Beauty Station.
                                       </p>
                                     </div>
                                     <div className="pricing-action d-flex flex-column align-items-center rbt-gap--8">
@@ -615,7 +615,7 @@ export default function MobileMenu() {
                                           New Aurora Watch
                                         </h5>
                                         <p className="b3 desc rbt-text-color-gray-200">
-                                          Send your idea, appear Unimart.
+                                          Send your idea, appear Beauty Station.
                                         </p>
                                       </div>
                                       <a

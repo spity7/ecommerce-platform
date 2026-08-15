@@ -11,6 +11,7 @@ const slimClientPolyfill = path.join(
 );
 
 const nextConfig: NextConfig = {
+  transpilePackages: ["@platform/shared", "@platform/site-config"],
   turbopack: {
     resolveAlias: {
       "next/dist/build/polyfills/polyfill-module": slimClientPolyfill,

@@ -4,7 +4,6 @@ import type {
   FeatureCard,
   FilterVariation,
   PluginItem,
-  PluginTableRow,
   PopupVariation,
   SplashDemoData,
   SplashFilter,
@@ -1655,12 +1654,12 @@ export const faqItems: FaqItem[] = [
     id: "collapseOne",
     headingId: "headingOne",
     defaultOpen: true,
-    question: "What is Unimart? How does it work?",
+    question: "What is Beauty Station? How does it work?",
     answer: [
       {
         type: "text",
         value:
-          "Unimart is a professionally designed eCommerce HTML template that provides a modern, flexible, and easy-to-customize foundation for your online store. Whether you're creating an online shop for fashion, electronics, home & lifestyle, or any other category, Unimart offers pre-built pages, components, and layouts that streamline development. Simply integrate it into your project, customize the elements to match your brand, and launch your eCommerce website effortlessly.",
+          "Beauty Station is a professionally designed eCommerce HTML template that provides a modern, flexible, and easy-to-customize foundation for your online store. Whether you're creating an online shop for fashion, electronics, home & lifestyle, or any other category, Beauty Station offers pre-built pages, components, and layouts that streamline development. Simply integrate it into your project, customize the elements to match your brand, and launch your eCommerce website effortlessly.",
       },
     ],
   },
@@ -1694,7 +1693,7 @@ export const faqItems: FaqItem[] = [
       {
         type: "text",
         value:
-          "Yes! Unimart receives regular updates to ensure compatibility with the latest technologies and industry trends. Once you purchase the template, you will get free lifetime updates, so your project always stays up to date with new features and improvements.",
+          "Yes! Beauty Station receives regular updates to ensure compatibility with the latest technologies and industry trends. Once you purchase the template, you will get free lifetime updates, so your project always stays up to date with new features and improvements.",
       },
     ],
   },
@@ -1706,7 +1705,7 @@ export const faqItems: FaqItem[] = [
       {
         type: "text",
         value:
-          "Absolutely! Unimart is designed with flexibility in mind. You can easily customize any section, page, or individual element to fit your brand's identity. With well-structured HTML, SASS, and jQuery integration, modifying styles, layouts, and functionalities is quick and hassle-free.",
+          "Absolutely! Beauty Station is designed with flexibility in mind. You can easily customize any section, page, or individual element to fit your brand's identity. With well-structured HTML, SASS, and jQuery integration, modifying styles, layouts, and functionalities is quick and hassle-free.",
       },
     ],
   },
@@ -1718,7 +1717,7 @@ export const faqItems: FaqItem[] = [
       {
         type: "text",
         value:
-          "Yes! Unimart provides all the necessary pages and components to build a fully functional eCommerce website. From homepage designs to product pages, cart, checkout, and user dashboards, everything is included. You can use it as a foundation for your project, integrate it with your preferred backend, and launch a professional online store with ease.",
+          "Yes! Beauty Station provides all the necessary pages and components to build a fully functional eCommerce website. From homepage designs to product pages, cart, checkout, and user dashboards, everything is included. You can use it as a foundation for your project, integrate it with your preferred backend, and launch a professional online store with ease.",
       },
     ],
   },
@@ -1734,7 +1733,7 @@ export const faqItems: FaqItem[] = [
       {
         type: "link",
         label: "click here",
-        href: "https://nextjs.getunimart.com/docs",
+        href: "/",
         external: true,
       },
       {
@@ -2363,7 +2362,7 @@ export const filterVariations: FilterVariation[] = [
       "/assets/images/splash/builder-element/filter-options/filter-var-1.webp",
     imgWidth: 1013,
     imgHeight: 714,
-    href: "https://nextjs.getunimart.com/docs",
+    href: "/",
   },
   {
     id: "02",
@@ -2374,7 +2373,7 @@ export const filterVariations: FilterVariation[] = [
       "/assets/images/splash/builder-element/filter-options/filter-var-2.webp",
     imgWidth: 1023,
     imgHeight: 717,
-    href: "https://nextjs.getunimart.com/docs",
+    href: "/",
     contentRight: true,
   },
   {
@@ -2386,7 +2385,7 @@ export const filterVariations: FilterVariation[] = [
       "/assets/images/splash/builder-element/filter-options/filter-var-3.webp",
     imgWidth: 1355,
     imgHeight: 1058,
-    href: "https://nextjs.getunimart.com/docs",
+    href: "/",
   },
   {
     id: "04",
@@ -2463,7 +2462,7 @@ export const filterVariations: FilterVariation[] = [
       "/assets/images/splash/builder-element/filter-options/filter-var-4.png",
     imgWidth: 1257,
     imgHeight: 1013,
-    href: "https://nextjs.getunimart.com/docs",
+    href: "/",
     contentRight: true,
   },
   {
@@ -2495,7 +2494,7 @@ export const filterVariations: FilterVariation[] = [
       "/assets/images/splash/builder-element/filter-options/filter-var-13.png",
     imgWidth: 1199,
     imgHeight: 925,
-    href: "https://nextjs.getunimart.com/docs",
+    href: "/",
     contentRight: true,
   },
 ];
@@ -2525,7 +2524,7 @@ export const popupVariations: PopupVariation[] = [
     imgSrc: "/assets/images/splash/builder-element/popup/popup-3.png",
     imgWidth: 1150,
     imgHeight: 1021,
-    href: "https://nextjs.getunimart.com/docs",
+    href: "/",
   },
   {
     id: "04",
@@ -2555,7 +2554,7 @@ export const popupVariations: PopupVariation[] = [
     imgSrc: "/assets/images/splash/builder-element/popup/popup-6.png",
     imgWidth: 1893,
     imgHeight: 1247,
-    href: "https://nextjs.getunimart.com/docs",
+    href: "/",
   },
   {
     id: "07",
@@ -2565,7 +2564,7 @@ export const popupVariations: PopupVariation[] = [
     imgSrc: "/assets/images/splash/builder-element/popup/popup-13.png",
     imgWidth: 1303,
     imgHeight: 849,
-    href: "https://nextjs.getunimart.com/docs",
+    href: "/",
     contentRight: true,
   },
   {
@@ -2596,7 +2595,7 @@ export const popupVariations: PopupVariation[] = [
     imgSrc: "/assets/images/splash/builder-element/popup/popup-9.png",
     imgWidth: 828,
     imgHeight: 563,
-    href: "https://nextjs.getunimart.com/docs",
+    href: "/",
   },
   {
     id: "11",
@@ -2606,7 +2605,7 @@ export const popupVariations: PopupVariation[] = [
     imgSrc: "/assets/images/splash/builder-element/popup/popup-10.png",
     imgWidth: 1220,
     imgHeight: 726,
-    href: "https://nextjs.getunimart.com/docs",
+    href: "/",
     contentRight: true,
   },
   {

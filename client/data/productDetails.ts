@@ -80,7 +80,7 @@ export const PRODUCT_FEATURES: ProductFeature[] = [
 
 export const PRODUCT_SPECIFICATIONS: ProductSpecification[] = [
   { id: "spec-1", label: "Model Number", value: "HN-508801" },
-  { id: "spec-2", label: "Brand", value: "Unimart" },
+  { id: "spec-2", label: "Brand", value: "Beauty Station" },
   { id: "spec-3", label: "Color", value: "Black, White, Blue" },
   { id: "spec-4", label: "Weight", value: "250g" },
   { id: "spec-5", label: "Battery Life", value: "Up to 40 hours" },

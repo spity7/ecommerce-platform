@@ -46,10 +46,15 @@ const toNumber = (value: unknown, fallback = 0) => {
   return Number.isNaN(parsed) ? fallback : parsed;
 };
 
+type ElementCache = {
+  originalStyle: string;
+  elementData: Map<string, number>;
+};
+
 export function useParallax() {
   const containerRef = useRef<HTMLDivElement>(null);
   const requestAnimationFrameId = useRef<number | null>(null);
-  const elementDataCache = useRef<Map<Element, any>>(new Map());
+  const elementDataCache = useRef<Map<Element, ElementCache>>(new Map());
 
   useEffect(() => {
     const container = containerRef.current;
@@ -75,7 +80,7 @@ export function useParallax() {
         }
 
         const { originalStyle, elementData } = cache;
-        let properties: Partial<Record<(typeof PROPERTIES)[number], number>> =
+        const properties: Partial<Record<(typeof PROPERTIES)[number], number>> =
           {};
         let applyProperties = false;
 
@@ -87,7 +92,7 @@ export function useParallax() {
         if (parallaxAttr) {
           try {
             dataAttributes.push(JSON.parse(parallaxAttr));
-          } catch (e) {
+          } catch {
             console.warn("Failed to parse data-parallax:", parallaxAttr);
           }
         }
@@ -98,7 +103,7 @@ export function useParallax() {
           if (!attr) break;
           try {
             dataAttributes.push(JSON.parse(attr));
-          } catch (e) {
+          } catch {
             console.warn(`Failed to parse data-parallax${i}:`, attr);
           }
         }
@@ -145,7 +150,7 @@ export function useParallax() {
           PROPERTIES.forEach((prop) => {
             const toRaw = data[prop as keyof ParallaxConfig];
             if (toRaw === undefined) return;
-            let to = toNumber(toRaw);
+            const to = toNumber(toRaw);
 
             let defaultProp = 0;
             if (
@@ -157,7 +162,7 @@ export function useParallax() {
               defaultProp = 1;
             }
 
-            let prev = elementData.get(`_${prop}`) ?? defaultProp;
+            const prev = elementData.get(`_${prop}`) ?? defaultProp;
             const next = (to - defaultProp) * progress + defaultProp;
             let val = prev + (next - prev) / smoothness;
 

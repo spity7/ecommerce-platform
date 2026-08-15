@@ -14,8 +14,8 @@ import Products2 from "@/components/homes/home-glass/Products2";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Home Glass || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+  title: "Home Glass | Beauty Station | Cosmetics & Skincare",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

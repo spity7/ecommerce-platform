@@ -45,9 +45,12 @@ export function useIsotopeMasonry(
   const imagesLoadedHandlerRef = useRef<(() => void) | null>(null);
   const imagesLoadedInstanceRef = useRef<ImagesLoadedInstance | null>(null);
   const onReadyRef = useRef(onReady);
-  onReadyRef.current = onReady;
   const onRelayoutRef = useRef(onRelayout);
-  onRelayoutRef.current = onRelayout;
+
+  useEffect(() => {
+    onReadyRef.current = onReady;
+    onRelayoutRef.current = onRelayout;
+  });
 
   useEffect(() => {
     let isMounted = true;

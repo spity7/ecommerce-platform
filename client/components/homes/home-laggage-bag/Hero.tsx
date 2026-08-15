@@ -17,7 +17,7 @@ export default function Hero() {
                       </h6>
                       <h1 className="rbt-title mb-0 rbt-text-color-white rbt-text-regular rbt-text-capitalize">
                         <span className="rbt-bold--text d-block">
-                          Discover the Unimart Luggage Edit
+                          Discover the Beauty Station Luggage Edit
                         </span>
                         durable shells and travel-ready comfort.
                       </h1>

@@ -4,8 +4,8 @@ import Breadcrumb from "@/components/common/other-components/Breadcrumb";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blog Sidebar || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Blog layout with sidebar navigation and Unimart posts.",
+  title: "Blog Sidebar | Beauty Station | Cosmetics & Skincare",
+  description: "Blog layout with sidebar navigation and Beauty Station posts.",
 };
 
 export default function page() {

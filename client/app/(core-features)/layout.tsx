@@ -21,7 +21,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
           <div className="row align-items-center">
             <div className="col-12">
               <p className="text-center h6 rbt-text-color-gray-400">
-                Unimart by{" "}
+                Beauty Station by{" "}
                 <a
                   className="text-decoration-underline rbt-text-color-heading"
                   href="https://rainbowthemes.net/"

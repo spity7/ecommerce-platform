@@ -1,5 +1,12 @@
+import { getAdminSiteConfig } from "@/lib/site";
+
+const site = getAdminSiteConfig();
+
 export const siteConfig = {
-  name: "Unimart Admin",
-  description: "Unimart admin dashboard for ecommerce operations.",
-  url: "http://localhost:3001",
+  name: `${site.name} Admin`,
+  description: `${site.name} admin dashboard for ecommerce operations.`,
+  url: site.adminUrl,
+  siteId: site.id,
+  storefrontUrl: site.url,
+  apiUrl: site.apiUrl,
 } as const;

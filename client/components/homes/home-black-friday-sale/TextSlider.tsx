@@ -10,47 +10,47 @@ export default function TextSlider() {
                 <div className="rbt-category-list">
                   <a href="#" className="rbt-text-color-white">
                     <span className="rbt-category-icon rbt-offer-icon-circle rbt-border-color-yellow" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#" className="rbt-text-color-white">
                     <span className="rbt-category-icon rbt-offer-icon-circle rbt-border-color-yellow" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#" className="rbt-text-color-white">
                     <span className="rbt-category-icon rbt-offer-icon-circle rbt-border-color-yellow" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#" className="rbt-text-color-white">
                     <span className="rbt-category-icon rbt-offer-icon-circle rbt-border-color-yellow" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#" className="rbt-text-color-white">
                     <span className="rbt-category-icon rbt-offer-icon-circle rbt-border-color-yellow" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#" className="rbt-text-color-white">
                     <span className="rbt-category-icon rbt-offer-icon-circle rbt-border-color-yellow" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#" className="rbt-text-color-white">
                     <span className="rbt-category-icon rbt-offer-icon-circle rbt-border-color-yellow" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#" className="rbt-text-color-white">
                     <span className="rbt-category-icon rbt-offer-icon-circle rbt-border-color-yellow" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#" className="rbt-text-color-white">
                     <span className="rbt-category-icon rbt-offer-icon-circle rbt-border-color-yellow" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#" className="rbt-text-color-white">
                     <span className="rbt-category-icon rbt-offer-icon-circle rbt-border-color-yellow" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#" className="rbt-text-color-white">
                     <span className="rbt-category-icon rbt-offer-icon-circle rbt-border-color-yellow" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                 </div>
               </div>

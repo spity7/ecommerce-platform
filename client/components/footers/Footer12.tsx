@@ -112,7 +112,7 @@ export default function Footer12() {
                     rel="noopener noreferrer"
                     className="mr--4"
                   >
-                    Unimart
+                    Beauty Station
                   </a>{" "}
                   Nextjs Template.
                 </p>

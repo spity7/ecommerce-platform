@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import StockProgressbarBanner from "@/components/core-features/stock-progressbar/StockProgressbarBanner";
 export const metadata: Metadata = {
   title:
-    "Stock Progressbar | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Stock Progressbar | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function StockProgressbarPage() {
   return (

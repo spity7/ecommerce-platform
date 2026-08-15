@@ -8,8 +8,8 @@ import HeaderComponents4 from "@/components/core-features/header-builder/HeaderC
 import HeaderComponents5 from "@/components/core-features/header-builder/HeaderComponents5";
 export const metadata: Metadata = {
   title:
-    "Header Builder | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Header Builder | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function HeaderBuilderPage() {
   return (

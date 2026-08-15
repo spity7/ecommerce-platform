@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useSyncedState } from "@/hooks/useSyncedState";
 import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types";
@@ -21,11 +22,10 @@ export default function ProductCardPlantOne({
 }) {
   const detailsPageLink = `${detailsPageUrl}/${product.id}`;
   const variants = product.variants ?? [];
-  const [selectedImage, setSelectedImage] = useState(product.imgSrc);
-
-  useEffect(() => {
-    setSelectedImage(product.imgSrc);
-  }, [product]);
+  const [selectedImage, setSelectedImage] = useSyncedState(
+    product.imgSrc,
+    product.id
+  );
 
   const badgeClass = useMemo(() => {
     const bg = product.badge?.bg;

@@ -13,12 +13,12 @@ export function AuthShell({ children }: AuthShellProps) {
     <main className="grid min-h-screen bg-surface-body lg:grid-cols-[minmax(0,0.9fr)_minmax(460px,1fr)]">
       <section className="hidden bg-gradient-to-b from-brand-600 to-admin-sidebar-dark p-10 text-white lg:flex lg:flex-col relative">
         <Link
-          aria-label="Unimart dashboard"
+          aria-label="Beauty Station dashboard"
           className="inline-flex items-center relative z-1"
           href={routes.dashboard}
         >
           <Image
-            alt="Unimart"
+            alt="Beauty Station"
             className="h-10 w-auto"
             height={40}
             priority
@@ -29,7 +29,7 @@ export function AuthShell({ children }: AuthShellProps) {
 
         <Image
           src={`${baseURL}assets/images/banner/signin-banner.webp`}
-          alt="Unimart"
+          alt="Beauty Station"
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority
@@ -40,7 +40,7 @@ export function AuthShell({ children }: AuthShellProps) {
         <Image
           className="lg:hidden object-cover"
           src={`${baseURL}assets/images/banner/signin-banner-small-devices.webp`}
-          alt="Unimart"
+          alt="Beauty Station"
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority

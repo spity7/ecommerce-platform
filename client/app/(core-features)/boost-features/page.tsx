@@ -3,8 +3,8 @@ import BoostFeaturesBanner from "@/components/core-features/boost-features/Boost
 import BoostFeaturesComponents from "@/components/core-features/boost-features/BoostFeaturesComponents";
 export const metadata: Metadata = {
   title:
-    "Boost Features | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Boost Features | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function BoostFeaturesPage() {
   return (

@@ -5,8 +5,8 @@ import Wishlist from "@/components/other-pages/shop-user/Wishlist";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "My Wishlist || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "See and manage products saved to your Unimart wishlist.",
+  title: "My Wishlist | Beauty Station | Cosmetics & Skincare",
+  description: "See and manage products saved to your Beauty Station wishlist.",
 };
 
 export default function page() {

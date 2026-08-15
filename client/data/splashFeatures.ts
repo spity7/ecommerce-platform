@@ -19,7 +19,7 @@ export const keyFeatures: KeyFeature[] = [
       { icon: "fa-regular fa-laptop", text: "100+ Ready Demos" },
       {
         icon: "fa-regular fa-code",
-        text: "Make your own website with Unimart",
+        text: "Make your own website with Beauty Station",
         marquee: true,
       },
       { icon: "fa-regular fa-sack-dollar", text: "Start Selling Instantly" },

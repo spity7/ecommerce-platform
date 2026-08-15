@@ -21,7 +21,7 @@ export default function Costing() {
               </span>
               <h2 className="rbt-title mb--24">
                 <span className="rbt-title-sm-text rbt-scroll-trigger fade_in animation-order-3">
-                  In-Built Unimart Features
+                  In-Built Beauty Station Features
                 </span>
               </h2>
             </div>

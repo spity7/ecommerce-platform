@@ -5,8 +5,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title:
-    "Compare (Empty) || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Your Unimart product compare page when no items are selected.",
+    "Compare (Empty) | Beauty Station | Cosmetics & Skincare",
+  description: "Your Beauty Station product compare page when no items are selected.",
 };
 
 export default function page() {

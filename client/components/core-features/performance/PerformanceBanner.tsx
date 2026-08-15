@@ -21,7 +21,7 @@ function PerformanceBanner() {
                   </h1>
                   <p className="rbt-description">
                     Experience lightning-fast performance across various
-                    platforms with Unimart. Optimize your workflow and enhance
+                    platforms with Beauty Station. Optimize your workflow and enhance
                     productivity effortlessly.
                   </p>
                 </div>

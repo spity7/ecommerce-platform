@@ -114,7 +114,7 @@ export default function SearchDropdownCommon() {
                       ref={registerInputRef("search-dropdown-common-link")}
                       className="rbt-copy-value-field"
                       type="text"
-                      defaultValue="https://unimart.template/wishlist"
+                      defaultValue="https://beauty-station.template/wishlist"
                       readOnly
                     />
                     <Tooltip

@@ -1,7 +1,7 @@
 "use client";
 import OfferBadge from "@/components/common/ui/OfferBadge";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useSyncedState } from "@/hooks/useSyncedState";
 import Link from "next/link";
 import Tooltip from "@/components/common/ui/Tooltip";
 import { Product } from "@/types";
@@ -21,10 +21,10 @@ export default function ProductCard1({
   cardBodyClass?: string;
   animationOrder?: number;
 }) {
-  const [selectedVariant, setSelectedVariant] = useState(product.imgSrc);
-  useEffect(() => {
-    setSelectedVariant(product.imgSrc);
-  }, [product]);
+  const [selectedVariant, setSelectedVariant] = useSyncedState(
+    product.imgSrc,
+    product.id
+  );
   const detailsPageLink = detailsPageUrl + `/${product.id}`;
   return (
     <div

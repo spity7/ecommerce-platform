@@ -4,8 +4,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title:
-    "Forgot Password || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Recover access to your Unimart account.",
+    "Forgot Password | Beauty Station | Cosmetics & Skincare",
+  description: "Recover access to your Beauty Station account.",
 };
 
 export default function page() {

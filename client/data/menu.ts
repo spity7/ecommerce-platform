@@ -897,7 +897,7 @@ export const categoryMegamenus: CategoryMegamenu[] = [
     ],
     banner: {
       title: "All For Garden",
-      desc: "Send your idea, appear Unimart.",
+      desc: "Send your idea, appear Beauty Station.",
       btnHref: "/product-single-default/132",
       btnText: "View Details",
       imgSrc: "/assets/images/splash/menu-banner/menu-prd-garden.webp",
@@ -938,7 +938,7 @@ export const categoryMegamenus: CategoryMegamenu[] = [
     ],
     banner: {
       title: "Apple 16 Pro",
-      desc: "Send your idea, appear Unimart.",
+      desc: "Send your idea, appear Beauty Station.",
       btnHref: "#",
       btnText: "View Details",
       imgSrc: "/assets/images/splash/menu-banner/menu-prd-apple.webp",
@@ -978,7 +978,7 @@ export const categoryMegamenus: CategoryMegamenu[] = [
     ],
     banner: {
       title: "Straps of Colors",
-      desc: "Send your idea, appear Unimart.",
+      desc: "Send your idea, appear Beauty Station.",
       btnHref: "/product-single-default/132",
       btnText: "View Details",
       imgSrc: "/assets/images/splash/menu-banner/menu-prd-02-lg.webp",
@@ -1018,7 +1018,7 @@ export const categorySimpleLinks: {
 
 export const supportMenuItems: MenuItem[] = [
   {
-    href: "https://nextjs.getunimart.com/docs",
+    href: "/",
     label: "Documentation",
   },
   {
@@ -1032,7 +1032,7 @@ export const supportMenuItems: MenuItem[] = [
     badgeColor: "green",
   },
   {
-    href: "https://nextjs.getunimart.com/docsdoc-changelog",
+    href: "/",
     label: "Change Log",
     useLink: true, // force use of <Link> for this one
   },

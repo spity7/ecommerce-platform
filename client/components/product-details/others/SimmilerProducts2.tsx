@@ -60,7 +60,7 @@ export default function SimmilerProducts2() {
                     <div className="rbt-card-content">
                       <h5 className="rbt-card-title">
                         <Link href="/shop-by-brands">
-                          Beats Brand is now on Unimart Platform
+                          Beats Brand is now on Beauty Station Platform
                         </Link>
                       </h5>
                       <p className="b4 desc rbt-text-medium">

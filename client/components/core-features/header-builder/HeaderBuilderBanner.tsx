@@ -48,7 +48,7 @@ function HeaderBuilderBanner() {
                     >
                       <Image
                         className="rbt-scroll-trigger fade_in animation-order-1"
-                        alt="Unimart Component Image"
+                        alt="Beauty Station Component Image"
                         src="/assets/images/splash/banner/component-img-7.webp"
                         width={128}
                         height={138}
@@ -60,7 +60,7 @@ function HeaderBuilderBanner() {
                     >
                       <Image
                         className="rbt-scroll-trigger fade_in animation-order-2"
-                        alt="Unimart Component Image"
+                        alt="Beauty Station Component Image"
                         src="/assets/images/splash/banner/component-img-6.webp"
                         width={125}
                         height={209}
@@ -72,7 +72,7 @@ function HeaderBuilderBanner() {
                     >
                       <Image
                         className="rbt-scroll-trigger fade_in animation-order-3"
-                        alt="Unimart Component Image"
+                        alt="Beauty Station Component Image"
                         src="/assets/images/splash/banner/component-img-8.webp"
                         width={112}
                         height={125}

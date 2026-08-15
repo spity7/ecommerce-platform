@@ -4,9 +4,9 @@ import Faqs from "@/components/other-pages/faq/Faqs";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "FAQ Page 01 || Unimart - eCommerce React Nextjs Bootstrap5 Template",
+  title: "FAQ Page 01 | Beauty Station | Cosmetics & Skincare",
   description:
-    "Frequently asked questions and contact information for Unimart.",
+    "Frequently asked questions and contact information for Beauty Station.",
 };
 
 export default function page() {

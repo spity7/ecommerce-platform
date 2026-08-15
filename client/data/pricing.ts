@@ -136,7 +136,7 @@ export const pricingStyleThreePlans: PricingPlan[] = [
 export const pricingStyleFourData = {
   mainTitle: "Active Plan Mode.",
   description:
-    "Unimart is a modern e-commerce platform designed to make online shopping simple, secure, and convenient.",
+    "Beauty Station is a modern e-commerce platform designed to make online shopping simple, secure, and convenient.",
   price: 129,
   priceSuffix: "/mo",
   primaryButtonText: "Purchase Now",

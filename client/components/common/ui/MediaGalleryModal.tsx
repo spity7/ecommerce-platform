@@ -4,7 +4,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperInstance } from "swiper";
 import "swiper/css";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { useSyncedState } from "@/hooks/useSyncedState";
 
 export type MediaGalleryItem = {
   id: string;
@@ -27,7 +28,10 @@ export default function MediaGalleryModal({
   items,
   initialIndex = 0,
 }: MediaGalleryModalProps) {
-  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const [currentIndex, setCurrentIndex] = useSyncedState(
+    initialIndex,
+    initialIndex
+  );
   const [swiperRef, setSwiperRef] = useState<SwiperInstance | null>(null);
   const videoRefs = useRef<Array<HTMLVideoElement | null>>([]);
 
@@ -45,10 +49,6 @@ export default function MediaGalleryModal({
       });
     }
   };
-
-  useEffect(() => {
-    setCurrentIndex(initialIndex);
-  }, [initialIndex]);
 
   if (!open) {
     return null;

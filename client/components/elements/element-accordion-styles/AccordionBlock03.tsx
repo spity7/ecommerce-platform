@@ -3,9 +3,9 @@ function AccordionBlock03() {
     {
       id: "collapseThree1",
       headerId: "headingThree1",
-      title: "What is Unimart ? How does it work?",
+      title: "What is Beauty Station ? How does it work?",
       content:
-        "You can run Unimart easily. Any School, E-commerce Website, College can be use this Unimart e-Commerce template for their e-commerce purpose. A Eccommerce can be run their online leaning management system by Unimart e-Commerce template.",
+        "You can run Beauty Station easily. Any School, E-commerce Website, College can be use this Beauty Station e-Commerce template for their e-commerce purpose. A Eccommerce can be run their online leaning management system by Beauty Station e-Commerce template.",
       isOpen: true,
     },
     {
@@ -20,7 +20,7 @@ function AccordionBlock03() {
       headerId: "headingThree3",
       title: "Can I get update regularly and For how long do I get updates?",
       content:
-        "Yes, We will get update the Unimart. And you can get it any time. Next time we will comes with more feature. You can be get update for unlimited times. Our dedicated team works for update.",
+        "Yes, We will get update the Beauty Station. And you can get it any time. Next time we will comes with more feature. You can be get update for unlimited times. Our dedicated team works for update.",
     },
     {
       id: "collapseThree4",
@@ -46,10 +46,10 @@ function AccordionBlock03() {
                   <span className="subtitle bg-pink-opacity">FAQ</span>
                   <h2 className="title">
                     Have a Question with <br />
-                    Unimart E-commerce Website?
+                    Beauty Station E-commerce Website?
                   </h2>
                   <p className="description has-medium-font-size mt--20 plr--80 plr_sm--0 plr_md--0">
-                    <strong>It&apos;s an e-commerce platform.</strong> Unimart
+                    <strong>It&apos;s an e-commerce platform.</strong> Beauty Station
                     helps you launch modern online stores quickly with reusable
                     sections, responsive layouts, and prebuilt shop flows for
                     categories, product details, cart, and checkout.

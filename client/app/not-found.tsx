@@ -1,4 +1,4 @@
-import { UnimartLogoIcon } from "../components/svg-icons";
+import { SiteLogoIcon } from "../components/svg-icons";
 import Link from "next/link";
 import Image from "next/image";
 import Footer10 from "@/components/footers/Footer10";
@@ -39,7 +39,7 @@ export default function page() {
               <div className="col-lg-12 d-flex mx-auto">
                 <div className="rbt-fshape-box-outline-bottom-style rbt-bg-color-white">
                   <div className="rbt-svg-bottom-portion">
-                    <UnimartLogoIcon />
+                    <SiteLogoIcon />
                   </div>
                 </div>
               </div>

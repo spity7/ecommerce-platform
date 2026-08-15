@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import PartialPaymentBanner from "@/components/core-features/partial-payment/PartialPaymentBanner";
 export const metadata: Metadata = {
   title:
-    "Partial Payment | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Partial Payment | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function PartialPaymentPage() {
   return (
@@ -23,7 +23,7 @@ export default function PartialPaymentPage() {
             ),
             description: (
               <>
-                Compare your selected products in a table with Unimart Compare
+                Compare your selected products in a table with Beauty Station Compare
                 Table Builder. Choose from a variety of pre-built templates.
               </>
             ),

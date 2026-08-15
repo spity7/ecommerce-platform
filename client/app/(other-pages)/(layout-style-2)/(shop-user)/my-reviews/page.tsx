@@ -6,8 +6,8 @@ import ReviewModal from "@/components/modals/ReviewModal";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "My Reviews || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Manage and edit your product reviews on Unimart.",
+  title: "My Reviews | Beauty Station | Cosmetics & Skincare",
+  description: "Manage and edit your product reviews on Beauty Station.",
 };
 
 export default function page() {

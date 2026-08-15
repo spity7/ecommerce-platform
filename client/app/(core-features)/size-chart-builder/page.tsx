@@ -3,8 +3,8 @@ import SizeChartBuilderBanner from "@/components/core-features/size-chart-builde
 import SizeChartBuilderComponents from "@/components/core-features/size-chart-builder/SizeChartBuilderComponents";
 export const metadata: Metadata = {
   title:
-    "Size Chart Builder | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Size Chart Builder | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function SizeChartBuilderPage() {
   return (

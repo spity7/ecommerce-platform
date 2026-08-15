@@ -18,47 +18,47 @@ export default function TextSlider({
                 <div className="rbt-category-list">
                   <a href="#">
                     <span className="rbt-category-icon rbt-offer-icon-circle" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#">
                     <span className="rbt-category-icon rbt-offer-icon-circle" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#">
                     <span className="rbt-category-icon rbt-offer-icon-circle" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#">
                     <span className="rbt-category-icon rbt-offer-icon-circle" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#">
                     <span className="rbt-category-icon rbt-offer-icon-circle" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#">
                     <span className="rbt-category-icon rbt-offer-icon-circle" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#">
                     <span className="rbt-category-icon rbt-offer-icon-circle" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#">
                     <span className="rbt-category-icon rbt-offer-icon-circle" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#">
                     <span className="rbt-category-icon rbt-offer-icon-circle" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#">
                     <span className="rbt-category-icon rbt-offer-icon-circle" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                   <a href="#">
                     <span className="rbt-category-icon rbt-offer-icon-circle" />
-                    UNIMART - 10% OFF ON YOUR FIRST ORDER
+                    BEAUTY STATION - 10% OFF ON YOUR FIRST ORDER
                   </a>
                 </div>
               </div>

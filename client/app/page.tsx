@@ -1,14 +1,14 @@
-import SplashPage from "./splash/page";
-import { Metadata } from "next";
+import { HomeLayoutRenderer } from "@/components/site/HomeLayoutRenderer";
+import { getStorefrontSiteConfig } from "@/lib/site";
+import type { Metadata } from "next";
+
+const site = getStorefrontSiteConfig();
 
 export const metadata: Metadata = {
-  title: "Preview || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+  title: site.seo.title,
+  description: site.seo.description,
 };
-export default function Home() {
-  return (
-    <>
-      <SplashPage />
-    </>
-  );
+
+export default function HomePage() {
+  return <HomeLayoutRenderer layout={site.homeLayout} />;
 }

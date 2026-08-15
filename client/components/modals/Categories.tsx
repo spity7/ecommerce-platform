@@ -41,7 +41,7 @@ export default function Categories() {
                   <div className="logo">
                     <Link href={`/`}>
                       <Image
-                        alt="Unimart Logo"
+                        alt="Beauty Station Logo"
                         src="/assets/images/logo/logo.webp"
                         width={1487}
                         height={334}

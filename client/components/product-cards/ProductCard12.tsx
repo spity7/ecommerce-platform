@@ -1,6 +1,6 @@
 "use client";
 import OfferBadge from "@/components/common/ui/OfferBadge";
-import { useEffect, useState } from "react";
+import { useSyncedState } from "@/hooks/useSyncedState";
 import Image from "next/image";
 import Link from "next/link";
 import Tooltip from "@/components/common/ui/Tooltip";
@@ -23,10 +23,10 @@ export default function ProductCard12({
   animationOrder?: number;
 }) {
   const detailsPageLink = `${detailsPageUrl}/${product.id}`;
-  const [selectedVariant, setSelectedVariant] = useState(product.imgSrc);
-  useEffect(() => {
-    setSelectedVariant(product.imgSrc);
-  }, [product]);
+  const [selectedVariant, setSelectedVariant] = useSyncedState(
+    product.imgSrc,
+    product.id
+  );
   return (
     <div
       className={`rbt-card rbt-product-card rbt-product-card-style-2 rounded--16 rbt-scroll-trigger fade_in animation-order-${animationOrder}`}

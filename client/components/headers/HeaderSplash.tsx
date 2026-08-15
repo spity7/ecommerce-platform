@@ -80,14 +80,14 @@ export default function HeaderSplash({ sticky = false, hasBg = false }) {
                   <SplashScrollLink
                     section="features"
                     className="rbt-btn splash-btn splash-hcs-btn icon-reverse-right rbt-btn-sm has-left-icon rbt-scroll-trigger fade_in animation-order-6"
-                    aria-label="Explore Unimart features"
-                    title="Explore Unimart features"
+                    aria-label="Explore Beauty Station features"
+                    title="Explore Beauty Station features"
                   >
                     <span className="icon-left">
                       <i className="fa-regular fa-cart-shopping mr--4" />
                     </span>
                     <span className="d-none d-lg-inline-block">
-                      Explore Unimart
+                      Explore Beauty Station
                     </span>
                     <span className="icon-right">
                       <i className="fa-sharp fa-regular fa-arrow-right ml--4" />
@@ -168,15 +168,15 @@ export default function HeaderSplash({ sticky = false, hasBg = false }) {
               <a
                 href="https://themeforest.net/user/rainbow-themes"
                 className="rbt-btn rbt-btn-sm splash-btn icon-reverse-left rbt-scroll-trigger fade_in animation-order-4 splash-hcs-btn"
-                aria-label="Buy Unimart"
-                title="Buy Unimart"
+                aria-label="Buy Beauty Station"
+                title="Buy Beauty Station"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <span className="icon-left">
                   <i className="fa-regular fa-cart-shopping mr--4" />
                 </span>
-                <span className="text">Buy Unimart</span>
+                <span className="text">Buy Beauty Station</span>
                 <span className="icon-right">
                   <i className="fa-sharp fa-regular fa-arrow-right ml--4" />
                 </span>

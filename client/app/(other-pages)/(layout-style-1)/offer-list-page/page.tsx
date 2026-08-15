@@ -3,8 +3,8 @@ import OfferList from "@/components/other-pages/OfferList";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Offer List || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Offer list page layout for Unimart.",
+  title: "Offer List | Beauty Station | Cosmetics & Skincare",
+  description: "Offer list page layout for Beauty Station.",
 };
 
 export default function page() {

@@ -3,8 +3,8 @@ import VariantSwitcherBanner from "@/components/core-features/variant-switcher/V
 import VariantSwitcherComponents from "@/components/core-features/variant-switcher/VariantSwitcherComponents";
 export const metadata: Metadata = {
   title:
-    "Variant Switcher | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Variant Switcher | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function VariantSwitcherPage() {
   return (

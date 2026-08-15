@@ -4,9 +4,29 @@ import { ShowcaseStrip } from "@/components/catalog/showcase-strip";
 import { Icon } from "@/components/layout/icon";
 import { PageHeader } from "@/components/layout/page-header";
 import { routes } from "@/config/routes";
-import { categories } from "@/data/admin/catalog";
+import type { Category } from "@/data/admin/catalog";
+import { fetchCategories } from "@/lib/api/catalog";
+import { mapCategoryDto } from "@/lib/mappers/catalog";
+import { getAdminSiteConfig } from "@/lib/site";
 
-export default function CategoriesPage() {
+const site = getAdminSiteConfig();
+
+export const metadata = {
+  title: `Categories | ${site.name} Admin`,
+};
+
+export default async function CategoriesPage() {
+  let categories: Category[] = [];
+  let loadError: string | null = null;
+
+  try {
+    const response = await fetchCategories({ limit: 100 });
+    categories = response.data.map(mapCategoryDto);
+  } catch (error) {
+    loadError =
+      error instanceof Error ? error.message : "Unable to load categories.";
+  }
+
   return (
     <>
       <PageHeader
@@ -23,6 +43,11 @@ export default function CategoriesPage() {
         eyebrow="Catalog"
         title="Categories"
       />
+      {loadError ? (
+        <div className="mb-4 rounded-base border border-warning-200 bg-warning-50 px-4 py-3 text-[14px] text-warning-700">
+          {loadError}
+        </div>
+      ) : null}
       <ShowcaseStrip items={categories} type="category" />
       <CategoryListTable categories={categories} />
     </>

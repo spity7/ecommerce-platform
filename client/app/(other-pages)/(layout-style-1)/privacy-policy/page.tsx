@@ -6,8 +6,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title:
-    "Privacy Policy || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Understand how Unimart collects and uses your data.",
+    "Privacy Policy | Beauty Station | Cosmetics & Skincare",
+  description: "Understand how Beauty Station collects and uses your data.",
 };
 
 export default function page() {

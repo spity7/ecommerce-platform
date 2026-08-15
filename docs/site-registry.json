@@ -1,0 +1,22 @@
+[
+  {
+    "id": "beauty-station",
+    "name": "Beauty Station",
+    "template": "beauty",
+    "homeLayout": "cosmetic-beauty-two",
+    "storefrontUrl": "http://localhost:3000",
+    "adminUrl": "http://localhost:3001",
+    "apiUrl": "http://localhost:5000",
+    "database": "beauty-station",
+    "gcsBucket": "beauty-station-media",
+    "region": "us",
+    "features": {
+      "attributes": true,
+      "brands": true,
+      "subscriptions": false,
+      "sizeGuide": false
+    },
+    "deploySha": null,
+    "notes": "Primary cosmetics & skincare site."
+  }
+]

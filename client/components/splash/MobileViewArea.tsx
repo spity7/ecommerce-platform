@@ -46,7 +46,7 @@ export default function MobileViewArea() {
               </span>
               <h2 className="rbt-title rbt-text-color-white">
                 <span className="rbt-bold--text rbt-scroll-trigger fade_in animation-order-2">
-                  Unimart Ecommerce
+                  Beauty Station Ecommerce
                   <br />
                 </span>
                 <span className="rbt-title-sm-text rbt-scroll-trigger fade_in animation-order-3">

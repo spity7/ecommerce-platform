@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { isotopFilters, isotopPortfoliosWiderTwo } from "@/data/portfolios";
 import { useRef, useState } from "react";
+import { useLatestRef } from "@/hooks/useLatestRef";
 import PortfolioIsotopeFilterTabs from "./PortfolioIsotopeFilterTabs";
 import { useIsotopeMasonry } from "@/hooks/useIsotopeMasonry";
 
@@ -13,8 +14,7 @@ function PortfolioGridIsotopWiderTwo() {
   );
 
   const gridRef = useRef<HTMLDivElement | null>(null);
-  const activeFilterRef = useRef(activeFilter);
-  activeFilterRef.current = activeFilter;
+  const activeFilterRef = useLatestRef(activeFilter);
   const isotopeRef = useIsotopeMasonry(
     gridRef,
     {

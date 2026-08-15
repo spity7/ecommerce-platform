@@ -13,7 +13,7 @@ function PerformanceComponents() {
                   </span>
                 </h2>
                 <p className="mb--40 b1 rbt-scroll-trigger fade_in animation-order-4">
-                  Experience unparalleled speed and efficiency with Unimart,
+                  Experience unparalleled speed and efficiency with Beauty Station,
                   <br />
                   optimized for all platforms.
                 </p>
@@ -39,13 +39,13 @@ function PerformanceComponents() {
                         </p>
                         <div className="mt--32">
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn rbt-btn-md rbt-btn-secondary"
                           >
                             Check example
                           </a>
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn-link rbt-text-color-gray-500 ml--8"
                           >
                             <span className="btn-icon">
@@ -95,13 +95,13 @@ function PerformanceComponents() {
                         </p>
                         <div className="mt--32">
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn rbt-btn-md rbt-btn-secondary"
                           >
                             Check example
                           </a>
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn-link rbt-text-color-gray-500 ml--8"
                           >
                             <span className="btn-icon">

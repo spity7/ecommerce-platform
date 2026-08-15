@@ -5,8 +5,8 @@ import Breadcrumb from "@/components/common/other-components/Breadcrumb";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blog Default || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Default Unimart blog listing page with slider and posts.",
+  title: "Blog Default | Beauty Station | Cosmetics & Skincare",
+  description: "Default Beauty Station blog listing page with slider and posts.",
 };
 
 export default function page() {

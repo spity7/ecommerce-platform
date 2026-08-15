@@ -2,8 +2,8 @@ import SplashElementBuilderSection from "@/components/splash/SplashElementBuilde
 import { Metadata } from "next";
 import BackorderBanner from "@/components/core-features/backorder/BackorderBanner";
 export const metadata: Metadata = {
-  title: "Backorder | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+  title: "Backorder | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function BackorderPage() {
   return (
@@ -24,7 +24,7 @@ export default function BackorderPage() {
             ),
             description: (
               <>
-                Compare your selected products in a table with Unimart Compare
+                Compare your selected products in a table with Beauty Station Compare
                 Table Builder. Choose from a variety of pre-built templates.
               </>
             ),

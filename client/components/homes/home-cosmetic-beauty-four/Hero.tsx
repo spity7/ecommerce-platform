@@ -13,7 +13,7 @@ export default function Hero() {
                 </h6>
                 <h1 className="rbt-title mb-0 h1 rbt-text-capitalize">
                   <span className="rbt-bold--text d-block">
-                    Discover the Unimart Beauty Lab
+                    Discover the Beauty Station Beauty Lab
                   </span>
                   radiant skin and everyday self-care rituals.
                 </h1>

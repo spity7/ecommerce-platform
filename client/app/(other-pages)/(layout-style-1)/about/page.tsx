@@ -7,8 +7,8 @@ import OurMission from "@/components/other-pages/about/OurMission";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Us || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Learn more about Unimart, our mission, and our story.",
+  title: "About Us | Beauty Station | Cosmetics & Skincare",
+  description: "Learn more about Beauty Station, our mission, and our story.",
 };
 
 export default function page() {

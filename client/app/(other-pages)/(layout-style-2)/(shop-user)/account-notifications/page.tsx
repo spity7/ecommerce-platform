@@ -6,8 +6,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title:
-    "Account Notifications || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Control your Unimart account and order notification settings.",
+    "Account Notifications | Beauty Station | Cosmetics & Skincare",
+  description: "Control your Beauty Station account and order notification settings.",
 };
 
 export default function page() {

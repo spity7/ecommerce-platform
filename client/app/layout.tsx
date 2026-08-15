@@ -1,9 +1,13 @@
 import { Cabin, Caveat, Bebas_Neue, Caprasimo } from "next/font/google";
 import LayoutEffectsLoader from "@/components/common/other-components/LayoutEffectsLoader";
 import BootstrapJsLoader from "@/components/common/other-components/BootstrapJsLoader";
+import { SiteThemeStyles } from "@/components/site/SiteThemeStyles";
+import { getStorefrontSiteConfig } from "@/lib/site";
 import type { Metadata } from "next";
 
 import "../public/assets/scss/main.scss";
+
+const site = getStorefrontSiteConfig();
 
 const cabin = Cabin({
   subsets: ["latin"],
@@ -30,24 +34,21 @@ import LayoutModals from "@/components/common/other-components/LayoutModals";
 import Toolbar from "@/components/modals/Toolbar";
 
 export const metadata: Metadata = {
-  title: "Unimart — eCommerce Nextjs Template",
-  description:
-    "Unimart is a powerful Nextjs eCommerce template with 80+ home pages, Bootstrap 5, and full TypeScript support.",
+  title: site.seo.title,
+  description: site.seo.description,
   robots: {
     index: true,
     follow: true,
   },
   openGraph: {
-    title: "Unimart — eCommerce Nextjs Template",
-    description:
-      "Unimart is a powerful Nextjs eCommerce template with 80+ home pages, Bootstrap 5, and full TypeScript support.",
+    title: site.seo.title,
+    description: site.seo.description,
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Unimart — eCommerce Nextjs Template",
-    description:
-      "Unimart is a powerful Nextjs eCommerce template with 80+ home pages, Bootstrap 5, and full TypeScript support.",
+    title: site.seo.title,
+    description: site.seo.description,
   },
 };
 
@@ -59,6 +60,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       suppressHydrationWarning
     >
       <body className={cabin.className} suppressHydrationWarning>
+        <SiteThemeStyles />
         <BootstrapJsLoader />
         <LayoutEffectsLoader />
         <main id="main-content">{children}</main>

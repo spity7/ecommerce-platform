@@ -39,13 +39,13 @@ function ProductFilteringComponents() {
                         </p>
                         <div className="mt--32">
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn rbt-btn-md rbt-btn-secondary"
                           >
                             Check example
                           </a>
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn-link rbt-text-color-gray-500 ml--8"
                           >
                             <span className="btn-icon">
@@ -95,13 +95,13 @@ function ProductFilteringComponents() {
                         </p>
                         <div className="mt--32">
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn rbt-btn-md rbt-btn-secondary"
                           >
                             Check example
                           </a>
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn-link rbt-text-color-gray-500 ml--8"
                           >
                             <span className="btn-icon">
@@ -131,13 +131,13 @@ function ProductFilteringComponents() {
                         </p>
                         <div className="mt--32">
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn rbt-btn-md rbt-btn-secondary"
                           >
                             Check example
                           </a>
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn-link rbt-text-color-gray-500 ml--8"
                           >
                             <span className="btn-icon">
@@ -358,13 +358,13 @@ function ProductFilteringComponents() {
                         </p>
                         <div className="mt--32">
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn rbt-btn-md rbt-btn-secondary"
                           >
                             Check example
                           </a>
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn-link rbt-text-color-gray-500 ml--8"
                           >
                             <span className="btn-icon">
@@ -462,13 +462,13 @@ function ProductFilteringComponents() {
                         </p>
                         <div className="mt--32">
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn rbt-btn-md rbt-btn-secondary"
                           >
                             Check example
                           </a>
                           <a
-                            href="https://nextjs.getunimart.com/docs"
+                            href="/"
                             className="rbt-btn-link rbt-text-color-gray-500 ml--8"
                           >
                             <span className="btn-icon">

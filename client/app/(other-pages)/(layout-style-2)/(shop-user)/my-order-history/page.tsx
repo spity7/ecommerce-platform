@@ -5,15 +5,15 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title:
-    "My Order History || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "View your full Unimart order history and details.",
+    "My Order History | Beauty Station | Cosmetics & Skincare",
+  description: "View your full Beauty Station order history and details.",
   robots: {
     index: true,
     follow: true,
   },
   openGraph: {
-    title: "My Order History | Unimart",
-    description: "View your full Unimart order history and details.",
+    title: "My Order History | Beauty Station",
+    description: "View your full Beauty Station order history and details.",
     type: "website",
   },
 };

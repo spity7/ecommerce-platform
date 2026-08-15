@@ -2,8 +2,8 @@ import { CurvedArrowIcon } from "../../../components/svg-icons";
 import { Metadata } from "next";
 import Image from "next/image";
 export const metadata: Metadata = {
-  title: "Feature List | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+  title: "Feature List | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function FeatureListPage() {
   return (

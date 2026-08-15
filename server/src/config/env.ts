@@ -1,9 +1,11 @@
+import { getSiteConfig } from "@platform/site-config";
 import { z } from "zod";
 
 const envSchema = z.object({
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),
+  SITE_ID: z.string().min(1).default("beauty-station"),
   PORT: z.coerce.number().int().positive().default(5000),
   MONGODB_URI: z.string().min(1, "MONGODB_URI is required"),
   CORS_ORIGINS: z
@@ -26,8 +28,11 @@ if (!parsed.success) {
 
 const data = parsed.data;
 
+const site = getSiteConfig(data.SITE_ID);
+
 export const env = {
   ...data,
+  site,
   corsOrigins: data.CORS_ORIGINS.split(",")
     .map((origin) => origin.trim())
     .filter(Boolean),

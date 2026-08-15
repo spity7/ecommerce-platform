@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import OfferManagementBanner from "@/components/core-features/offer-management/OfferManagementBanner";
 export const metadata: Metadata = {
   title:
-    "Offer Management | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Offer Management | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function OfferManagementPage() {
   return (
@@ -24,7 +24,7 @@ export default function OfferManagementPage() {
             ),
             description: (
               <>
-                Compare your selected products in a table with Unimart Compare
+                Compare your selected products in a table with Beauty Station Compare
                 Table Builder. Choose from a variety of pre-built templates.
               </>
             ),

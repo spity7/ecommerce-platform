@@ -36,7 +36,7 @@ export default function InfoSection() {
                     A wonderful serenity has taken possession of my entire soul.
                   </h5>
                   <p className="rbt-collapsible-block-content b2 rbt-text-color-gray-500">
-                    Unimart is a modern e-commerce template built for fast
+                    Beauty Station is a modern e-commerce template built for fast
                     launches and scalable storefronts. You get reusable UI
                     sections, conversion-focused product pages, and responsive
                     layouts that help teams ship polished shopping experiences

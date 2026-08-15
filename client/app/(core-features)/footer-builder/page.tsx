@@ -14,8 +14,8 @@ import Footer11 from "@/components/footers/Footer11";
 import Footer12 from "@/components/footers/Footer12";
 export const metadata: Metadata = {
   title:
-    "Footer Builder | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Footer Builder | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function FooterBuilderPage() {
   return (

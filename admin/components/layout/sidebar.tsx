@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { siteConfig } from "@/config/site";
 import { primaryNavigation } from "@/config/navigation";
 import { routes } from "@/config/routes";
 import type { NavigationGroup, NavigationItem } from "@/types/navigation";
@@ -28,12 +29,12 @@ export function Sidebar() {
     >
       <div className="sidebar-header relative flex items-center gap-2 p-3">
         <Link
-          aria-label="Unimart dashboard"
+          aria-label={`${siteConfig.name} dashboard`}
           className="ws-switch flex flex-1 items-center gap-2 rounded-base px-2 py-1.5"
           href={routes.dashboard}
         >
           <Image
-            alt="Unimart"
+            alt={siteConfig.name}
             className="logo-full h-8 max-w-[300px] w-auto dark:hidden"
             height={32}
             priority
@@ -41,14 +42,14 @@ export function Sidebar() {
             width={142}
           />
           <Image
-            alt="Unimart"
+            alt={siteConfig.name}
             className="logo-full hidden h-8 w-auto dark:block"
             height={32}
             src={`${baseURL}assets/images/logo/logo-blackbg.webp`}
             width={142}
           />
           <Image
-            alt="Unimart"
+            alt={siteConfig.name}
             className="logo-mark hidden h-9 w-9 shrink-0 rounded-lg object-contain"
             height={36}
             src={`${baseURL}assets/images/favicon.png`}

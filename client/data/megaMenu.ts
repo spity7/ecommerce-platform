@@ -47,7 +47,7 @@ export const megaMenuCategories: MegaMenuCategory[] = [
     ],
     banner: {
       title: "All For Garden",
-      desc: "Send your idea, appear Unimart.",
+      desc: "Send your idea, appear Beauty Station.",
       btnLabel: "View Details",
       btnHref: "/product-single-default/132",
       btnClass: "rbt-btn rbt-btn-sm rbt-btn-black",
@@ -91,7 +91,7 @@ export const megaMenuCategories: MegaMenuCategory[] = [
     banner: {
       title: "Apple 16 Pro",
       titleClass: "title rbt-text-color-white",
-      desc: "Send your idea, appear Unimart.",
+      desc: "Send your idea, appear Beauty Station.",
       descClass: "b3 desc rbt-text-color-gray-200",
       btnLabel: "View Details",
       btnHref: "#",
@@ -134,7 +134,7 @@ export const megaMenuCategories: MegaMenuCategory[] = [
     ],
     banner: {
       title: "Straps of Colors",
-      desc: "Send your idea, appear Unimart.",
+      desc: "Send your idea, appear Beauty Station.",
       btnLabel: "View Details",
       btnHref: "/product-single-default/132",
       btnClass: "rbt-btn rbt-btn-sm rbt-btn-black",

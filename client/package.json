@@ -1,8 +1,9 @@
 {
-  "name": "unimert-next-ts",
+  "name": "@platform/storefront",
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "npm run build:shared --prefix ..",
     "dev": "next dev",
     "dev:webpack": "next dev --turbopack=false",
     "build": "next build",
@@ -10,10 +11,13 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "rebrand": "tsx ../scripts/rebrand-client.ts"
   },
   "dependencies": {
     "@cloudimage/360-view": "^4.10.0",
+    "@platform/shared": "0.0.1",
+    "@platform/site-config": "0.0.1",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-popover": "^1.1.15",
     "@radix-ui/react-tooltip": "^1.2.8",

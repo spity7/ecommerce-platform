@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import SalePushNotificationBanner from "@/components/core-features/sale-push-notification/SalePushNotificationBanner";
 export const metadata: Metadata = {
   title:
-    "Sale Push Notification | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Sale Push Notification | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function SalePushNotificationPage() {
   return (
@@ -33,7 +33,7 @@ export default function SalePushNotificationPage() {
             ),
             description: (
               <>
-                Compare your selected products in a table with Unimart Compare
+                Compare your selected products in a table with Beauty Station Compare
                 Table Builder. Choose from a variety of pre-built templates.
               </>
             ),

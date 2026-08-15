@@ -3,8 +3,8 @@ import ProductDisplayBanner from "@/components/core-features/product-display/Pro
 import ProductDisplayComponents from "@/components/core-features/product-display/ProductDisplayComponents";
 export const metadata: Metadata = {
   title:
-    "Product Display | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+    "Product Display | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function ProductDisplayPage() {
   return (

@@ -79,7 +79,7 @@ export default function Banner() {
           <Image
             priority
             fetchPriority="high"
-            alt="Unimart Splash Banner Background"
+            alt="Beauty Station Splash Banner Background"
             src="/assets/images/splash/banner/banner-bg.webp"
             width={1920}
             height={766}
@@ -94,7 +94,7 @@ export default function Banner() {
             <Image
               loading="lazy"
               className="rbt-scroll-trigger fade_in animation-order-1"
-              alt="Unimart Component Image"
+              alt="Beauty Station Component Image"
               src="/assets/images/splash/banner/component-img-1.webp"
               width={179}
               height={446}
@@ -107,7 +107,7 @@ export default function Banner() {
             <Image
               loading="lazy"
               className="rbt-scroll-trigger fade_in animation-order-2"
-              alt="Unimart Component Image"
+              alt="Beauty Station Component Image"
               src="/assets/images/splash/banner/component-img-2.webp"
               width={232}
               height={330}
@@ -120,7 +120,7 @@ export default function Banner() {
             <Image
               loading="lazy"
               className="rbt-scroll-trigger fade_in animation-order-3"
-              alt="Unimart Component Image"
+              alt="Beauty Station Component Image"
               src="/assets/images/splash/banner/component-img-3.webp"
               width={232}
               height={407}
@@ -133,7 +133,7 @@ export default function Banner() {
             <Image
               loading="lazy"
               className="rbt-scroll-trigger fade_in animation-order-4"
-              alt="Unimart Component Image"
+              alt="Beauty Station Component Image"
               src="/assets/images/splash/banner/component-img-4.webp"
               width={112}
               height={277}
@@ -146,7 +146,7 @@ export default function Banner() {
             <Image
               loading="lazy"
               className="rbt-scroll-trigger fade_in animation-order-5"
-              alt="Unimart Component Image"
+              alt="Beauty Station Component Image"
               src="/assets/images/splash/banner/component-img-5.webp"
               width={161}
               height={257}

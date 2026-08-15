@@ -19,7 +19,7 @@ export default function Cta() {
               </span>
               <h2 className="rbt-title rbt-text-color-white position-relative">
                 <span className="rbt-bold--text rbt-scroll-trigger fade_in animation-order-2">
-                  Grab <span className="rbt-splash-gradient-text">Unimart</span>{" "}
+                  Grab <span className="rbt-splash-gradient-text">Beauty Station</span>{" "}
                   Now Before
                   <br />
                 </span>
@@ -35,7 +35,7 @@ export default function Cta() {
                 <span className="icon-left">
                   <i className="fa-sharp fa-solid fa-circle-play mr--4" />
                 </span>
-                <span>Purchase Unimart</span>
+                <span>Purchase Beauty Station</span>
                 <span className="icon-right">
                   <i className="fa-sharp fa-regular fa-arrow-right ml--4" />
                 </span>

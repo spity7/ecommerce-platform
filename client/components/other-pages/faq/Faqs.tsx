@@ -9,9 +9,9 @@ export default function Faqs() {
     {
       id: "collapseTwo1",
       headerId: "headingTwo1",
-      title: "What is Unimart ? How does it work?",
+      title: "What is Beauty Station ? How does it work?",
       content:
-        "You can run Unimart easily. Any School, E-commerce Website, College can be use this Unimart e-Commerce template for their e-commerce purpose. A Ecommerce can be run their online leaning management system by Unimart E-commerce template.",
+        "You can run Beauty Station easily. Any School, E-commerce Website, College can be use this Beauty Station e-Commerce template for their e-commerce purpose. A Ecommerce can be run their online leaning management system by Beauty Station E-commerce template.",
       isOpen: true,
     },
     {
@@ -31,7 +31,7 @@ export default function Faqs() {
       headerId: "headingTwo3",
       title: "Can I get update regularly and For how long do I get updates?",
       content:
-        "Yes, We will get update the Unimart. And you can get it any time. Next time we will comes with more feature. You can be get update for unlimited times. Our dedicated team works for update.",
+        "Yes, We will get update the Beauty Station. And you can get it any time. Next time we will comes with more feature. You can be get update for unlimited times. Our dedicated team works for update.",
     },
     {
       id: "collapseTwo4",
@@ -55,10 +55,10 @@ export default function Faqs() {
                 <span className="subtitle bg-pink-opacity">FAQ</span>
                 <h2 className="title">
                   Have a Question with <br />
-                  Unimart E-commerce Website?
+                  Beauty Station E-commerce Website?
                 </h2>
                 <p className="description has-medium-font-size mt--20 mb--40 mx-auto">
-                  <strong>Unimart</strong> is a modern and user-friendly
+                  <strong>Beauty Station</strong> is a modern and user-friendly
                   e-commerce platform designed to make online shopping simple,
                   secure, and convenient.
                 </p>

@@ -21,7 +21,7 @@ export default function SplashSupportSection() {
                   <div className="content">
                     <h4 className="rbt-title mb--24">
                       <a
-                        href="https://nextjs.getunimart.com/docs"
+                        href="/"
                         target="_blank"
                       >
                         Online Documentation
@@ -34,7 +34,7 @@ export default function SplashSupportSection() {
                       option.
                     </p>
                     <a
-                      href="https://nextjs.getunimart.com/docs"
+                      href="/"
                       className="rbt-btn splash-btn icon-reverse-left"
                       target="_blank"
                     >

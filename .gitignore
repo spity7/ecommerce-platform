@@ -1,0 +1,32 @@
+# Dependencies (npm workspaces hoist to repo root)
+node_modules/
+
+# Package build outputs (@platform/shared, @platform/site-config)
+packages/*/dist/
+
+# Environment & secrets (per-app .gitignore also applies; this covers sites/ and root)
+.env
+.env.*
+!.env.example
+!**/.env.example
+gcs-key.json
+.gcs-key.json
+*-key.json
+
+# Logs & debug
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional tooling (uncomment if you prefer not to commit)
+# .cursor/
+# .vscode/

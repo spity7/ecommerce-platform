@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useSyncedState } from "@/hooks/useSyncedState";
 import Link from "next/link";
 import AddToCart from "../action-buttons/AddToCart";
 import Tooltip from "@/components/common/ui/Tooltip";
@@ -18,10 +18,10 @@ const ProductCard6 = ({
   animationOrder?: number;
 }) => {
   const detailsPageLink = `${detailsPageUrl}/${product.id}`;
-  const [selectedVariant, setSelectedVariant] = useState(product.imgSrc);
-  useEffect(() => {
-    setSelectedVariant(product.imgSrc);
-  }, [product]);
+  const [selectedVariant, setSelectedVariant] = useSyncedState(
+    product.imgSrc,
+    product.id
+  );
 
   return (
     <div

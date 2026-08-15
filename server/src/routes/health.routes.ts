@@ -7,7 +7,9 @@ export const healthRouter = Router();
 healthRouter.get("/", (_req, res) => {
   res.json({
     ok: true,
-    service: "beauty-station-server",
+    service: "ecommerce-platform-server",
+    siteId: env.site.id,
+    siteName: env.site.name,
     environment: env.NODE_ENV,
     database:
       mongoose.connection.readyState === 1 ? "connected" : "disconnected",

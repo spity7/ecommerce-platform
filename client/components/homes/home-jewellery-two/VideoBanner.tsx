@@ -18,7 +18,7 @@ export default function VideoBanner() {
                 </h6>
                 <h2 className="rbt-title mb-0 h1 rbt-text-capitalize">
                   <span className="rbt-bold--text d-block">
-                    Discover the Unimart Jewellery Edit
+                    Discover the Beauty Station Jewellery Edit
                   </span>
                   heirloom-inspired pieces, and everyday sparkle.
                 </h2>

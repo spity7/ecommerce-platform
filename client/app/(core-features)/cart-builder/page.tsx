@@ -2,8 +2,8 @@ import { Metadata } from "next";
 import CartBuilderBanner from "@/components/core-features/cart-builder/CartBuilderBanner";
 import CartBuilderComponents from "@/components/core-features/cart-builder/CartBuilderComponents";
 export const metadata: Metadata = {
-  title: "Cart Builder | Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart - eCommerce React Nextjs Bootstrap5 Template",
+  title: "Cart Builder | Discover premium cosmetics and skincare products at Beauty Station.",
+  description: "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function CartBuilderPage() {
   return (

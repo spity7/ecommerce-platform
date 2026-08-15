@@ -1,5 +1,5 @@
 export * from "./CurvedArrowIcon";
-export * from "./UnimartLogoIcon";
+export * from "./SiteLogoIcon";
 export * from "./WaveFatIcon";
 export * from "./ScrollTopIcon";
 export * from "./WaveSplashIcon";

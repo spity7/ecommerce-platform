@@ -301,22 +301,22 @@ export const basketballBanners: HeroSlide[] = [
 export const skateBanners: HeroSlide[] = [
   {
     subtitle: "Urban Skate Essentials",
-    title: `Rule the Streets \n with Unimart's Skate Collection`,
+    title: `Rule the Streets \n with Beauty Station's Skate Collection`,
     imgSrc: "/assets/images/product-banner/banner-img-skate-01.webp",
   },
   {
     subtitle: "Urban Skate Essentials",
-    title: `Born to Ride \n with Unimart's Skate Collection`,
+    title: `Born to Ride \n with Beauty Station's Skate Collection`,
     imgSrc: "/assets/images/product-banner/banner-img-skate-02.webp",
   },
   {
     subtitle: "Street-Ready Gear",
-    title: `Skate Stronger \n with Unimart's Skate Collection`,
+    title: `Skate Stronger \n with Beauty Station's Skate Collection`,
     imgSrc: "/assets/images/product-banner/banner-img-skate-03.webp",
   },
   {
     subtitle: "Urban Skate Essentials",
-    title: `Rule the Streets \n with Unimart's Skate Collection`,
+    title: `Rule the Streets \n with Beauty Station's Skate Collection`,
     imgSrc: "/assets/images/product-banner/banner-img-skate-04.webp",
   },
 ];
@@ -479,13 +479,13 @@ export const yogaBanners: HeroSlide[] = [
   {
     subtitle: "Exclusive Offer Going",
     title:
-      "Discover the unimart Drinkware\ncollection of stainless-steel drinkware.",
+      "Discover the beauty-station Drinkware\ncollection of stainless-steel drinkware.",
     imgSrc: "/assets/images/product-banner/product-banner-yoga-a-01.webp",
   },
   {
     subtitle: "Exclusive Offer Going",
     title:
-      "Discover the unimart Drinkware\ncollection of stainless-steel drinkware.",
+      "Discover the beauty-station Drinkware\ncollection of stainless-steel drinkware.",
     imgSrc: "/assets/images/product-banner/product-banner-yoga-a-02.webp",
   },
 ];

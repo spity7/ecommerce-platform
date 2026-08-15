@@ -151,12 +151,12 @@ export function StoreProfilePage() {
         </div>
         <div className="mt-6 grid gap-5 md:grid-cols-2">
           <Field
-            defaultValue="Unimart Grocery"
+            defaultValue="Beauty Station"
             label="Store name"
             name="store_name"
           />
           <Field
-            defaultValue="support@unimart.local"
+            defaultValue="hello@beautystation.com"
             label="Support email"
             name="support_email"
             type="email"
@@ -407,7 +407,7 @@ export function NotificationsPage() {
         </div>
         <div className="mt-6 grid gap-5 border-t border-surface-line pt-6 md:grid-cols-2">
           <Field
-            defaultValue="support@unimart.local"
+            defaultValue="hello@beautystation.com"
             label="Primary email"
             name="primary_email"
             type="email"

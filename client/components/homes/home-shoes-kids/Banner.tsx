@@ -13,7 +13,7 @@ export default function Banner() {
                 </h6>
                 <h2 className="rbt-title mb-0 h1 rbt-text-color-white rbt-text-capitalize">
                   <span className="rbt-bold--text d-inline d-lg-block">
-                    Discover the Unimart Kids Footwear Edit
+                    Discover the Beauty Station Kids Footwear Edit
                   </span>
                   playful comfort and sizes made for growing feet.
                 </h2>

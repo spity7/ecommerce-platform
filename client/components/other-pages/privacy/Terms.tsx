@@ -8,20 +8,20 @@ export default function Terms() {
           <div className="col-lg-8">
             <div className="rbt-article-content-wrapper">
               <div className="content">
-                <h2>Welcome to Unimart Terms Policy</h2>
+                <h2>Welcome to Beauty Station Terms Policy</h2>
                 <p>
-                  Welcome to Unimart! By accessing and using our website, you
+                  Welcome to Beauty Station! By accessing and using our website, you
                   agree to comply with and be bound by the following terms and
                   policies. Please read these terms carefully before using our
                   services. These terms govern your access to and use of
-                  Unimart’s online platform, including any content,
+                  Beauty Station’s online platform, including any content,
                   functionality, and services offered through the website. If
                   you do not agree with any part of these terms, please refrain
                   from using our website.
                 </p>
                 <h5>1. General Terms</h5>
                 <p>
-                  These Terms &amp; Policies govern the use of Unimart’s
+                  These Terms &amp; Policies govern the use of Beauty Station’s
                   website, services, and products. By using our site, you
                   acknowledge and accept these terms in their entirety. If you
                   do not agree with any part of the terms, you should
@@ -43,7 +43,7 @@ export default function Terms() {
                 </p>
                 <h5>3. User Account</h5>
                 <p>
-                  To purchase items from Unimart, you may be required to create
+                  To purchase items from Beauty Station, you may be required to create
                   a user account. When creating your account, you agree to
                   provide accurate, complete, and up-to-date information. You
                   are responsible for keeping your account details, including
@@ -55,7 +55,7 @@ export default function Terms() {
                 </p>
                 <h5>4. Orders &amp; Payments</h5>
                 <p>
-                  When you place an order with Unimart, you are offering to
+                  When you place an order with Beauty Station, you are offering to
                   purchase the item(s) in accordance with our terms and
                   conditions. Orders will be processed and confirmed based on
                   availability, payment verification, and our shipping terms. We
@@ -67,14 +67,14 @@ export default function Terms() {
                 </p>
                 <h5>5. Shipping &amp; Delivery</h5>
                 <p>
-                  At Unimart, we strive to deliver your orders promptly and
+                  At Beauty Station, we strive to deliver your orders promptly and
                   efficiently. Shipping times vary depending on the destination
                   and chosen shipping method. We aim to process and ship all
                   orders within the time frames listed on our site, but delivery
                   dates may vary depending on factors such as weather, holidays,
                   and third-party carrier delays. Please be aware that any
                   delivery issues beyond our control, such as shipping delays by
-                  carriers or customs, are not the responsibility of Unimart.
+                  carriers or customs, are not the responsibility of Beauty Station.
                 </p>
                 <h5>6. Returns &amp; Refunds</h5>
                 <p>
@@ -101,7 +101,7 @@ export default function Terms() {
                 </p>
                 <h5>8. Prohibited Activities</h5>
                 <p>
-                  When using Unimart’s website, you agree not to engage in any
+                  When using Beauty Station’s website, you agree not to engage in any
                   activities that are unlawful, harmful, or disruptive. These
                   activities include, but are not limited to, engaging in
                   fraudulent transactions, spreading malware or viruses,
@@ -112,7 +112,7 @@ export default function Terms() {
                 </p>
                 <h5>9. Limitation of Liability</h5>
                 <p>
-                  Unimart makes every effort to provide accurate information and
+                  Beauty Station makes every effort to provide accurate information and
                   ensure the smooth functioning of the website. However, we
                   cannot be held liable for any direct, indirect, incidental, or
                   consequential damages arising from the use of our website or
@@ -124,7 +124,7 @@ export default function Terms() {
                 </p>
                 <h5>10. Changes to Terms</h5>
                 <p>
-                  Unimart reserves the right to modify, update, or amend these
+                  Beauty Station reserves the right to modify, update, or amend these
                   Terms &amp; Policies at any time. We will notify users of
                   significant changes by posting the updated terms on this page.
                   It is your responsibility to review these terms periodically
@@ -138,7 +138,7 @@ export default function Terms() {
                   accordance with the laws of [Your Country]. Any disputes
                   arising from the use of the site will be subject to the
                   jurisdiction of the courts in [Your Country]. By using
-                  Unimart, you consent to the exclusive jurisdiction of these
+                  Beauty Station, you consent to the exclusive jurisdiction of these
                   courts to resolve any disputes.
                 </p>
                 <h5>12. Contact Us</h5>
@@ -150,7 +150,7 @@ export default function Terms() {
                 </p>
                 <p>
                   Email:
-                  <a href="mailto:support@unimart.com">support@unimart.com</a>
+                  <a href="mailto:hello@beautystation.com">hello@beautystation.com</a>
                 </p>
                 <p>
                   Phone: <a href="tel:+11234567890">+1 123 456 7890</a>

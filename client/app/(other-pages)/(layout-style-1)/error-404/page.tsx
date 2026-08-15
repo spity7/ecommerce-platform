@@ -1,12 +1,13 @@
-import { UnimartLogoIcon } from "../../../../components/svg-icons";
+import { SiteLogoIcon } from "../../../../components/svg-icons";
 import Link from "next/link";
 import Image from "next/image";
 
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Error 404 || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "The page you are looking for could not be found on Unimart.",
+  title: "Error 404 | Beauty Station | Cosmetics & Skincare",
+  description:
+    "The page you are looking for could not be found on Beauty Station.",
 };
 
 export default function page() {
@@ -42,7 +43,7 @@ export default function page() {
             <div className="col-lg-12 d-flex mx-auto">
               <div className="rbt-fshape-box-outline-bottom-style rbt-bg-color-white">
                 <div className="rbt-svg-bottom-portion">
-                  <UnimartLogoIcon />
+                  <SiteLogoIcon />
                 </div>
               </div>
             </div>

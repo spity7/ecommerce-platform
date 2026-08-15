@@ -9,8 +9,8 @@ import { SplashSectionNavProvider } from "@/components/splash/SplashSectionNavCo
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Splash || Unimart - eCommerce React Nextjs Bootstrap5 Template",
-  description: "Unimart splash page showcasing demos and features.",
+  title: "Splash | Beauty Station | Cosmetics & Skincare",
+  description: "Beauty Station splash page showcasing demos and features.",
 };
 
 export default function SplashPage() {
