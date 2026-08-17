@@ -34,6 +34,7 @@ import LayoutModals from "@/components/common/other-components/LayoutModals";
 import Toolbar from "@/components/modals/Toolbar";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
   title: site.seo.title,
   description: site.seo.description,
   robots: {
@@ -44,6 +45,7 @@ export const metadata: Metadata = {
     title: site.seo.title,
     description: site.seo.description,
     type: "website",
+    url: site.url,
   },
   twitter: {
     card: "summary_large_image",

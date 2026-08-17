@@ -6,6 +6,7 @@ import {
   bindThemeRepaint,
   type ChartLike,
   cardBg,
+  initChart,
   labelColor,
   tooltipBase,
 } from "@/components/charts/chart-utils";
@@ -42,7 +43,7 @@ export function VisitorsChart() {
       const element = chartRef.current;
       if (!element || disposed) return;
 
-      chart = echarts.init(element, null, { renderer: "canvas" }) as ChartLike;
+      chart = initChart(echarts, element, { renderer: "canvas" });
 
       const paint = () => {
         chart?.setOption({

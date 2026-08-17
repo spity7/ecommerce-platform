@@ -22,6 +22,7 @@ export default function SignInPage() {
           height={36}
           priority
           src={`${baseURL}assets/images/logo/logo.webp`}
+          style={{ width: "auto" }}
           width={160}
         />
       </Link>

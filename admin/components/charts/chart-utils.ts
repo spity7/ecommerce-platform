@@ -23,6 +23,25 @@ export type ChartLike = {
   ) => void;
 };
 
+type EChartsInitLib = {
+  init: (
+    element: HTMLElement,
+    theme?: string | null,
+    options?: { renderer?: "canvas" }
+  ) => unknown;
+  getInstanceByDom?: (element: HTMLElement) => ChartLike | undefined;
+};
+
+/** Dispose any existing instance before init (React Strict Mode / remounts). */
+export function initChart(
+  echarts: EChartsInitLib,
+  element: HTMLElement,
+  options?: { renderer?: "canvas" }
+): ChartLike {
+  echarts.getInstanceByDom?.(element)?.dispose();
+  return echarts.init(element, null, options) as ChartLike;
+}
+
 export function isDarkMode() {
   return document.documentElement.classList.contains("dark");
 }

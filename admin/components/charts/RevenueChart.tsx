@@ -7,6 +7,7 @@ import {
   bindThemeRepaint,
   type ChartLike,
   cardBg,
+  initChart,
   labelColor,
   MONTHS,
   tooltipBase,
@@ -85,7 +86,7 @@ export function RevenueChart() {
           { color: end, offset: 1 },
         ]);
 
-      chart = echarts.init(element, null, { renderer: "canvas" }) as ChartLike;
+      chart = initChart(echarts, element, { renderer: "canvas" });
 
       const paint = () => {
         chart?.setOption(

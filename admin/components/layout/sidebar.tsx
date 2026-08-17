@@ -39,6 +39,7 @@ export function Sidebar() {
             height={32}
             priority
             src={`${baseURL}assets/images/logo/logo.webp`}
+            style={{ width: "auto" }}
             width={142}
           />
           <Image
@@ -46,6 +47,7 @@ export function Sidebar() {
             className="logo-full hidden h-8 w-auto dark:block"
             height={32}
             src={`${baseURL}assets/images/logo/logo-blackbg.webp`}
+            style={{ width: "auto" }}
             width={142}
           />
           <Image

@@ -34,12 +34,26 @@ const homeLayout =
 
 writeFileSync(
   join(siteDir, ".env.example"),
-  `SITE_ID=${slug}
-MONGODB_URI=mongodb://127.0.0.1:27017/${slug}
-GCS_BUCKET_NAME=${slug}-media
+  `# Reference env for ${slug} — copy values into server/.env, admin/.env.local, client/.env.local
 
+# --- Shared (all apps) ---
+SITE_ID=${slug}
 NEXT_PUBLIC_SITE_ID=${slug}
+
+# --- Server only (server/.env) ---
+NODE_ENV=development
+PORT=5000
+MONGODB_URI=mongodb://127.0.0.1:27017/${slug}
+CORS_ORIGINS=http://localhost:3000,http://localhost:3001
+GCS_PROJECT_ID=your-gcp-project-id
+GCS_BUCKET_NAME=${slug}-media
+GCS_KEY_FILE=./gcs-key.json
+
+# --- Admin + client ---
+API_URL=http://localhost:5000
 NEXT_PUBLIC_API_URL=http://localhost:5000
+
+# --- Client only (client/.env.local) ---
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 `,
 );

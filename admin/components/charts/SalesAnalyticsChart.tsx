@@ -6,6 +6,7 @@ import {
   bindResponsiveChart,
   bindThemeRepaint,
   type ChartLike,
+  initChart,
   labelColor,
   splitColor,
   tooltipBase,
@@ -250,9 +251,11 @@ export function SalesAnalyticsChart({
         }
       }
 
+      if (disposed) return;
+
       mode = resolvedMode;
       chart?.dispose();
-      chart = lib.init(element, null, { renderer: "canvas" });
+      chart = initChart(lib, element, { renderer: "canvas" });
       paintSales();
 
       onModeResolved?.(resolvedMode);

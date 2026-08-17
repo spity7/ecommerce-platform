@@ -23,6 +23,7 @@ export function AuthShell({ children }: AuthShellProps) {
             height={40}
             priority
             src={`${baseURL}assets/images/logo/logo.webp`}
+            style={{ width: "auto" }}
             width={178}
           />
         </Link>
