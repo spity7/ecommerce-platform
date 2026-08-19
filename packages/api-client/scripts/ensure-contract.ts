@@ -1,16 +1,15 @@
 import { execSync } from "node:child_process";
-import { isApiContractStale } from "./api-contract-paths.js";
+import { isApiContractStale } from "./contract-paths.js";
+import { REPO_ROOT } from "./repo-root.js";
 
-// Invoked via root npm scripts — cwd is always the repo root.
-const repoRoot = process.cwd();
 const checkOnly = process.argv.includes("--check-only");
 const skipGenerate = process.env.SKIP_API_GENERATE === "1";
 
 function run(command: string) {
-  execSync(command, { cwd: repoRoot, stdio: "inherit" });
+  execSync(command, { cwd: REPO_ROOT, stdio: "inherit" });
 }
 
-if (!isApiContractStale(repoRoot)) {
+if (!isApiContractStale(REPO_ROOT)) {
   console.log("API contract is up to date.");
   process.exit(0);
 }
@@ -24,5 +23,5 @@ if (checkOnly || skipGenerate) {
 }
 
 console.log(`${message} Regenerating...`);
-run("npm run api:generate");
+run("npm run generate -w @platform/api-client");
 console.log("API contract regenerated.");

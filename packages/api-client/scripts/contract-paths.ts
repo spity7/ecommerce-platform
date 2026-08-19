@@ -6,11 +6,16 @@ export const API_CONTRACT_SOURCE_DIRS = [
   "server/src/openapi",
 ] as const;
 
-export const API_CONTRACT_SOURCE_FILES = ["orval.config.ts"] as const;
+export const API_CONTRACT_SOURCE_FILES = [
+  "packages/api-client/orval.config.ts",
+  "packages/api-client/openapi-transformer.cjs",
+  "packages/api-client/scripts/generate-orval-barrel.mjs",
+] as const;
 
 export const API_CONTRACT_ARTIFACTS = [
   "packages/api-client/openapi.json",
-  "packages/api-client/src/generated/client.ts",
+  "packages/api-client/src/generated/platform.schemas.ts",
+  "packages/api-client/src/generated/index.ts",
 ] as const;
 
 function walkSourceFiles(dir: string, files: string[]): void {

@@ -1,21 +1,21 @@
 import { execSync } from "node:child_process";
+import { REPO_ROOT } from "./repo-root.js";
 
-const repoRoot = process.cwd();
 const contractPaths = [
   "packages/api-client/openapi.json",
   "packages/api-client/src/generated",
 ];
 
 function run(command: string) {
-  execSync(command, { cwd: repoRoot, stdio: "inherit" });
+  execSync(command, { cwd: REPO_ROOT, stdio: "inherit" });
 }
 
 console.log("Regenerating OpenAPI spec and API client...");
-run("npm run api:generate");
+run("npm run generate -w @platform/api-client");
 
 const status = execSync(
   `git status --porcelain -- ${contractPaths.join(" ")}`,
-  { cwd: repoRoot, encoding: "utf8" },
+  { cwd: REPO_ROOT, encoding: "utf8" }
 ).trim();
 
 if (status) {

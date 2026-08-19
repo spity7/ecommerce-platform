@@ -1,12 +1,7 @@
-const DEFAULT_API_URL = "http://localhost:5000";
+import axios, { isAxiosError, type AxiosRequestConfig } from "axios";
+import { getApiBaseUrl } from "./apiBaseUrl.js";
 
-export function getApiBaseUrl(): string {
-  return (
-    process.env.API_URL ??
-    process.env.NEXT_PUBLIC_API_URL ??
-    DEFAULT_API_URL
-  ).replace(/\/$/, "");
-}
+export { getApiBaseUrl } from "./apiBaseUrl.js";
 
 export class ApiError extends Error {
   constructor(
@@ -18,71 +13,50 @@ export class ApiError extends Error {
   }
 }
 
-export type CustomFetchOptions = RequestInit & {
-  searchParams?: Record<string, string | number | boolean | undefined>;
-};
+export const platformInstance = axios.create({
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
+});
 
-type OrvalResponse<TData> = {
-  data: TData;
-  status: number;
-  headers: Headers;
-};
-
-export async function customFetch<T>(
-  path: string,
-  options: CustomFetchOptions = {}
-): Promise<T> {
-  const { searchParams, ...init } = options;
-  const url = new URL(`${getApiBaseUrl()}${path}`);
-
-  if (searchParams) {
-    for (const [key, value] of Object.entries(searchParams)) {
-      if (value !== undefined && value !== "") {
-        url.searchParams.set(key, String(value));
-      }
-    }
+platformInstance.interceptors.request.use((config) => {
+  config.baseURL = getApiBaseUrl();
+  if (typeof FormData !== "undefined" && config.data instanceof FormData) {
+    config.headers.delete("Content-Type");
   }
+  return config;
+});
 
-  const response = await fetch(url, {
-    ...init,
-    headers: {
-      ...(init.body instanceof FormData
-        ? {}
-        : { "Content-Type": "application/json" }),
-      ...init.headers,
-    },
-  });
-
-  if (!response.ok) {
-    let message = `Request failed (${response.status})`;
-    try {
-      const body = (await response.json()) as { error?: string };
-      if (body.error) {
+platformInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (isAxiosError(error)) {
+      const status = error.response?.status ?? 0;
+      let message = `Request failed (${status})`;
+      const body = error.response?.data as { error?: string } | undefined;
+      if (body?.error) {
         message = body.error;
       }
-    } catch {
-      // ignore parse errors
+      throw new ApiError(message, status);
     }
-    throw new ApiError(message, response.status);
+    throw error;
   }
+);
 
-  let data: unknown;
-  if (response.status === 204) {
-    data = undefined;
-  } else {
-    data = await response.json();
-  }
+export const customInstance = <T>(config: AxiosRequestConfig): Promise<T> => {
+  const source = axios.CancelToken.source();
+  const promise = platformInstance({
+    ...config,
+    cancelToken: source.token,
+  }).then(({ data }) => data);
 
-  return {
-    data,
-    status: response.status,
-    headers: response.headers,
-  } as T;
-}
+  // @ts-expect-error injected at runtime by consumers
+  promise.cancel = () => {
+    source.cancel("Query was cancelled");
+  };
 
-export async function unwrap<TData>(
-  promise: Promise<OrvalResponse<TData>>
-): Promise<TData> {
-  const response = await promise;
-  return response.data;
-}
+  return promise;
+};
+
+export default customInstance;
