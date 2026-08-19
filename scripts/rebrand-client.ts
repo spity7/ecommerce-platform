@@ -2,7 +2,8 @@
 import { readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-const ROOT = join(import.meta.dirname, "..");
+// Run from client workspace: npm run rebrand
+const ROOT = join(process.cwd(), "..");
 
 const TITLE_SUFFIX = "Beauty Station | Cosmetics & Skincare";
 const DESCRIPTION =
@@ -78,5 +79,5 @@ const clientChanged = rebrandDir(join(ROOT, "client"));
 const adminChanged = rebrandDir(join(ROOT, "admin"));
 
 console.log(
-  `Rebranded ${clientChanged} client files and ${adminChanged} admin files.`,
+  `Rebranded ${clientChanged} client files and ${adminChanged} admin files.`
 );

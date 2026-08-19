@@ -11,7 +11,7 @@ export function getApiBaseUrl(): string {
 export class ApiError extends Error {
   constructor(
     message: string,
-    public status: number,
+    public status: number
   ) {
     super(message);
     this.name = "ApiError";
@@ -30,7 +30,7 @@ type OrvalResponse<TData> = {
 
 export async function customFetch<T>(
   path: string,
-  options: CustomFetchOptions = {},
+  options: CustomFetchOptions = {}
 ): Promise<T> {
   const { searchParams, ...init } = options;
   const url = new URL(`${getApiBaseUrl()}${path}`);
@@ -81,7 +81,7 @@ export async function customFetch<T>(
 }
 
 export async function unwrap<TData>(
-  promise: Promise<OrvalResponse<TData>>,
+  promise: Promise<OrvalResponse<TData>>
 ): Promise<TData> {
   const response = await promise;
   return response.data;

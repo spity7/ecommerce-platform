@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "npm run build:packages --prefix ..",
+    "predev": "npm run api:ensure --prefix .. && npm run build:packages --prefix ..",
     "dev": "next dev",
     "dev:webpack": "next dev --turbopack=false",
     "build": "next build",

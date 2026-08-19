@@ -1,54 +1,22 @@
 export { ApiError, customFetch, getApiBaseUrl, unwrap } from "./mutator.js";
 export type { CustomFetchOptions } from "./mutator.js";
 
-export {
-  listProduct,
-  getProduct,
-  createProduct,
-  updateProduct,
+export * from "./generated/client.js";
+
+import {
   deleteProduct,
-} from "./generated/products/products.js";
-
-export {
-  listCategory,
-  getCategory,
-  createCategory,
-  updateCategory,
-  deleteCategory,
-} from "./generated/categories/categories.js";
-
-export {
-  listBrand,
-  getBrand,
-  createBrand,
-  updateBrand,
-  deleteBrand,
-} from "./generated/brands/brands.js";
-
-export {
   listAttribute,
-  getAttribute,
-  createAttribute,
-  updateAttribute,
-  deleteAttribute,
-} from "./generated/attributes/attributes.js";
-
-export { getHealth } from "./generated/health/health.js";
-export { uploadFile } from "./generated/uploads/uploads.js";
-
-export type * from "./generated/models/index.js";
-
-import { listAttribute } from "./generated/attributes/attributes.js";
-import { listBrand } from "./generated/brands/brands.js";
-import { listCategory } from "./generated/categories/categories.js";
-import { deleteProduct, listProduct } from "./generated/products/products.js";
+  listBrand,
+  listCategory,
+  listProduct,
+} from "./generated/client.js";
 import { unwrap } from "./mutator.js";
 import type {
   ListAttributeParams,
   ListBrandParams,
   ListCategoryParams,
   ListProductParams,
-} from "./generated/models/index.js";
+} from "./generated/client.js";
 
 export async function fetchProducts(params?: ListProductParams) {
   return unwrap(listProduct(params));
@@ -77,8 +45,8 @@ export async function fetchPublishedProducts(limit = 8) {
         status: "published",
         limit,
       },
-      { next: { revalidate: 60 } } as RequestInit,
-    ),
+      { next: { revalidate: 60 } } as RequestInit
+    )
   );
 }
 

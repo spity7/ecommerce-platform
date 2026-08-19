@@ -12,8 +12,14 @@
   "scripts": {
     "build:packages": "npm run build -w @platform/shared && npm run build -w @platform/site-config && npm run build -w @platform/api-client",
     "openapi:generate": "npm run build -w @platform/shared && npm run openapi:generate -w @platform/server",
-    "api:generate": "npm run openapi:generate && orval --config orval.config.ts && npm run build -w @platform/api-client",
+    "api:generate": "npm run openapi:generate && orval --config orval.config.ts && npm run api:format && npm run build -w @platform/api-client",
+    "api:ensure": "tsx scripts/ensure-api-contract.ts",
+    "api:watch": "chokidar \"packages/shared/src/**/*\" \"server/src/openapi/**/*\" \"orval.config.ts\" -c \"npm run api:generate\" --debounce 500 --initial",
+    "api:format": "prettier --write orval.config.ts packages/api-client/openapi.json packages/api-client/src",
+    "api:format:check": "prettier --check orval.config.ts packages/api-client/openapi.json packages/api-client/src",
     "api:check": "tsx scripts/check-api-contract.ts",
+    "format": "npm run api:format && npm run format -w @platform/admin && npm run format -w @platform/storefront && npm run format -w @platform/server",
+    "format:check": "npm run api:format:check && npm run format:check -w @platform/admin && npm run format:check -w @platform/storefront && npm run format:check -w @platform/server",
     "dev:client": "npm run dev -w @platform/storefront",
     "dev:admin": "npm run dev -w @platform/admin",
     "dev:server": "npm run dev -w @platform/server",
@@ -24,6 +30,8 @@
   "devDependencies": {
     "@types/node": "^20",
     "orval": "^7.21.0",
+    "chokidar-cli": "^3.0.0",
+    "prettier": "^3.6.2",
     "tsx": "^4.21.0",
     "typescript": "^5"
   },

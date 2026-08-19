@@ -42,11 +42,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "draft",
-              "published",
-              "archived"
-            ]
+            "enum": ["draft", "published", "archived"]
           },
           "categoryId": {
             "type": "string"
@@ -130,10 +126,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "draft",
-              "published"
-            ]
+            "enum": ["draft", "published"]
           },
           "productCount": {
             "type": "integer"
@@ -181,19 +174,11 @@
           },
           "visibility": {
             "type": "string",
-            "enum": [
-              "Featured",
-              "Standard",
-              "Hidden"
-            ]
+            "enum": ["Featured", "Standard", "Hidden"]
           },
           "status": {
             "type": "string",
-            "enum": [
-              "draft",
-              "published",
-              "archived"
-            ]
+            "enum": ["draft", "published", "archived"]
           },
           "productCount": {
             "type": "integer"
@@ -235,21 +220,14 @@
           },
           "displayType": {
             "type": "string",
-            "enum": [
-              "Dropdown",
-              "Swatch",
-              "Text"
-            ]
+            "enum": ["Dropdown", "Swatch", "Text"]
           },
           "description": {
             "type": "string"
           },
           "status": {
             "type": "string",
-            "enum": [
-              "active",
-              "draft"
-            ]
+            "enum": ["active", "draft"]
           },
           "values": {
             "type": "array",
@@ -320,11 +298,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "draft",
-              "published",
-              "archived"
-            ],
+            "enum": ["draft", "published", "archived"],
             "default": "draft"
           },
           "categoryId": {
@@ -365,11 +339,7 @@
             "default": {}
           }
         },
-        "required": [
-          "name",
-          "sku",
-          "price"
-        ]
+        "required": ["name", "sku", "price"]
       },
       "UpdateProductInput": {
         "type": "object",
@@ -409,11 +379,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "draft",
-              "published",
-              "archived"
-            ],
+            "enum": ["draft", "published", "archived"],
             "default": "draft"
           },
           "categoryId": {
@@ -474,16 +440,11 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "draft",
-              "published"
-            ],
+            "enum": ["draft", "published"],
             "default": "draft"
           }
         },
-        "required": [
-          "name"
-        ]
+        "required": ["name"]
       },
       "UpdateCategoryInput": {
         "type": "object",
@@ -504,10 +465,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "draft",
-              "published"
-            ],
+            "enum": ["draft", "published"],
             "default": "draft"
           }
         }
@@ -540,26 +498,16 @@
           },
           "visibility": {
             "type": "string",
-            "enum": [
-              "Featured",
-              "Standard",
-              "Hidden"
-            ],
+            "enum": ["Featured", "Standard", "Hidden"],
             "default": "Standard"
           },
           "status": {
             "type": "string",
-            "enum": [
-              "draft",
-              "published",
-              "archived"
-            ],
+            "enum": ["draft", "published", "archived"],
             "default": "draft"
           }
         },
-        "required": [
-          "name"
-        ]
+        "required": ["name"]
       },
       "UpdateBrandInput": {
         "type": "object",
@@ -589,20 +537,12 @@
           },
           "visibility": {
             "type": "string",
-            "enum": [
-              "Featured",
-              "Standard",
-              "Hidden"
-            ],
+            "enum": ["Featured", "Standard", "Hidden"],
             "default": "Standard"
           },
           "status": {
             "type": "string",
-            "enum": [
-              "draft",
-              "published",
-              "archived"
-            ],
+            "enum": ["draft", "published", "archived"],
             "default": "draft"
           }
         }
@@ -622,11 +562,7 @@
           },
           "displayType": {
             "type": "string",
-            "enum": [
-              "Dropdown",
-              "Swatch",
-              "Text"
-            ],
+            "enum": ["Dropdown", "Swatch", "Text"],
             "default": "Dropdown"
           },
           "description": {
@@ -636,10 +572,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "active",
-              "draft"
-            ],
+            "enum": ["active", "draft"],
             "default": "draft"
           },
           "values": {
@@ -651,9 +584,7 @@
             "default": []
           }
         },
-        "required": [
-          "name"
-        ]
+        "required": ["name"]
       },
       "UpdateAttributeInput": {
         "type": "object",
@@ -670,11 +601,7 @@
           },
           "displayType": {
             "type": "string",
-            "enum": [
-              "Dropdown",
-              "Swatch",
-              "Text"
-            ],
+            "enum": ["Dropdown", "Swatch", "Text"],
             "default": "Dropdown"
           },
           "description": {
@@ -684,10 +611,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "active",
-              "draft"
-            ],
+            "enum": ["active", "draft"],
             "default": "draft"
           },
           "values": {
@@ -756,11 +680,7 @@
                 },
                 "status": {
                   "type": "string",
-                  "enum": [
-                    "draft",
-                    "published",
-                    "archived"
-                  ]
+                  "enum": ["draft", "published", "archived"]
                 },
                 "categoryId": {
                   "type": "string"
@@ -838,12 +758,7 @@
             "type": "integer"
           }
         },
-        "required": [
-          "data",
-          "total",
-          "page",
-          "limit"
-        ]
+        "required": ["data", "total", "page", "limit"]
       },
       "PaginatedCategories": {
         "type": "object",
@@ -867,10 +782,7 @@
                 },
                 "status": {
                   "type": "string",
-                  "enum": [
-                    "draft",
-                    "published"
-                  ]
+                  "enum": ["draft", "published"]
                 },
                 "productCount": {
                   "type": "integer"
@@ -906,12 +818,7 @@
             "type": "integer"
           }
         },
-        "required": [
-          "data",
-          "total",
-          "page",
-          "limit"
-        ]
+        "required": ["data", "total", "page", "limit"]
       },
       "PaginatedBrands": {
         "type": "object",
@@ -941,19 +848,11 @@
                 },
                 "visibility": {
                   "type": "string",
-                  "enum": [
-                    "Featured",
-                    "Standard",
-                    "Hidden"
-                  ]
+                  "enum": ["Featured", "Standard", "Hidden"]
                 },
                 "status": {
                   "type": "string",
-                  "enum": [
-                    "draft",
-                    "published",
-                    "archived"
-                  ]
+                  "enum": ["draft", "published", "archived"]
                 },
                 "productCount": {
                   "type": "integer"
@@ -992,12 +891,7 @@
             "type": "integer"
           }
         },
-        "required": [
-          "data",
-          "total",
-          "page",
-          "limit"
-        ]
+        "required": ["data", "total", "page", "limit"]
       },
       "PaginatedAttributes": {
         "type": "object",
@@ -1018,21 +912,14 @@
                 },
                 "displayType": {
                   "type": "string",
-                  "enum": [
-                    "Dropdown",
-                    "Swatch",
-                    "Text"
-                  ]
+                  "enum": ["Dropdown", "Swatch", "Text"]
                 },
                 "description": {
                   "type": "string"
                 },
                 "status": {
                   "type": "string",
-                  "enum": [
-                    "active",
-                    "draft"
-                  ]
+                  "enum": ["active", "draft"]
                 },
                 "values": {
                   "type": "array",
@@ -1076,12 +963,7 @@
             "type": "integer"
           }
         },
-        "required": [
-          "data",
-          "total",
-          "page",
-          "limit"
-        ]
+        "required": ["data", "total", "page", "limit"]
       },
       "HealthResponse": {
         "type": "object",
@@ -1103,17 +985,11 @@
           },
           "database": {
             "type": "string",
-            "enum": [
-              "connected",
-              "disconnected"
-            ]
+            "enum": ["connected", "disconnected"]
           },
           "gcs": {
             "type": "string",
-            "enum": [
-              "configured",
-              "not_configured"
-            ]
+            "enum": ["configured", "not_configured"]
           },
           "timestamp": {
             "type": "string",
@@ -1142,10 +1018,7 @@
             "format": "uri"
           }
         },
-        "required": [
-          "fileName",
-          "publicUrl"
-        ]
+        "required": ["fileName", "publicUrl"]
       },
       "ErrorResponse": {
         "type": "object",
@@ -1154,9 +1027,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "error"
-        ]
+        "required": ["error"]
       },
       "ValidationErrorResponse": {
         "type": "object",
@@ -1174,10 +1045,7 @@
             }
           }
         },
-        "required": [
-          "error",
-          "details"
-        ]
+        "required": ["error", "details"]
       }
     },
     "parameters": {}
@@ -1185,9 +1053,7 @@
   "paths": {
     "/api/products": {
       "get": {
-        "tags": [
-          "Products"
-        ],
+        "tags": ["Products"],
         "operationId": "listProduct",
         "summary": "List products",
         "parameters": [
@@ -1268,11 +1134,7 @@
                           },
                           "status": {
                             "type": "string",
-                            "enum": [
-                              "draft",
-                              "published",
-                              "archived"
-                            ]
+                            "enum": ["draft", "published", "archived"]
                           },
                           "categoryId": {
                             "type": "string"
@@ -1350,12 +1212,7 @@
                       "type": "integer"
                     }
                   },
-                  "required": [
-                    "data",
-                    "total",
-                    "page",
-                    "limit"
-                  ]
+                  "required": ["data", "total", "page", "limit"]
                 }
               }
             }
@@ -1363,9 +1220,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Products"
-        ],
+        "tags": ["Products"],
         "operationId": "createProduct",
         "summary": "Create product",
         "requestBody": {
@@ -1409,11 +1264,7 @@
                   },
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "draft",
-                      "published",
-                      "archived"
-                    ],
+                    "enum": ["draft", "published", "archived"],
                     "default": "draft"
                   },
                   "categoryId": {
@@ -1454,11 +1305,7 @@
                     "default": {}
                   }
                 },
-                "required": [
-                  "name",
-                  "sku",
-                  "price"
-                ]
+                "required": ["name", "sku", "price"]
               }
             }
           }
@@ -1497,11 +1344,7 @@
                     },
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "draft",
-                        "published",
-                        "archived"
-                      ]
+                      "enum": ["draft", "published", "archived"]
                     },
                     "categoryId": {
                       "type": "string"
@@ -1591,10 +1434,7 @@
                       }
                     }
                   },
-                  "required": [
-                    "error",
-                    "details"
-                  ]
+                  "required": ["error", "details"]
                 }
               }
             }
@@ -1610,9 +1450,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -1622,9 +1460,7 @@
     },
     "/api/products/{id}": {
       "get": {
-        "tags": [
-          "Products"
-        ],
+        "tags": ["Products"],
         "operationId": "getProduct",
         "summary": "Get product by ID",
         "parameters": [
@@ -1673,11 +1509,7 @@
                     },
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "draft",
-                        "published",
-                        "archived"
-                      ]
+                      "enum": ["draft", "published", "archived"]
                     },
                     "categoryId": {
                       "type": "string"
@@ -1758,9 +1590,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -1768,9 +1598,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "Products"
-        ],
+        "tags": ["Products"],
         "operationId": "updateProduct",
         "summary": "Update product",
         "parameters": [
@@ -1826,11 +1654,7 @@
                   },
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "draft",
-                      "published",
-                      "archived"
-                    ],
+                    "enum": ["draft", "published", "archived"],
                     "default": "draft"
                   },
                   "categoryId": {
@@ -1909,11 +1733,7 @@
                     },
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "draft",
-                        "published",
-                        "archived"
-                      ]
+                      "enum": ["draft", "published", "archived"]
                     },
                     "categoryId": {
                       "type": "string"
@@ -2003,10 +1823,7 @@
                       }
                     }
                   },
-                  "required": [
-                    "error",
-                    "details"
-                  ]
+                  "required": ["error", "details"]
                 }
               }
             }
@@ -2022,9 +1839,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -2040,9 +1855,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -2050,9 +1863,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Products"
-        ],
+        "tags": ["Products"],
         "operationId": "deleteProduct",
         "summary": "Delete product",
         "parameters": [
@@ -2082,9 +1893,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -2094,9 +1903,7 @@
     },
     "/api/categories": {
       "get": {
-        "tags": [
-          "Categories"
-        ],
+        "tags": ["Categories"],
         "operationId": "listCategory",
         "summary": "List categorys",
         "parameters": [
@@ -2165,10 +1972,7 @@
                           },
                           "status": {
                             "type": "string",
-                            "enum": [
-                              "draft",
-                              "published"
-                            ]
+                            "enum": ["draft", "published"]
                           },
                           "productCount": {
                             "type": "integer"
@@ -2204,12 +2008,7 @@
                       "type": "integer"
                     }
                   },
-                  "required": [
-                    "data",
-                    "total",
-                    "page",
-                    "limit"
-                  ]
+                  "required": ["data", "total", "page", "limit"]
                 }
               }
             }
@@ -2217,9 +2016,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Categories"
-        ],
+        "tags": ["Categories"],
         "operationId": "createCategory",
         "summary": "Create category",
         "requestBody": {
@@ -2244,16 +2041,11 @@
                   },
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "draft",
-                      "published"
-                    ],
+                    "enum": ["draft", "published"],
                     "default": "draft"
                   }
                 },
-                "required": [
-                  "name"
-                ]
+                "required": ["name"]
               }
             }
           }
@@ -2280,10 +2072,7 @@
                     },
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "draft",
-                        "published"
-                      ]
+                      "enum": ["draft", "published"]
                     },
                     "productCount": {
                       "type": "integer"
@@ -2331,10 +2120,7 @@
                       }
                     }
                   },
-                  "required": [
-                    "error",
-                    "details"
-                  ]
+                  "required": ["error", "details"]
                 }
               }
             }
@@ -2350,9 +2136,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -2362,9 +2146,7 @@
     },
     "/api/categories/{id}": {
       "get": {
-        "tags": [
-          "Categories"
-        ],
+        "tags": ["Categories"],
         "operationId": "getCategory",
         "summary": "Get category by ID",
         "parameters": [
@@ -2401,10 +2183,7 @@
                     },
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "draft",
-                        "published"
-                      ]
+                      "enum": ["draft", "published"]
                     },
                     "productCount": {
                       "type": "integer"
@@ -2443,9 +2222,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -2453,9 +2230,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "Categories"
-        ],
+        "tags": ["Categories"],
         "operationId": "updateCategory",
         "summary": "Update category",
         "parameters": [
@@ -2492,10 +2267,7 @@
                   },
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "draft",
-                      "published"
-                    ],
+                    "enum": ["draft", "published"],
                     "default": "draft"
                   }
                 }
@@ -2525,10 +2297,7 @@
                     },
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "draft",
-                        "published"
-                      ]
+                      "enum": ["draft", "published"]
                     },
                     "productCount": {
                       "type": "integer"
@@ -2576,10 +2345,7 @@
                       }
                     }
                   },
-                  "required": [
-                    "error",
-                    "details"
-                  ]
+                  "required": ["error", "details"]
                 }
               }
             }
@@ -2595,9 +2361,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -2613,9 +2377,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -2623,9 +2385,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Categories"
-        ],
+        "tags": ["Categories"],
         "operationId": "deleteCategory",
         "summary": "Delete category",
         "parameters": [
@@ -2655,9 +2415,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -2667,9 +2425,7 @@
     },
     "/api/brands": {
       "get": {
-        "tags": [
-          "Brands"
-        ],
+        "tags": ["Brands"],
         "operationId": "listBrand",
         "summary": "List brands",
         "parameters": [
@@ -2744,19 +2500,11 @@
                           },
                           "visibility": {
                             "type": "string",
-                            "enum": [
-                              "Featured",
-                              "Standard",
-                              "Hidden"
-                            ]
+                            "enum": ["Featured", "Standard", "Hidden"]
                           },
                           "status": {
                             "type": "string",
-                            "enum": [
-                              "draft",
-                              "published",
-                              "archived"
-                            ]
+                            "enum": ["draft", "published", "archived"]
                           },
                           "productCount": {
                             "type": "integer"
@@ -2795,12 +2543,7 @@
                       "type": "integer"
                     }
                   },
-                  "required": [
-                    "data",
-                    "total",
-                    "page",
-                    "limit"
-                  ]
+                  "required": ["data", "total", "page", "limit"]
                 }
               }
             }
@@ -2808,9 +2551,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Brands"
-        ],
+        "tags": ["Brands"],
         "operationId": "createBrand",
         "summary": "Create brand",
         "requestBody": {
@@ -2844,26 +2585,16 @@
                   },
                   "visibility": {
                     "type": "string",
-                    "enum": [
-                      "Featured",
-                      "Standard",
-                      "Hidden"
-                    ],
+                    "enum": ["Featured", "Standard", "Hidden"],
                     "default": "Standard"
                   },
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "draft",
-                      "published",
-                      "archived"
-                    ],
+                    "enum": ["draft", "published", "archived"],
                     "default": "draft"
                   }
                 },
-                "required": [
-                  "name"
-                ]
+                "required": ["name"]
               }
             }
           }
@@ -2896,19 +2627,11 @@
                     },
                     "visibility": {
                       "type": "string",
-                      "enum": [
-                        "Featured",
-                        "Standard",
-                        "Hidden"
-                      ]
+                      "enum": ["Featured", "Standard", "Hidden"]
                     },
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "draft",
-                        "published",
-                        "archived"
-                      ]
+                      "enum": ["draft", "published", "archived"]
                     },
                     "productCount": {
                       "type": "integer"
@@ -2959,10 +2682,7 @@
                       }
                     }
                   },
-                  "required": [
-                    "error",
-                    "details"
-                  ]
+                  "required": ["error", "details"]
                 }
               }
             }
@@ -2978,9 +2698,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -2990,9 +2708,7 @@
     },
     "/api/brands/{id}": {
       "get": {
-        "tags": [
-          "Brands"
-        ],
+        "tags": ["Brands"],
         "operationId": "getBrand",
         "summary": "Get brand by ID",
         "parameters": [
@@ -3035,19 +2751,11 @@
                     },
                     "visibility": {
                       "type": "string",
-                      "enum": [
-                        "Featured",
-                        "Standard",
-                        "Hidden"
-                      ]
+                      "enum": ["Featured", "Standard", "Hidden"]
                     },
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "draft",
-                        "published",
-                        "archived"
-                      ]
+                      "enum": ["draft", "published", "archived"]
                     },
                     "productCount": {
                       "type": "integer"
@@ -3089,9 +2797,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -3099,9 +2805,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "Brands"
-        ],
+        "tags": ["Brands"],
         "operationId": "updateBrand",
         "summary": "Update brand",
         "parameters": [
@@ -3147,20 +2851,12 @@
                   },
                   "visibility": {
                     "type": "string",
-                    "enum": [
-                      "Featured",
-                      "Standard",
-                      "Hidden"
-                    ],
+                    "enum": ["Featured", "Standard", "Hidden"],
                     "default": "Standard"
                   },
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "draft",
-                      "published",
-                      "archived"
-                    ],
+                    "enum": ["draft", "published", "archived"],
                     "default": "draft"
                   }
                 }
@@ -3196,19 +2892,11 @@
                     },
                     "visibility": {
                       "type": "string",
-                      "enum": [
-                        "Featured",
-                        "Standard",
-                        "Hidden"
-                      ]
+                      "enum": ["Featured", "Standard", "Hidden"]
                     },
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "draft",
-                        "published",
-                        "archived"
-                      ]
+                      "enum": ["draft", "published", "archived"]
                     },
                     "productCount": {
                       "type": "integer"
@@ -3259,10 +2947,7 @@
                       }
                     }
                   },
-                  "required": [
-                    "error",
-                    "details"
-                  ]
+                  "required": ["error", "details"]
                 }
               }
             }
@@ -3278,9 +2963,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -3296,9 +2979,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -3306,9 +2987,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Brands"
-        ],
+        "tags": ["Brands"],
         "operationId": "deleteBrand",
         "summary": "Delete brand",
         "parameters": [
@@ -3338,9 +3017,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -3350,9 +3027,7 @@
     },
     "/api/attributes": {
       "get": {
-        "tags": [
-          "Attributes"
-        ],
+        "tags": ["Attributes"],
         "operationId": "listAttribute",
         "summary": "List attributes",
         "parameters": [
@@ -3418,21 +3093,14 @@
                           },
                           "displayType": {
                             "type": "string",
-                            "enum": [
-                              "Dropdown",
-                              "Swatch",
-                              "Text"
-                            ]
+                            "enum": ["Dropdown", "Swatch", "Text"]
                           },
                           "description": {
                             "type": "string"
                           },
                           "status": {
                             "type": "string",
-                            "enum": [
-                              "active",
-                              "draft"
-                            ]
+                            "enum": ["active", "draft"]
                           },
                           "values": {
                             "type": "array",
@@ -3476,12 +3144,7 @@
                       "type": "integer"
                     }
                   },
-                  "required": [
-                    "data",
-                    "total",
-                    "page",
-                    "limit"
-                  ]
+                  "required": ["data", "total", "page", "limit"]
                 }
               }
             }
@@ -3489,9 +3152,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Attributes"
-        ],
+        "tags": ["Attributes"],
         "operationId": "createAttribute",
         "summary": "Create attribute",
         "requestBody": {
@@ -3512,11 +3173,7 @@
                   },
                   "displayType": {
                     "type": "string",
-                    "enum": [
-                      "Dropdown",
-                      "Swatch",
-                      "Text"
-                    ],
+                    "enum": ["Dropdown", "Swatch", "Text"],
                     "default": "Dropdown"
                   },
                   "description": {
@@ -3526,10 +3183,7 @@
                   },
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "active",
-                      "draft"
-                    ],
+                    "enum": ["active", "draft"],
                     "default": "draft"
                   },
                   "values": {
@@ -3541,9 +3195,7 @@
                     "default": []
                   }
                 },
-                "required": [
-                  "name"
-                ]
+                "required": ["name"]
               }
             }
           }
@@ -3567,21 +3219,14 @@
                     },
                     "displayType": {
                       "type": "string",
-                      "enum": [
-                        "Dropdown",
-                        "Swatch",
-                        "Text"
-                      ]
+                      "enum": ["Dropdown", "Swatch", "Text"]
                     },
                     "description": {
                       "type": "string"
                     },
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "active",
-                        "draft"
-                      ]
+                      "enum": ["active", "draft"]
                     },
                     "values": {
                       "type": "array",
@@ -3637,10 +3282,7 @@
                       }
                     }
                   },
-                  "required": [
-                    "error",
-                    "details"
-                  ]
+                  "required": ["error", "details"]
                 }
               }
             }
@@ -3656,9 +3298,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -3668,9 +3308,7 @@
     },
     "/api/attributes/{id}": {
       "get": {
-        "tags": [
-          "Attributes"
-        ],
+        "tags": ["Attributes"],
         "operationId": "getAttribute",
         "summary": "Get attribute by ID",
         "parameters": [
@@ -3704,21 +3342,14 @@
                     },
                     "displayType": {
                       "type": "string",
-                      "enum": [
-                        "Dropdown",
-                        "Swatch",
-                        "Text"
-                      ]
+                      "enum": ["Dropdown", "Swatch", "Text"]
                     },
                     "description": {
                       "type": "string"
                     },
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "active",
-                        "draft"
-                      ]
+                      "enum": ["active", "draft"]
                     },
                     "values": {
                       "type": "array",
@@ -3765,9 +3396,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -3775,9 +3404,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "Attributes"
-        ],
+        "tags": ["Attributes"],
         "operationId": "updateAttribute",
         "summary": "Update attribute",
         "parameters": [
@@ -3810,11 +3437,7 @@
                   },
                   "displayType": {
                     "type": "string",
-                    "enum": [
-                      "Dropdown",
-                      "Swatch",
-                      "Text"
-                    ],
+                    "enum": ["Dropdown", "Swatch", "Text"],
                     "default": "Dropdown"
                   },
                   "description": {
@@ -3824,10 +3447,7 @@
                   },
                   "status": {
                     "type": "string",
-                    "enum": [
-                      "active",
-                      "draft"
-                    ],
+                    "enum": ["active", "draft"],
                     "default": "draft"
                   },
                   "values": {
@@ -3862,21 +3482,14 @@
                     },
                     "displayType": {
                       "type": "string",
-                      "enum": [
-                        "Dropdown",
-                        "Swatch",
-                        "Text"
-                      ]
+                      "enum": ["Dropdown", "Swatch", "Text"]
                     },
                     "description": {
                       "type": "string"
                     },
                     "status": {
                       "type": "string",
-                      "enum": [
-                        "active",
-                        "draft"
-                      ]
+                      "enum": ["active", "draft"]
                     },
                     "values": {
                       "type": "array",
@@ -3932,10 +3545,7 @@
                       }
                     }
                   },
-                  "required": [
-                    "error",
-                    "details"
-                  ]
+                  "required": ["error", "details"]
                 }
               }
             }
@@ -3951,9 +3561,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -3969,9 +3577,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -3979,9 +3585,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Attributes"
-        ],
+        "tags": ["Attributes"],
         "operationId": "deleteAttribute",
         "summary": "Delete attribute",
         "parameters": [
@@ -4011,9 +3615,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -4023,9 +3625,7 @@
     },
     "/api/health": {
       "get": {
-        "tags": [
-          "Health"
-        ],
+        "tags": ["Health"],
         "operationId": "getHealth",
         "summary": "Health check",
         "responses": {
@@ -4053,17 +3653,11 @@
                     },
                     "database": {
                       "type": "string",
-                      "enum": [
-                        "connected",
-                        "disconnected"
-                      ]
+                      "enum": ["connected", "disconnected"]
                     },
                     "gcs": {
                       "type": "string",
-                      "enum": [
-                        "configured",
-                        "not_configured"
-                      ]
+                      "enum": ["configured", "not_configured"]
                     },
                     "timestamp": {
                       "type": "string",
@@ -4089,9 +3683,7 @@
     },
     "/api/uploads": {
       "post": {
-        "tags": [
-          "Uploads"
-        ],
+        "tags": ["Uploads"],
         "operationId": "uploadFile",
         "summary": "Upload a file to storage",
         "requestBody": {
@@ -4108,9 +3700,7 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "file"
-                ]
+                "required": ["file"]
               }
             }
           }
@@ -4131,10 +3721,7 @@
                       "format": "uri"
                     }
                   },
-                  "required": [
-                    "fileName",
-                    "publicUrl"
-                  ]
+                  "required": ["fileName", "publicUrl"]
                 }
               }
             }
@@ -4150,9 +3737,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }
@@ -4168,9 +3753,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "error"
-                  ]
+                  "required": ["error"]
                 }
               }
             }

@@ -4,11 +4,12 @@ export default defineConfig({
   platformApi: {
     input: "./packages/api-client/openapi.json",
     output: {
-      target: "./packages/api-client/src/generated/endpoints.ts",
-      schemas: "./packages/api-client/src/generated/models",
+      // Single file: all endpoints + types (no per-tag folders or per-schema files).
+      target: "./packages/api-client/src/generated/client.ts",
       client: "fetch",
-      mode: "tags-split",
+      mode: "single",
       clean: true,
+      prettier: true,
       override: {
         mutator: {
           path: "./packages/api-client/src/mutator.ts",

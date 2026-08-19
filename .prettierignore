@@ -1,0 +1,30 @@
+# Dependencies & build output
+**/node_modules
+**/.next
+**/out
+**/build
+**/dist
+**/coverage
+
+# Generated / cache
+**/*.tsbuildinfo
+**/next-env.d.ts
+**/.vercel
+
+# Lock files
+package-lock.json
+
+# Secrets & env
+.env*
+!.env.example
+*.pem
+
+# Vendor / minified assets
+**/*.min.css
+**/*.min.js
+client/public/assets/css/vendor/
+client/public/assets/css/plugins/
+
+# OS / logs
+.DS_Store
+*.log

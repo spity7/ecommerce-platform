@@ -75,12 +75,12 @@ The API is documented with **OpenAPI 3** and consumed by frontends through a gen
 
 ### Source of truth
 
-| Layer            | Location                             | Role                                |
-| ---------------- | ------------------------------------ | ----------------------------------- |
-| Zod schemas      | `packages/shared/src/schemas/`       | Request validation + DTO shapes     |
-| OpenAPI registry | `server/src/openapi/registry.ts`     | Path/response definitions           |
-| OpenAPI spec     | `packages/api-client/openapi.json`   | Committed contract artifact         |
-| Generated client | `packages/api-client/src/generated/` | Typed fetch functions for frontends |
+| Layer            | Location                                      | Role                                          |
+| ---------------- | --------------------------------------------- | --------------------------------------------- |
+| Zod schemas      | `packages/shared/src/schemas/`                | Request validation + DTO shapes               |
+| OpenAPI registry | `server/src/openapi/registry.ts`              | Path/response definitions                     |
+| OpenAPI spec     | `packages/api-client/openapi.json`            | Committed contract artifact                   |
+| Generated client | `packages/api-client/src/generated/client.ts` | Single Orval output (types + fetch functions) |
 
 ### Live docs (dev server)
 
@@ -92,8 +92,17 @@ The API is documented with **OpenAPI 3** and consumed by frontends through a gen
 ### Commands
 
 ```bash
-# Regenerate spec + client after API changes
+# Regenerate spec + client after API changes (Orval + Prettier)
 npm run api:generate
+
+# Auto-regenerate when contract inputs change (used by dev:server/admin/client)
+npm run api:ensure
+
+# Watch contract inputs and regenerate on save (optional, for API-heavy work)
+npm run api:watch
+
+# Format only API contract artifacts
+npm run api:format
 
 # Verify committed artifacts match the registry (used in CI)
 npm run api:check
@@ -107,11 +116,17 @@ npm run build:packages
 1. Update Zod schemas in `@platform/shared` (request + DTO schemas).
 2. Register or update paths in `server/src/openapi/registry.ts`.
 3. Implement route handlers in `server/src/routes/`.
-4. Run `npm run api:generate`.
-5. Commit `openapi.json` and `packages/api-client/src/generated/`.
+4. Run `npm run api:generate` (or just restart any dev app — `api:ensure` runs automatically).
+5. Commit `openapi.json` and `packages/api-client/src/generated/client.ts`.
 6. Use the new functions from `@platform/api-client` in `admin` / `client`.
 
-### Frontend usage
+### Orval output
+
+The client is generated as **one file** (`client.ts`) with Orval `mode: single`. That keeps types and fetch helpers together without hundreds of per-schema or per-tag files. `api:generate` runs Orval with `prettier: true`, then formats `openapi.json`, `orval.config.ts`, and `packages/api-client/src` via the root Prettier config (`.prettierrc.json`).
+
+**Safety net:** `dev:server`, `dev:admin`, and `dev:client` call `api:ensure` first. If `packages/shared` or `server/src/openapi` changed since the last generation, it runs `api:generate` automatically. Set `SKIP_API_GENERATE=1` to only warn. Use `api:watch` while actively editing the API.
+
+Import from `@platform/api-client` — the package `index.ts` re-exports the generated client and adds small convenience wrappers (`fetchProducts`, etc.).
 
 ```ts
 import { fetchProducts, listProduct } from "@platform/api-client";
