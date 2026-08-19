@@ -1,0 +1,36 @@
+---
+description: Keep platform docs in sync when code or contracts change
+alwaysApply: true
+---
+
+# Documentation sync (ecommerce-platform)
+
+When your work changes something documented here, **update the matching doc in the same task** — do not wait to be asked.
+
+## When to update what
+
+| You changed                                                | Update (same task)                                   |
+| ---------------------------------------------------------- | ---------------------------------------------------- |
+| Monorepo layout, CI, multi-site flow, integration maturity | `docs/ARCHITECTURE.md`                               |
+| HTTP routes, admin pages, storefront production routes     | `docs/ROUTES.md`                                     |
+| Naming, UI stacks, patterns, tooling                       | `docs/CONVENTIONS.md`                                |
+| Deployed sites (DB, GCS, URLs, features)                   | `docs/site-registry.json`                            |
+| OpenAPI / Orval pipeline details                           | `docs/ARCHITECTURE.md` § API contract                |
+| Agent entry commands or doc map                            | `AGENTS.md`, `CLAUDE.md`, `docs/AI-INDEX.md`         |
+| Storefront-specific patterns (tabs, modals, Zustand)       | `docs/CONVENTIONS.md` + `client/.cursor/rules/*.mdc` |
+| Admin-specific patterns (nav, tokens)                      | `docs/CONVENTIONS.md` + `.cursor/rules/admin-ui.mdc` |
+| API contract rules                                         | `.cursor/rules/api-contract.mdc`                     |
+| Site config / new sites                                    | `.cursor/rules/multi-site.mdc`                       |
+| Human quick start                                          | `README.md`                                          |
+| Workspace README scope                                     | `client/README.md`, `admin/README.md`                |
+
+## How
+
+1. Edit the smallest section that reflects the change (one table row, one bullet, one subsection).
+2. Set **Last reviewed** to today's date in `docs/AI-INDEX.md` for every doc you touch.
+3. If a Cursor rule summary is stale, update the matching `.cursor/rules/*.mdc` bullet — keep rules short; long form stays in `docs/`.
+
+## Do not
+
+- Hand-edit `packages/api-client/src/generated/**` — regenerate and document the pipeline instead.
+- Document aspirational behavior as current (e.g. feature-flag nav filtering) without noting it is not implemented yet.

@@ -1,124 +1,100 @@
-# Beauty Station Storefront
+# Storefront (`@platform/storefront`)
 
-A multi-demo eCommerce frontend template built with Next.js (App Router), React, TypeScript, and Zustand.
+Next.js storefront for the ecommerce platform. Folder name: `client/`. Runs on **port 3000** in development.
 
-## Tech Stack
+Part of the monorepo — run commands from **repo root** unless noted. Platform docs: [AGENTS.md](../AGENTS.md), [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md), [docs/CONVENTIONS.md](../docs/CONVENTIONS.md).
 
-- Next.js 16 (App Router)
-- React 19 + TypeScript
-- Zustand for UI/store state
-- Bootstrap + Sass
-- Swiper and other UI-focused libraries
+## Tech stack
+
+- Next.js 16 (App Router), React 19, TypeScript
+- Bootstrap 5 + Sass, Swiper, GSAP, Lightgallery
+- Zustand (cart, wishlist, compare — browser persistence)
+- `@platform/site-config` for multi-site theming and home layout
 
 ## Prerequisites
 
-- Node.js 20+ (recommended)
-- npm 10+ (or compatible package manager)
-
-## Installation
-
-```bash
-npm install
-```
+- Node.js **20.x**
 
 ## Development
 
-Start dev server (Turbopack default):
+From repo root:
 
 ```bash
-npm run dev
+npm run dev:client
 ```
 
-Start dev server with Webpack:
+Webpack instead of Turbopack:
 
 ```bash
-npm run dev:webpack
+npm run dev:webpack -w @platform/storefront
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
-## Available Scripts
+## Environment
 
-- `npm run dev` - Start development server (Turbopack)
-- `npm run dev:webpack` - Start development server (Webpack)
-- `npm run build` - Create production build
-- `npm run start` - Run production server
-- `npm run lint` - Run ESLint
-- `npm run analyze` - Build with bundle analyzer enabled
+Copy `client/.env.example` → `client/.env.local`:
 
-## Project Structure
+- `NEXT_PUBLIC_SITE_ID` — site config (default `beauty-station`)
+- `NEXT_PUBLIC_API_URL` — backend for API-integrated blocks
+
+## Scripts
+
+| Command                                       | Purpose                |
+| --------------------------------------------- | ---------------------- |
+| `npm run dev -w @platform/storefront`         | Dev server (Turbopack) |
+| `npm run dev:webpack -w @platform/storefront` | Dev with Webpack       |
+| `npm run build -w @platform/storefront`       | Production build       |
+| `npm run lint -w @platform/storefront`        | ESLint                 |
+| `npm run analyze -w @platform/storefront`     | Bundle analyzer        |
+| `npm run rebrand -w @platform/storefront`     | Rebrand helper script  |
+
+## Project structure
 
 ```text
-app/          Route groups and page entries (App Router)
-components/   Reusable UI blocks, home/demo sections, modals, product UIs
-context/      Zustand stores (cart, wishlist, UI state)
-data/         Static data sources used by demos/pages
-hooks/        Custom React hooks
-lib/          Utilities and shared helpers
-types/        TypeScript shared types
-public/       Static assets (images, fonts, styles)
-scripts/      Utility scripts for project maintenance
+app/              App Router — many theme demo route groups
+components/       UI blocks, home sections, modals, site shell
+context/          Zustand stores (cart, wishlist, ui)
+data/             Static demo catalog (products, blogs, …)
+hooks/            Custom React hooks
+lib/              Site config, utilities
+public/           Images, fonts, SCSS
 ```
 
-## Architecture Notes
+## Production vs demo
 
-- The app contains many demo routes and presentation variants.
-- Modal rendering is centralized in `components/common/other-components/LayoutModals.tsx`.
-- Global UI state is managed in `context/uiStore.ts`.
-- Cart/wishlist state persistence is managed in `context/store.ts`.
+- **`/`** renders the site-specific home layout (`HomeLayoutRenderer` → Beauty Station uses `cosmetic-beauty-two`).
+- **~300 demo routes** under `(homes)`, `(shop)`, `(product-single)`, etc. — theme showcase, not all production paths.
+- **API:** partial integration on Beauty home (`Products1.tsx` tries API, falls back to static `data/*`).
+- **Tab filtering:** see `.cursor/rules/product-tab-filtering-pattern.mdc`.
 
-## Quality Workflow
+## Common tasks
 
-Before opening a PR:
+### Add a production page
 
-```bash
-npm run lint
-npm run build
-```
+1. Create a route under `app/`.
+2. Reuse components from `components/`.
+3. Prefer static data in `data/` for demos; use `@platform/api-client` only when wiring real catalog.
 
-Recommended additions for stricter quality gates:
+### Add a modal
 
-- Add a `typecheck` script (`tsc --noEmit`)
-- Add unit tests for utility and store logic
-- Add E2E smoke tests for core shopping flows
+1. Component under `components/modals/`.
+2. Register in `components/common/other-components/LayoutModals.tsx`.
+3. Wire open/close in `context/uiStore.ts`.
 
-## Common Tasks
-
-### Add a new page
-
-1. Create a route under `app/` using App Router conventions.
-2. Reuse existing section components from `components/` whenever possible.
-3. Keep data in `data/` and avoid embedding large static arrays in UI files.
-
-### Add a new modal
-
-1. Create the modal component under `components/modals/`.
-2. Register it in `LayoutModals`.
-3. Map modal open/close actions in `context/uiStore.ts`.
-
-### Analyze bundle size
+## Quality
 
 ```bash
-npm run analyze
+npm run lint -w @platform/storefront
+npm run build -w @platform/storefront
 ```
 
 ## Deployment
 
-Standard Next.js production flow:
-
-```bash
-npm run build
-npm run start
-```
-
-Deploy on any platform that supports Node.js and Next.js (Vercel recommended for easiest setup).
+Standard Next.js production flow. Client includes a multi-stage `Dockerfile` (note: verify Node version matches repo `engines`).
 
 ## Troubleshooting
 
-- If dev server behaves unexpectedly, remove `.next/` and restart.
-- If styles do not refresh properly, restart the dev server.
-- If you change dependencies, run `npm install` again before building.
-
-## License
-
-Use according to your project's licensing terms.
+- Unexpected dev behavior: delete `client/.next/` and restart.
+- SCSS not refreshing: restart dev server.
+- After dependency changes: `npm install` from repo root.

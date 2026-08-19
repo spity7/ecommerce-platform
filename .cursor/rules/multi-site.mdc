@@ -1,0 +1,38 @@
+---
+description: Multi-site configuration, env vars, and new site workflow
+alwaysApply: true
+---
+
+# Multi-site configuration
+
+One codebase deploys many storefront instances. Site identity comes from env vars, not hardcoded strings.
+
+## Resolution
+
+```ts
+import { getSiteConfig } from "@platform/site-config";
+const site = getSiteConfig(process.env.SITE_ID ?? "beauty-station");
+```
+
+| Env                               | Apps          | Purpose                       |
+| --------------------------------- | ------------- | ----------------------------- |
+| `SITE_ID`                         | server        | Site config + DB              |
+| `NEXT_PUBLIC_SITE_ID`             | admin, client | Site config in browser        |
+| `MONGODB_URI`                     | server        | One MongoDB database per site |
+| `API_URL` / `NEXT_PUBLIC_API_URL` | admin, client | Backend URL                   |
+
+## Adding a site
+
+1. `npm run create-site <id> [--template beauty|sport|general]`
+2. Add `packages/site-config/src/sites/<id>.ts`
+3. Register in `packages/site-config/src/index.ts`
+4. Add row to `docs/site-registry.json`
+5. Provision MongoDB + GCS + deploy env
+
+## Rules
+
+- Site IDs: kebab-case.
+- Use `getSiteConfig()` / workspace helpers (`getAdminSiteConfig`, `getStorefrontSiteConfig`) — no magic `"beauty-station"` in feature code except env defaults.
+- `SiteConfig.features.*` exists but admin nav does **not** filter on it yet — document or implement before relying on it.
+
+Registry: `docs/site-registry.json`. Architecture: `docs/ARCHITECTURE.md`.

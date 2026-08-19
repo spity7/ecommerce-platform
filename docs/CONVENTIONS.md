@@ -1,0 +1,109 @@
+# Code conventions
+
+Per-workspace patterns for humans and AI. **Last reviewed:** 2026-08-19.
+
+## Monorepo
+
+| Item                 | Convention                                                                                                                         |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Package names        | `@platform/storefront`, `@platform/admin`, `@platform/server`, `@platform/shared`, `@platform/site-config`, `@platform/api-client` |
+| Folder vs name       | Folder `client/` = npm `@platform/storefront`; folder `admin/` = `@platform/admin`                                                 |
+| Node                 | **20.x** at repo root (`engines` in root `package.json`)                                                                           |
+| Imports (server ESM) | Use `.js` extensions in `server/src` relative imports                                                                              |
+| Site IDs             | kebab-case (`beauty-station`)                                                                                                      |
+
+Run root scripts from repo root. Workspace dev commands auto-run `api:ensure` + `build:packages` via `predev`.
+
+## Multi-site
+
+```ts
+import { getSiteConfig } from "@platform/site-config";
+
+const site = getSiteConfig(process.env.SITE_ID);
+```
+
+| Env var                           | Where         | Purpose                              |
+| --------------------------------- | ------------- | ------------------------------------ |
+| `SITE_ID`                         | server        | Select site config + DB context      |
+| `NEXT_PUBLIC_SITE_ID`             | admin, client | Select site config in browser        |
+| `MONGODB_URI`                     | server        | MongoDB connection (one DB per site) |
+| `API_URL` / `NEXT_PUBLIC_API_URL` | admin, client | Backend base URL                     |
+
+- Add new sites in `packages/site-config/src/sites/{id}.ts` and register in `index.ts`.
+- Update `docs/site-registry.json` and run `npm run create-site` for env scaffolding.
+- Do **not** hardcode site names in feature code.
+
+## API contract
+
+**Chain:** `packages/shared/src/schemas/` → `server/src/openapi/registry.ts` → `packages/api-client/openapi.json` → Orval → `packages/api-client/src/generated/`.
+
+- Validate request bodies with Zod from `@platform/shared` in route handlers.
+- Serialize Mongo documents via DTO helpers (e.g. `toProductDto`).
+- Frontends import `@platform/api-client` — use `fetchProducts` helpers or `platformApi.listProduct()`.
+- **Never** hand-edit `packages/api-client/src/generated/**`.
+- After contract changes: `npm run api:generate` and commit `openapi.json` + generated files.
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) § API contract and `.cursor/rules/api-contract.mdc`.
+
+## Server (`@platform/server`)
+
+| Pattern      | Location                                      |
+| ------------ | --------------------------------------------- |
+| Routes       | `server/src/routes/*.routes.ts`               |
+| Models       | Mongoose in `server/src/models/`              |
+| Errors       | `AppError` + `middleware/errorHandler.ts`     |
+| Async routes | `asyncHandler` wrapper                        |
+| OpenAPI      | `server/src/openapi/registry.ts`              |
+| Seed         | `npm run seed` → `server/src/scripts/seed.ts` |
+| Format       | Prettier                                      |
+
+## Admin (`@platform/admin`)
+
+| Topic       | Convention                                                                                |
+| ----------- | ----------------------------------------------------------------------------------------- |
+| Styling     | Tailwind CSS 4 — semantic tokens in `app/globals.css` (`bg-brand-600`, `text-ink-500`, …) |
+| Icons       | `lucide-react`                                                                            |
+| Navigation  | `config/routes.ts` + `config/navigation.ts`                                               |
+| Site        | `lib/site.ts` → `getAdminSiteConfig()`                                                    |
+| API mappers | `lib/mappers/` — map DTOs to UI types                                                     |
+| Lint        | Biome + Prettier (`npm run check`)                                                        |
+| Auth        | **Not implemented** — sign-in is a demo page                                              |
+
+Catalog list pages fetch from API in Server Components; show inline error banner with seed hint on failure.
+
+## Storefront (`@platform/storefront`)
+
+| Topic           | Convention                                                                                       |
+| --------------- | ------------------------------------------------------------------------------------------------ |
+| Styling         | Bootstrap 5 + SCSS (`public/assets/scss/`)                                                       |
+| Site theme      | `SiteThemeStyles` injects CSS variables from `site.theme`                                        |
+| Home layout     | `SiteConfig.homeLayout` → `HomeLayoutRenderer`                                                   |
+| Demo catalog    | Static data in `data/products/*.ts` with optional `demoTab` for tabs                             |
+| Tab filtering   | See `client/.cursor/rules/product-tab-filtering-pattern.mdc`                                     |
+| Modals          | Register in `components/common/other-components/LayoutModals.tsx`; state in `context/uiStore.ts` |
+| Cart / wishlist | Zustand + persist in `context/store.ts` (client-only)                                            |
+| API fallback    | Try `@platform/api-client`, fall back to static data where implemented                           |
+| Lint            | ESLint + Prettier                                                                                |
+
+The storefront is primarily a **theme demo** (~300 routes). Wire API only for production paths the product needs.
+
+## Tooling matrix
+
+| Workspace                         | Lint   | Format                     |
+| --------------------------------- | ------ | -------------------------- |
+| Root / server / packages / client | —      | Prettier via root `format` |
+| Admin                             | Biome  | Prettier                   |
+| Client                            | ESLint | Prettier                   |
+
+**CI today:** `api:check`, `build:packages`, `typecheck` — no Next.js build or lint in CI yet.
+
+## Scripts (root)
+
+| Script           | Purpose                                                              |
+| ---------------- | -------------------------------------------------------------------- |
+| `create-site`    | Scaffold `sites/{id}/` from template                                 |
+| `rebrand-client` | Client rebranding helper (`npm run rebrand -w @platform/storefront`) |
+
+## Documentation sync
+
+When you change contracts, routes, site config, or these conventions, update docs in the same change. See `.cursor/rules/documentation-sync.mdc`.

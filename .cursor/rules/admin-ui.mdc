@@ -1,0 +1,47 @@
+---
+description: Admin dashboard UI and navigation conventions
+globs: admin/**/*
+alwaysApply: false
+---
+
+# Admin conventions (`@platform/admin`)
+
+Folder: `admin/`. Dev port **3001**.
+
+## Stack
+
+- Next.js 16 App Router, React 19, Tailwind CSS 4, Lucide icons, ECharts.
+
+## Site & API
+
+- Site: `getAdminSiteConfig()` in `lib/site.ts`.
+- Catalog **list** pages (products, categories, brands, attributes) fetch from `@platform/api-client` in Server Components.
+- Map DTOs in `lib/mappers/`. Other dashboard pages are template/demo data — do not assume API submit works.
+
+## Navigation
+
+- Routes: `config/routes.ts`
+- Sidebar: `config/navigation.ts`
+- Feature flags in site config are **not** yet used to hide nav items.
+
+## Styling
+
+- Semantic tokens in `app/globals.css` (`bg-brand-600`, `text-ink-500`, …).
+- No raw hex in TSX except inside `globals.css`.
+
+## Auth
+
+**Not implemented.** `app/(auth)/signin` is a demo — no middleware, no session. Do not add route guards without a real auth backend.
+
+## Optional basePath
+
+`admin/next.config.ts` reads `NEXT_PUBLIC_BASE_URL` for subdirectory deploys.
+
+## Quality
+
+```bash
+npm run check -w @platform/admin
+npm run build -w @platform/admin
+```
+
+See `docs/ROUTES.md` for page inventory and `docs/CONVENTIONS.md` for patterns.

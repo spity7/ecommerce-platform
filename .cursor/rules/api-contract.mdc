@@ -1,0 +1,33 @@
+---
+description: OpenAPI, Zod schemas, Orval, and generated API client rules
+alwaysApply: true
+---
+
+# API contract
+
+## Source of truth chain
+
+```
+packages/shared/src/schemas/     → Zod validation + DTO shapes
+server/src/openapi/registry.ts   → OpenAPI paths/responses
+packages/api-client/openapi.json → committed contract artifact
+Orval (orval.config.ts)         → packages/api-client/src/generated/
+```
+
+## When changing the API
+
+1. Update Zod schemas in `@platform/shared`.
+2. Register paths in `server/src/openapi/registry.ts`.
+3. Implement handlers in `server/src/routes/`.
+4. Run `npm run api:generate` from repo root.
+5. Commit `openapi.json` and `packages/api-client/src/generated/`.
+6. Update `docs/ROUTES.md` and `docs/ARCHITECTURE.md` if surface changed.
+
+## Rules
+
+- **Never** hand-edit `packages/api-client/src/generated/**`.
+- Frontends import `@platform/api-client` — use `fetchProducts` helpers or `platformApi.*`.
+- Dev apps run `api:ensure` on start; set `SKIP_API_GENERATE=1` to warn only.
+- CI runs `npm run api:check` — stale artifacts fail the build.
+
+Full reference: `docs/ARCHITECTURE.md` § API contract.

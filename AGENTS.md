@@ -1,0 +1,60 @@
+<!-- BEGIN:nextjs-agent-rules -->
+
+# Ecommerce Platform — agent guide
+
+Cross-tool entry point (**Cursor**, **Claude Code**, **Antigravity / Gemini**, **GitHub Copilot**, etc.). Copilot also reads **[.github/copilot-instructions.md](.github/copilot-instructions.md)**.
+
+**Antigravity:** also reads **[GEMINI.md](GEMINI.md)** (Antigravity-only overrides; this file stays the shared base).
+
+## Read first
+
+| Topic                               | Document                                                    |
+| ----------------------------------- | ----------------------------------------------------------- |
+| **Navigation hub**                  | [docs/AI-INDEX.md](docs/AI-INDEX.md)                        |
+| **Monorepo layout, multi-site, CI** | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)                |
+| **API routes + app surfaces**       | [docs/ROUTES.md](docs/ROUTES.md)                            |
+| **Code conventions per workspace**  | [docs/CONVENTIONS.md](docs/CONVENTIONS.md)                  |
+| **OpenAPI / Orval pipeline**        | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) § API contract |
+| **Cursor enforcement**              | `.cursor/rules/*.mdc`                                       |
+| **Claude Code commands**            | [CLAUDE.md](CLAUDE.md)                                      |
+
+## Quick facts
+
+- **Monorepo:** npm workspaces — `client` (`@platform/storefront`), `admin` (`@platform/admin`), `server` (`@platform/server`), `packages/*`.
+- **Node:** **20.x** (root `engines`). Run commands from repo root unless noted.
+- **Multi-site:** `SITE_ID` / `NEXT_PUBLIC_SITE_ID` → `getSiteConfig()` from `@platform/site-config`. First site: **beauty-station**.
+- **API client:** Orval from OpenAPI — **do not edit** `packages/api-client/src/generated/**` by hand. Run `npm run api:generate` after contract changes.
+- **Auth:** **Not implemented.** Admin sign-in and API routes are open — do not assume sessions or JWT.
+- **Integration maturity:** Server catalog CRUD is real; admin has **4 API-connected list pages**; client has **partial** API on the Beauty home block — most routes are theme demos with static `data/*`.
+
+## Common commands
+
+```bash
+npm install
+npm run build:packages
+npm run dev:server    # :5000 — Swagger at /api/docs
+npm run seed
+npm run dev:admin     # :3001
+npm run dev:client    # :3000
+
+npm run api:generate  # After OpenAPI / shared schema changes
+npm run typecheck     # Full monorepo
+npm run format:check  # Prettier across workspaces
+```
+
+## When you change code
+
+Follow **[.cursor/rules/documentation-sync.mdc](.cursor/rules/documentation-sync.mdc)** — update the matching doc in the **same task** when behavior, contracts, routes, or conventions change. Set **Last reviewed** dates in `docs/AI-INDEX.md`.
+
+## Cursor rules (always apply)
+
+| Rule                                                     | Scope                                 |
+| -------------------------------------------------------- | ------------------------------------- |
+| `documentation-sync.mdc`                                 | Keep docs in sync after changes       |
+| `api-contract.mdc`                                       | OpenAPI, Zod, Orval, generated client |
+| `multi-site.mdc`                                         | Site config, env vars, new sites      |
+| `storefront-ui.mdc`                                      | Client / `@platform/storefront`       |
+| `admin-ui.mdc`                                           | Admin dashboard                       |
+| `client/.cursor/rules/product-tab-filtering-pattern.mdc` | Tab-driven product sections           |
+
+<!-- END:nextjs-agent-rules -->

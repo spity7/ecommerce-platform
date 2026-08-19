@@ -1,0 +1,48 @@
+---
+description: Storefront (client/) UI and data conventions
+globs: client/**/*
+alwaysApply: false
+---
+
+# Storefront conventions (`@platform/storefront`)
+
+Folder: `client/`. npm name: `@platform/storefront`.
+
+## Stack
+
+- Next.js 16 App Router, React 19, Bootstrap 5 + SCSS, Zustand (cart/wishlist/compare).
+
+## Site integration
+
+- Resolve site via `getStorefrontSiteConfig()` / `lib/site.ts`.
+- Root `/` uses `HomeLayoutRenderer` + `SiteConfig.homeLayout`.
+- Theme CSS variables from `site.theme` via `SiteThemeStyles`.
+
+## Demo vs production
+
+- ~300 demo routes under `app/(homes)`, `(shop)`, `(product-single)`, etc.
+- Static catalog: `data/products/*.ts`. API used selectively (e.g. Beauty home `Products1.tsx` with static fallback).
+- Do not wire API into every demo page unless product requires it.
+
+## Tab-driven product sections
+
+Follow `client/.cursor/rules/product-tab-filtering-pattern.mdc`:
+
+- `TABS` array + `activeTab` state
+- Filter with `useMemo` and `product.demoTab?.includes(activeTab)`
+- Never put synthetic tab ids like `view-all` into `demoTab` data
+
+## Modals & state
+
+- Register modals in `components/common/other-components/LayoutModals.tsx`
+- Open/close via `context/uiStore.ts`
+- Cart persistence: `context/store.ts`
+
+## Quality
+
+```bash
+npm run lint -w @platform/storefront
+npm run build -w @platform/storefront
+```
+
+See `docs/CONVENTIONS.md` for full patterns.

@@ -2,14 +2,27 @@
 
 Multipurpose ecommerce monorepo. **Beauty Station** is the first site instance.
 
+## Documentation
+
+| Audience                                            | Start here                                                    |
+| --------------------------------------------------- | ------------------------------------------------------------- |
+| **AI assistants** (Cursor, Claude, Gemini, Copilot) | [AGENTS.md](AGENTS.md) → [docs/AI-INDEX.md](docs/AI-INDEX.md) |
+| **Developers**                                      | This README + [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)    |
+| **Claude Code**                                     | [CLAUDE.md](CLAUDE.md)                                        |
+
+Docs stay in sync via [.cursor/rules/documentation-sync.mdc](.cursor/rules/documentation-sync.mdc) — update docs in the same change when behavior or contracts change.
+
 ## Structure
 
-- `client/` — storefront
-- `admin/` — admin dashboard
-- `server/` — Express API
-- `packages/shared` — shared types & validation
-- `packages/site-config` — per-site configuration registry
-- `sites/beauty-station/` — Beauty Station env template
+| Path                    | npm name                | Role                        |
+| ----------------------- | ----------------------- | --------------------------- |
+| `client/`               | `@platform/storefront`  | Storefront (Next.js)        |
+| `admin/`                | `@platform/admin`       | Admin dashboard (Next.js)   |
+| `server/`               | `@platform/server`      | Express API + MongoDB       |
+| `packages/shared`       | `@platform/shared`      | Types & Zod schemas         |
+| `packages/site-config`  | `@platform/site-config` | Per-site config registry    |
+| `packages/api-client`   | `@platform/api-client`  | OpenAPI + Orval client      |
+| `sites/beauty-station/` | —                       | Beauty Station env template |
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the full picture.
 
@@ -32,8 +45,21 @@ npm run dev:client
 
 Copy `.env.example` from each app (and `sites/beauty-station/.env.example`) into `.env.local` / `.env` as needed.
 
+**Node:** 20.x
+
+## Common commands
+
+```bash
+npm run api:generate   # Regenerate OpenAPI + client after API changes
+npm run typecheck      # Full monorepo typecheck
+npm run format:check   # Prettier across workspaces
+npm run create-site sport-shop -- --template sport
+```
+
 ## New site
 
 ```bash
 npm run create-site sport-shop -- --template sport
 ```
+
+Then add site config, register in `packages/site-config`, and update `docs/site-registry.json`. Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
