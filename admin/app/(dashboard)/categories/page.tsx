@@ -5,7 +5,7 @@ import { Icon } from "@/components/layout/icon";
 import { PageHeader } from "@/components/layout/page-header";
 import { routes } from "@/config/routes";
 import type { Category } from "@/data/admin/catalog";
-import { fetchCategories } from "@/lib/api/catalog";
+import { fetchCategories } from "@platform/api-client";
 import { mapCategoryDto } from "@/lib/mappers/catalog";
 import { getAdminSiteConfig } from "@/lib/site";
 

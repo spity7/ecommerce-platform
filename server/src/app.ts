@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import { env } from "./config/env.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import { mountSwaggerUi } from "./openapi/swagger.js";
 import { apiRouter } from "./routes/index.js";
 
 export function createApp() {
@@ -21,8 +22,12 @@ export function createApp() {
       message: `${env.site.name} API`,
       siteId: env.site.id,
       health: "/api/health",
+      docs: "/api/docs",
+      openapi: "/api/openapi.json",
     });
   });
+
+  mountSwaggerUi(app);
 
   app.use("/api", apiRouter);
   app.use(errorHandler);

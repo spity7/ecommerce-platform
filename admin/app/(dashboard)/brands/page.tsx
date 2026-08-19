@@ -5,7 +5,7 @@ import { Icon } from "@/components/layout/icon";
 import { PageHeader } from "@/components/layout/page-header";
 import { routes } from "@/config/routes";
 import type { Brand } from "@/data/admin/catalog";
-import { fetchBrands } from "@/lib/api/catalog";
+import { fetchBrands } from "@platform/api-client";
 import { mapBrandDto } from "@/lib/mappers/catalog";
 import { getAdminSiteConfig } from "@/lib/site";
 

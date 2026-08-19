@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { ProductListTable } from "@/components/products/product-list-table";
 import { routes } from "@/config/routes";
 import type { Product } from "@/data/products/data";
-import { fetchProducts } from "@/lib/api/catalog";
+import { fetchProducts } from "@platform/api-client";
 import { mapProductDto } from "@/lib/mappers/catalog";
 import { getAdminSiteConfig } from "@/lib/site";
 

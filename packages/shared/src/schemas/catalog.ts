@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "../zod.js";
 import {
   ATTRIBUTE_DISPLAY_TYPES,
   ATTRIBUTE_STATUSES,

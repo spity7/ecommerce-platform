@@ -4,7 +4,7 @@ import { Icon } from "@/components/layout/icon";
 import { PageHeader } from "@/components/layout/page-header";
 import { routes } from "@/config/routes";
 import type { Attribute } from "@/data/admin/catalog";
-import { fetchAttributes } from "@/lib/api/catalog";
+import { fetchAttributes } from "@platform/api-client";
 import { mapAttributeDto } from "@/lib/mappers/catalog";
 import { getAdminSiteConfig } from "@/lib/site";
 

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "npm run build:shared --prefix ..",
+    "predev": "npm run build:packages --prefix ..",
     "dev": "next dev",
     "dev:webpack": "next dev --turbopack=false",
     "build": "next build",
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@cloudimage/360-view": "^4.10.0",
+    "@platform/api-client": "0.0.1",
     "@platform/shared": "0.0.1",
     "@platform/site-config": "0.0.1",
     "@radix-ui/react-dialog": "^1.1.15",

@@ -10,16 +10,20 @@
     "packages/*"
   ],
   "scripts": {
-    "build:shared": "npm run build -w @platform/shared && npm run build -w @platform/site-config",
+    "build:packages": "npm run build -w @platform/shared && npm run build -w @platform/site-config && npm run build -w @platform/api-client",
+    "openapi:generate": "npm run build -w @platform/shared && npm run openapi:generate -w @platform/server",
+    "api:generate": "npm run openapi:generate && orval --config orval.config.ts && npm run build -w @platform/api-client",
+    "api:check": "tsx scripts/check-api-contract.ts",
     "dev:client": "npm run dev -w @platform/storefront",
     "dev:admin": "npm run dev -w @platform/admin",
     "dev:server": "npm run dev -w @platform/server",
     "seed": "npm run seed -w @platform/server",
     "create-site": "tsx scripts/create-site.ts",
-    "typecheck": "npm run typecheck -w @platform/shared && npm run typecheck -w @platform/site-config && npm run typecheck -w @platform/server && tsc --noEmit -p admin && tsc --noEmit -p client && tsc --noEmit -p tsconfig.json"
+    "typecheck": "npm run typecheck -w @platform/shared && npm run typecheck -w @platform/site-config && npm run typecheck -w @platform/api-client && npm run typecheck -w @platform/server && tsc --noEmit -p admin && tsc --noEmit -p client && tsc --noEmit -p tsconfig.json"
   },
   "devDependencies": {
     "@types/node": "^20",
+    "orval": "^7.21.0",
     "tsx": "^4.21.0",
     "typescript": "^5"
   },

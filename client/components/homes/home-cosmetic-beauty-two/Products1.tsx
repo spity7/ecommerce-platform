@@ -1,6 +1,6 @@
 import ProductCard5 from "@/components/product-cards/ProductCard5";
 import { cosmeticProducts } from "@/data/products/beauty";
-import { fetchPublishedProducts } from "@/lib/api/products";
+import { fetchPublishedProducts } from "@platform/api-client";
 import { mapProductDtosToStorefront } from "@/lib/mappers/product";
 import type { Product } from "@/types/product";
 import Link from "next/link";

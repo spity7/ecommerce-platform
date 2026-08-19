@@ -5,17 +5,19 @@
   "description": "Express API server for the ecommerce platform",
   "main": "dist/index.js",
   "scripts": {
-    "predev": "npm run build -w @platform/shared && npm run build -w @platform/site-config",
+    "predev": "npm run build:packages --prefix ..",
     "dev": "tsx watch src/index.ts",
-    "prebuild": "npm run build -w @platform/shared && npm run build -w @platform/site-config",
+    "prebuild": "npm run build:packages --prefix ..",
     "build": "tsc",
     "start": "node dist/index.js",
     "seed": "tsx src/scripts/seed.ts",
+    "openapi:generate": "tsx src/openapi/generate.ts",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^8.0.0",
     "@google-cloud/storage": "^7.19.0",
     "@platform/shared": "0.0.1",
     "@platform/site-config": "0.0.1",
@@ -24,6 +26,7 @@
     "express": "^5.2.1",
     "mongoose": "^9.2.3",
     "multer": "^2.1.1",
+    "swagger-ui-express": "^5.0.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {
@@ -31,6 +34,7 @@
     "@types/express": "^5.0.6",
     "@types/multer": "^2.0.0",
     "@types/node": "^20",
+    "@types/swagger-ui-express": "^4.1.8",
     "prettier": "^3.6.2",
     "tsx": "^4.21.0",
     "typescript": "^5"

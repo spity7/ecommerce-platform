@@ -17,7 +17,7 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the full picture.
 
 ```bash
 npm install
-npm run build:shared
+npm run build:packages
 npm run dev:server
 npm run seed
 npm run dev:admin
