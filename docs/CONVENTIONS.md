@@ -1,6 +1,6 @@
 # Code conventions
 
-Per-workspace patterns for humans and AI. **Last reviewed:** 2026-08-19.
+Per-workspace patterns for humans and AI. **Last reviewed:** 2026-08-20.
 
 ## Monorepo
 
@@ -22,6 +22,13 @@ import { getSiteConfig } from "@platform/site-config";
 const site = getSiteConfig(process.env.SITE_ID);
 ```
 
+**Workspace helpers:**
+
+| Helper                      | File                 | Env overrides                                             |
+| --------------------------- | -------------------- | --------------------------------------------------------- |
+| `getStorefrontSiteConfig()` | `client/lib/site.ts` | `NEXT_PUBLIC_SITE_URL`, `API_URL` / `NEXT_PUBLIC_API_URL` |
+| `getAdminSiteConfig()`      | `admin/lib/site.ts`  | None (uses config as-is)                                  |
+
 | Env var                           | Where         | Purpose                              |
 | --------------------------------- | ------------- | ------------------------------------ |
 | `SITE_ID`                         | server        | Select site config + DB context      |
@@ -30,7 +37,8 @@ const site = getSiteConfig(process.env.SITE_ID);
 | `API_URL` / `NEXT_PUBLIC_API_URL` | admin, client | Backend base URL                     |
 
 - Add new sites in `packages/site-config/src/sites/{id}.ts` and register in `index.ts`.
-- Update `docs/site-registry.json` and run `npm run create-site` for env scaffolding.
+- Update `docs/site-registry.json` (all `features` flags must match the site config file).
+- Run `npm run create-site` for env scaffolding.
 - Do **not** hardcode site names in feature code.
 
 ## API contract

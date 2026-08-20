@@ -34,5 +34,6 @@ const site = getSiteConfig(process.env.SITE_ID ?? "beauty-station");
 - Site IDs: kebab-case.
 - Use `getSiteConfig()` / workspace helpers (`getAdminSiteConfig`, `getStorefrontSiteConfig`) — no magic `"beauty-station"` in feature code except env defaults.
 - `SiteConfig.features.*` exists but admin nav does **not** filter on it yet — document or implement before relying on it.
+- When changing `features` in site config, update matching `docs/site-registry.json` entry in the same task.
 
 Registry: `docs/site-registry.json`. Architecture: `docs/ARCHITECTURE.md`.

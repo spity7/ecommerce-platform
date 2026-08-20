@@ -2,7 +2,7 @@
 
 Multipurpose ecommerce monorepo: one codebase, many site deployments.
 
-**Last reviewed:** 2026-08-19. See [AI-INDEX.md](AI-INDEX.md) for the full doc map.
+**Last reviewed:** 2026-08-20. See [AI-INDEX.md](AI-INDEX.md) for the full doc map and tree.
 
 ## Layout
 
@@ -243,7 +243,13 @@ Site-specific modules are defined in site config (`features.*`). **Today:** flag
 - **New modules:** add optional server routes + admin pages; gate with `features` when nav filtering exists
 - **One-off custom logic:** prefer minimal hooks in site config or a future `sites/{id}/extensions/` folder (not scaffolded yet)
 - **Client rebrand:** `npm run rebrand -w @platform/storefront` (`scripts/rebrand-client.ts`)
+- **API roadmap:** [client/backend_features_analysis.md](../client/backend_features_analysis.md) — planned endpoints; catalog CRUD is live, most other sections are not
+
+## Deploy notes
+
+- **Node version:** repo root `engines` require **Node 20.x**. `client/Dockerfile` currently uses Node **24.13.0** — align before production Docker deploys.
+- **Site registry:** `docs/site-registry.json` must stay in sync with `packages/site-config/src/sites/*.ts` (especially `features` and URLs).
 
 ## AI documentation
 
-Cross-tool entry: [AGENTS.md](../AGENTS.md). Index: [AI-INDEX.md](AI-INDEX.md). Sync policy: `.cursor/rules/documentation-sync.mdc`.
+Cross-tool entry: [AGENTS.md](../AGENTS.md). Index + tree: [AI-INDEX.md](AI-INDEX.md). Sync policy: `.cursor/rules/documentation-sync.mdc`.

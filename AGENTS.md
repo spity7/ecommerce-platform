@@ -46,15 +46,27 @@ npm run format:check  # Prettier across workspaces
 
 Follow **[.cursor/rules/documentation-sync.mdc](.cursor/rules/documentation-sync.mdc)** — update the matching doc in the **same task** when behavior, contracts, routes, or conventions change. Set **Last reviewed** dates in `docs/AI-INDEX.md`.
 
-## Cursor rules (always apply)
+## Cursor rules
 
-| Rule                                                     | Scope                                 |
-| -------------------------------------------------------- | ------------------------------------- |
-| `documentation-sync.mdc`                                 | Keep docs in sync after changes       |
-| `api-contract.mdc`                                       | OpenAPI, Zod, Orval, generated client |
-| `multi-site.mdc`                                         | Site config, env vars, new sites      |
-| `storefront-ui.mdc`                                      | Client / `@platform/storefront`       |
-| `admin-ui.mdc`                                           | Admin dashboard                       |
-| `client/.cursor/rules/product-tab-filtering-pattern.mdc` | Tab-driven product sections           |
+### Always apply (`.cursor/rules/`)
+
+| Rule                     | Scope                                 |
+| ------------------------ | ------------------------------------- |
+| `documentation-sync.mdc` | Keep docs in sync after changes       |
+| `api-contract.mdc`       | OpenAPI, Zod, Orval, generated client |
+| `multi-site.mdc`         | Site config, env vars, new sites      |
+
+### Scoped by path (`.cursor/rules/`)
+
+| Rule                | Globs         |
+| ------------------- | ------------- |
+| `storefront-ui.mdc` | `client/**/*` |
+| `admin-ui.mdc`      | `admin/**/*`  |
+
+### Client workspace (`.cursor/rules/` under `client/`)
+
+| Rule                                                     | Scope                                             |
+| -------------------------------------------------------- | ------------------------------------------------- |
+| `client/.cursor/rules/product-tab-filtering-pattern.mdc` | Tab-driven product sections (`alwaysApply: true`) |
 
 <!-- END:nextjs-agent-rules -->

@@ -2,7 +2,7 @@
 
 Next.js admin UI for the ecommerce platform. Runs on **port 3001** in development.
 
-Part of the monorepo — run commands from **repo root** unless noted. Platform docs: [AGENTS.md](../AGENTS.md), [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md), [docs/ROUTES.md](../docs/ROUTES.md).
+Part of the monorepo — run commands from **repo root** unless noted. Platform docs: [AGENTS.md](../AGENTS.md), [docs/AI-INDEX.md](../docs/AI-INDEX.md), [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md), [docs/ROUTES.md](../docs/ROUTES.md).
 
 ## Tech stack
 

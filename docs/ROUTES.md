@@ -1,6 +1,6 @@
 # Routes reference
 
-HTTP API routes, admin pages, and storefront routing. **Last reviewed:** 2026-08-19.
+HTTP API routes, admin pages, and storefront routing. **Last reviewed:** 2026-08-20.
 
 ## Server API (`@platform/server`)
 

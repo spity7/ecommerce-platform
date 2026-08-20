@@ -13,10 +13,15 @@
     "features": {
       "attributes": true,
       "brands": true,
+      "blog": false,
+      "coupons": true,
+      "giftRegistry": false,
+      "reviews": true,
+      "sizeGuide": false,
       "subscriptions": false,
-      "sizeGuide": false
+      "wishlist": true
     },
     "deploySha": null,
-    "notes": "Primary cosmetics & skincare site."
+    "notes": "Primary cosmetics & skincare site. Features must match packages/site-config/src/sites/beauty-station.ts."
   }
 ]

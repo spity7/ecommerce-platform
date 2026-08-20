@@ -2,7 +2,7 @@
 
 Next.js storefront for the ecommerce platform. Folder name: `client/`. Runs on **port 3000** in development.
 
-Part of the monorepo — run commands from **repo root** unless noted. Platform docs: [AGENTS.md](../AGENTS.md), [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md), [docs/CONVENTIONS.md](../docs/CONVENTIONS.md).
+Part of the monorepo — run commands from **repo root** unless noted. Platform docs: [AGENTS.md](../AGENTS.md), [docs/AI-INDEX.md](../docs/AI-INDEX.md), [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md), [docs/CONVENTIONS.md](../docs/CONVENTIONS.md).
 
 ## Tech stack
 
@@ -66,7 +66,7 @@ public/           Images, fonts, SCSS
 - **`/`** renders the site-specific home layout (`HomeLayoutRenderer` → Beauty Station uses `cosmetic-beauty-two`).
 - **~300 demo routes** under `(homes)`, `(shop)`, `(product-single)`, etc. — theme showcase, not all production paths.
 - **API:** partial integration on Beauty home (`Products1.tsx` tries API, falls back to static `data/*`).
-- **Tab filtering:** see `.cursor/rules/product-tab-filtering-pattern.mdc`.
+- **Tab filtering:** see `client/.cursor/rules/product-tab-filtering-pattern.mdc`.
 
 ## Common tasks
 

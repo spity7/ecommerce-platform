@@ -4,11 +4,11 @@ Multipurpose ecommerce monorepo. **Beauty Station** is the first site instance.
 
 ## Documentation
 
-| Audience                                            | Start here                                                    |
-| --------------------------------------------------- | ------------------------------------------------------------- |
-| **AI assistants** (Cursor, Claude, Gemini, Copilot) | [AGENTS.md](AGENTS.md) → [docs/AI-INDEX.md](docs/AI-INDEX.md) |
-| **Developers**                                      | This README + [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)    |
-| **Claude Code**                                     | [CLAUDE.md](CLAUDE.md)                                        |
+| Audience                                            | Start here                                                                        |
+| --------------------------------------------------- | --------------------------------------------------------------------------------- |
+| **AI assistants** (Cursor, Claude, Gemini, Copilot) | [AGENTS.md](AGENTS.md) → [docs/AI-INDEX.md](docs/AI-INDEX.md) (includes doc tree) |
+| **Developers**                                      | This README + [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)                        |
+| **Claude Code**                                     | [CLAUDE.md](CLAUDE.md)                                                            |
 
 Docs stay in sync via [.cursor/rules/documentation-sync.mdc](.cursor/rules/documentation-sync.mdc) — update docs in the same change when behavior or contracts change.
 

@@ -9,20 +9,21 @@ When your work changes something documented here, **update the matching doc in t
 
 ## When to update what
 
-| You changed                                                | Update (same task)                                   |
-| ---------------------------------------------------------- | ---------------------------------------------------- |
-| Monorepo layout, CI, multi-site flow, integration maturity | `docs/ARCHITECTURE.md`                               |
-| HTTP routes, admin pages, storefront production routes     | `docs/ROUTES.md`                                     |
-| Naming, UI stacks, patterns, tooling                       | `docs/CONVENTIONS.md`                                |
-| Deployed sites (DB, GCS, URLs, features)                   | `docs/site-registry.json`                            |
-| OpenAPI / Orval pipeline details                           | `docs/ARCHITECTURE.md` § API contract                |
-| Agent entry commands or doc map                            | `AGENTS.md`, `CLAUDE.md`, `docs/AI-INDEX.md`         |
-| Storefront-specific patterns (tabs, modals, Zustand)       | `docs/CONVENTIONS.md` + `client/.cursor/rules/*.mdc` |
-| Admin-specific patterns (nav, tokens)                      | `docs/CONVENTIONS.md` + `.cursor/rules/admin-ui.mdc` |
-| API contract rules                                         | `.cursor/rules/api-contract.mdc`                     |
-| Site config / new sites                                    | `.cursor/rules/multi-site.mdc`                       |
-| Human quick start                                          | `README.md`                                          |
-| Workspace README scope                                     | `client/README.md`, `admin/README.md`                |
+| You changed                                                | Update (same task)                                                                           |
+| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Monorepo layout, CI, multi-site flow, integration maturity | `docs/ARCHITECTURE.md`                                                                       |
+| HTTP routes, admin pages, storefront production routes     | `docs/ROUTES.md`                                                                             |
+| Naming, UI stacks, patterns, tooling                       | `docs/CONVENTIONS.md`                                                                        |
+| Deployed sites (DB, GCS, URLs, features)                   | `docs/site-registry.json` (features must match `packages/site-config/src/sites/*.ts`)        |
+| OpenAPI / Orval pipeline details                           | `docs/ARCHITECTURE.md` § API contract                                                        |
+| Storefront-specific patterns (tabs, modals, Zustand)       | `docs/CONVENTIONS.md` + `client/.cursor/rules/*.mdc`                                         |
+| Admin-specific patterns (nav, tokens)                      | `docs/CONVENTIONS.md` + `.cursor/rules/admin-ui.mdc`                                         |
+| API contract rules                                         | `.cursor/rules/api-contract.mdc`                                                             |
+| Site config / new sites                                    | `.cursor/rules/multi-site.mdc`                                                               |
+| Human quick start                                          | `README.md`                                                                                  |
+| Workspace README scope                                     | `client/README.md`, `admin/README.md`                                                        |
+| Agent entry commands or doc map                            | `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.github/copilot-instructions.md`, `docs/AI-INDEX.md` |
+| API roadmap / planned endpoints                            | `client/backend_features_analysis.md` (keep status header accurate)                          |
 
 ## How
 
