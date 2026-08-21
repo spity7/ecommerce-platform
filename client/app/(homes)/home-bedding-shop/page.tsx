@@ -9,9 +9,9 @@ import Testimonials from "@/components/homes/home-bedding-shop/Testimonials";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Bedding Shop | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Bedding Shop | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

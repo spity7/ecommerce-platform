@@ -21,8 +21,8 @@ function PerformanceBanner() {
                   </h1>
                   <p className="rbt-description">
                     Experience lightning-fast performance across various
-                    platforms with Beauty Station. Optimize your workflow and enhance
-                    productivity effortlessly.
+                    platforms with Beauty Station. Optimize your workflow and
+                    enhance productivity effortlessly.
                   </p>
                 </div>
               </div>

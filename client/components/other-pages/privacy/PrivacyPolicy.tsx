@@ -8,12 +8,12 @@ export default function PrivacyPolicy() {
               <div className="content">
                 <h3>Welcome to Beauty Station Privacy Policy</h3>
                 <p>
-                  Your privacy is very important to us at Beauty Station. This Privacy
-                  Policy explains how we collect, use, disclose, and protect
-                  your personal information when you visit our website, make
-                  purchases, or use our services. By accessing our website and
-                  using our services, you consent to the practices described in
-                  this policy. If you do not agree with the terms outlined in
+                  Your privacy is very important to us at Beauty Station. This
+                  Privacy Policy explains how we collect, use, disclose, and
+                  protect your personal information when you visit our website,
+                  make purchases, or use our services. By accessing our website
+                  and using our services, you consent to the practices described
+                  in this policy. If you do not agree with the terms outlined in
                   this policy, please refrain from using our website or
                   services.
                 </p>
@@ -111,8 +111,8 @@ export default function PrivacyPolicy() {
                 </p>
                 <h5>5. Your Rights and Choices</h5>
                 <p>
-                  As a user of Beauty Station, you have the following rights regarding
-                  your personal information:
+                  As a user of Beauty Station, you have the following rights
+                  regarding your personal information:
                 </p>
                 <ul>
                   <li>

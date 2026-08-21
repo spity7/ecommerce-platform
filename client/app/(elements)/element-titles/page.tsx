@@ -27,7 +27,8 @@ import TitlesStyleDefaultCenterDark from "@/components/elements/element-titles/T
 export const metadata: Metadata = {
   title:
     "Element Titles | Discover premium cosmetics and skincare products at Beauty Station.",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function ElementTitlesPage() {
   return (

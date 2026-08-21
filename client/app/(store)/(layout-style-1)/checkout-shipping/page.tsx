@@ -5,9 +5,9 @@ import SimilerProducts from "@/components/product-details/others/SimilerProducts
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Checkout Shipping | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Checkout Shipping | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

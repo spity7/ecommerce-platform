@@ -6,8 +6,7 @@ import AddPaymentMethod from "@/components/modals/AddPaymentMethod";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "My Payment Methods | Beauty Station | Cosmetics & Skincare",
+  title: "My Payment Methods | Beauty Station | Cosmetics & Skincare",
   description: "Manage your saved Beauty Station payment methods and cards.",
 };
 

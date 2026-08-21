@@ -4,7 +4,8 @@ import CompareTableBuilderBanner from "@/components/core-features/compare-table-
 export const metadata: Metadata = {
   title:
     "Compare Table Builder | Discover premium cosmetics and skincare products at Beauty Station.",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function CompareTableBuilderPage() {
   return (
@@ -32,9 +33,9 @@ export default function CompareTableBuilderPage() {
             ),
             description: (
               <>
-                Compare your selected products in a table with Beauty Station Compare
-                Table Builder. Choose from a variety of pre-built templates and
-                customize them to match your brand.
+                Compare your selected products in a table with Beauty Station
+                Compare Table Builder. Choose from a variety of pre-built
+                templates and customize them to match your brand.
               </>
             ),
             image: {

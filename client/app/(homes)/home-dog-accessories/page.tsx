@@ -9,9 +9,9 @@ import VideosSection from "@/components/homes/home-dog-accessories/VideosSection
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Dog Accessories | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Dog Accessories | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

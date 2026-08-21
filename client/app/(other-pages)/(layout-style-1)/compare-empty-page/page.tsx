@@ -4,9 +4,9 @@ import EmptyCompare from "@/components/other-pages/compare/EmptyCompare";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Compare (Empty) | Beauty Station | Cosmetics & Skincare",
-  description: "Your Beauty Station product compare page when no items are selected.",
+  title: "Compare (Empty) | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Your Beauty Station product compare page when no items are selected.",
 };
 
 export default function page() {

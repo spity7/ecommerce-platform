@@ -10,9 +10,9 @@ import Footer7 from "@/components/footers/Footer7";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Plant One | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Plant One | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

@@ -38,8 +38,8 @@ export default function Footer10() {
                   </Link>
                 </div>
                 <p className="description pr--52 pr_sm--0">
-                  Beauty Station is a modern and user-friendly e-commerce platform
-                  designed to make online shopping simple, secure, and
+                  Beauty Station is a modern and user-friendly e-commerce
+                  platform designed to make online shopping simple, secure, and
                   convenient.
                 </p>
                 <div className="footer-widget mt--24">

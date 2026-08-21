@@ -5,9 +5,9 @@ import Checkout2 from "@/components/store/Checkout2";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Checkout Delivery Step Two | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Checkout Delivery Step Two | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 
 export default function page() {

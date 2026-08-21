@@ -9,9 +9,9 @@ import Products1 from "@/components/homes/home-cat-accessories-01/Products1";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Cat Accessories 01 | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Cat Accessories 01 | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

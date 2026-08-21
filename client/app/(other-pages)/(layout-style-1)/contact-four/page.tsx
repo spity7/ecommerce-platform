@@ -5,8 +5,7 @@ import Locations2 from "@/components/other-pages/contact/Locations2";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Contact Us 03 | Beauty Station | Cosmetics & Skincare",
+  title: "Contact Us 03 | Beauty Station | Cosmetics & Skincare",
   description:
     "Contact page variation with multiple Beauty Station locations and map.",
 };

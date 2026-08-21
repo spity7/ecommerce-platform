@@ -13,7 +13,8 @@ function PerformanceComponents() {
                   </span>
                 </h2>
                 <p className="mb--40 b1 rbt-scroll-trigger fade_in animation-order-4">
-                  Experience unparalleled speed and efficiency with Beauty Station,
+                  Experience unparalleled speed and efficiency with Beauty
+                  Station,
                   <br />
                   optimized for all platforms.
                 </p>

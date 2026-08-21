@@ -15,7 +15,8 @@ import Footer12 from "@/components/footers/Footer12";
 export const metadata: Metadata = {
   title:
     "Footer Builder | Discover premium cosmetics and skincare products at Beauty Station.",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function FooterBuilderPage() {
   return (

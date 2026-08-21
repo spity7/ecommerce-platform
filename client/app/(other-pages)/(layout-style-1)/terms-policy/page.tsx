@@ -5,9 +5,9 @@ import BreadcrumbInner from "@/components/common/other-components/BreadcrumbInne
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Terms & Policy | Beauty Station | Cosmetics & Skincare",
-  description: "Read the terms and policies for using the Beauty Station store.",
+  title: "Terms & Policy | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Read the terms and policies for using the Beauty Station store.",
 };
 
 export default function page() {

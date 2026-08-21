@@ -13,9 +13,9 @@ import Products3 from "@/components/homes/home-furniture/Products3";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Furniture | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Furniture | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

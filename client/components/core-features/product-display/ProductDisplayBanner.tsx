@@ -20,8 +20,8 @@ function ProductDisplayBanner() {
                     </span>
                   </h1>
                   <p className="rbt-description">
-                    Showcase your products in a more interactive way with
-                    Beauty Station Product Video &amp; 3D View. Choose from a variety
+                    Showcase your products in a more interactive way with Beauty
+                    Station Product Video &amp; 3D View. Choose from a variety
                     of pre-built templates and customize them to match your
                     brand.
                   </p>

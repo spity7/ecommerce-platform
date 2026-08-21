@@ -19,9 +19,9 @@ export default function IntroVideo() {
                     where innovation meets the real printing.
                   </h3>
                   <p className="b1 rbt-text-color-gray-600 mb--24">
-                    Let the beauty of what you love be what you do. Beauty Station is a
-                    modern e-commerce platform designed to make online shopping
-                    simple, secure, and convenient.
+                    Let the beauty of what you love be what you do. Beauty
+                    Station is a modern e-commerce platform designed to make
+                    online shopping simple, secure, and convenient.
                   </p>
                   <div className="read-more-btn">
                     <VideoModal videoUrl={INTRO_VIDEO_URL}>

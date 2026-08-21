@@ -7,9 +7,9 @@ import { electronicsHoverVideoData2 } from "@/data/products/electronics";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Standard Products Shop | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Standard Products Shop | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 
 export default function page() {

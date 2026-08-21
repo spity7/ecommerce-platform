@@ -10,9 +10,9 @@ import VideosSection from "@/components/homes/home-gym-supliments-one/VideoSecti
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Gym Supplement | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Gym Supplement | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

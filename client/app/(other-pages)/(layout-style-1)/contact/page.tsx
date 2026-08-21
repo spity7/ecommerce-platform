@@ -6,7 +6,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Contact Us | Beauty Station | Cosmetics & Skincare",
-  description: "Get in touch with the Beauty Station team via our contact page.",
+  description:
+    "Get in touch with the Beauty Station team via our contact page.",
 };
 
 export default function page() {

@@ -9,9 +9,9 @@ import Testimonials from "@/components/homes/home-chocolate-store/Testimonials";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Chocolate Store | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Chocolate Store | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

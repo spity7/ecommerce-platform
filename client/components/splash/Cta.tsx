@@ -19,7 +19,10 @@ export default function Cta() {
               </span>
               <h2 className="rbt-title rbt-text-color-white position-relative">
                 <span className="rbt-bold--text rbt-scroll-trigger fade_in animation-order-2">
-                  Grab <span className="rbt-splash-gradient-text">Beauty Station</span>{" "}
+                  Grab{" "}
+                  <span className="rbt-splash-gradient-text">
+                    Beauty Station
+                  </span>{" "}
                   Now Before
                   <br />
                 </span>

@@ -13,9 +13,9 @@ import TextSlider from "@/components/common/other-components/TextSlider";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Printing Service | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Printing Service | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

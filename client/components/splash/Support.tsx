@@ -18,10 +18,7 @@ export default function Support() {
                 </div>
                 <div className="content">
                   <h4 className="rbt-title mb--24">
-                    <a
-                      href="/"
-                      target="_blank"
-                    >
+                    <a href="/" target="_blank">
                       Online Documentation
                     </a>
                   </h4>

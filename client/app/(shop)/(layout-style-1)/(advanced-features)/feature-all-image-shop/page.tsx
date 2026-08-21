@@ -7,9 +7,9 @@ import { furnitureTranspProducts } from "@/data/products/furnitures";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Scale Hover Products Shop | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Scale Hover Products Shop | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 
 export default function page() {

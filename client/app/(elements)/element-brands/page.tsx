@@ -7,7 +7,8 @@ import ElementsHero from "@/components/elements/ElementsHero";
 export const metadata: Metadata = {
   title:
     "Element Brands | Discover premium cosmetics and skincare products at Beauty Station.",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function ElementBrandsPage() {
   return (

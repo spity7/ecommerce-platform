@@ -2,8 +2,10 @@ import SplashElementBuilderSection from "@/components/splash/SplashElementBuilde
 import { Metadata } from "next";
 import SalesPopupBanner from "@/components/core-features/sales-popup/SalesPopupBanner";
 export const metadata: Metadata = {
-  title: "Sales Popup | Discover premium cosmetics and skincare products at Beauty Station.",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title:
+    "Sales Popup | Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function SalesPopupPage() {
   return (
@@ -32,8 +34,9 @@ export default function SalesPopupPage() {
             ),
             description: (
               <>
-                Compare your selected products in a table with Beauty Station Compare
-                Table Builder. Choose from a variety of pre-built templates.
+                Compare your selected products in a table with Beauty Station
+                Compare Table Builder. Choose from a variety of pre-built
+                templates.
               </>
             ),
           },

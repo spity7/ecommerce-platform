@@ -16,8 +16,8 @@ export default function HelpFaqs() {
       title: "How can I get customer support?",
       content: (
         <>
-          After purchasing the Beauty Station template, if you need any support, feel
-          free to reach out to us via email at{" "}
+          After purchasing the Beauty Station template, if you need any support,
+          feel free to reach out to us via email at{" "}
           <a href="mailto:rainbowit10@gmail.com">rainbowit10@gmail.com</a>.
           We’re here to help!
         </>

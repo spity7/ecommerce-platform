@@ -2,8 +2,10 @@ import SplashElementBuilderSection from "@/components/splash/SplashElementBuilde
 import { Metadata } from "next";
 import PageOptionsBanner from "@/components/core-features/page-options/PageOptionsBanner";
 export const metadata: Metadata = {
-  title: "Page Options | Discover premium cosmetics and skincare products at Beauty Station.",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title:
+    "Page Options | Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function PageOptionsPage() {
   return (
@@ -31,9 +33,9 @@ export default function PageOptionsPage() {
             ),
             description: (
               <>
-                Compare your selected products in a table with Beauty Station Compare
-                Table Builder. Choose from a variety of pre-built templates and
-                customize them to match your brand.
+                Compare your selected products in a table with Beauty Station
+                Compare Table Builder. Choose from a variety of pre-built
+                templates and customize them to match your brand.
               </>
             ),
           },

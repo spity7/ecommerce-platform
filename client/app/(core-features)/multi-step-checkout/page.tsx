@@ -4,7 +4,8 @@ import MultiStepCheckoutBanner from "@/components/core-features/multi-step-check
 export const metadata: Metadata = {
   title:
     "Multi Step Checkout | Discover premium cosmetics and skincare products at Beauty Station.",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function MultiStepCheckoutPage() {
   return (
@@ -24,8 +25,9 @@ export default function MultiStepCheckoutPage() {
             ),
             description: (
               <>
-                Compare your selected products in a table with Beauty Station Compare
-                Table Builder. Choose from a variety of pre-built templates.
+                Compare your selected products in a table with Beauty Station
+                Compare Table Builder. Choose from a variety of pre-built
+                templates.
               </>
             ),
           },

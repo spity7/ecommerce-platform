@@ -5,9 +5,9 @@ import Notifications from "@/components/other-pages/shop-user/Notifications";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Account Notifications | Beauty Station | Cosmetics & Skincare",
-  description: "Control your Beauty Station account and order notification settings.",
+  title: "Account Notifications | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Control your Beauty Station account and order notification settings.",
 };
 
 export default function page() {

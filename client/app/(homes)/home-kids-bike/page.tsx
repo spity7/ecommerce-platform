@@ -11,9 +11,9 @@ import TextSlider from "@/components/homes/home-kids-bike/TextSlider";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Kids Bike | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Kids Bike | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

@@ -692,7 +692,8 @@ export const luggageItems: Collection[] = [
 export const fragranceBanners: Collection[] = [
   {
     imgSrc: "/assets/images/product-banner/straller-a-01.webp",
-    title: "Stroll in comfort with\nBeauty Station's premium stroller collection.",
+    title:
+      "Stroll in comfort with\nBeauty Station's premium stroller collection.",
   },
   {
     imgSrc: "/assets/images/product-banner/straller-a-02.webp",

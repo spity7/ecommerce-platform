@@ -4,9 +4,9 @@ import ShopDefault from "@/components/products/ShopDefault";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Shop No Page Heading | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Shop No Page Heading | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 
 const pageTitle = "Shop No Page Heading";

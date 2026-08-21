@@ -4,8 +4,7 @@ import Sidebar from "@/components/other-pages/shop-user/Sidebar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "My Order History | Beauty Station | Cosmetics & Skincare",
+  title: "My Order History | Beauty Station | Cosmetics & Skincare",
   description: "View your full Beauty Station order history and details.",
   robots: {
     index: true,

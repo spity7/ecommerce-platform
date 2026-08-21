@@ -6,9 +6,9 @@ import { categoryCards } from "@/data/categories";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Categories Style Simple Box | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Categories Style Simple Box | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 
 export default function Page() {

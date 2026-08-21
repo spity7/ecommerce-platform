@@ -10,9 +10,9 @@ import Testimonials from "@/components/homes/home-tea-stores/Testimonials";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Tea Stores | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Tea Stores | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

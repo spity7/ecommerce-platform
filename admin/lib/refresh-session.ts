@@ -1,8 +1,5 @@
 import { getApiBaseUrl, setAccessToken } from "@platform/api-client";
-import {
-  getRefreshTokenFromCookie,
-  setAuthCookies,
-} from "@/lib/auth";
+import { getRefreshTokenFromCookie, setAuthCookies } from "@/lib/auth";
 
 export async function tryRefreshSession(): Promise<boolean> {
   const refreshToken = getRefreshTokenFromCookie();

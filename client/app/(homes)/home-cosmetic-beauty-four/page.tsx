@@ -11,9 +11,9 @@ import Products1 from "@/components/homes/home-cosmetic-beauty-four/Products1";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Cosmetic Beauty 04 | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Cosmetic Beauty 04 | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

@@ -126,10 +126,7 @@ export default function NavShopPages() {
                         </button>
                       );
                     })}
-                    <Link
-                      href="https://nextjs./"
-                      className="nav-link"
-                    >
+                    <Link href="https://nextjs./" className="nav-link">
                       <span>
                         <i className="fa-regular fa-chart-pie" />
                       </span>

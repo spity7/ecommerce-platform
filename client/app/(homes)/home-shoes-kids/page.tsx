@@ -10,9 +10,9 @@ import VideosSection from "@/components/homes/home-shoes-kids/VideosSection";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Shoe Kids | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Shoe Kids | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

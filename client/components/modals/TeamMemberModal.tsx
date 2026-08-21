@@ -85,8 +85,9 @@ export default function TeamMemberModal() {
                     </div>
                     <p className="mb--16">
                       You can run Beauty Station easily. Any School, University,
-                      College can be use this beauty-station E-commerce template for
-                      their Commercial purpose. A university can be success you.
+                      College can be use this beauty-station E-commerce template
+                      for their Commercial purpose. A university can be success
+                      you.
                     </p>
                     <ul className="social-icon rbt-social-default mt--20 justify-content-start">
                       <li>

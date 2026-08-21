@@ -10,10 +10,10 @@ export default function Terms() {
               <div className="content">
                 <h2>Welcome to Beauty Station Terms Policy</h2>
                 <p>
-                  Welcome to Beauty Station! By accessing and using our website, you
-                  agree to comply with and be bound by the following terms and
-                  policies. Please read these terms carefully before using our
-                  services. These terms govern your access to and use of
+                  Welcome to Beauty Station! By accessing and using our website,
+                  you agree to comply with and be bound by the following terms
+                  and policies. Please read these terms carefully before using
+                  our services. These terms govern your access to and use of
                   Beauty Station’s online platform, including any content,
                   functionality, and services offered through the website. If
                   you do not agree with any part of these terms, please refrain
@@ -43,9 +43,9 @@ export default function Terms() {
                 </p>
                 <h5>3. User Account</h5>
                 <p>
-                  To purchase items from Beauty Station, you may be required to create
-                  a user account. When creating your account, you agree to
-                  provide accurate, complete, and up-to-date information. You
+                  To purchase items from Beauty Station, you may be required to
+                  create a user account. When creating your account, you agree
+                  to provide accurate, complete, and up-to-date information. You
                   are responsible for keeping your account details, including
                   your username and password, confidential. If you suspect any
                   unauthorized use of your account, you must notify us
@@ -55,8 +55,8 @@ export default function Terms() {
                 </p>
                 <h5>4. Orders &amp; Payments</h5>
                 <p>
-                  When you place an order with Beauty Station, you are offering to
-                  purchase the item(s) in accordance with our terms and
+                  When you place an order with Beauty Station, you are offering
+                  to purchase the item(s) in accordance with our terms and
                   conditions. Orders will be processed and confirmed based on
                   availability, payment verification, and our shipping terms. We
                   accept various payment methods, including major credit/debit
@@ -67,14 +67,15 @@ export default function Terms() {
                 </p>
                 <h5>5. Shipping &amp; Delivery</h5>
                 <p>
-                  At Beauty Station, we strive to deliver your orders promptly and
-                  efficiently. Shipping times vary depending on the destination
-                  and chosen shipping method. We aim to process and ship all
-                  orders within the time frames listed on our site, but delivery
-                  dates may vary depending on factors such as weather, holidays,
-                  and third-party carrier delays. Please be aware that any
-                  delivery issues beyond our control, such as shipping delays by
-                  carriers or customs, are not the responsibility of Beauty Station.
+                  At Beauty Station, we strive to deliver your orders promptly
+                  and efficiently. Shipping times vary depending on the
+                  destination and chosen shipping method. We aim to process and
+                  ship all orders within the time frames listed on our site, but
+                  delivery dates may vary depending on factors such as weather,
+                  holidays, and third-party carrier delays. Please be aware that
+                  any delivery issues beyond our control, such as shipping
+                  delays by carriers or customs, are not the responsibility of
+                  Beauty Station.
                 </p>
                 <h5>6. Returns &amp; Refunds</h5>
                 <p>
@@ -101,9 +102,9 @@ export default function Terms() {
                 </p>
                 <h5>8. Prohibited Activities</h5>
                 <p>
-                  When using Beauty Station’s website, you agree not to engage in any
-                  activities that are unlawful, harmful, or disruptive. These
-                  activities include, but are not limited to, engaging in
+                  When using Beauty Station’s website, you agree not to engage
+                  in any activities that are unlawful, harmful, or disruptive.
+                  These activities include, but are not limited to, engaging in
                   fraudulent transactions, spreading malware or viruses,
                   interfering with our website’s operations, or attempting to
                   gain unauthorized access to our systems. Any such activities
@@ -112,33 +113,34 @@ export default function Terms() {
                 </p>
                 <h5>9. Limitation of Liability</h5>
                 <p>
-                  Beauty Station makes every effort to provide accurate information and
-                  ensure the smooth functioning of the website. However, we
-                  cannot be held liable for any direct, indirect, incidental, or
-                  consequential damages arising from the use of our website or
-                  services. This includes any errors or omissions in content,
-                  delays, or interruptions in service, and any losses or damages
-                  incurred due to reliance on the information provided on our
-                  site. We strongly recommend that users verify the details
-                  before making any decisions based on the content on our site.
+                  Beauty Station makes every effort to provide accurate
+                  information and ensure the smooth functioning of the website.
+                  However, we cannot be held liable for any direct, indirect,
+                  incidental, or consequential damages arising from the use of
+                  our website or services. This includes any errors or omissions
+                  in content, delays, or interruptions in service, and any
+                  losses or damages incurred due to reliance on the information
+                  provided on our site. We strongly recommend that users verify
+                  the details before making any decisions based on the content
+                  on our site.
                 </p>
                 <h5>10. Changes to Terms</h5>
                 <p>
-                  Beauty Station reserves the right to modify, update, or amend these
-                  Terms &amp; Policies at any time. We will notify users of
-                  significant changes by posting the updated terms on this page.
-                  It is your responsibility to review these terms periodically
-                  to stay informed of any updates. Continued use of the website
-                  after changes have been posted constitutes your acceptance of
-                  the revised terms.
+                  Beauty Station reserves the right to modify, update, or amend
+                  these Terms &amp; Policies at any time. We will notify users
+                  of significant changes by posting the updated terms on this
+                  page. It is your responsibility to review these terms
+                  periodically to stay informed of any updates. Continued use of
+                  the website after changes have been posted constitutes your
+                  acceptance of the revised terms.
                 </p>
                 <h5>11. Governing Law</h5>
                 <p>
                   These Terms &amp; Policies are governed by and construed in
                   accordance with the laws of [Your Country]. Any disputes
                   arising from the use of the site will be subject to the
-                  jurisdiction of the courts in [Your Country]. By using
-                  Beauty Station, you consent to the exclusive jurisdiction of these
+                  jurisdiction of the courts in [Your Country]. By using Beauty
+                  Station, you consent to the exclusive jurisdiction of these
                   courts to resolve any disputes.
                 </p>
                 <h5>12. Contact Us</h5>
@@ -150,7 +152,9 @@ export default function Terms() {
                 </p>
                 <p>
                   Email:
-                  <a href="mailto:hello@beautystation.com">hello@beautystation.com</a>
+                  <a href="mailto:hello@beautystation.com">
+                    hello@beautystation.com
+                  </a>
                 </p>
                 <p>
                   Phone: <a href="tel:+11234567890">+1 123 456 7890</a>

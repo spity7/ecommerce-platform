@@ -5,8 +5,7 @@ import Socials from "@/components/other-pages/privacy/Socials";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Privacy Policy | Beauty Station | Cosmetics & Skincare",
+  title: "Privacy Policy | Beauty Station | Cosmetics & Skincare",
   description: "Understand how Beauty Station collects and uses your data.",
 };
 

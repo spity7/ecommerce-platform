@@ -8,7 +8,8 @@ import Description1 from "@/components/product-details/descriptions/Description1
 export const metadata: Metadata = {
   title:
     "Element Single Product | Discover premium cosmetics and skincare products at Beauty Station.",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function ElementSingleProductPage() {
   const product = electronicsHoverVideoData[0];

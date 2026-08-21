@@ -10,9 +10,9 @@ import VideosSection from "@/components/homes/home-paddle-boards/VideosSection";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Paddle Boards | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Paddle Boards | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

@@ -4,7 +4,8 @@ import StockProgressbarBanner from "@/components/core-features/stock-progressbar
 export const metadata: Metadata = {
   title:
     "Stock Progressbar | Discover premium cosmetics and skincare products at Beauty Station.",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function StockProgressbarPage() {
   return (

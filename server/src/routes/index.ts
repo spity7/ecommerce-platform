@@ -29,29 +29,31 @@ apiRouter.post(
   "/uploads",
   requireAuth,
   requireAdmin,
-  upload.single("file"), async (req, res, next) => {
-  try {
-    if (!env.gcs.isConfigured) {
-      throw new AppError(
-        503,
-        "File uploads are unavailable until GCS is configured."
-      );
+  upload.single("file"),
+  async (req, res, next) => {
+    try {
+      if (!env.gcs.isConfigured) {
+        throw new AppError(
+          503,
+          "File uploads are unavailable until GCS is configured."
+        );
+      }
+
+      if (!req.file) {
+        throw new AppError(400, "No file uploaded. Use field name 'file'.");
+      }
+
+      const folder =
+        typeof req.body.folder === "string" ? req.body.folder : undefined;
+
+      const result = await uploadFile(req.file.buffer, req.file.originalname, {
+        folder,
+        contentType: req.file.mimetype,
+      });
+
+      res.status(201).json(result);
+    } catch (error) {
+      next(error);
     }
-
-    if (!req.file) {
-      throw new AppError(400, "No file uploaded. Use field name 'file'.");
-    }
-
-    const folder =
-      typeof req.body.folder === "string" ? req.body.folder : undefined;
-
-    const result = await uploadFile(req.file.buffer, req.file.originalname, {
-      folder,
-      contentType: req.file.mimetype,
-    });
-
-    res.status(201).json(result);
-  } catch (error) {
-    next(error);
   }
-});
+);

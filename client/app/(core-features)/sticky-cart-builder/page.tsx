@@ -4,7 +4,8 @@ import StickyCartBuilderBanner from "@/components/core-features/sticky-cart-buil
 export const metadata: Metadata = {
   title:
     "Sticky Cart Builder | Discover premium cosmetics and skincare products at Beauty Station.",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function StickyCartBuilderPage() {
   return (
@@ -33,9 +34,9 @@ export default function StickyCartBuilderPage() {
             ),
             description: (
               <>
-                Compare your selected products in a table with Beauty Station Compare
-                Table Builder. Choose from a variety of pre-built templates and
-                customize them to match your brand.
+                Compare your selected products in a table with Beauty Station
+                Compare Table Builder. Choose from a variety of pre-built
+                templates and customize them to match your brand.
               </>
             ),
           },

@@ -9,7 +9,8 @@ import HeaderComponents5 from "@/components/core-features/header-builder/HeaderC
 export const metadata: Metadata = {
   title:
     "Header Builder | Discover premium cosmetics and skincare products at Beauty Station.",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function HeaderBuilderPage() {
   return (

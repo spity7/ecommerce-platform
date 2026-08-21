@@ -21,8 +21,9 @@ function CompareTableBuilderBanner() {
                   </h1>
                   <p className="rbt-description">
                     Create a beautiful and feature-rich compare table with
-                    Beauty Station Compare Table Builder. Choose from a variety of
-                    pre-built templates and customize them to match your brand.
+                    Beauty Station Compare Table Builder. Choose from a variety
+                    of pre-built templates and customize them to match your
+                    brand.
                   </p>
                 </div>
               </div>

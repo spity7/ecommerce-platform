@@ -49,10 +49,10 @@ function AccordionBlock03() {
                     Beauty Station E-commerce Website?
                   </h2>
                   <p className="description has-medium-font-size mt--20 plr--80 plr_sm--0 plr_md--0">
-                    <strong>It&apos;s an e-commerce platform.</strong> Beauty Station
-                    helps you launch modern online stores quickly with reusable
-                    sections, responsive layouts, and prebuilt shop flows for
-                    categories, product details, cart, and checkout.
+                    <strong>It&apos;s an e-commerce platform.</strong> Beauty
+                    Station helps you launch modern online stores quickly with
+                    reusable sections, responsive layouts, and prebuilt shop
+                    flows for categories, product details, cart, and checkout.
                   </p>
                 </div>
                 <div className="rbt-accordion-style rbt-accordion-04 accordion">

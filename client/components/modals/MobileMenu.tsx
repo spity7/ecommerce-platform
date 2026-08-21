@@ -185,8 +185,8 @@ export default function MobileMenu() {
               </div>
             </div>
             <p className="description">
-              Beauty Station is a E-commerce Template. Worldwide electronics store
-              since 1978.
+              Beauty Station is a E-commerce Template. Worldwide electronics
+              store since 1978.
             </p>
             <div className="rbt-inner-search-field style-one rbt-search-field-rounded rbt-search-field-sm-width">
               <input type="text" placeholder="Search for products" />

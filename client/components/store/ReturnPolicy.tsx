@@ -8,9 +8,9 @@ export default function ReturnPolicy() {
               <div className="content">
                 <h2>Welcome to Beauty Station Return Policy</h2>
                 <p>
-                  At Beauty Station, we want you to be completely satisfied with your
-                  purchase. If you&apos;re not happy with your order, you can
-                  return it within 30 days for a full refund or exchange.
+                  At Beauty Station, we want you to be completely satisfied with
+                  your purchase. If you&apos;re not happy with your order, you
+                  can return it within 30 days for a full refund or exchange.
                 </p>
                 <h4>Eligibility</h4>
                 <ul>
@@ -31,7 +31,9 @@ export default function ReturnPolicy() {
                 <ol>
                   <li>
                     Contact our customer service at
-                    <a href="mailto:hello@beautystation.com">hello@beautystation.com</a>
+                    <a href="mailto:hello@beautystation.com">
+                      hello@beautystation.com
+                    </a>
                     to initiate the return.
                   </li>
                   <li>

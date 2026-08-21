@@ -9,7 +9,8 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title:
     "Button On Image Signin Products Shop | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 
 export default function page() {

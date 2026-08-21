@@ -10,9 +10,9 @@ import VideoBanner from "@/components/homes/home-basketball-store/VideoBanner";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Basketball Store | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Basketball Store | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

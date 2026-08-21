@@ -3,7 +3,10 @@
 import { useEffect, type ReactNode } from "react";
 import { getAccessTokenFromCookie } from "@/lib/auth";
 import { tryRefreshSession } from "@/lib/refresh-session";
-import { registerUnauthorizedHandler, setAccessToken } from "@platform/api-client";
+import {
+  registerUnauthorizedHandler,
+  setAccessToken,
+} from "@platform/api-client";
 
 type AppProvidersProps = {
   children: ReactNode;

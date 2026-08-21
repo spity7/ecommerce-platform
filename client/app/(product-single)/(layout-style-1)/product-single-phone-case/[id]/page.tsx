@@ -8,9 +8,9 @@ import Footer10 from "@/components/footers/Footer10";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Product Single Phone Case | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Product Single Phone Case | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default async function Page({
   params,

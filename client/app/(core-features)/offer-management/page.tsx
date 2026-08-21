@@ -4,7 +4,8 @@ import OfferManagementBanner from "@/components/core-features/offer-management/O
 export const metadata: Metadata = {
   title:
     "Offer Management | Discover premium cosmetics and skincare products at Beauty Station.",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function OfferManagementPage() {
   return (
@@ -24,8 +25,9 @@ export default function OfferManagementPage() {
             ),
             description: (
               <>
-                Compare your selected products in a table with Beauty Station Compare
-                Table Builder. Choose from a variety of pre-built templates.
+                Compare your selected products in a table with Beauty Station
+                Compare Table Builder. Choose from a variety of pre-built
+                templates.
               </>
             ),
           },

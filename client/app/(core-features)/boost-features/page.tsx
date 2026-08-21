@@ -4,7 +4,8 @@ import BoostFeaturesComponents from "@/components/core-features/boost-features/B
 export const metadata: Metadata = {
   title:
     "Boost Features | Discover premium cosmetics and skincare products at Beauty Station.",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function BoostFeaturesPage() {
   return (

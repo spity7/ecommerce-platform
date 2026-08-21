@@ -4,7 +4,8 @@ import ProductDisplayComponents from "@/components/core-features/product-display
 export const metadata: Metadata = {
   title:
     "Product Display | Discover premium cosmetics and skincare products at Beauty Station.",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function ProductDisplayPage() {
   return (

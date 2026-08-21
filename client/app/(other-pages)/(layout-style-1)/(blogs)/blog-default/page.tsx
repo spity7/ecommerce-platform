@@ -6,7 +6,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Blog Default | Beauty Station | Cosmetics & Skincare",
-  description: "Default Beauty Station blog listing page with slider and posts.",
+  description:
+    "Default Beauty Station blog listing page with slider and posts.",
 };
 
 export default function page() {

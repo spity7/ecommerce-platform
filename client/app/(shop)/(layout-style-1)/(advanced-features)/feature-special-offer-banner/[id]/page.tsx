@@ -5,9 +5,9 @@ import DetailsSizePopup from "@/components/product-details/details/DetailsSizePo
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Product Single Default | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Product Single Default | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default async function Page({
   params,

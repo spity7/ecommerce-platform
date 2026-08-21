@@ -5,7 +5,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Team Page 02 | Beauty Station | Cosmetics & Skincare",
-  description: "Second team page layout highlighting Beauty Station team members.",
+  description:
+    "Second team page layout highlighting Beauty Station team members.",
 };
 
 export default function page() {

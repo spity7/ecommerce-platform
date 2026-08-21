@@ -15,9 +15,9 @@ import BreadCrumb from "@/components/product-details/BreadCrumb";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Product Single Electronics | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Product Single Electronics | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default async function Page({
   params,

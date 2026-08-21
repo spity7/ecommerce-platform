@@ -4,7 +4,8 @@ import WishlistBuilderBanner from "@/components/core-features/wishlist-builder/W
 export const metadata: Metadata = {
   title:
     "Wishlist Builder | Discover premium cosmetics and skincare products at Beauty Station.",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function WishlistBuilderPage() {
   return (
@@ -15,7 +16,8 @@ export default function WishlistBuilderPage() {
         sectionTitle="Fast Performance Across Platforms"
         sectionDescription={
           <>
-            Experience unparalleled speed and efficiency with Beauty Station, <br />
+            Experience unparalleled speed and efficiency with Beauty Station,{" "}
+            <br />
             optimized for all platforms.
           </>
         }

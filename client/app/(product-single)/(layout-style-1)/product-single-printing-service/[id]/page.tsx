@@ -9,7 +9,8 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title:
     "Product Single Printing Service | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default async function Page({
   params,

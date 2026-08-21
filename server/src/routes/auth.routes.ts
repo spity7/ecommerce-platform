@@ -6,10 +6,7 @@ import {
   registerSchema,
 } from "@platform/shared";
 import { AppError } from "../middleware/errorHandler.js";
-import {
-  requireAuth,
-  type AuthenticatedRequest,
-} from "../middleware/auth.js";
+import { requireAuth, type AuthenticatedRequest } from "../middleware/auth.js";
 import { User } from "../models/User.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import {

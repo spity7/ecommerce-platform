@@ -10,9 +10,9 @@ import Testimonials from "@/components/homes/home-electronics-three/Testimonials
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Electronics 03 | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Electronics 03 | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

@@ -13,9 +13,9 @@ import VideoBackground from "@/components/homes/home-jewellery/VideoBackground";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Jwellery 01 | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Jwellery 01 | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

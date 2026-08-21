@@ -30,8 +30,8 @@ function ProductDisplayComponents() {
                       <div className="content-inner">
                         <span className="overlay-text">01</span>
                         <h2 className="rbt-title rbt-text-bold">
-                          Showcase Your Product in a 3D View with Beauty Station 3D
-                          Viewer.
+                          Showcase Your Product in a 3D View with Beauty Station
+                          3D Viewer.
                         </h2>
                         <p className="rbt-description">
                           Show your product in an interactive 3D view using

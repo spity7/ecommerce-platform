@@ -10,9 +10,9 @@ import VideosSection from "@/components/common/other-components/VideosSection";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Home Cosmetic Beauty 02 | Beauty Station | Cosmetics & Skincare",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  title: "Home Cosmetic Beauty 02 | Beauty Station | Cosmetics & Skincare",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function page() {
   return (

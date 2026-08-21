@@ -4,7 +4,8 @@ import CustomizeOptionsBanner from "@/components/core-features/customize-options
 export const metadata: Metadata = {
   title:
     "Customize Options | Discover premium cosmetics and skincare products at Beauty Station.",
-  description: "Discover premium cosmetics and skincare products at Beauty Station.",
+  description:
+    "Discover premium cosmetics and skincare products at Beauty Station.",
 };
 export default function CustomizeOptionsPage() {
   return (
@@ -32,9 +33,9 @@ export default function CustomizeOptionsPage() {
             ),
             description: (
               <>
-                Compare your selected products in a table with Beauty Station Compare
-                Table Builder. Choose from a variety of pre-built templates and
-                customize them to match your brand.
+                Compare your selected products in a table with Beauty Station
+                Compare Table Builder. Choose from a variety of pre-built
+                templates and customize them to match your brand.
               </>
             ),
           },
