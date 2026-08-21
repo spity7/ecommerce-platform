@@ -1,6 +1,6 @@
 # Routes reference
 
-HTTP API routes, admin pages, and storefront routing. **Last reviewed:** 2026-08-21.
+HTTP API routes, admin pages, and storefront routing. **Last reviewed:** 2026-08-22.
 
 ## Server API (`@platform/server`)
 
@@ -80,7 +80,7 @@ Protected by `admin/proxy.ts`: validates access token via `GET /api/auth/me` and
 | `/settings`, `/settings/shipping`, `/settings/payments`, `/settings/permissions` | No             | Demo data                     |
 | `/localization/currency-rates`, `/localization/translation`                      | No             | Demo data                     |
 
-Navigation source: `admin/config/navigation.ts` + `admin/config/routes.ts`. Feature flags in site config are **not** yet used to hide nav items.
+Navigation source: `admin/config/navigation.ts` + `admin/config/routes.ts`. Optional nav items are hidden when matching `SiteConfig.features` is `false` (e.g. `coupons`, `reviews`).
 
 ---
 

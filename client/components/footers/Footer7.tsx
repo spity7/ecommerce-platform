@@ -2,8 +2,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { footerData, footerDataStores, socialLinks } from "../../data/footer";
 import FooterNewsletterForm from "./FooterNewsletterForm";
+import {
+  getSiteChromeBranding,
+  type SiteChromeBranding,
+} from "@/lib/site-branding";
 
-export default function Footer7() {
+type Footer7Props = {
+  branding?: SiteChromeBranding;
+};
+
+export default function Footer7({ branding }: Footer7Props) {
+  const brand = branding ?? getSiteChromeBranding();
   return (
     <>
       {/* Start Component Area */}
@@ -270,8 +279,8 @@ export default function Footer7() {
                 <div className="logo mx-auto mx-xl-0">
                   <Link href={`/`}>
                     <Image
-                      alt="Beauty Station Logo"
-                      src="/assets/images/logo/logo.webp"
+                      alt={`${brand.siteName} logo`}
+                      src={brand.logo}
                       width={1487}
                       height={334}
                     />
@@ -287,7 +296,7 @@ export default function Footer7() {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Beauty Station
+                    {brand.siteName}
                   </a>
                   Nextjs Template.
                 </p>
@@ -310,7 +319,7 @@ export default function Footer7() {
             <div className="row mt--12">
               <div className="col-12">
                 <div className="rbt-watermark-text rbt-watermark-color-var-1">
-                  <span>Follow@Beauty Station</span>
+                  <span>Follow @{brand.siteName}</span>
                 </div>
               </div>
             </div>

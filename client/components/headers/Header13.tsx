@@ -21,8 +21,18 @@ import SearchToggler from "./headerComponents/SearchToggler";
 import { useSticky } from "@/hooks/useSticky";
 import Tooltip from "@/components/common/ui/Tooltip";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
+import {
+  getSiteChromeBranding,
+  type SiteChromeBranding,
+} from "@/lib/site-branding";
 
-export default function Header13({ sticky = true }) {
+type Header13Props = {
+  sticky?: boolean;
+  branding?: SiteChromeBranding;
+};
+
+export default function Header13({ sticky = true, branding }: Header13Props) {
+  const brand = branding ?? getSiteChromeBranding();
   const isSticky = useSticky();
   const stickyClass = sticky && isSticky ? " rbt-sticky" : "";
   return (
@@ -55,11 +65,11 @@ export default function Header13({ sticky = true }) {
                     <li className="rbt-access-box">
                       <div className="header-info">
                         <a
-                          href="tel:+800300-353-569"
+                          href={brand.phoneHref || undefined}
                           className="rbt-access-box-wrapper p-0"
                         >
                           <div className="content p-0">
-                            <span>+800 300-353-569</span>
+                            <span>{brand.phone}</span>
                           </div>
                         </a>
                       </div>
@@ -83,8 +93,8 @@ export default function Header13({ sticky = true }) {
               <div className="logo">
                 <Link href={`/`}>
                   <Image
-                    alt="Ecommerce Logo Images"
-                    src="/assets/images/logo/logo-blackbg.webp"
+                    alt={`${brand.siteName} logo`}
+                    src={brand.logoDark}
                     width={1487}
                     height={334}
                   />
@@ -189,8 +199,8 @@ export default function Header13({ sticky = true }) {
                   <div className="logo rbt-logo-height-sm">
                     <Link href={`/`}>
                       <Image
-                        alt="Ecommerce Logo Images"
-                        src="/assets/images/logo/logo.webp"
+                        alt={`${brand.siteName} logo`}
+                        src={brand.logo}
                         width={1487}
                         height={334}
                       />
@@ -210,8 +220,8 @@ export default function Header13({ sticky = true }) {
               <div className="logo">
                 <Link href={`/`}>
                   <Image
-                    alt="Ecommerce Logo Images"
-                    src="/assets/images/logo/logo.webp"
+                    alt={`${brand.siteName} logo`}
+                    src={brand.logo}
                     width={1487}
                     height={334}
                   />

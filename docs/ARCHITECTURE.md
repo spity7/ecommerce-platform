@@ -2,7 +2,7 @@
 
 Multipurpose ecommerce monorepo: one codebase, many site deployments.
 
-**Last reviewed:** 2026-08-21. See [AI-INDEX.md](AI-INDEX.md) for the full doc map and tree.
+**Last reviewed:** 2026-08-22. See [AI-INDEX.md](AI-INDEX.md) for the full doc map and tree.
 
 ## Layout
 
@@ -36,11 +36,11 @@ ecommerce-platform/
 
 The platform skeleton is real (shared contract, multi-site config, catalog API). UI is largely a purchased theme with early API wiring:
 
-| Layer  | API-connected                            | Template / static              |
-| ------ | ---------------------------------------- | ------------------------------ |
-| Server | Catalog CRUD + auth + uploads            | No orders/users/cart API       |
-| Admin  | Catalog lists + CRUD forms + sign-in     | ~35 other dashboard pages      |
-| Client | Home block + `/shop` + `/product/[slug]` | 300+ demo routes, Zustand cart |
+| Layer  | API-connected                                              | Template / static                                                |
+| ------ | ---------------------------------------------------------- | ---------------------------------------------------------------- |
+| Server | Catalog CRUD + auth + uploads                              | No orders/users/cart API                                         |
+| Admin  | Catalog lists + CRUD forms + sign-in                       | ~35 other dashboard pages; nav filtered by `SiteConfig.features` |
+| Client | Home layout per `homeLayout` + `/shop` + `/product/[slug]` | 300+ demo routes, Zustand cart                                   |
 
 **Auth:** JWT on catalog mutations and uploads. Admin: sign-in (admin role only), `proxy.ts` validates token via `/api/auth/me`, 401 refresh with sign-out fallback, header loads user from API. Production rejects default JWT secrets. Storefront catalog reads remain public; customer auth UI not wired yet.
 
@@ -209,17 +209,18 @@ All catalog routes are **unauthenticated**.
 
 - **MongoDB** via Mongoose 9 — one database per site (`MONGODB_URI`)
 - Models: `Product`, `Category`, `Brand`, `Attribute` in `server/src/models/`
-- Seed: `npm run seed` → `server/src/scripts/seed.ts`
+- Seed: `npm run seed` → `server/src/scripts/seed.ts` (dataset from `SITE_ID` + `homeLayout`: beauty, sport, or general)
 - Optional media: Google Cloud Storage (`POST /api/uploads` returns 503 if not configured)
 
 ## Feature flags
 
-Site-specific modules are defined in site config (`features.*`). **Today:** flags are stored but admin navigation does **not** yet hide sections when disabled — implement filtering in `admin/config/navigation.ts` when needed.
+Site-specific modules are defined in site config (`features.*`). Admin navigation filters optional modules (`attributes`, `brands`, `coupons`, `reviews`) when the matching feature is `false`. Storefront module gating is not implemented yet.
 
 ## Storefront notes
 
 - Large theme demo: 80+ home layouts, many shop/product variants under `client/app/`.
-- `HomeLayoutRenderer` maps all `HomeLayoutId` values to the active layout component (currently `cosmetic-beauty-two` for Beauty Station).
+- `HomeLayoutRenderer` maps each `HomeLayoutId` to a dedicated layout under `client/components/site/home-layouts/`.
+- Production chrome on `/shop` and `/product/[slug]` uses `SiteConfig.branding` + `contact` in `Header13` / `Footer7`.
 - Cart, wishlist, compare: Zustand + browser persistence only (`client/context/`).
 - Tab-driven product sections: follow `client/.cursor/rules/product-tab-filtering-pattern.mdc`.
 
@@ -227,7 +228,7 @@ Site-specific modules are defined in site config (`features.*`). **Today:** flag
 
 - Tailwind 4 + Biome lint + Prettier.
 - Optional `basePath` from `NEXT_PUBLIC_BASE_URL` in `admin/next.config.ts`.
-- Catalog list pages use Server Components + `@platform/api-client`.
+- Catalog list + CRUD pages use `@platform/api-client`. Nav items with `feature` keys respect `SiteConfig.features`.
 
 ## Tooling
 

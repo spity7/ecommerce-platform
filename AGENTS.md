@@ -25,7 +25,7 @@ Cross-tool entry point (**Cursor**, **Claude Code**, **Antigravity / Gemini**, *
 - **Multi-site:** `SITE_ID` / `NEXT_PUBLIC_SITE_ID` → `getSiteConfig()` from `@platform/site-config`. First site: **beauty-station**.
 - **API client:** Orval from OpenAPI — **do not edit** `packages/api-client/src/generated/**` by hand. Run `npm run api:generate` after contract changes.
 - **Auth:** JWT API + admin sign-in (admin role enforced in UI and proxy). Register creates `customer` only; promote first admin in MongoDB. Storefront sign-in pages are still theme demos.
-- **Integration maturity:** Server catalog CRUD is real; admin has **4 API-connected list pages**; client has **partial** API on the Beauty home block — most routes are theme demos with static `data/*`.
+- **Integration maturity:** Server catalog CRUD is real; admin catalog CRUD + feature-filtered nav; client home layout per site + `/shop`/`/product/[slug]` API routes.
 
 ## Common commands
 

@@ -42,7 +42,7 @@ const site = getSiteConfig(process.env.SITE_ID);
 
 Reference templates: `server/.env.example`, `admin/.env.example`, `client/.env.example`, and `sites/{id}/.env.example` from `npm run create-site`.
 
-- Add new sites in `packages/site-config/src/sites/{id}.ts` and register in `index.ts`.
+- Add new sites in `packages/site-config/src/sites/{id}.ts` and register in `index.ts`. Include `branding` (logo paths) and `features` (must match registry).
 - Update `docs/site-registry.json` (all `features` flags must match the site config file).
 - Run `npm run create-site` for env scaffolding.
 - Do **not** hardcode site names in feature code.
@@ -75,15 +75,16 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) § API contract and `.cursor/rules/api-co
 
 ## Admin (`@platform/admin`)
 
-| Topic       | Convention                                                                                |
-| ----------- | ----------------------------------------------------------------------------------------- |
-| Styling     | Tailwind CSS 4 — semantic tokens in `app/globals.css` (`bg-brand-600`, `text-ink-500`, …) |
-| Icons       | `lucide-react`                                                                            |
-| Navigation  | `config/routes.ts` + `config/navigation.ts`                                               |
-| Site        | `lib/site.ts` → `getAdminSiteConfig()`                                                    |
-| API mappers | `lib/mappers/` — map DTOs to UI types                                                     |
-| Lint        | Biome + Prettier (`npm run check`)                                                        |
-| Auth        | **Not implemented** — sign-in is a demo page                                              |
+| Topic       | Convention                                                                                                     |
+| ----------- | -------------------------------------------------------------------------------------------------------------- |
+| Styling     | Tailwind CSS 4 — semantic tokens in `app/globals.css` (`bg-brand-600`, `text-ink-500`, …)                      |
+| Icons       | `lucide-react`                                                                                                 |
+| Navigation  | `config/routes.ts` + `config/navigation.ts`; optional `feature` keys filter nav via `lib/navigation-filter.ts` |
+| Site        | `lib/site.ts` → `getAdminSiteConfig()`; `config/site.ts` exposes `branding`, `features`, `displayName`         |
+| Auth UI     | `lib/brand.ts` → `createAdminMetadata()`; sign-in shell uses `siteConfig.branding`                             |
+| API mappers | `lib/mappers/` — map DTOs to UI types                                                                          |
+| Lint        | Biome + Prettier (`npm run check`)                                                                             |
+| Auth        | **Not implemented** — sign-in is a demo page                                                                   |
 
 Catalog list pages fetch from API in Server Components; show inline error banner with seed hint on failure.
 
@@ -93,6 +94,7 @@ Catalog list pages fetch from API in Server Components; show inline error banner
 | --------------- | ------------------------------------------------------------------------------------------------ |
 | Styling         | Bootstrap 5 + SCSS (`public/assets/scss/`)                                                       |
 | Site theme      | `SiteThemeStyles` injects CSS variables from `site.theme`                                        |
+| Site branding   | `lib/site-branding.ts` → logo/phone for `Header13` / `Footer7` on production routes              |
 | Home layout     | `SiteConfig.homeLayout` → `HomeLayoutRenderer`                                                   |
 | Demo catalog    | Static data in `data/products/*.ts` with optional `demoTab` for tabs                             |
 | Tab filtering   | See `client/.cursor/rules/product-tab-filtering-pattern.mdc`                                     |

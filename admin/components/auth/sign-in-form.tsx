@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { AuthResponse } from "@platform/shared";
 import { routes } from "@/config/routes";
+import { adminBrandName } from "@/lib/brand";
 import { setAuthCookies } from "@/lib/auth";
 import { getApiBaseUrl, setAccessToken } from "@platform/api-client";
 import { useAuthSession } from "@/providers/auth-session-provider";
@@ -69,10 +70,10 @@ export function SignInForm() {
           Welcome back
         </p>
         <h1 className="text-[26px] font-semibold text-ink-900">
-          Sign in to admin
+          Sign in to {adminBrandName}
         </h1>
         <p className="mt-2 text-[14px] text-ink-500">
-          Use your admin credentials to access the dashboard.
+          Use your admin credentials to access the {adminBrandName} dashboard.
         </p>
       </div>
 

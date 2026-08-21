@@ -12,7 +12,7 @@ Copy `.env.example` values into each app (`client`, `admin`, `server`) for local
 | `admin/.env.local`  | `SITE_ID`, `NEXT_PUBLIC_SITE_ID`, API URLs, cookie max-age |
 | `client/.env.local` | `NEXT_PUBLIC_SITE_ID`, API URLs, `NEXT_PUBLIC_SITE_URL`    |
 
-**Admin access:** register via `POST /api/auth/register`, then set `role: "admin"` on that user in MongoDB. Run `npm run seed` for catalog demo data only.
+**Admin access:** register via `POST /api/auth/register`, then set `role: "admin"` on that user in MongoDB. Run `npm run seed` for catalog demo data (dataset follows `homeLayout`: beauty, sport, or general).
 
 ## Resources (production)
 

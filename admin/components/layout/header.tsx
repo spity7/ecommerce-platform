@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { routes } from "@/config/routes";
+import { siteConfig } from "@/config/site";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { useAuthSession } from "@/providers/auth-session-provider";
 import { baseURL, cn } from "@/utils/cn";
@@ -45,7 +46,7 @@ function MobileSidebarButton() {
 function MobileLogo() {
   return (
     <Link
-      aria-label="Beauty Station dashboard"
+      aria-label={`${siteConfig.displayName} dashboard`}
       className="absolute left-1/2 -translate-x-1/2 lg:hidden"
       href={routes.dashboard}
     >

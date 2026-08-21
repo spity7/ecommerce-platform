@@ -1,0 +1,126 @@
+import type { SiteSeedData } from "./types.js";
+
+export const beautySeedData: SiteSeedData = {
+  label: "beauty",
+  primaryCategorySlug: "skincare",
+  primaryBrandSlug: "glow-lab",
+  categories: [
+    {
+      name: "Skincare",
+      slug: "skincare",
+      image: "/assets/images/catagory-img/cat-transp-img-01.webp",
+      status: "published",
+    },
+    {
+      name: "Makeup",
+      slug: "makeup",
+      image: "/assets/images/catagory-img/cat-transp-img-02.webp",
+      status: "published",
+    },
+    {
+      name: "Fragrance",
+      slug: "fragrance",
+      image: "/assets/images/catagory-img/cat-transp-img-03.webp",
+      status: "published",
+    },
+    {
+      name: "Hair Care",
+      slug: "hair-care",
+      image: "/assets/images/catagory-img/cat-bg-headphones-01.webp",
+      status: "published",
+    },
+  ],
+  brands: [
+    {
+      name: "Glow Lab",
+      slug: "glow-lab",
+      website: "glowlab.com",
+      initials: "GL",
+      tileClass: "bg-brand-50 text-brand-600",
+      visibility: "Featured",
+      status: "published",
+    },
+    {
+      name: "Pure Skin",
+      slug: "pure-skin",
+      website: "pureskin.com",
+      initials: "PS",
+      tileClass: "bg-success-50 text-success-600",
+      visibility: "Standard",
+      status: "published",
+    },
+  ],
+  attributes: [
+    {
+      name: "Skin Type",
+      slug: "skin-type",
+      displayType: "Dropdown",
+      description: "Recommended skin type for the product.",
+      status: "active",
+      values: ["Oily", "Dry", "Combination", "Sensitive"],
+    },
+    {
+      name: "SPF Level",
+      slug: "spf-level",
+      displayType: "Dropdown",
+      description: "Sun protection factor.",
+      status: "active",
+      values: ["15", "30", "50"],
+    },
+  ],
+  products: [
+    {
+      name: "Hydrating Vitamin C Serum",
+      slug: "hydrating-vitamin-c-serum",
+      sku: "BS-SK-001",
+      description: "Brightening daily serum with stable vitamin C.",
+      price: 42,
+      compareAtPrice: 52,
+      stock: 120,
+      status: "published",
+      images: [
+        "/assets/images/product-img/beauty-product/beauty-product-st-05.webp",
+      ],
+      attributes: { "skin-type": "Combination" },
+    },
+    {
+      name: "SPF 50 Daily Moisturizer",
+      slug: "spf-50-daily-moisturizer",
+      sku: "BS-SK-002",
+      description: "Lightweight moisturizer with broad-spectrum SPF 50.",
+      price: 36,
+      stock: 8,
+      status: "published",
+      images: [
+        "/assets/images/product-img/beauty-product/beauty-product-st-06.webp",
+      ],
+      attributes: { "skin-type": "Sensitive", "spf-level": "50" },
+    },
+    {
+      name: "Rosewater Balancing Toner",
+      slug: "rosewater-balancing-toner",
+      sku: "BS-SK-003",
+      description: "Alcohol-free toner to refresh and balance skin.",
+      price: 24,
+      stock: 64,
+      status: "published",
+      images: [
+        "/assets/images/product-img/beauty-product/beauty-product-st-07.webp",
+      ],
+      attributes: { "skin-type": "Dry" },
+    },
+    {
+      name: "Overnight Repair Cream",
+      slug: "overnight-repair-cream",
+      sku: "BS-SK-004",
+      description: "Rich night cream for deep hydration.",
+      price: 58,
+      stock: 45,
+      status: "draft",
+      images: [
+        "/assets/images/product-img/beauty-product/beauty-product-st-08.webp",
+      ],
+      attributes: { "skin-type": "Dry" },
+    },
+  ],
+};

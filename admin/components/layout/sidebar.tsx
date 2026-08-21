@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { siteConfig } from "@/config/site";
-import { primaryNavigation } from "@/config/navigation";
+import { filterNavigationByFeatures } from "@/lib/navigation-filter";
 import { routes } from "@/config/routes";
 import type { NavigationGroup, NavigationItem } from "@/types/navigation";
 import { baseURL, cn } from "@/utils/cn";
@@ -17,6 +17,7 @@ import { SearchKbd } from "./sidebar-search";
 export function Sidebar() {
   const { closeSidebar, mobileOpen, toggleCollapsed } = useDashboardChrome();
   const pathname = usePathname();
+  const navigation = filterNavigationByFeatures(siteConfig.features);
 
   return (
     <aside
@@ -34,27 +35,27 @@ export function Sidebar() {
           href={routes.dashboard}
         >
           <Image
-            alt={siteConfig.name}
+            alt={siteConfig.displayName}
             className="logo-full h-8 max-w-[300px] w-auto dark:hidden"
             height={32}
             priority
-            src={`${baseURL}assets/images/logo/logo.webp`}
+            src={`${baseURL}${siteConfig.branding.logo.replace(/^\//, "")}`}
             style={{ width: "auto" }}
             width={142}
           />
           <Image
-            alt={siteConfig.name}
+            alt={siteConfig.displayName}
             className="logo-full hidden h-8 w-auto dark:block"
             height={32}
-            src={`${baseURL}assets/images/logo/logo-blackbg.webp`}
+            src={`${baseURL}${(siteConfig.branding.logoDark ?? siteConfig.branding.logo).replace(/^\//, "")}`}
             style={{ width: "auto" }}
             width={142}
           />
           <Image
-            alt={siteConfig.name}
+            alt={siteConfig.displayName}
             className="logo-mark hidden h-9 w-9 shrink-0 rounded-lg object-contain"
             height={36}
-            src={`${baseURL}assets/images/favicon.png`}
+            src={`${baseURL}${(siteConfig.branding.favicon ?? siteConfig.branding.logo).replace(/^\//, "")}`}
             width={36}
           />
         </Link>
@@ -77,7 +78,7 @@ export function Sidebar() {
       </div>
       <SidebarSearch />
       <nav className="dashboard-scrollbar mt-3 flex-1 space-y-0.5 overflow-y-auto px-3 pb-3">
-        {primaryNavigation.map((item) =>
+        {navigation.map((item) =>
           isNavigationGroup(item) ? (
             <SidebarNavGroup group={item} key={item.key} pathname={pathname} />
           ) : (
