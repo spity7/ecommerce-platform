@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { routes } from "@/config/routes";
 import { LogoutButton } from "@/components/auth/logout-button";
+import { useAuthSession } from "@/providers/auth-session-provider";
 import { baseURL, cn } from "@/utils/cn";
 import { useDashboardChrome } from "./dashboard-chrome";
 import { Icon } from "./icon";
@@ -148,6 +149,10 @@ type UserProfileDropdownProps = {
 };
 
 export function UserProfileDropdown({ variant }: UserProfileDropdownProps) {
+  const { user, loading } = useAuthSession();
+  const displayName = user?.name ?? (loading ? "Loading…" : "Admin");
+  const displayEmail = user?.email ?? "";
+  const menuLabel = `${displayName} Admin - open account menu`;
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const menuId =
@@ -190,7 +195,7 @@ export function UserProfileDropdown({ variant }: UserProfileDropdownProps) {
           type="button"
         >
           <Image
-            alt="Emay Walter"
+            alt={displayName}
             className="h-9 w-9 shrink-0 rounded-full object-cover"
             height={36}
             src={`${baseURL}assets/avatars/admin-avatar.svg`}
@@ -198,10 +203,10 @@ export function UserProfileDropdown({ variant }: UserProfileDropdownProps) {
           />
           <span className="user-text min-w-0 flex-1">
             <span className="block truncate text-[14px] font-semibold text-ink-900">
-              Emay Walter
+              {displayName}
             </span>
             <span className="block truncate text-[12px] text-ink-400">
-              admin@beautystation.com
+              {displayEmail}
             </span>
           </span>
           <Icon
@@ -209,7 +214,13 @@ export function UserProfileDropdown({ variant }: UserProfileDropdownProps) {
             name="chevrons-up-down"
           />
         </button>
-        <UserMenu id={menuId} open={open} placement="sidebar" />
+        <UserMenu
+          displayEmail={displayEmail}
+          displayName={displayName}
+          id={menuId}
+          open={open}
+          placement="sidebar"
+        />
       </div>
     );
   }
@@ -220,13 +231,13 @@ export function UserProfileDropdown({ variant }: UserProfileDropdownProps) {
         aria-controls={menuId}
         aria-expanded={open}
         aria-haspopup="menu"
-        aria-label="Emay Walter Admin - open account menu"
+        aria-label={menuLabel}
         className="flex items-center gap-3 rounded-card px-2 py-1.5 hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-card"
         onClick={() => setOpen((current) => !current)}
         type="button"
       >
         <Image
-          alt="Emay Walter"
+          alt={displayName}
           className="h-10 w-10 rounded-full border border-surface-line object-cover"
           height={40}
           src={`${baseURL}assets/avatars/admin-avatar.svg`}
@@ -234,25 +245,39 @@ export function UserProfileDropdown({ variant }: UserProfileDropdownProps) {
         />
         <span className="hidden text-left lg:block">
           <span className="block text-[15px] font-semibold leading-tight text-ink-900">
-            Emay Walter
+            {displayName}
           </span>
           <span className="flex items-center gap-1 text-[13px] text-ink-500">
             Admin <Icon className="h-3.5 w-3.5" name="chevron-down" />
           </span>
         </span>
       </button>
-      <UserMenu id={menuId} open={open} placement="topbar" />
+      <UserMenu
+        displayEmail={displayEmail}
+        displayName={displayName}
+        id={menuId}
+        open={open}
+        placement="topbar"
+      />
     </div>
   );
 }
 
 type UserMenuProps = {
+  displayEmail: string;
+  displayName: string;
   id: string;
   open: boolean;
   placement: "sidebar" | "topbar";
 };
 
-function UserMenu({ id, open, placement }: UserMenuProps) {
+function UserMenu({
+  displayEmail,
+  displayName,
+  id,
+  open,
+  placement,
+}: UserMenuProps) {
   const placementClass =
     placement === "topbar"
       ? "absolute right-0 top-full z-50 mt-2 w-64"
@@ -270,7 +295,7 @@ function UserMenu({ id, open, placement }: UserMenuProps) {
     >
       <div className="flex items-center gap-3 border-b border-surface-line px-2 pb-3 pt-2">
         <Image
-          alt="Emay Walter"
+          alt={displayName}
           className="h-9 w-9 rounded-full object-cover"
           height={36}
           src={`${baseURL}assets/avatars/admin-avatar.svg`}
@@ -278,10 +303,10 @@ function UserMenu({ id, open, placement }: UserMenuProps) {
         />
         <span className="min-w-0 flex-1">
           <span className="block truncate text-[14px] font-semibold text-ink-900">
-            Emay Walter
+            {displayName}
           </span>
           <span className="block truncate text-[12px] text-ink-400">
-            admin@beautystation.com
+            {displayEmail}
           </span>
         </span>
       </div>

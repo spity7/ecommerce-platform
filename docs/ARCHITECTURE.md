@@ -42,7 +42,7 @@ The platform skeleton is real (shared contract, multi-site config, catalog API).
 | Admin  | Catalog lists + CRUD forms + sign-in     | ~35 other dashboard pages      |
 | Client | Home block + `/shop` + `/product/[slug]` | 300+ demo routes, Zustand cart |
 
-**Auth:** JWT on catalog mutations and uploads; admin dashboard protected by `proxy.ts` + sign-in. Storefront catalog reads remain public.
+**Auth:** JWT on catalog mutations and uploads. Admin: sign-in (admin role only), `proxy.ts` validates token via `/api/auth/me`, 401 refresh with sign-out fallback, header loads user from API. Production rejects default JWT secrets. Storefront catalog reads remain public; customer auth UI not wired yet.
 
 ## Beauty Station (site #1)
 

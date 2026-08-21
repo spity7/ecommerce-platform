@@ -2,15 +2,17 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import type { AuthResponse } from "@platform/shared";
 import { routes } from "@/config/routes";
 import { setAuthCookies } from "@/lib/auth";
-import { getApiBaseUrl } from "@platform/api-client";
-import { setAccessToken } from "@platform/api-client";
+import { getApiBaseUrl, setAccessToken } from "@platform/api-client";
+import { useAuthSession } from "@/providers/auth-session-provider";
 
 export function SignInForm() {
   const router = useRouter();
-  const [email, setEmail] = useState("admin@beautystation.com");
-  const [password, setPassword] = useState("password");
+  const { refreshUser } = useAuthSession();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -26,10 +28,8 @@ export function SignInForm() {
         body: JSON.stringify({ email, password }),
       });
 
-      const body = (await response.json()) as {
+      const body = (await response.json()) as AuthResponse & {
         error?: string;
-        accessToken?: string;
-        refreshToken?: string;
       };
 
       if (!response.ok) {
@@ -42,8 +42,14 @@ export function SignInForm() {
         return;
       }
 
+      if (body.user?.role !== "admin") {
+        setError("Admin access required");
+        return;
+      }
+
       setAuthCookies(body.accessToken, body.refreshToken);
       setAccessToken(body.accessToken);
+      await refreshUser();
       router.push(routes.dashboard);
       router.refresh();
     } catch {
@@ -76,6 +82,7 @@ export function SignInForm() {
             Email address
           </span>
           <input
+            autoComplete="email"
             className="mt-2 h-11 w-full rounded-base border border-surface-line bg-surface-body px-4 text-[14px] focus:border-brand-600"
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -88,6 +95,7 @@ export function SignInForm() {
             Password
           </span>
           <input
+            autoComplete="current-password"
             className="mt-2 h-11 w-full rounded-base border border-surface-line bg-surface-body px-4 text-[14px] focus:border-brand-600"
             onChange={(e) => setPassword(e.target.value)}
             required

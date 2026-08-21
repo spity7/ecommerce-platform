@@ -1,4 +1,5 @@
 import { getApiBaseUrl, setAccessToken } from "@platform/api-client";
+import type { AuthResponse } from "@platform/shared";
 import { getRefreshTokenFromCookie, setAuthCookies } from "@/lib/auth";
 
 export async function tryRefreshSession(): Promise<boolean> {
@@ -18,12 +19,13 @@ export async function tryRefreshSession(): Promise<boolean> {
       return false;
     }
 
-    const body = (await response.json()) as {
-      accessToken?: string;
-      refreshToken?: string;
-    };
+    const body = (await response.json()) as AuthResponse;
 
-    if (!body.accessToken || !body.refreshToken) {
+    if (
+      !body.accessToken ||
+      !body.refreshToken ||
+      body.user?.role !== "admin"
+    ) {
       return false;
     }
 

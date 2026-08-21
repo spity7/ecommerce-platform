@@ -48,12 +48,13 @@ Copy `admin/.env.example` → `admin/.env.local`:
 
 ```text
 app/
-  (auth)/signin/          Demo sign-in (not wired to backend)
+  (auth)/signin/          JWT sign-in (admin role required)
   (dashboard)/            Dashboard pages
 config/                   routes.ts, navigation.ts, site.ts
-components/               layout, products, charts, ui, …
-lib/                      site helpers, API mappers
-providers/                app providers
+components/               layout, products, charts, auth, …
+lib/                      auth, session, site helpers, API mappers
+providers/                app + auth session providers
+proxy.ts                  Route gate via /api/auth/me (admin role)
 ```
 
 ## API integration
@@ -64,7 +65,11 @@ providers/                app providers
 
 ## Auth
 
-Authentication is **not implemented**. The sign-in page is a UI template with no backend session. Do not deploy admin publicly without adding auth.
+JWT sign-in against `POST /api/auth/login`. Only users with `role: admin` may enter the dashboard. [`proxy.ts`](proxy.ts) validates each request via `GET /api/auth/me`. Tokens live in cookies + in-memory Bearer header for mutations. Logout calls `POST /api/auth/logout`.
+
+**First admin:** register via API, then set `role: "admin"` on that user in MongoDB (see [docs/CONVENTIONS.md](../docs/CONVENTIONS.md)).
+
+Do not expose admin publicly without strong JWT secrets (`NODE_ENV=production` rejects default secrets on the server).
 
 ## Conventions
 

@@ -54,7 +54,7 @@ Dev URL: `http://localhost:3001`. Optional `basePath` via `NEXT_PUBLIC_BASE_URL`
 | --------- | ------------------------------------ |
 | `/signin` | JWT login via API; sets auth cookies |
 
-Protected by `admin/proxy.ts` (cookie presence check; not JWT validation).
+Protected by `admin/proxy.ts`: validates access token via `GET /api/auth/me` and requires `role: admin`. Clears invalid cookies and redirects to `/signin`. Sign-in rejects non-admin users. Logout calls `POST /api/auth/logout`. Failed token refresh clears session and redirects to sign-in.
 
 ### Dashboard (template + catalog API)
 

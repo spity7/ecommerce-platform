@@ -1,3 +1,11 @@
+export type SiteBranding = {
+  logo: string;
+  logoDark?: string;
+  favicon?: string;
+  signInBanner?: string;
+  signInBannerMobile?: string;
+};
+
 export type HomeLayoutId =
   | "cosmetic-beauty-two"
   | "cosmetic-beauty-three"
@@ -38,6 +46,7 @@ export type SiteConfig = {
     email: string;
     phone: string;
   };
+  branding: SiteBranding;
   seo: {
     title: string;
     description: string;

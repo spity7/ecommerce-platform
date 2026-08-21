@@ -82,7 +82,14 @@ authRouter.post(
   "/refresh",
   asyncHandler(async (req, res) => {
     const { refreshToken } = refreshTokenSchema.parse(req.body);
-    const payload = verifyRefreshToken(refreshToken);
+
+    let payload;
+    try {
+      payload = verifyRefreshToken(refreshToken);
+    } catch {
+      throw new AppError(401, "Invalid or expired refresh token");
+    }
+
     const user = await User.findById(payload.userId);
     if (!user) {
       throw new AppError(401, "User not found");

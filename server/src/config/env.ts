@@ -1,6 +1,9 @@
 import { getSiteConfig } from "@platform/site-config";
 import { z } from "zod";
 
+const DEV_JWT_ACCESS_SECRET = "dev-access-secret-change-me";
+const DEV_JWT_REFRESH_SECRET = "dev-refresh-secret-change-me";
+
 const envSchema = z.object({
   NODE_ENV: z
     .enum(["development", "production", "test"])
@@ -34,6 +37,18 @@ if (!parsed.success) {
 }
 
 const data = parsed.data;
+
+if (data.NODE_ENV === "production") {
+  if (
+    data.JWT_ACCESS_SECRET === DEV_JWT_ACCESS_SECRET ||
+    data.JWT_REFRESH_SECRET === DEV_JWT_REFRESH_SECRET
+  ) {
+    console.error(
+      "Invalid environment variables: JWT_ACCESS_SECRET and JWT_REFRESH_SECRET must be set to non-default values in production."
+    );
+    process.exit(1);
+  }
+}
 
 const site = getSiteConfig(data.SITE_ID);
 
