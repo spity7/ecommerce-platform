@@ -32,6 +32,7 @@ const caprasimo = Caprasimo({
 });
 import LayoutModals from "@/components/common/other-components/LayoutModals";
 import Toolbar from "@/components/modals/Toolbar";
+import { AppProviders } from "@/providers/app-providers";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -65,9 +66,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <SiteThemeStyles />
         <BootstrapJsLoader />
         <LayoutEffectsLoader />
-        <main id="main-content">{children}</main>
-        <Toolbar />
-        <LayoutModals />
+        <AppProviders>
+          <main id="main-content">{children}</main>
+          <Toolbar />
+          <LayoutModals />
+        </AppProviders>
       </body>
     </html>
   );

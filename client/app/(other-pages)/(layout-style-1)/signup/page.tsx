@@ -1,16 +1,14 @@
 import Signup from "@/components/other-pages/Signup";
+import { getStorefrontSiteConfig } from "@/lib/site";
+import type { Metadata } from "next";
 
-import { Metadata } from "next";
+const site = getStorefrontSiteConfig();
 
 export const metadata: Metadata = {
-  title: "Sign Up | Beauty Station | Cosmetics & Skincare",
-  description: "Create your Beauty Station customer account.",
+  title: `Sign Up | ${site.name}`,
+  description: `Create your ${site.name} customer account.`,
 };
 
-export default function page() {
-  return (
-    <>
-      <Signup />
-    </>
-  );
+export default function SignUpPage() {
+  return <Signup />;
 }

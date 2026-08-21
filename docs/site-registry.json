@@ -19,7 +19,8 @@
       "reviews": true,
       "sizeGuide": false,
       "subscriptions": false,
-      "wishlist": true
+      "wishlist": true,
+      "customerAuth": true
     },
     "deploySha": null,
     "notes": "Primary cosmetics & skincare site. Features must match packages/site-config/src/sites/beauty-station.ts."

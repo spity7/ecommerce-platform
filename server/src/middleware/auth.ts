@@ -41,3 +41,23 @@ export function requireAdmin(
   }
   next();
 }
+
+export function optionalAuth(
+  req: AuthenticatedRequest,
+  _res: Response,
+  next: NextFunction
+): void {
+  const header = req.headers.authorization;
+  if (!header?.startsWith("Bearer ")) {
+    next();
+    return;
+  }
+
+  const token = header.slice(7);
+  try {
+    req.auth = verifyAccessToken(token);
+  } catch {
+    // Invalid token — treat as guest for cart routes.
+  }
+  next();
+}

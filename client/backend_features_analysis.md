@@ -1,6 +1,6 @@
 # Backend API Feature Breakdown — Beauty Station
 
-> **Status (2026-08-20):** **Roadmap / planning doc** — not all endpoints below exist. **Implemented today:** catalog CRUD (`/api/products`, `/api/categories`, `/api/brands`, `/api/attributes`), `/api/uploads`, `/api/health` in `@platform/server`. See [docs/ROUTES.md](../docs/ROUTES.md) and [docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md). Auth, orders, cart API, and most sections below are **not implemented**. Storefront still uses static `data/*` for most pages; admin catalog list pages use the live API.
+> **Status (2026-08-22):** **Roadmap / planning doc** — not all endpoints below exist. **Implemented today:** catalog CRUD, auth, cart, orders (place + list), `PATCH /api/users/me`, `/api/uploads`, `/api/health`. See [docs/ROUTES.md](../docs/ROUTES.md). Wishlist API, checkout sessions, addresses, payments, and most sections below are **not implemented**. Storefront customer auth is wired when `features.customerAuth` is enabled; Zustand cart remains the primary UI cart until full API sync.
 
 > **Stack context:** Next.js App Router storefront + Express API monorepo. Static mock data remains in `client/data/` for theme demos.
 

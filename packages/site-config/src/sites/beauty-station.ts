@@ -24,6 +24,7 @@ export const beautyStationConfig = {
     sizeGuide: false,
     subscriptions: false,
     wishlist: true,
+    customerAuth: true,
   },
   contact: {
     email: "hello@beautystation.com",

@@ -10,6 +10,9 @@ import { brandsRouter } from "./brands.routes.js";
 import { categoriesRouter } from "./categories.routes.js";
 import { healthRouter } from "./health.routes.js";
 import { productsRouter } from "./products.routes.js";
+import { cartRouter } from "./cart.routes.js";
+import { ordersRouter } from "./orders.routes.js";
+import { usersRouter } from "./users.routes.js";
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -24,6 +27,9 @@ apiRouter.use("/products", productsRouter);
 apiRouter.use("/categories", categoriesRouter);
 apiRouter.use("/brands", brandsRouter);
 apiRouter.use("/attributes", attributesRouter);
+apiRouter.use("/cart", cartRouter);
+apiRouter.use("/orders", ordersRouter);
+apiRouter.use("/users", usersRouter);
 
 apiRouter.post(
   "/uploads",

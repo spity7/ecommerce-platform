@@ -35,10 +35,21 @@ Base URL: `http://localhost:5000` (override with `API_URL`).
 | POST   | `/api/auth/refresh`   | auth       | Refresh tokens (public)                            |
 | GET    | `/api/auth/me`        | auth       | Current user (Bearer token)                        |
 | POST   | `/api/auth/logout`    | auth       | Logout (Bearer token)                              |
+| GET    | `/api/cart`           | cart       | Current cart (Bearer or `X-Guest-Cart-Id`)       |
+| POST   | `/api/cart/items`     | cart       | Add item                                         |
+| PATCH  | `/api/cart/items/:itemId` | cart   | Update quantity                                  |
+| DELETE | `/api/cart/items/:itemId` | cart   | Remove item                                      |
+| DELETE | `/api/cart`           | cart       | Clear cart                                       |
+| POST   | `/api/cart/merge`     | cart       | Merge guest cart on login (Bearer)               |
+| POST   | `/api/orders`         | orders     | Place order from cart (Bearer)                     |
+| GET    | `/api/orders`         | orders     | List orders (user; admin sees all)                 |
+| GET    | `/api/orders/:id`     | orders     | Order detail (owner or admin)                      |
+| PATCH  | `/api/orders/:id`     | orders     | Update status (admin)                            |
+| PATCH  | `/api/users/me`       | users      | Update profile (name, phone)                       |
 
 **Docs:** Swagger UI at `/api/docs`, raw spec at `/api/openapi.json`.
 
-**Security:** Catalog **GET** routes are public. Catalog **POST/PATCH/DELETE** and **uploads** require admin JWT (`Authorization: Bearer <token>`). Auth login/register/refresh are public.
+**Security:** Catalog **GET** routes are public. Catalog **POST/PATCH/DELETE** and **uploads** require admin JWT. Cart routes accept guest `X-Guest-Cart-Id` or user Bearer token. Orders and profile updates require Bearer token; order status updates require admin.
 
 **Implementation:** `server/src/routes/*.routes.ts`, registered in `server/src/routes/index.ts`.
 
@@ -98,7 +109,15 @@ Dev URL: `http://localhost:3000`.
 
 **API integration today:** Home `Products1`, `/shop`, and `/product/[slug]` fetch published products from the API with static fallback. Demo routes under `(shop)/` and `(product-single)/` remain for theme previews.
 
-**Client state:** Zustand stores in `client/context/` (cart, wishlist, compare — persisted in browser only).
+**Client state:** Zustand cart/wishlist/compare in `client/context/` (browser persisted). Server cart API available when `features.customerAuth` is enabled; guest carts use `X-Guest-Cart-Id` and merge on login.
+
+### Customer auth (when `features.customerAuth`)
+
+| Path | Notes |
+| ---- | ----- |
+| `/signin`, `/signup` | API login/register; site-branded forms |
+| `/account-info`, `/my-order-history`, … | Protected by `client/proxy.ts` when feature enabled |
+| `/my-order-history` | Loads orders from `GET /api/orders` when feature enabled |
 
 ### Theme demo surface
 

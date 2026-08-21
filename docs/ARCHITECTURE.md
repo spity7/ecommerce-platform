@@ -36,13 +36,13 @@ ecommerce-platform/
 
 The platform skeleton is real (shared contract, multi-site config, catalog API). UI is largely a purchased theme with early API wiring:
 
-| Layer  | API-connected                                              | Template / static                                                |
-| ------ | ---------------------------------------------------------- | ---------------------------------------------------------------- |
-| Server | Catalog CRUD + auth + uploads                              | No orders/users/cart API                                         |
-| Admin  | Catalog lists + CRUD forms + sign-in                       | ~35 other dashboard pages; nav filtered by `SiteConfig.features` |
-| Client | Home layout per `homeLayout` + `/shop` + `/product/[slug]` | 300+ demo routes, Zustand cart                                   |
+| Layer  | API-connected                                             | Template / static                                                |
+| ------ | --------------------------------------------------------- | ---------------------------------------------------------------- |
+| Server | Catalog CRUD + auth + cart/orders + uploads               | No payment gateway, wishlist API, addresses API                  |
+| Admin  | Catalog lists + CRUD forms + sign-in                      | ~35 other dashboard pages; nav filtered by `SiteConfig.features` |
+| Client | Home layout + `/shop` + `/product/[slug]` + customer auth | 300+ demo routes; Zustand cart not fully synced to API           |
 
-**Auth:** JWT on catalog mutations and uploads. Admin: sign-in (admin role only), `proxy.ts` validates token via `/api/auth/me`, 401 refresh with sign-out fallback, header loads user from API. Production rejects default JWT secrets. Storefront catalog reads remain public; customer auth UI not wired yet.
+**Auth:** JWT on catalog mutations and uploads. Admin: sign-in (admin role only), `proxy.ts` validates token via `/api/auth/me`, 401 refresh with sign-out fallback. Storefront: customer sign-in/sign-up when `features.customerAuth`; `client/proxy.ts` guards account routes; cart/orders API for authenticated customers. Production rejects default JWT secrets.
 
 ## Beauty Station (site #1)
 

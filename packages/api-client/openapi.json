@@ -3,7 +3,7 @@
   "info": {
     "title": "Ecommerce Platform API",
     "version": "1.0.0",
-    "description": "REST API for the ecommerce platform catalog, auth, health, and uploads."
+    "description": "REST API for the ecommerce platform catalog, auth, cart, orders, health, and uploads."
   },
   "servers": [
     {
@@ -1146,6 +1146,419 @@
           }
         },
         "required": ["refreshToken"]
+      },
+      "CartDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "productId": {
+                  "type": "string"
+                },
+                "quantity": {
+                  "type": "integer"
+                },
+                "productName": {
+                  "type": "string"
+                },
+                "productSlug": {
+                  "type": "string"
+                },
+                "productImage": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "lineTotal": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "id",
+                "productId",
+                "quantity",
+                "productName",
+                "productSlug",
+                "productImage",
+                "price",
+                "lineTotal"
+              ]
+            }
+          },
+          "itemCount": {
+            "type": "integer"
+          },
+          "subtotal": {
+            "type": "number"
+          },
+          "guestSessionId": {
+            "type": "string"
+          }
+        },
+        "required": ["id", "items", "itemCount", "subtotal"]
+      },
+      "CartItemInput": {
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 99
+          }
+        },
+        "required": ["productId", "quantity"]
+      },
+      "UpdateCartItemInput": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 99
+          }
+        },
+        "required": ["quantity"]
+      },
+      "MergeCartInput": {
+        "type": "object",
+        "properties": {
+          "guestSessionId": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": ["guestSessionId"]
+      },
+      "OrderDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "processing",
+              "shipped",
+              "delivered",
+              "cancelled"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "type": "string"
+                },
+                "quantity": {
+                  "type": "integer"
+                },
+                "productName": {
+                  "type": "string"
+                },
+                "productSlug": {
+                  "type": "string"
+                },
+                "productImage": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "lineTotal": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "productId",
+                "quantity",
+                "productName",
+                "productSlug",
+                "productImage",
+                "price",
+                "lineTotal"
+              ]
+            }
+          },
+          "itemCount": {
+            "type": "integer"
+          },
+          "subtotal": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "shippingAddress": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              },
+              "line1": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "city": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              },
+              "country": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              },
+              "phone": {
+                "type": "string",
+                "maxLength": 40
+              }
+            },
+            "required": ["name", "line1", "city", "country"]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "status",
+          "items",
+          "itemCount",
+          "subtotal",
+          "total",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "PaginatedOrders": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "userId": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "pending",
+                    "processing",
+                    "shipped",
+                    "delivered",
+                    "cancelled"
+                  ]
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "productId": {
+                        "type": "string"
+                      },
+                      "quantity": {
+                        "type": "integer"
+                      },
+                      "productName": {
+                        "type": "string"
+                      },
+                      "productSlug": {
+                        "type": "string"
+                      },
+                      "productImage": {
+                        "type": "string"
+                      },
+                      "price": {
+                        "type": "number"
+                      },
+                      "lineTotal": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "productId",
+                      "quantity",
+                      "productName",
+                      "productSlug",
+                      "productImage",
+                      "price",
+                      "lineTotal"
+                    ]
+                  }
+                },
+                "itemCount": {
+                  "type": "integer"
+                },
+                "subtotal": {
+                  "type": "number"
+                },
+                "total": {
+                  "type": "number"
+                },
+                "shippingAddress": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    },
+                    "line1": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200
+                    },
+                    "city": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    },
+                    "country": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    },
+                    "phone": {
+                      "type": "string",
+                      "maxLength": 40
+                    }
+                  },
+                  "required": ["name", "line1", "city", "country"]
+                },
+                "createdAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "id",
+                "userId",
+                "status",
+                "items",
+                "itemCount",
+                "subtotal",
+                "total",
+                "createdAt",
+                "updatedAt"
+              ]
+            }
+          },
+          "total": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "required": ["data", "total", "page", "limit"]
+      },
+      "CreateOrderInput": {
+        "type": "object",
+        "properties": {
+          "shippingAddress": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              },
+              "line1": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "city": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              },
+              "country": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              },
+              "phone": {
+                "type": "string",
+                "maxLength": 40
+              }
+            },
+            "required": ["name", "line1", "city", "country"]
+          }
+        }
+      },
+      "UpdateOrderStatusInput": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "processing",
+              "shipped",
+              "delivered",
+              "cancelled"
+            ]
+          }
+        },
+        "required": ["status"]
+      },
+      "UpdateUserProfileInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 40
+          }
+        }
       },
       "ErrorResponse": {
         "type": "object",
@@ -4158,6 +4571,1273 @@
                     }
                   },
                   "required": ["ok"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cart": {
+      "get": {
+        "tags": ["Cart"],
+        "operationId": "getCart",
+        "summary": "Get current cart",
+        "responses": {
+          "200": {
+            "description": "Cart",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "productId": {
+                            "type": "string"
+                          },
+                          "quantity": {
+                            "type": "integer"
+                          },
+                          "productName": {
+                            "type": "string"
+                          },
+                          "productSlug": {
+                            "type": "string"
+                          },
+                          "productImage": {
+                            "type": "string"
+                          },
+                          "price": {
+                            "type": "number"
+                          },
+                          "lineTotal": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "productId",
+                          "quantity",
+                          "productName",
+                          "productSlug",
+                          "productImage",
+                          "price",
+                          "lineTotal"
+                        ]
+                      }
+                    },
+                    "itemCount": {
+                      "type": "integer"
+                    },
+                    "subtotal": {
+                      "type": "number"
+                    },
+                    "guestSessionId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["id", "items", "itemCount", "subtotal"]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Cart"],
+        "operationId": "clearCart",
+        "summary": "Clear cart",
+        "responses": {
+          "200": {
+            "description": "Empty cart",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "productId": {
+                            "type": "string"
+                          },
+                          "quantity": {
+                            "type": "integer"
+                          },
+                          "productName": {
+                            "type": "string"
+                          },
+                          "productSlug": {
+                            "type": "string"
+                          },
+                          "productImage": {
+                            "type": "string"
+                          },
+                          "price": {
+                            "type": "number"
+                          },
+                          "lineTotal": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "productId",
+                          "quantity",
+                          "productName",
+                          "productSlug",
+                          "productImage",
+                          "price",
+                          "lineTotal"
+                        ]
+                      }
+                    },
+                    "itemCount": {
+                      "type": "integer"
+                    },
+                    "subtotal": {
+                      "type": "number"
+                    },
+                    "guestSessionId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["id", "items", "itemCount", "subtotal"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cart/items": {
+      "post": {
+        "tags": ["Cart"],
+        "operationId": "addCartItem",
+        "summary": "Add item to cart",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "productId": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "quantity": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 99
+                  }
+                },
+                "required": ["productId", "quantity"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Updated cart",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "productId": {
+                            "type": "string"
+                          },
+                          "quantity": {
+                            "type": "integer"
+                          },
+                          "productName": {
+                            "type": "string"
+                          },
+                          "productSlug": {
+                            "type": "string"
+                          },
+                          "productImage": {
+                            "type": "string"
+                          },
+                          "price": {
+                            "type": "number"
+                          },
+                          "lineTotal": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "productId",
+                          "quantity",
+                          "productName",
+                          "productSlug",
+                          "productImage",
+                          "price",
+                          "lineTotal"
+                        ]
+                      }
+                    },
+                    "itemCount": {
+                      "type": "integer"
+                    },
+                    "subtotal": {
+                      "type": "number"
+                    },
+                    "guestSessionId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["id", "items", "itemCount", "subtotal"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cart/items/{itemId}": {
+      "patch": {
+        "tags": ["Cart"],
+        "operationId": "updateCartItem",
+        "summary": "Update cart item quantity",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "Cart item ID"
+            },
+            "required": true,
+            "description": "Cart item ID",
+            "name": "itemId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "quantity": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 99
+                  }
+                },
+                "required": ["quantity"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated cart",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "productId": {
+                            "type": "string"
+                          },
+                          "quantity": {
+                            "type": "integer"
+                          },
+                          "productName": {
+                            "type": "string"
+                          },
+                          "productSlug": {
+                            "type": "string"
+                          },
+                          "productImage": {
+                            "type": "string"
+                          },
+                          "price": {
+                            "type": "number"
+                          },
+                          "lineTotal": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "productId",
+                          "quantity",
+                          "productName",
+                          "productSlug",
+                          "productImage",
+                          "price",
+                          "lineTotal"
+                        ]
+                      }
+                    },
+                    "itemCount": {
+                      "type": "integer"
+                    },
+                    "subtotal": {
+                      "type": "number"
+                    },
+                    "guestSessionId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["id", "items", "itemCount", "subtotal"]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Cart"],
+        "operationId": "removeCartItem",
+        "summary": "Remove cart item",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "Cart item ID"
+            },
+            "required": true,
+            "description": "Cart item ID",
+            "name": "itemId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated cart",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "productId": {
+                            "type": "string"
+                          },
+                          "quantity": {
+                            "type": "integer"
+                          },
+                          "productName": {
+                            "type": "string"
+                          },
+                          "productSlug": {
+                            "type": "string"
+                          },
+                          "productImage": {
+                            "type": "string"
+                          },
+                          "price": {
+                            "type": "number"
+                          },
+                          "lineTotal": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "productId",
+                          "quantity",
+                          "productName",
+                          "productSlug",
+                          "productImage",
+                          "price",
+                          "lineTotal"
+                        ]
+                      }
+                    },
+                    "itemCount": {
+                      "type": "integer"
+                    },
+                    "subtotal": {
+                      "type": "number"
+                    },
+                    "guestSessionId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["id", "items", "itemCount", "subtotal"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/cart/merge": {
+      "post": {
+        "tags": ["Cart"],
+        "operationId": "mergeCart",
+        "summary": "Merge guest cart into user cart",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "guestSessionId": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["guestSessionId"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Merged cart",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "productId": {
+                            "type": "string"
+                          },
+                          "quantity": {
+                            "type": "integer"
+                          },
+                          "productName": {
+                            "type": "string"
+                          },
+                          "productSlug": {
+                            "type": "string"
+                          },
+                          "productImage": {
+                            "type": "string"
+                          },
+                          "price": {
+                            "type": "number"
+                          },
+                          "lineTotal": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "productId",
+                          "quantity",
+                          "productName",
+                          "productSlug",
+                          "productImage",
+                          "price",
+                          "lineTotal"
+                        ]
+                      }
+                    },
+                    "itemCount": {
+                      "type": "integer"
+                    },
+                    "subtotal": {
+                      "type": "number"
+                    },
+                    "guestSessionId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["id", "items", "itemCount", "subtotal"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/orders": {
+      "post": {
+        "tags": ["Orders"],
+        "operationId": "createOrder",
+        "summary": "Create order from cart",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "shippingAddress": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 120
+                      },
+                      "line1": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 200
+                      },
+                      "city": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 120
+                      },
+                      "country": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 120
+                      },
+                      "phone": {
+                        "type": "string",
+                        "maxLength": 40
+                      }
+                    },
+                    "required": ["name", "line1", "city", "country"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "pending",
+                        "processing",
+                        "shipped",
+                        "delivered",
+                        "cancelled"
+                      ]
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "productId": {
+                            "type": "string"
+                          },
+                          "quantity": {
+                            "type": "integer"
+                          },
+                          "productName": {
+                            "type": "string"
+                          },
+                          "productSlug": {
+                            "type": "string"
+                          },
+                          "productImage": {
+                            "type": "string"
+                          },
+                          "price": {
+                            "type": "number"
+                          },
+                          "lineTotal": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "productId",
+                          "quantity",
+                          "productName",
+                          "productSlug",
+                          "productImage",
+                          "price",
+                          "lineTotal"
+                        ]
+                      }
+                    },
+                    "itemCount": {
+                      "type": "integer"
+                    },
+                    "subtotal": {
+                      "type": "number"
+                    },
+                    "total": {
+                      "type": "number"
+                    },
+                    "shippingAddress": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 120
+                        },
+                        "line1": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 200
+                        },
+                        "city": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 120
+                        },
+                        "country": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 120
+                        },
+                        "phone": {
+                          "type": "string",
+                          "maxLength": 40
+                        }
+                      },
+                      "required": ["name", "line1", "city", "country"]
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "userId",
+                    "status",
+                    "items",
+                    "itemCount",
+                    "subtotal",
+                    "total",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Orders"],
+        "operationId": "listOrders",
+        "summary": "List orders",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Orders",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "pending",
+                              "processing",
+                              "shipped",
+                              "delivered",
+                              "cancelled"
+                            ]
+                          },
+                          "items": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "productId": {
+                                  "type": "string"
+                                },
+                                "quantity": {
+                                  "type": "integer"
+                                },
+                                "productName": {
+                                  "type": "string"
+                                },
+                                "productSlug": {
+                                  "type": "string"
+                                },
+                                "productImage": {
+                                  "type": "string"
+                                },
+                                "price": {
+                                  "type": "number"
+                                },
+                                "lineTotal": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "productId",
+                                "quantity",
+                                "productName",
+                                "productSlug",
+                                "productImage",
+                                "price",
+                                "lineTotal"
+                              ]
+                            }
+                          },
+                          "itemCount": {
+                            "type": "integer"
+                          },
+                          "subtotal": {
+                            "type": "number"
+                          },
+                          "total": {
+                            "type": "number"
+                          },
+                          "shippingAddress": {
+                            "type": "object",
+                            "properties": {
+                              "name": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 120
+                              },
+                              "line1": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 200
+                              },
+                              "city": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 120
+                              },
+                              "country": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 120
+                              },
+                              "phone": {
+                                "type": "string",
+                                "maxLength": 40
+                              }
+                            },
+                            "required": ["name", "line1", "city", "country"]
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "userId",
+                          "status",
+                          "items",
+                          "itemCount",
+                          "subtotal",
+                          "total",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "limit": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": ["data", "total", "page", "limit"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/orders/{id}": {
+      "get": {
+        "tags": ["Orders"],
+        "operationId": "getOrder",
+        "summary": "Get order by ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "Resource ID"
+            },
+            "required": true,
+            "description": "Resource ID",
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "pending",
+                        "processing",
+                        "shipped",
+                        "delivered",
+                        "cancelled"
+                      ]
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "productId": {
+                            "type": "string"
+                          },
+                          "quantity": {
+                            "type": "integer"
+                          },
+                          "productName": {
+                            "type": "string"
+                          },
+                          "productSlug": {
+                            "type": "string"
+                          },
+                          "productImage": {
+                            "type": "string"
+                          },
+                          "price": {
+                            "type": "number"
+                          },
+                          "lineTotal": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "productId",
+                          "quantity",
+                          "productName",
+                          "productSlug",
+                          "productImage",
+                          "price",
+                          "lineTotal"
+                        ]
+                      }
+                    },
+                    "itemCount": {
+                      "type": "integer"
+                    },
+                    "subtotal": {
+                      "type": "number"
+                    },
+                    "total": {
+                      "type": "number"
+                    },
+                    "shippingAddress": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 120
+                        },
+                        "line1": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 200
+                        },
+                        "city": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 120
+                        },
+                        "country": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 120
+                        },
+                        "phone": {
+                          "type": "string",
+                          "maxLength": 40
+                        }
+                      },
+                      "required": ["name", "line1", "city", "country"]
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "userId",
+                    "status",
+                    "items",
+                    "itemCount",
+                    "subtotal",
+                    "total",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Orders"],
+        "operationId": "updateOrder",
+        "summary": "Update order status (admin)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "Resource ID"
+            },
+            "required": true,
+            "description": "Resource ID",
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "pending",
+                      "processing",
+                      "shipped",
+                      "delivered",
+                      "cancelled"
+                    ]
+                  }
+                },
+                "required": ["status"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "pending",
+                        "processing",
+                        "shipped",
+                        "delivered",
+                        "cancelled"
+                      ]
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "productId": {
+                            "type": "string"
+                          },
+                          "quantity": {
+                            "type": "integer"
+                          },
+                          "productName": {
+                            "type": "string"
+                          },
+                          "productSlug": {
+                            "type": "string"
+                          },
+                          "productImage": {
+                            "type": "string"
+                          },
+                          "price": {
+                            "type": "number"
+                          },
+                          "lineTotal": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "productId",
+                          "quantity",
+                          "productName",
+                          "productSlug",
+                          "productImage",
+                          "price",
+                          "lineTotal"
+                        ]
+                      }
+                    },
+                    "itemCount": {
+                      "type": "integer"
+                    },
+                    "subtotal": {
+                      "type": "number"
+                    },
+                    "total": {
+                      "type": "number"
+                    },
+                    "shippingAddress": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 120
+                        },
+                        "line1": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 200
+                        },
+                        "city": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 120
+                        },
+                        "country": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 120
+                        },
+                        "phone": {
+                          "type": "string",
+                          "maxLength": 40
+                        }
+                      },
+                      "required": ["name", "line1", "city", "country"]
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "userId",
+                    "status",
+                    "items",
+                    "itemCount",
+                    "subtotal",
+                    "total",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/me": {
+      "patch": {
+        "tags": ["Users"],
+        "operationId": "updateUserProfile",
+        "summary": "Update current user profile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "phone": {
+                    "type": "string",
+                    "maxLength": 40
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "role": {
+                      "type": "string",
+                      "enum": ["admin", "customer"]
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "email",
+                    "role",
+                    "createdAt",
+                    "updatedAt"
+                  ]
                 }
               }
             }

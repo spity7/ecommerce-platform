@@ -6,6 +6,7 @@
 export { platformInstance, customInstance, ApiError } from "./mutator.js";
 export { getApiBaseUrl } from "./apiBaseUrl.js";
 export { getAccessToken, setAccessToken } from "./auth.js";
+export { setGuestCartId, getGuestCartId } from "./guest-cart.js";
 export {
   registerUnauthorizedHandler,
   type UnauthorizedHandler,
@@ -39,3 +40,16 @@ export {
   updateCategoryApi,
   updateProductApi,
 } from "./helpers.js";
+
+export {
+  fetchCart,
+  addCartItem,
+  updateCartItem,
+  removeCartItem,
+  clearCart,
+  mergeGuestCart,
+  createOrderFromCart,
+  fetchOrders,
+  fetchOrder,
+  updateUserProfile,
+} from "./commerce-api.js";

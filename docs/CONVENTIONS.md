@@ -1,6 +1,6 @@
 # Code conventions
 
-Per-workspace patterns for humans and AI. **Last reviewed:** 2026-08-20.
+Per-workspace patterns for humans and AI. **Last reviewed:** 2026-08-22.
 
 ## Monorepo
 
@@ -90,18 +90,19 @@ Catalog list pages fetch from API in Server Components; show inline error banner
 
 ## Storefront (`@platform/storefront`)
 
-| Topic           | Convention                                                                                       |
-| --------------- | ------------------------------------------------------------------------------------------------ |
-| Styling         | Bootstrap 5 + SCSS (`public/assets/scss/`)                                                       |
-| Site theme      | `SiteThemeStyles` injects CSS variables from `site.theme`                                        |
-| Site branding   | `lib/site-branding.ts` → logo/phone for `Header13` / `Footer7` on production routes              |
-| Home layout     | `SiteConfig.homeLayout` → `HomeLayoutRenderer`                                                   |
-| Demo catalog    | Static data in `data/products/*.ts` with optional `demoTab` for tabs                             |
-| Tab filtering   | See `client/.cursor/rules/product-tab-filtering-pattern.mdc`                                     |
-| Modals          | Register in `components/common/other-components/LayoutModals.tsx`; state in `context/uiStore.ts` |
-| Cart / wishlist | Zustand + persist in `context/store.ts` (client-only)                                            |
-| API fallback    | Try `@platform/api-client`, fall back to static data where implemented                           |
-| Lint            | ESLint + Prettier                                                                                |
+| Topic           | Convention                                                                                                                      |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Styling         | Bootstrap 5 + SCSS (`public/assets/scss/`)                                                                                      |
+| Site theme      | `SiteThemeStyles` injects CSS variables from `site.theme`                                                                       |
+| Site branding   | `lib/site-branding.ts` → logo/phone for `Header13` / `Footer7` on production routes                                             |
+| Home layout     | `SiteConfig.homeLayout` → `HomeLayoutRenderer`                                                                                  |
+| Demo catalog    | Static data in `data/products/*.ts` with optional `demoTab` for tabs                                                            |
+| Tab filtering   | See `client/.cursor/rules/product-tab-filtering-pattern.mdc`                                                                    |
+| Modals          | Register in `components/common/other-components/LayoutModals.tsx`; state in `context/uiStore.ts`                                |
+| Cart / wishlist | Zustand + persist in `context/store.ts`; server cart API when `features.customerAuth` (guest `X-Guest-Cart-Id`, merge on login) |
+| Customer auth   | `client/lib/auth.ts`, `providers/app-providers.tsx`, `proxy.ts` guards account routes when `features.customerAuth`              |
+| API fallback    | Try `@platform/api-client`, fall back to static data where implemented                                                          |
+| Lint            | ESLint + Prettier                                                                                                               |
 
 The storefront is primarily a **theme demo** (~300 routes). Wire API only for production paths the product needs.
 

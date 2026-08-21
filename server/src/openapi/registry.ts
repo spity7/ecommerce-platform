@@ -29,6 +29,15 @@ import {
   uploadResponseSchema,
   userDtoSchema,
   validationErrorResponseSchema,
+  cartDtoSchema,
+  cartItemInputSchema,
+  updateCartItemSchema,
+  mergeCartSchema,
+  orderDtoSchema,
+  paginatedOrdersSchema,
+  createOrderSchema,
+  updateOrderStatusSchema,
+  updateUserProfileSchema,
 } from "@platform/shared";
 import { z } from "@platform/shared/zod";
 
@@ -36,6 +45,10 @@ export const openApiRegistry = new OpenAPIRegistry();
 
 const idParamSchema = z.object({
   id: z.string().openapi({ description: "Resource ID" }),
+});
+
+const itemIdParamSchema = z.object({
+  itemId: z.string().openapi({ description: "Cart item ID" }),
 });
 
 openApiRegistry.register("ProductDto", productDtoSchema);
@@ -62,6 +75,15 @@ openApiRegistry.register("AuthResponse", authResponseSchema);
 openApiRegistry.register("LoginInput", loginSchema);
 openApiRegistry.register("RegisterInput", registerSchema);
 openApiRegistry.register("RefreshTokenInput", refreshTokenSchema);
+openApiRegistry.register("CartDto", cartDtoSchema);
+openApiRegistry.register("CartItemInput", cartItemInputSchema);
+openApiRegistry.register("UpdateCartItemInput", updateCartItemSchema);
+openApiRegistry.register("MergeCartInput", mergeCartSchema);
+openApiRegistry.register("OrderDto", orderDtoSchema);
+openApiRegistry.register("PaginatedOrders", paginatedOrdersSchema);
+openApiRegistry.register("CreateOrderInput", createOrderSchema);
+openApiRegistry.register("UpdateOrderStatusInput", updateOrderStatusSchema);
+openApiRegistry.register("UpdateUserProfileInput", updateUserProfileSchema);
 openApiRegistry.register("ErrorResponse", errorResponseSchema);
 openApiRegistry.register(
   "ValidationErrorResponse",
@@ -350,6 +372,196 @@ openApiRegistry.registerPath({
 
 openApiRegistry.registerPath({
   method: "get",
+  path: "/api/cart",
+  tags: ["Cart"],
+  operationId: "getCart",
+  summary: "Get current cart",
+  responses: {
+    200: {
+      description: "Cart",
+      content: { "application/json": { schema: cartDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/cart/items",
+  tags: ["Cart"],
+  operationId: "addCartItem",
+  summary: "Add item to cart",
+  request: {
+    body: {
+      content: { "application/json": { schema: cartItemInputSchema } },
+    },
+  },
+  responses: {
+    201: {
+      description: "Updated cart",
+      content: { "application/json": { schema: cartDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "patch",
+  path: "/api/cart/items/{itemId}",
+  tags: ["Cart"],
+  operationId: "updateCartItem",
+  summary: "Update cart item quantity",
+  request: {
+    params: itemIdParamSchema,
+    body: {
+      content: { "application/json": { schema: updateCartItemSchema } },
+    },
+  },
+  responses: {
+    200: {
+      description: "Updated cart",
+      content: { "application/json": { schema: cartDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "delete",
+  path: "/api/cart/items/{itemId}",
+  tags: ["Cart"],
+  operationId: "removeCartItem",
+  summary: "Remove cart item",
+  request: { params: itemIdParamSchema },
+  responses: {
+    200: {
+      description: "Updated cart",
+      content: { "application/json": { schema: cartDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "delete",
+  path: "/api/cart",
+  tags: ["Cart"],
+  operationId: "clearCart",
+  summary: "Clear cart",
+  responses: {
+    200: {
+      description: "Empty cart",
+      content: { "application/json": { schema: cartDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/cart/merge",
+  tags: ["Cart"],
+  operationId: "mergeCart",
+  summary: "Merge guest cart into user cart",
+  security: [{ bearerAuth: [] }],
+  request: {
+    body: { content: { "application/json": { schema: mergeCartSchema } } },
+  },
+  responses: {
+    200: {
+      description: "Merged cart",
+      content: { "application/json": { schema: cartDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/orders",
+  tags: ["Orders"],
+  operationId: "createOrder",
+  summary: "Create order from cart",
+  security: [{ bearerAuth: [] }],
+  request: {
+    body: { content: { "application/json": { schema: createOrderSchema } } },
+  },
+  responses: {
+    201: {
+      description: "Order created",
+      content: { "application/json": { schema: orderDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "get",
+  path: "/api/orders",
+  tags: ["Orders"],
+  operationId: "listOrders",
+  summary: "List orders",
+  security: [{ bearerAuth: [] }],
+  responses: {
+    200: {
+      description: "Orders",
+      content: { "application/json": { schema: paginatedOrdersSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "get",
+  path: "/api/orders/{id}",
+  tags: ["Orders"],
+  operationId: "getOrder",
+  summary: "Get order by ID",
+  security: [{ bearerAuth: [] }],
+  request: { params: idParamSchema },
+  responses: {
+    200: {
+      description: "Order",
+      content: { "application/json": { schema: orderDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "patch",
+  path: "/api/orders/{id}",
+  tags: ["Orders"],
+  operationId: "updateOrder",
+  summary: "Update order status (admin)",
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: idParamSchema,
+    body: {
+      content: { "application/json": { schema: updateOrderStatusSchema } },
+    },
+  },
+  responses: {
+    200: {
+      description: "Order",
+      content: { "application/json": { schema: orderDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "patch",
+  path: "/api/users/me",
+  tags: ["Users"],
+  operationId: "updateUserProfile",
+  summary: "Update current user profile",
+  security: [{ bearerAuth: [] }],
+  request: {
+    body: {
+      content: { "application/json": { schema: updateUserProfileSchema } },
+    },
+  },
+  responses: {
+    200: {
+      description: "User",
+      content: { "application/json": { schema: userDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "get",
   path: "/api/health",
   tags: ["Health"],
   operationId: "getHealth",
@@ -405,7 +617,7 @@ export function createOpenApiDocument() {
       title: "Ecommerce Platform API",
       version: "1.0.0",
       description:
-        "REST API for the ecommerce platform catalog, auth, health, and uploads.",
+        "REST API for the ecommerce platform catalog, auth, cart, orders, health, and uploads.",
     },
     servers: [{ url: "http://localhost:5000", description: "Local dev" }],
   });

@@ -1,11 +1,14 @@
-import Orders from "@/components/other-pages/shop-user/Orders";
+import OrdersPanel from "@/components/other-pages/shop-user/OrdersPanel";
 import Breadcrumb from "@/components/common/other-components/Breadcrumb";
 import Sidebar from "@/components/other-pages/shop-user/Sidebar";
+import { getStorefrontSiteConfig } from "@/lib/site";
 import type { Metadata } from "next";
 
+const site = getStorefrontSiteConfig();
+
 export const metadata: Metadata = {
-  title: "My Order History | Beauty Station | Cosmetics & Skincare",
-  description: "View your full Beauty Station order history and details.",
+  title: `My Order History | ${site.name}`,
+  description: `View your ${site.name} order history and details.`,
   robots: {
     index: true,
     follow: true,
@@ -32,7 +35,7 @@ export default function page() {
               <Sidebar />
             </div>
             <div className="col-12 col-md-12 col-lg-8 col-xl-9 mt--24">
-              <Orders />
+              <OrdersPanel />
             </div>
           </div>
         </div>

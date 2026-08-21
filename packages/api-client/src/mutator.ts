@@ -1,6 +1,7 @@
 import axios, { isAxiosError, type AxiosRequestConfig } from "axios";
 import { getAccessToken } from "./auth.js";
 import { getApiBaseUrl } from "./apiBaseUrl.js";
+import { getGuestCartId } from "./guest-cart.js";
 import { getUnauthorizedHandler } from "./unauthorized.js";
 
 export { getApiBaseUrl } from "./apiBaseUrl.js";
@@ -30,6 +31,10 @@ platformInstance.interceptors.request.use((config) => {
   const token = getAccessToken();
   if (token) {
     config.headers.set("Authorization", `Bearer ${token}`);
+  }
+  const guestCartId = getGuestCartId();
+  if (guestCartId) {
+    config.headers.set("X-Guest-Cart-Id", guestCartId);
   }
   return config;
 });

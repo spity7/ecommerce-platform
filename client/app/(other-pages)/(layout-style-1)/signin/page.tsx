@@ -1,16 +1,14 @@
 import Signin from "@/components/other-pages/Signin";
+import { getStorefrontSiteConfig } from "@/lib/site";
+import type { Metadata } from "next";
 
-import { Metadata } from "next";
+const site = getStorefrontSiteConfig();
 
 export const metadata: Metadata = {
-  title: "Sign In | Beauty Station | Cosmetics & Skincare",
-  description: "Sign in to your Beauty Station account.",
+  title: `Sign In | ${site.name}`,
+  description: `Sign in to your ${site.name} account.`,
 };
 
-export default function page() {
-  return (
-    <>
-      <Signin />
-    </>
-  );
+export default function SignInPage() {
+  return <Signin />;
 }

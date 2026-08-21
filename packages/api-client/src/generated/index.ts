@@ -5,19 +5,25 @@
 import { getAttributes } from "./attributes/attributes";
 import { getAuth } from "./auth/auth";
 import { getBrands } from "./brands/brands";
+import { getCart } from "./cart/cart";
 import { getCategories } from "./categories/categories";
 import { getHealth } from "./health/health";
+import { getOrders } from "./orders/orders";
 import { getProducts } from "./products/products";
 import { getUploads } from "./uploads/uploads";
+import { getUsers } from "./users/users";
 
 export const getPlatformAPI = () => ({
   ...getAttributes(),
   ...getAuth(),
   ...getBrands(),
+  ...getCart(),
   ...getCategories(),
   ...getHealth(),
+  ...getOrders(),
   ...getProducts(),
   ...getUploads(),
+  ...getUsers(),
 });
 
 export const platformApi = getPlatformAPI();

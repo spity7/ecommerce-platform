@@ -12,6 +12,7 @@ export function createApp() {
     cors({
       origin: env.corsOrigins,
       credentials: true,
+      allowedHeaders: ["Content-Type", "Authorization", "X-Guest-Cart-Id"],
     })
   );
   app.use(express.json({ limit: "1mb" }));

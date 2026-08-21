@@ -23,6 +23,7 @@ export type SiteFeatures = {
   sizeGuide: boolean;
   subscriptions: boolean;
   wishlist: boolean;
+  customerAuth: boolean;
 };
 
 export type SiteTheme = {

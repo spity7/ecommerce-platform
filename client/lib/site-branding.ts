@@ -14,9 +14,7 @@ function toTelHref(phone: string): string {
   return normalized ? `tel:${normalized}` : "";
 }
 
-export function getSiteChromeBranding(
-  site?: SiteConfig
-): SiteChromeBranding {
+export function getSiteChromeBranding(site?: SiteConfig): SiteChromeBranding {
   const config = site ?? getStorefrontSiteConfig();
   const logoDark = config.branding.logoDark ?? config.branding.logo;
 
