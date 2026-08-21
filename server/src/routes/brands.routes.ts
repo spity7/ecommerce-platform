@@ -5,6 +5,7 @@ import {
   updateBrandSchema,
 } from "@platform/shared";
 import { AppError } from "../middleware/errorHandler.js";
+import { requireAuth, requireAdmin } from "../middleware/auth.js";
 import { Brand } from "../models/Brand.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { isUniqueKeyError, toBrandDto } from "../utils/serializers.js";
@@ -54,6 +55,8 @@ brandsRouter.get(
 
 brandsRouter.post(
   "/",
+  requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const payload = createBrandSchema.parse(req.body);
     const slug = payload.slug ?? slugify(payload.name);
@@ -73,6 +76,8 @@ brandsRouter.post(
 
 brandsRouter.patch(
   "/:id",
+  requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const payload = updateBrandSchema.parse(req.body);
     const brand = await Brand.findById(req.params.id);
@@ -95,6 +100,8 @@ brandsRouter.patch(
 
 brandsRouter.delete(
   "/:id",
+  requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const brand = await Brand.findByIdAndDelete(req.params.id);
     if (!brand) {

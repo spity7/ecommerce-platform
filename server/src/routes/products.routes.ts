@@ -5,6 +5,7 @@ import {
   updateProductSchema,
 } from "@platform/shared";
 import { AppError } from "../middleware/errorHandler.js";
+import { requireAuth, requireAdmin } from "../middleware/auth.js";
 import { Brand } from "../models/Brand.js";
 import { Category } from "../models/Category.js";
 import { Product } from "../models/Product.js";
@@ -60,6 +61,8 @@ productsRouter.get(
 
 productsRouter.post(
   "/",
+  requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const payload = createProductSchema.parse(req.body);
     const slug = payload.slug ?? slugify(payload.name);
@@ -104,6 +107,8 @@ productsRouter.post(
 
 productsRouter.patch(
   "/:id",
+  requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const payload = updateProductSchema.parse(req.body);
     const product = await Product.findById(req.params.id);
@@ -179,6 +184,8 @@ productsRouter.patch(
 
 productsRouter.delete(
   "/:id",
+  requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) {

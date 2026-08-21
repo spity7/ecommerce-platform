@@ -1,9 +1,11 @@
 import { Router } from "express";
 import multer from "multer";
 import { env } from "../config/env.js";
+import { requireAuth, requireAdmin } from "../middleware/auth.js";
 import { AppError } from "../middleware/errorHandler.js";
 import { uploadFile } from "../services/storage.service.js";
 import { attributesRouter } from "./attributes.routes.js";
+import { authRouter } from "./auth.routes.js";
 import { brandsRouter } from "./brands.routes.js";
 import { categoriesRouter } from "./categories.routes.js";
 import { healthRouter } from "./health.routes.js";
@@ -17,12 +19,17 @@ const upload = multer({
 export const apiRouter = Router();
 
 apiRouter.use("/health", healthRouter);
+apiRouter.use("/auth", authRouter);
 apiRouter.use("/products", productsRouter);
 apiRouter.use("/categories", categoriesRouter);
 apiRouter.use("/brands", brandsRouter);
 apiRouter.use("/attributes", attributesRouter);
 
-apiRouter.post("/uploads", upload.single("file"), async (req, res, next) => {
+apiRouter.post(
+  "/uploads",
+  requireAuth,
+  requireAdmin,
+  upload.single("file"), async (req, res, next) => {
   try {
     if (!env.gcs.isConfigured) {
       throw new AppError(

@@ -3,9 +3,8 @@
 # ============================================
 
 # IMPORTANT: Node.js Version Maintenance
-# This Dockerfile uses Node.js 24.13.0-slim, which was the latest LTS version at the time of writing.
-# To ensure security and compatibility, regularly update the NODE_VERSION ARG to the latest LTS version.
-ARG NODE_VERSION=24.13.0-slim
+# This Dockerfile uses Node.js 20-slim to match repo root engines (20.x).
+ARG NODE_VERSION=20-slim
 
 FROM node:${NODE_VERSION} AS dependencies
 

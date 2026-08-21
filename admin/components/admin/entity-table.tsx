@@ -23,9 +23,10 @@ type FilterOption<T> = {
 type EntityTableProps<T extends { id: string }> = {
   columns: EntityColumn<T>[];
   deleteMessage: string;
-  editHref: string;
+  editHref: string | ((row: T) => string);
   filterOptions?: FilterOption<T>[];
   items: T[];
+  onDelete?: (ids: string[]) => Promise<void>;
   searchLabel: string;
   searchPlaceholder: string;
   searchText: (row: T) => string;
@@ -43,6 +44,7 @@ export function EntityTable<T extends { id: string }>({
   editHref,
   filterOptions,
   items,
+  onDelete,
   searchLabel,
   searchPlaceholder,
   searchText,
@@ -56,6 +58,8 @@ export function EntityTable<T extends { id: string }>({
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [columnsOpen, setColumnsOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [sort, setSort] = useState<SortState>({
     direction: "asc",
     key: sortableColumns[0]?.key ?? columns[0]?.key ?? "",
@@ -134,10 +138,32 @@ export function EntityTable<T extends { id: string }>({
     });
   }
 
-  function confirmDelete() {
+  async function confirmDelete() {
+    const ids = Array.from(selected);
+    if (onDelete) {
+      setDeleting(true);
+      setDeleteError(null);
+      try {
+        await onDelete(ids);
+        setRows((current) => current.filter((row) => !selected.has(row.id)));
+        setSelected(new Set());
+        setConfirmOpen(false);
+      } catch (error) {
+        setDeleteError(
+          error instanceof Error ? error.message : "Delete failed"
+        );
+      } finally {
+        setDeleting(false);
+      }
+      return;
+    }
     setRows((current) => current.filter((row) => !selected.has(row.id)));
     setSelected(new Set());
     setConfirmOpen(false);
+  }
+
+  function resolveEditHref(row: T): string {
+    return typeof editHref === "function" ? editHref(row) : editHref;
   }
 
   return (
@@ -308,7 +334,7 @@ export function EntityTable<T extends { id: string }>({
                     <Link
                       aria-label={`Edit ${singularName}`}
                       className="icon-button hover:bg-brand-50 hover:text-brand-600"
-                      href={editHref}
+                      href={resolveEditHref(row)}
                     >
                       <Icon className="h-4 w-4" name="pencil" />
                     </Link>
@@ -388,20 +414,25 @@ export function EntityTable<T extends { id: string }>({
             <p className="mx-auto mt-2 max-w-xs text-[14px] text-ink-500">
               {deleteMessage}
             </p>
+            {deleteError ? (
+              <p className="mt-2 text-[14px] text-danger-600">{deleteError}</p>
+            ) : null}
             <div className="mt-6 flex items-center justify-center gap-3">
               <button
                 className="h-11 min-w-[88px] rounded-base border border-surface-line px-5 text-[14px] font-semibold text-ink-700 transition-colors hover:bg-surface-muted"
+                disabled={deleting}
                 onClick={() => setConfirmOpen(false)}
                 type="button"
               >
                 No
               </button>
               <button
-                className="h-11 min-w-[88px] rounded-base bg-danger-500 px-5 text-[14px] font-semibold text-white transition-colors hover:bg-danger-600"
-                onClick={confirmDelete}
+                className="h-11 min-w-[88px] rounded-base bg-danger-500 px-5 text-[14px] font-semibold text-white transition-colors hover:bg-danger-600 disabled:opacity-60"
+                disabled={deleting}
+                onClick={() => void confirmDelete()}
                 type="button"
               >
-                Yes, delete
+                {deleting ? "Deleting…" : "Yes, delete"}
               </button>
             </div>
           </div>

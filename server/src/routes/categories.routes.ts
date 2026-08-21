@@ -5,6 +5,7 @@ import {
   updateCategorySchema,
 } from "@platform/shared";
 import { AppError } from "../middleware/errorHandler.js";
+import { requireAuth, requireAdmin } from "../middleware/auth.js";
 import { Category } from "../models/Category.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { isUniqueKeyError, toCategoryDto } from "../utils/serializers.js";
@@ -54,6 +55,8 @@ categoriesRouter.get(
 
 categoriesRouter.post(
   "/",
+  requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const payload = createCategorySchema.parse(req.body);
     const slug = payload.slug ?? slugify(payload.name);
@@ -72,6 +75,8 @@ categoriesRouter.post(
 
 categoriesRouter.patch(
   "/:id",
+  requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const payload = updateCategorySchema.parse(req.body);
     const category = await Category.findById(req.params.id);
@@ -91,6 +96,8 @@ categoriesRouter.patch(
 
 categoriesRouter.delete(
   "/:id",
+  requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const category = await Category.findByIdAndDelete(req.params.id);
     if (!category) {

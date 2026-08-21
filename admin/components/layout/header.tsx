@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { routes } from "@/config/routes";
+import { LogoutButton } from "@/components/auth/logout-button";
 import { baseURL, cn } from "@/utils/cn";
 import { useDashboardChrome } from "./dashboard-chrome";
 import { Icon } from "./icon";
@@ -314,12 +315,7 @@ function UserMenu({ id, open, placement }: UserMenuProps) {
           <span className="h-2 w-2 rounded-full bg-success-500" />
           <span className="nav-text">Update App</span>
         </Link>
-        <UserMenuItem
-          className="mt-0.5"
-          href={routes.signIn}
-          icon="log-out"
-          label="Logout"
-        />
+        <LogoutButton className="mt-0.5" />
       </div>
       {placement === "sidebar" ? (
         <p className="px-2 pb-1 pt-2 text-[12px] text-ink-400 nav-text">

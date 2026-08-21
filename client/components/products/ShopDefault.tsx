@@ -59,6 +59,7 @@ export default function ShopDefault({
   cardVariant = "default",
   products,
   hasCardBorder = false,
+  detailsPageUrl = "/product-single-default",
 }: {
   rightSidebar?: boolean;
   stickyTop?: boolean;
@@ -75,6 +76,7 @@ export default function ShopDefault({
   cardVariant?: CardVariant;
   products?: Product[];
   hasCardBorder?: boolean;
+  detailsPageUrl?: string;
 }) {
   const { state, dispatch, visibleProducts, getFilterCount, isLoadMore } =
     useShopState({
@@ -311,6 +313,7 @@ export default function ShopDefault({
                     }
                   >
                     <ProductCardComponent
+                      detailsPageUrl={detailsPageUrl}
                       showBestSellerBadge={showBestSellerBadge}
                       showPricingBadge={shouldShowPricingBadge}
                       shouldShowTimer={shouldShowTimer}

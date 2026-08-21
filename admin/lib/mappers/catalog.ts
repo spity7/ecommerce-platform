@@ -37,8 +37,11 @@ export function mapProductDto(product: ProductDto): Product & { id: string } {
   };
 }
 
-export function mapCategoryDto(category: CategoryDto): Category {
+export function mapCategoryDto(
+  category: CategoryDto
+): Category & { id: string } {
   return {
+    id: category.id,
     count: category.productCount,
     image: category.image || PLACEHOLDER_IMAGE,
     name: category.name,
@@ -47,8 +50,9 @@ export function mapCategoryDto(category: CategoryDto): Category {
   };
 }
 
-export function mapBrandDto(brand: BrandDto): Brand {
+export function mapBrandDto(brand: BrandDto): Brand & { id: string } {
   return {
+    id: brand.id,
     count: brand.productCount,
     initials: brand.initials,
     name: brand.name,

@@ -1,5 +1,7 @@
 import axios, { isAxiosError, type AxiosRequestConfig } from "axios";
+import { getAccessToken } from "./auth.js";
 import { getApiBaseUrl } from "./apiBaseUrl.js";
+import { getUnauthorizedHandler } from "./unauthorized.js";
 
 export { getApiBaseUrl } from "./apiBaseUrl.js";
 
@@ -25,14 +27,38 @@ platformInstance.interceptors.request.use((config) => {
   if (typeof FormData !== "undefined" && config.data instanceof FormData) {
     config.headers.delete("Content-Type");
   }
+  const token = getAccessToken();
+  if (token) {
+    config.headers.set("Authorization", `Bearer ${token}`);
+  }
   return config;
 });
 
 platformInstance.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     if (isAxiosError(error)) {
       const status = error.response?.status ?? 0;
+      const config = error.config;
+
+      if (
+        status === 401 &&
+        config &&
+        !(config as AxiosRequestConfig & { _authRetry?: boolean })._authRetry
+      ) {
+        const handler = getUnauthorizedHandler();
+        if (handler) {
+          const refreshed = await handler();
+          if (refreshed) {
+            const retryConfig = {
+              ...config,
+              _authRetry: true,
+            } as AxiosRequestConfig & { _authRetry?: boolean };
+            return platformInstance(retryConfig);
+          }
+        }
+      }
+
       let message = `Request failed (${status})`;
       const body = error.response?.data as { error?: string } | undefined;
       if (body?.error) {

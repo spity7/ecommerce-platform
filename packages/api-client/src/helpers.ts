@@ -6,6 +6,25 @@ import type {
   ListProductParams,
 } from "./generated/platform.schemas.js";
 
+export {
+  createAttributeApi,
+  createBrandApi,
+  createCategoryApi,
+  createProductApi,
+  deleteAttributeApi,
+  deleteBrandApi,
+  deleteCategoryApi,
+  deleteProductApi,
+  getAttributeApi,
+  getBrandApi,
+  getCategoryApi,
+  getProductApi,
+  updateAttributeApi,
+  updateBrandApi,
+  updateCategoryApi,
+  updateProductApi,
+} from "./catalog-api.js";
+
 export async function fetchProducts(params?: ListProductParams) {
   return platformApi.listProduct(params);
 }
@@ -35,8 +54,12 @@ export async function fetchPublishedProducts(limit = 8) {
 
 export async function fetchProductBySlug(slug: string) {
   const response = await fetchProducts({
-    search: slug,
-    limit: 1,
+    status: "published",
+    limit: 100,
   });
-  return response.data[0] ?? null;
+  return response.data.find((product) => product.slug === slug) ?? null;
+}
+
+export async function fetchProductById(id: string) {
+  return platformApi.getProduct(id);
 }

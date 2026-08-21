@@ -48,7 +48,7 @@ export default async function Products1() {
               className="col-lg-3 col-xl-3 col-xxl-3 col-md-6 col-sm-6 col-6 mt--24"
             >
               <ProductCard5
-                detailsPageUrl="/product-single-cosmetic-beauty"
+                detailsPageUrl="/product"
                 contentBgClass="rbt-bg-color-gray-light"
                 product={product}
                 animationOrder={i + 1}

@@ -5,6 +5,7 @@ import {
   updateAttributeSchema,
 } from "@platform/shared";
 import { AppError } from "../middleware/errorHandler.js";
+import { requireAuth, requireAdmin } from "../middleware/auth.js";
 import { Attribute } from "../models/Attribute.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { isUniqueKeyError, toAttributeDto } from "../utils/serializers.js";
@@ -54,6 +55,8 @@ attributesRouter.get(
 
 attributesRouter.post(
   "/",
+  requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const payload = createAttributeSchema.parse(req.body);
     const slug = payload.slug ?? slugify(payload.name);
@@ -72,6 +75,8 @@ attributesRouter.post(
 
 attributesRouter.patch(
   "/:id",
+  requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const payload = updateAttributeSchema.parse(req.body);
     const attribute = await Attribute.findById(req.params.id);
@@ -91,6 +96,8 @@ attributesRouter.patch(
 
 attributesRouter.delete(
   "/:id",
+  requireAuth,
+  requireAdmin,
   asyncHandler(async (req, res) => {
     const attribute = await Attribute.findByIdAndDelete(req.params.id);
     if (!attribute) {

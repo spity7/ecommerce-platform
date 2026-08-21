@@ -4,7 +4,6 @@ import { ShowcaseStrip } from "@/components/catalog/showcase-strip";
 import { Icon } from "@/components/layout/icon";
 import { PageHeader } from "@/components/layout/page-header";
 import { routes } from "@/config/routes";
-import type { Brand } from "@/data/admin/catalog";
 import { fetchBrands } from "@platform/api-client";
 import { mapBrandDto } from "@/lib/mappers/catalog";
 import { getAdminSiteConfig } from "@/lib/site";
@@ -16,7 +15,7 @@ export const metadata = {
 };
 
 export default async function BrandsPage() {
-  let brands: Brand[] = [];
+  let brands: ReturnType<typeof mapBrandDto>[] = [];
   let loadError: string | null = null;
 
   try {

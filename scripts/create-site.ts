@@ -10,7 +10,7 @@ const template =
 
 if (!siteId || siteId.startsWith("-")) {
   console.error(
-    "Usage: npm run create-site <site-id> [--template beauty|sport|general]",
+    "Usage: npm run create-site <site-id> [--template beauty|sport|general]"
   );
   process.exit(1);
 }
@@ -49,13 +49,25 @@ GCS_PROJECT_ID=your-gcp-project-id
 GCS_BUCKET_NAME=${slug}-media
 GCS_KEY_FILE=./gcs-key.json
 
+# Auth (JWT signing)
+JWT_ACCESS_SECRET=dev-access-secret-change-me-in-production
+JWT_REFRESH_SECRET=dev-refresh-secret-change-me-in-production
+JWT_ACCESS_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
+
+
 # --- Admin + client ---
 API_URL=http://localhost:5000
 NEXT_PUBLIC_API_URL=http://localhost:5000
 
+# --- Admin only (admin/.env.local) ---
+# Cookie max-age in seconds — keep aligned with JWT_*_EXPIRES_IN above
+NEXT_PUBLIC_ACCESS_TOKEN_MAX_AGE=900
+NEXT_PUBLIC_REFRESH_TOKEN_MAX_AGE=604800
+
 # --- Client only (client/.env.local) ---
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
-`,
+`
 );
 
 writeFileSync(
@@ -72,7 +84,7 @@ Home layout: \`${homeLayout}\`
 3. Add an entry to \`docs/site-registry.json\`
 4. Copy env vars into \`client\`, \`admin\`, and \`server\`
 5. Deploy with a dedicated MongoDB database and GCS bucket
-`,
+`
 );
 
 console.log(`Created site scaffold at sites/${slug}`);

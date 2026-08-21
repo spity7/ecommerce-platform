@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/layout/page-header";
 import { routes } from "@/config/routes";
 import type { Attribute } from "@/data/admin/catalog";
 import { fetchAttributes } from "@platform/api-client";
-import { mapAttributeDto } from "@/lib/mappers/catalog";
+import { mapAttributeRows } from "@/lib/mappers/catalog";
 import { getAdminSiteConfig } from "@/lib/site";
 
 const site = getAdminSiteConfig();
@@ -15,12 +15,12 @@ export const metadata = {
 };
 
 export default async function AttributesPage() {
-  let attributes: Attribute[] = [];
+  let attributes: ReturnType<typeof mapAttributeRows> = [];
   let loadError: string | null = null;
 
   try {
     const response = await fetchAttributes({ limit: 100 });
-    attributes = response.data.map(mapAttributeDto);
+    attributes = mapAttributeRows(response.data);
   } catch (error) {
     loadError =
       error instanceof Error ? error.message : "Unable to load attributes.";

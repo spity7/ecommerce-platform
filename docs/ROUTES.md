@@ -1,6 +1,6 @@
 # Routes reference
 
-HTTP API routes, admin pages, and storefront routing. **Last reviewed:** 2026-08-20.
+HTTP API routes, admin pages, and storefront routing. **Last reviewed:** 2026-08-21.
 
 ## Server API (`@platform/server`)
 
@@ -30,10 +30,15 @@ Base URL: `http://localhost:5000` (override with `API_URL`).
 | PATCH  | `/api/attributes/:id` | attributes | Update                                             |
 | DELETE | `/api/attributes/:id` | attributes | Delete                                             |
 | POST   | `/api/uploads`        | uploads    | Multipart upload → GCS (503 if GCS not configured) |
+| POST   | `/api/auth/login`     | auth       | Login (public)                                     |
+| POST   | `/api/auth/register`  | auth       | Register customer (public)                         |
+| POST   | `/api/auth/refresh`   | auth       | Refresh tokens (public)                            |
+| GET    | `/api/auth/me`        | auth       | Current user (Bearer token)                        |
+| POST   | `/api/auth/logout`    | auth       | Logout (Bearer token)                              |
 
 **Docs:** Swagger UI at `/api/docs`, raw spec at `/api/openapi.json`.
 
-**Security:** No authentication middleware — all routes are open. Do not expose publicly without adding auth.
+**Security:** Catalog **GET** routes are public. Catalog **POST/PATCH/DELETE** and **uploads** require admin JWT (`Authorization: Bearer <token>`). Auth login/register/refresh are public.
 
 **Implementation:** `server/src/routes/*.routes.ts`, registered in `server/src/routes/index.ts`.
 
@@ -45,32 +50,35 @@ Dev URL: `http://localhost:3001`. Optional `basePath` via `NEXT_PUBLIC_BASE_URL`
 
 ### Auth
 
-| Path      | Notes                                         |
-| --------- | --------------------------------------------- |
-| `/signin` | Demo template only — **not wired to backend** |
+| Path      | Notes                                |
+| --------- | ------------------------------------ |
+| `/signin` | JWT login via API; sets auth cookies |
 
-### Dashboard (template + partial API)
+Protected by `admin/proxy.ts` (cookie presence check; not JWT validation).
 
-| Path                                                                             | API-connected? | Notes                        |
-| -------------------------------------------------------------------------------- | -------------- | ---------------------------- |
-| `/`                                                                              | No             | Dashboard home (demo charts) |
-| `/products`                                                                      | **Yes**        | List from API                |
-| `/products/new`, `/products/demo/edit`                                           | No             | Template forms               |
-| `/categories`                                                                    | **Yes**        | List from API                |
-| `/categories/new`, `/categories/demo/edit`                                       | No             | Template forms               |
-| `/brands`                                                                        | **Yes**        | List from API                |
-| `/brands/new`, `/brands/demo/edit`                                               | No             | Template forms               |
-| `/attributes`                                                                    | **Yes**        | List from API                |
-| `/attributes/new`                                                                | No             | Template form                |
-| `/orders`, `/orders/new`, `/orders/demo`, `/orders/demo/edit`                    | No             | Demo data                    |
-| `/customers`, `/users/new`                                                       | No             | Demo data                    |
-| `/coupons`, `/coupons/new`, `/coupons/demo/edit`                                 | No             | Demo data                    |
-| `/roles`, `/roles/new`                                                           | No             | Demo data                    |
-| `/reports`, `/tax`, `/media`, `/history`                                         | No             | Demo data                    |
-| `/product-reviews`, `/support-tickets`, `/notifications`                         | No             | Demo data                    |
-| `/integrations`, `/upgrade`, `/update-app`, `/list-page`                         | No             | Template pages               |
-| `/settings`, `/settings/shipping`, `/settings/payments`, `/settings/permissions` | No             | Demo data                    |
-| `/localization/currency-rates`, `/localization/translation`                      | No             | Demo data                    |
+### Dashboard (template + catalog API)
+
+| Path                                                                             | API-connected? | Notes                         |
+| -------------------------------------------------------------------------------- | -------------- | ----------------------------- |
+| `/`                                                                              | No             | Dashboard home (demo charts)  |
+| `/products`                                                                      | **Yes**        | List + delete from API        |
+| `/products/new`, `/products/[id]/edit`                                           | **Yes**        | Create/update via API         |
+| `/categories`                                                                    | **Yes**        | List + delete from API        |
+| `/categories/new`, `/categories/[id]/edit`                                       | **Yes**        | Create/update via API         |
+| `/brands`                                                                        | **Yes**        | List + delete from API        |
+| `/brands/new`, `/brands/[id]/edit`                                               | **Yes**        | Create/update via API         |
+| `/attributes`                                                                    | **Yes**        | List + delete from API        |
+| `/attributes/new`, `/attributes/[id]/edit`                                       | **Yes**        | Create/update via API         |
+| `/products/demo/edit`, `/categories/demo/edit`, …                                | No             | Legacy demo routes (optional) |
+| `/orders`, `/orders/new`, `/orders/demo`, `/orders/demo/edit`                    | No             | Demo data                     |
+| `/customers`, `/users/new`                                                       | No             | Demo data                     |
+| `/coupons`, `/coupons/new`, `/coupons/demo/edit`                                 | No             | Demo data                     |
+| `/roles`, `/roles/new`                                                           | No             | Demo data                     |
+| `/reports`, `/tax`, `/media`, `/history`                                         | No             | Demo data                     |
+| `/product-reviews`, `/support-tickets`, `/notifications`                         | No             | Demo data                     |
+| `/integrations`, `/upgrade`, `/update-app`, `/list-page`                         | No             | Template pages                |
+| `/settings`, `/settings/shipping`, `/settings/payments`, `/settings/permissions` | No             | Demo data                     |
+| `/localization/currency-rates`, `/localization/translation`                      | No             | Demo data                     |
 
 Navigation source: `admin/config/navigation.ts` + `admin/config/routes.ts`. Feature flags in site config are **not** yet used to hide nav items.
 
@@ -82,9 +90,15 @@ Dev URL: `http://localhost:3000`.
 
 ### Production entry
 
-| Path | Notes                                                                                       |
-| ---- | ------------------------------------------------------------------------------------------- |
-| `/`  | Renders site `homeLayout` via `HomeLayoutRenderer` (Beauty Station → `cosmetic-beauty-two`) |
+| Path              | Notes                                                                                       |
+| ----------------- | ------------------------------------------------------------------------------------------- |
+| `/`               | Renders site `homeLayout` via `HomeLayoutRenderer` (Beauty Station → `cosmetic-beauty-two`) |
+| `/shop`           | Published products from API with static fallback (`ShopDefault`)                            |
+| `/product/[slug]` | Product detail from API by slug with static fallback                                        |
+
+**API integration today:** Home `Products1`, `/shop`, and `/product/[slug]` fetch published products from the API with static fallback. Demo routes under `(shop)/` and `(product-single)/` remain for theme previews.
+
+**Client state:** Zustand stores in `client/context/` (cart, wishlist, compare — persisted in browser only).
 
 ### Theme demo surface
 
@@ -98,10 +112,6 @@ The storefront contains **many** demo routes under App Router groups — not all
 | `(core-features)/`                                    | Cart, checkout, builders       |
 | `(other-pages)/`                                      | Blog, contact, signin, team, … |
 | `(elements)/`, `(portfolios)/`, `(store)/`, `splash/` | UI demos                       |
-
-**API integration today:** `home-cosmetic-beauty-two/Products1.tsx` fetches published products with static fallback. Most product UI reads from `client/data/products/*.ts`.
-
-**Client state:** Zustand stores in `client/context/` (cart, wishlist, compare — persisted in browser only).
 
 ---
 

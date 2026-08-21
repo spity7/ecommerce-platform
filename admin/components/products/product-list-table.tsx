@@ -7,7 +7,9 @@ import { Icon } from "@/components/layout/icon";
 import { AppSelect } from "@/components/ui/app-select";
 import { StatusBadge } from "@/components/products/status-badge";
 import { routes } from "@/config/routes";
+import { productEditPath } from "@/lib/paths";
 import type { Product, ProductStatus } from "@/data/products/data";
+import { deleteProductApi } from "@platform/api-client";
 import { cn } from "@/utils/cn";
 
 type SortKey = "name" | "price" | "status" | "stock";
@@ -53,6 +55,8 @@ export function ProductListTable({ products }: ProductListTableProps) {
   );
   const [columnsOpen, setColumnsOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [rows, setRows] = useState(products);
 
   const filteredProducts = useMemo(() => {
@@ -117,12 +121,22 @@ export function ProductListTable({ products }: ProductListTableProps) {
     });
   }
 
-  function confirmDelete() {
-    setRows((current) =>
-      current.filter((product) => !selected.has(productKey(product)))
-    );
-    setSelected(new Set());
-    setConfirmOpen(false);
+  async function confirmDelete() {
+    const ids = Array.from(selected);
+    setDeleting(true);
+    setDeleteError(null);
+    try {
+      await Promise.all(ids.map((id) => deleteProductApi(id)));
+      setRows((current) =>
+        current.filter((product) => !selected.has(productKey(product)))
+      );
+      setSelected(new Set());
+      setConfirmOpen(false);
+    } catch (error) {
+      setDeleteError(error instanceof Error ? error.message : "Delete failed");
+    } finally {
+      setDeleting(false);
+    }
   }
 
   function isColumnVisible(index: number) {
@@ -292,7 +306,7 @@ export function ProductListTable({ products }: ProductListTableProps) {
                     <div>
                       <Link
                         className="font-semibold text-ink-900 hover:text-brand-600"
-                        href={routes.editProduct}
+                        href={productEditPath(String(product.id))}
                       >
                         {product.name}
                       </Link>
@@ -352,7 +366,7 @@ export function ProductListTable({ products }: ProductListTableProps) {
                     <Link
                       aria-label="Edit product"
                       className="icon-button hover:bg-brand-50 hover:text-brand-600"
-                      href={routes.editProduct}
+                      href={productEditPath(String(product.id))}
                     >
                       <Icon className="h-4 w-4" name="pencil" />
                     </Link>
@@ -433,20 +447,25 @@ export function ProductListTable({ products }: ProductListTableProps) {
               This product will be permanently removed from your catalog. This
               action cannot be undone.
             </p>
+            {deleteError ? (
+              <p className="mt-2 text-[14px] text-danger-600">{deleteError}</p>
+            ) : null}
             <div className="mt-6 flex items-center justify-center gap-3">
               <button
                 className="h-11 min-w-[88px] rounded-base border border-surface-line px-5 text-[14px] font-semibold text-ink-700 transition-colors hover:bg-surface-muted"
+                disabled={deleting}
                 onClick={() => setConfirmOpen(false)}
                 type="button"
               >
                 No
               </button>
               <button
-                className="h-11 min-w-[88px] rounded-base bg-danger-500 px-5 text-[14px] font-semibold text-white transition-colors hover:bg-danger-600"
-                onClick={confirmDelete}
+                className="h-11 min-w-[88px] rounded-base bg-danger-500 px-5 text-[14px] font-semibold text-white transition-colors hover:bg-danger-600 disabled:opacity-60"
+                disabled={deleting}
+                onClick={() => void confirmDelete()}
                 type="button"
               >
-                Yes, delete
+                {deleting ? "Deleting…" : "Yes, delete"}
               </button>
             </div>
           </div>

@@ -6,6 +6,14 @@ Platform docs: [docs/AI-INDEX.md](../../docs/AI-INDEX.md), [docs/ARCHITECTURE.md
 
 Copy `.env.example` values into each app (`client`, `admin`, `server`) for local development.
 
+| Target              | Vars from site `.env.example`                              |
+| ------------------- | ---------------------------------------------------------- |
+| `server/.env`       | `SITE_ID`, Mongo, GCS, JWT                                 |
+| `admin/.env.local`  | `SITE_ID`, `NEXT_PUBLIC_SITE_ID`, API URLs, cookie max-age |
+| `client/.env.local` | `NEXT_PUBLIC_SITE_ID`, API URLs, `NEXT_PUBLIC_SITE_URL`    |
+
+**Admin access:** register via `POST /api/auth/register`, then set `role: "admin"` on that user in MongoDB. Run `npm run seed` for catalog demo data only.
+
 ## Resources (production)
 
 | Resource   | Value                                   |

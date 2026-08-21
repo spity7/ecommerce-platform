@@ -42,7 +42,7 @@ ecommerce-platform/
 | -------------------------------------------------------------------------------- | --------------------------------------------------------- | ------------- |
 | [ARCHITECTURE.md](ARCHITECTURE.md)                                               | Monorepo layout, multi-site, OpenAPI/Orval, CI, new sites | 2026-08-20    |
 | [ROUTES.md](ROUTES.md)                                                           | HTTP API + admin/storefront route inventory               | 2026-08-20    |
-| [CONVENTIONS.md](CONVENTIONS.md)                                                 | Naming, UI stacks, patterns per workspace                 | 2026-08-20    |
+| [CONVENTIONS.md](CONVENTIONS.md)                                                 | Naming, UI stacks, patterns per workspace                 | 2026-08-21    |
 | [site-registry.json](site-registry.json)                                         | Deployed sites metadata (DB, GCS, URLs, features)         | 2026-08-20    |
 | [../AGENTS.md](../AGENTS.md)                                                     | Cross-tool agent entry                                    | 2026-08-20    |
 | [../CLAUDE.md](../CLAUDE.md)                                                     | Claude Code quick commands                                | 2026-08-20    |

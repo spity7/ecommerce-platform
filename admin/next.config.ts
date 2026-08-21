@@ -1,8 +1,13 @@
 import type { NextConfig } from "next";
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
+
+/**
+ * Subdomain deploy (e.g. admin.beautystation.com): leave NEXT_PUBLIC_BASE_URL unset.
+ * Path deploy (e.g. example.com/admin): set NEXT_PUBLIC_BASE_URL=/admin
+ */
+const basePath = process.env.NEXT_PUBLIC_BASE_URL?.trim();
 
 const nextConfig: NextConfig = {
-  basePath: baseURL,
+  ...(basePath ? { basePath } : {}),
   transpilePackages: ["@platform/shared", "@platform/site-config"],
 };
 

@@ -42,4 +42,11 @@ export const routes = {
   upgrade: "/upgrade",
 } as const;
 
+export const pathBuilders = {
+  editAttribute: (id: string) => `/attributes/${id}/edit`,
+  editBrand: (id: string) => `/brands/${id}/edit`,
+  editCategory: (id: string) => `/categories/${id}/edit`,
+  editProduct: (id: string) => `/products/${id}/edit`,
+} as const;
+
 export type RouteKey = keyof typeof routes;

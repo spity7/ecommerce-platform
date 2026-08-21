@@ -4,7 +4,6 @@ import { ShowcaseStrip } from "@/components/catalog/showcase-strip";
 import { Icon } from "@/components/layout/icon";
 import { PageHeader } from "@/components/layout/page-header";
 import { routes } from "@/config/routes";
-import type { Category } from "@/data/admin/catalog";
 import { fetchCategories } from "@platform/api-client";
 import { mapCategoryDto } from "@/lib/mappers/catalog";
 import { getAdminSiteConfig } from "@/lib/site";
@@ -16,7 +15,7 @@ export const metadata = {
 };
 
 export default async function CategoriesPage() {
-  let categories: Category[] = [];
+  let categories: ReturnType<typeof mapCategoryDto>[] = [];
   let loadError: string | null = null;
 
   try {

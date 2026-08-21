@@ -14,6 +14,13 @@ const envSchema = z.object({
   GCS_PROJECT_ID: z.string().optional(),
   GCS_BUCKET_NAME: z.string().optional(),
   GCS_KEY_FILE: z.string().optional(),
+  JWT_ACCESS_SECRET: z.string().min(16).default("dev-access-secret-change-me"),
+  JWT_REFRESH_SECRET: z
+    .string()
+    .min(16)
+    .default("dev-refresh-secret-change-me"),
+  JWT_ACCESS_EXPIRES_IN: z.string().default("15m"),
+  JWT_REFRESH_EXPIRES_IN: z.string().default("7d"),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -43,5 +50,11 @@ export const env = {
     isConfigured: Boolean(
       data.GCS_PROJECT_ID && data.GCS_BUCKET_NAME && data.GCS_KEY_FILE
     ),
+  },
+  jwt: {
+    accessSecret: data.JWT_ACCESS_SECRET,
+    refreshSecret: data.JWT_REFRESH_SECRET,
+    accessExpiresIn: data.JWT_ACCESS_EXPIRES_IN,
+    refreshExpiresIn: data.JWT_REFRESH_EXPIRES_IN,
   },
 } as const;

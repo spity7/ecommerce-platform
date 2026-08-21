@@ -3,6 +3,7 @@
  * Regenerate with "npm run api:generate".
  */
 import { getAttributes } from "./attributes/attributes";
+import { getAuth } from "./auth/auth";
 import { getBrands } from "./brands/brands";
 import { getCategories } from "./categories/categories";
 import { getHealth } from "./health/health";
@@ -11,6 +12,7 @@ import { getUploads } from "./uploads/uploads";
 
 export const getPlatformAPI = () => ({
   ...getAttributes(),
+  ...getAuth(),
   ...getBrands(),
   ...getCategories(),
   ...getHealth(),

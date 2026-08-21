@@ -2,7 +2,7 @@
 
 Multipurpose ecommerce monorepo: one codebase, many site deployments.
 
-**Last reviewed:** 2026-08-20. See [AI-INDEX.md](AI-INDEX.md) for the full doc map and tree.
+**Last reviewed:** 2026-08-21. See [AI-INDEX.md](AI-INDEX.md) for the full doc map and tree.
 
 ## Layout
 
@@ -36,13 +36,13 @@ ecommerce-platform/
 
 The platform skeleton is real (shared contract, multi-site config, catalog API). UI is largely a purchased theme with early API wiring:
 
-| Layer  | API-connected                          | Template / static              |
-| ------ | -------------------------------------- | ------------------------------ |
-| Server | Full catalog CRUD + uploads            | No auth, no orders/users       |
-| Admin  | 4 catalog list pages                   | ~40 other dashboard pages      |
-| Client | Beauty home product block (+ fallback) | 300+ demo routes, Zustand cart |
+| Layer  | API-connected                            | Template / static              |
+| ------ | ---------------------------------------- | ------------------------------ |
+| Server | Catalog CRUD + auth + uploads            | No orders/users/cart API       |
+| Admin  | Catalog lists + CRUD forms + sign-in     | ~35 other dashboard pages      |
+| Client | Home block + `/shop` + `/product/[slug]` | 300+ demo routes, Zustand cart |
 
-**Auth:** Not implemented. Admin sign-in is a demo page; API routes have no auth middleware. Do not expose admin or API publicly without adding authentication.
+**Auth:** JWT on catalog mutations and uploads; admin dashboard protected by `proxy.ts` + sign-in. Storefront catalog reads remain public.
 
 ## Beauty Station (site #1)
 

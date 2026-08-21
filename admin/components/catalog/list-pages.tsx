@@ -8,6 +8,11 @@ import {
 } from "@/components/admin/entity-table";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { routes } from "@/config/routes";
+import {
+  categoryEditPath,
+  brandEditPath,
+  attributeEditPath,
+} from "@/lib/paths";
 import type {
   Attribute,
   Brand,
@@ -15,6 +20,11 @@ import type {
   Customer,
 } from "@/data/admin/catalog";
 import { cn } from "@/utils/cn";
+import {
+  deleteBrandApi,
+  deleteCategoryApi,
+  deleteAttributeApi,
+} from "@platform/api-client";
 
 type CategoryRow = Category & { id: string };
 type BrandRow = Brand & { id: string };
@@ -29,11 +39,12 @@ const statusClass = {
   review: "bg-warning-50 text-warning-600",
 };
 
-export function CategoryListTable({ categories }: { categories: Category[] }) {
-  const rows: CategoryRow[] = categories.map((category) => ({
-    ...category,
-    id: category.slug,
-  }));
+export function CategoryListTable({
+  categories,
+}: {
+  categories: Array<Category & { id: string }>;
+}) {
+  const rows: CategoryRow[] = categories;
   const columns: EntityColumn<CategoryRow>[] = [
     {
       key: "category",
@@ -50,7 +61,7 @@ export function CategoryListTable({ categories }: { categories: Category[] }) {
           <div>
             <Link
               className="font-semibold text-ink-900 hover:text-brand-600"
-              href={routes.editCategory}
+              href={categoryEditPath(category.id)}
             >
               {category.name}
             </Link>
@@ -92,7 +103,10 @@ export function CategoryListTable({ categories }: { categories: Category[] }) {
     <EntityTable
       columns={columns}
       deleteMessage="This category will be permanently removed from your catalog. This action cannot be undone."
-      editHref={routes.editCategory}
+      editHref={(row) => categoryEditPath(row.id)}
+      onDelete={async (ids) => {
+        await Promise.all(ids.map((id) => deleteCategoryApi(id)));
+      }}
       filterOptions={[
         { label: "All", match: () => true, value: "all" },
         {
@@ -115,11 +129,12 @@ export function CategoryListTable({ categories }: { categories: Category[] }) {
   );
 }
 
-export function BrandListTable({ brands }: { brands: Brand[] }) {
-  const rows: BrandRow[] = brands.map((brand) => ({
-    ...brand,
-    id: brand.slug,
-  }));
+export function BrandListTable({
+  brands,
+}: {
+  brands: Array<Brand & { id: string }>;
+}) {
+  const rows: BrandRow[] = brands;
   const columns: EntityColumn<BrandRow>[] = [
     {
       key: "brand",
@@ -137,7 +152,7 @@ export function BrandListTable({ brands }: { brands: Brand[] }) {
           <div>
             <Link
               className="font-semibold text-ink-900 hover:text-brand-600"
-              href={routes.editBrand}
+              href={brandEditPath(brand.id)}
             >
               {brand.name}
             </Link>
@@ -186,7 +201,10 @@ export function BrandListTable({ brands }: { brands: Brand[] }) {
     <EntityTable
       columns={columns}
       deleteMessage="This brand will be permanently removed from your catalog. This action cannot be undone."
-      editHref={routes.editBrand}
+      editHref={(row) => brandEditPath(row.id)}
+      onDelete={async (ids) => {
+        await Promise.all(ids.map((id) => deleteBrandApi(id)));
+      }}
       filterOptions={[
         { label: "All", match: () => true, value: "all" },
         {
@@ -217,12 +235,9 @@ export function BrandListTable({ brands }: { brands: Brand[] }) {
 export function AttributeListTable({
   attributes,
 }: {
-  attributes: Attribute[];
+  attributes: AttributeRow[];
 }) {
-  const rows: AttributeRow[] = attributes.map((attribute) => ({
-    ...attribute,
-    id: attribute.name.toLowerCase(),
-  }));
+  const rows = attributes;
   const columns: EntityColumn<AttributeRow>[] = [
     {
       key: "attribute",
@@ -231,7 +246,7 @@ export function AttributeListTable({
         <div>
           <Link
             className="font-semibold text-ink-900 hover:text-brand-600"
-            href={routes.addAttribute}
+            href={attributeEditPath(attribute.id)}
           >
             {attribute.name}
           </Link>
@@ -274,7 +289,10 @@ export function AttributeListTable({
     <EntityTable
       columns={columns}
       deleteMessage="This attribute will be permanently removed from your catalog. This action cannot be undone."
-      editHref={routes.addAttribute}
+      editHref={(row) => attributeEditPath(row.id)}
+      onDelete={async (ids) => {
+        await Promise.all(ids.map((id) => deleteAttributeApi(id)));
+      }}
       filterOptions={[
         { label: "All types", match: () => true, value: "all" },
         {

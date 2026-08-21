@@ -29,17 +29,25 @@ const site = getSiteConfig(process.env.SITE_ID);
 | `getStorefrontSiteConfig()` | `client/lib/site.ts` | `NEXT_PUBLIC_SITE_URL`, `API_URL` / `NEXT_PUBLIC_API_URL` |
 | `getAdminSiteConfig()`      | `admin/lib/site.ts`  | None (uses config as-is)                                  |
 
-| Env var                           | Where         | Purpose                              |
-| --------------------------------- | ------------- | ------------------------------------ |
-| `SITE_ID`                         | server        | Select site config + DB context      |
-| `NEXT_PUBLIC_SITE_ID`             | admin, client | Select site config in browser        |
-| `MONGODB_URI`                     | server        | MongoDB connection (one DB per site) |
-| `API_URL` / `NEXT_PUBLIC_API_URL` | admin, client | Backend base URL                     |
+| Env var                                           | Where         | Purpose                                     |
+| ------------------------------------------------- | ------------- | ------------------------------------------- |
+| `SITE_ID`                                         | server        | Select site config + DB context             |
+| `NEXT_PUBLIC_SITE_ID`                             | admin, client | Select site config in browser               |
+| `MONGODB_URI`                                     | server        | MongoDB connection (one DB per site)        |
+| `API_URL` / `NEXT_PUBLIC_API_URL`                 | admin, client | Backend base URL                            |
+| `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`         | server        | Sign access/refresh tokens                  |
+| `JWT_ACCESS_EXPIRES_IN`, `JWT_REFRESH_EXPIRES_IN` | server        | Token lifetime (e.g. `15m`, `7d`)           |
+| `NEXT_PUBLIC_ACCESS_TOKEN_MAX_AGE`                | admin         | Cookie max-age (seconds); match access JWT  |
+| `NEXT_PUBLIC_REFRESH_TOKEN_MAX_AGE`               | admin         | Cookie max-age (seconds); match refresh JWT |
+
+Reference templates: `server/.env.example`, `admin/.env.example`, `client/.env.example`, and `sites/{id}/.env.example` from `npm run create-site`.
 
 - Add new sites in `packages/site-config/src/sites/{id}.ts` and register in `index.ts`.
 - Update `docs/site-registry.json` (all `features` flags must match the site config file).
 - Run `npm run create-site` for env scaffolding.
 - Do **not** hardcode site names in feature code.
+
+**First admin:** register a user (`POST /api/auth/register`), then set `role: "admin"` on that document in MongoDB. Seed does not create users.
 
 ## API contract
 

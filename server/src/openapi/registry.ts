@@ -4,6 +4,7 @@ import {
 } from "@asteasolutions/zod-to-openapi";
 import {
   attributeDtoSchema,
+  authResponseSchema,
   brandDtoSchema,
   categoryDtoSchema,
   createAttributeSchema,
@@ -13,16 +14,20 @@ import {
   errorResponseSchema,
   healthResponseSchema,
   listQuerySchema,
+  loginSchema,
   paginatedAttributesSchema,
   paginatedBrandsSchema,
   paginatedCategoriesSchema,
   paginatedProductsSchema,
   productDtoSchema,
+  refreshTokenSchema,
+  registerSchema,
   updateAttributeSchema,
   updateBrandSchema,
   updateCategorySchema,
   updateProductSchema,
   uploadResponseSchema,
+  userDtoSchema,
   validationErrorResponseSchema,
 } from "@platform/shared";
 import { z } from "@platform/shared/zod";
@@ -52,6 +57,11 @@ openApiRegistry.register("PaginatedBrands", paginatedBrandsSchema);
 openApiRegistry.register("PaginatedAttributes", paginatedAttributesSchema);
 openApiRegistry.register("HealthResponse", healthResponseSchema);
 openApiRegistry.register("UploadResponse", uploadResponseSchema);
+openApiRegistry.register("UserDto", userDtoSchema);
+openApiRegistry.register("AuthResponse", authResponseSchema);
+openApiRegistry.register("LoginInput", loginSchema);
+openApiRegistry.register("RegisterInput", registerSchema);
+openApiRegistry.register("RefreshTokenInput", refreshTokenSchema);
 openApiRegistry.register("ErrorResponse", errorResponseSchema);
 openApiRegistry.register(
   "ValidationErrorResponse",
@@ -232,6 +242,113 @@ registerCrudPaths({
 });
 
 openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/auth/login",
+  tags: ["Auth"],
+  operationId: "login",
+  summary: "Login with email and password",
+  request: {
+    body: {
+      content: { "application/json": { schema: loginSchema } },
+    },
+  },
+  responses: {
+    200: {
+      description: "Authenticated",
+      content: { "application/json": { schema: authResponseSchema } },
+    },
+    401: {
+      description: "Invalid credentials",
+      content: { "application/json": { schema: errorResponseSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/auth/register",
+  tags: ["Auth"],
+  operationId: "register",
+  summary: "Register a customer account",
+  request: {
+    body: {
+      content: { "application/json": { schema: registerSchema } },
+    },
+  },
+  responses: {
+    201: {
+      description: "Registered",
+      content: { "application/json": { schema: authResponseSchema } },
+    },
+    409: {
+      description: "Email already registered",
+      content: { "application/json": { schema: errorResponseSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/auth/refresh",
+  tags: ["Auth"],
+  operationId: "refreshToken",
+  summary: "Refresh access token",
+  request: {
+    body: {
+      content: { "application/json": { schema: refreshTokenSchema } },
+    },
+  },
+  responses: {
+    200: {
+      description: "Token refreshed",
+      content: { "application/json": { schema: authResponseSchema } },
+    },
+    401: {
+      description: "Invalid refresh token",
+      content: { "application/json": { schema: errorResponseSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "get",
+  path: "/api/auth/me",
+  tags: ["Auth"],
+  operationId: "getMe",
+  summary: "Get current user profile",
+  security: [{ bearerAuth: [] }],
+  responses: {
+    200: {
+      description: "Current user",
+      content: { "application/json": { schema: userDtoSchema } },
+    },
+    401: {
+      description: "Unauthorized",
+      content: { "application/json": { schema: errorResponseSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/auth/logout",
+  tags: ["Auth"],
+  operationId: "logout",
+  summary: "Logout current user",
+  security: [{ bearerAuth: [] }],
+  responses: {
+    200: {
+      description: "Logged out",
+      content: {
+        "application/json": {
+          schema: z.object({ ok: z.boolean() }),
+        },
+      },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
   method: "get",
   path: "/api/health",
   tags: ["Health"],
@@ -288,7 +405,7 @@ export function createOpenApiDocument() {
       title: "Ecommerce Platform API",
       version: "1.0.0",
       description:
-        "REST API for the ecommerce platform catalog, health, and uploads.",
+        "REST API for the ecommerce platform catalog, auth, health, and uploads.",
     },
     servers: [{ url: "http://localhost:5000", description: "Local dev" }],
   });
