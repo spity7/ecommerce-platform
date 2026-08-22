@@ -4,6 +4,7 @@ import type { Product } from "@/types/product";
 export function mapProductDtoToStorefront(product: ProductDto): Product {
   return {
     id: product.slug,
+    apiProductId: product.id,
     title: product.name,
     price: product.price,
     imgSrc:

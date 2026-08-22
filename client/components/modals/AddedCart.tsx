@@ -2,6 +2,7 @@
 import { CheckmarkIcon } from "../svg-icons";
 import Image from "next/image";
 import Link from "next/link";
+import { getCheckoutPath } from "@/lib/checkout";
 import { useContextElement } from "@/context/Context";
 import { useManagedModalPanel } from "@/hooks/useManagedModalPanel";
 import { electronicsCardData } from "@/data/products/electronics";
@@ -10,6 +11,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function AddedCart() {
   const { cartProducts, totalPrice } = useContextElement();
+  const checkoutPath = getCheckoutPath();
   const { close } = useManagedModalPanel("addedCartModal");
 
   const lastItem =
@@ -97,7 +99,7 @@ export default function AddedCart() {
 
                   <Link
                     className="rbt-btn rbt-btn-sm d-block mt--16"
-                    href="/checkout-delivery-step-one"
+                    href={checkoutPath}
                   >
                     Checkout
                   </Link>

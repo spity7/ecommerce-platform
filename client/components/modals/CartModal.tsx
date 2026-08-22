@@ -10,6 +10,7 @@ import { Pagination } from "swiper/modules";
 import Tooltip from "@/components/common/ui/Tooltip";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
 import { getCartSummary } from "@/lib/cartSummaryUtils";
+import { getCheckoutPath } from "@/lib/checkout";
 import { getStackedModalZIndex } from "@/lib/modalStack";
 import { useManagedModalPanel } from "@/hooks/useManagedModalPanel";
 
@@ -27,7 +28,7 @@ export default function CartModal() {
   const {
     cartProducts,
     totalPrice,
-    setCartProducts,
+    removeFromCart,
     setActiveCartProduct,
     updateQuantity,
     addProductToCart,
@@ -35,8 +36,10 @@ export default function CartModal() {
     mounted,
   } = useContextElement();
 
+  const checkoutPath = getCheckoutPath();
+
   const removeItem = (id: string | number) => {
-    setCartProducts((pre) => [...pre.filter((elm) => elm.id != id)]);
+    removeFromCart(id);
   };
   const {
     subtotalLabel,
@@ -349,10 +352,7 @@ export default function CartModal() {
             </div>
             <div className="rbt-minicart-bottom mt--24">
               <div className="checkout-btn mt--20">
-                <Link
-                  className="rbt-btn w-100 text-center"
-                  href="/checkout-delivery-step-one"
-                >
+                <Link className="rbt-btn w-100 text-center" href={checkoutPath}>
                   <span className="btn-text">Checkout</span>
                 </Link>
               </div>

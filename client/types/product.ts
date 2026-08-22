@@ -172,9 +172,14 @@ export interface Product {
 
   // Demo / Tab Filtering
   demoTab?: string[];
+
+  /** MongoDB product id when loaded from API (cart/checkout). */
+  apiProductId?: string;
 }
 
 // Cart item: Product with required quantity
 export interface CartProduct extends Product {
   quantity: number;
+  /** Server cart line id (`/api/cart/items/:itemId`). */
+  serverCartItemId?: string;
 }

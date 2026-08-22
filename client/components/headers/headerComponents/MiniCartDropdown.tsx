@@ -5,9 +5,17 @@ import Link from "next/link";
 import { useContextElement } from "@/context/store";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
 import { formatCurrency } from "@/lib/price";
+import { getCheckoutPath } from "@/lib/checkout";
 
 export default function MiniCartDropdown() {
-  const { cartProducts, totalPrice, setCartProducts } = useContextElement();
+  const { cartProducts, totalPrice, removeFromCart } = useContextElement();
+  const checkoutPath = getCheckoutPath();
+
+  function productHref(item: { id: string | number; apiProductId?: string }) {
+    return item.apiProductId
+      ? `/product/${item.id}`
+      : `/product-single-default/${item.id}`;
+  }
 
   return (
     <div className="rbt-mini-cart-popup">
@@ -39,7 +47,7 @@ export default function MiniCartDropdown() {
                 {cartProducts.map((item) => (
                   <li className="minicart-item" key={item.id}>
                     <div className="thumbnail">
-                      <Link href={`/product-single-default/${item.id}`}>
+                      <Link href={productHref(item)}>
                         <Image
                           alt="Product Image"
                           src={item.imgSrc}
@@ -50,9 +58,7 @@ export default function MiniCartDropdown() {
                     </div>
                     <div className="product-content text-start">
                       <h6 className="title">
-                        <Link href={`/product-single-default/${item.id}`}>
-                          {item.title}
-                        </Link>
+                        <Link href={productHref(item)}>{item.title}</Link>
                       </h6>
                       <span className="quantity">
                         {item.quantity}x{" "}
@@ -66,11 +72,7 @@ export default function MiniCartDropdown() {
                         type="button"
                         aria-label={`Remove ${item.title} from cart`}
                         className="rbt-round-btn"
-                        onClick={() =>
-                          setCartProducts(
-                            cartProducts.filter((elm) => elm.id !== item.id)
-                          )
-                        }
+                        onClick={() => removeFromCart(item.id)}
                       >
                         <i className="fa-solid fa-xmark" />
                       </button>
@@ -136,10 +138,7 @@ export default function MiniCartDropdown() {
                   >
                     View Cart
                   </Link>
-                  <Link
-                    href="/checkout-delivery-step-one"
-                    className="rbt-btn rbt-btn-sm"
-                  >
+                  <Link href={checkoutPath} className="rbt-btn rbt-btn-sm">
                     <span className="btn-text">Checkout</span>
                   </Link>
                 </div>

@@ -11,12 +11,14 @@ import Tooltip from "@/components/common/ui/Tooltip";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
 import SearchableDropdown from "@/components/common/select/SearchableDropdown";
 import { getCartSummary } from "../../lib/cartSummaryUtils";
+import { getCheckoutPath } from "@/lib/checkout";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar } from "swiper/modules";
 
 export default function Cart() {
-  const { cartProducts, totalPrice, setCartProducts, updateQuantity } =
+  const { cartProducts, totalPrice, removeFromCart, updateQuantity } =
     useContextElement();
+  const checkoutPath = getCheckoutPath();
   const shippingCityOptions = [
     "Select your City",
     "New York",
@@ -34,7 +36,7 @@ export default function Cart() {
     useState("Select your City");
 
   const removeItem = (id: string | number) => {
-    setCartProducts((prev) => prev.filter((elm) => elm.id != id));
+    removeFromCart(id);
   };
 
   const itemTotal = (price: number, qty: number) => (price * qty).toFixed(2);
@@ -310,7 +312,7 @@ export default function Cart() {
                               </div>
                               <div className="rbt-button-group m--0 mt--16">
                                 <Link
-                                  href="/checkout-delivery-step-one"
+                                  href={checkoutPath}
                                   className="rbt-btn rbt-btn-md rbt-btn-primary"
                                 >
                                   Calculate shipping
@@ -666,11 +668,7 @@ export default function Cart() {
                     <div className="checkout-btn mt--20">
                       <Link
                         className="rbt-btn w-100 text-center"
-                        href={
-                          cartProducts.length > 0
-                            ? "/checkout-delivery-step-one"
-                            : "/cart"
-                        }
+                        href={cartProducts.length > 0 ? checkoutPath : "/cart"}
                       >
                         <span className="btn-text">Checkout</span>
                       </Link>

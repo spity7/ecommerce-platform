@@ -9,6 +9,13 @@ import type {
   Product as ProductType,
   CartProduct as CartProductType,
 } from "@/types";
+import {
+  isServerCartEnabled,
+  syncAddToServerCart,
+  syncClearServerCart,
+  syncRemoveServerCartItem,
+  syncUpdateServerCartItem,
+} from "@/lib/cart-sync";
 
 export type Product = ProductType;
 export type CartProduct = CartProductType;
@@ -32,6 +39,7 @@ interface StoreState {
   setActiveCartProduct: (item: CartProduct | null) => void;
   isAddedToCartProducts: (id: ProductId) => boolean;
   addProductToCart: (item: Product, qty?: number) => void;
+  removeFromCart: (id: ProductId) => void;
   updateQuantity: (id: ProductId, qty: number) => void;
   quantityInCart: (id: ProductId) => number;
   addToWishlist: (item: Product) => void;
@@ -92,6 +100,21 @@ export const useStore = create<StoreState>()(
 
       addProductToCart: (item, qty = 1) => {
         const { cartProducts, isAddedToCartProducts } = get();
+
+        if (item.apiProductId && isServerCartEnabled()) {
+          void syncAddToServerCart(item.apiProductId, qty).then(
+            (serverCart) => {
+              if (serverCart) {
+                set({
+                  cartProducts: serverCart,
+                  totalPrice: getTotalPrice(serverCart),
+                });
+              }
+            }
+          );
+          return;
+        }
+
         if (isAddedToCartProducts(item.id)) return;
         const cartItem: CartProduct = {
           ...item,
@@ -101,11 +124,49 @@ export const useStore = create<StoreState>()(
         set({ cartProducts: next, totalPrice: getTotalPrice(next) });
       },
 
+      removeFromCart: (id) => {
+        const { cartProducts } = get();
+        const item = cartProducts.find((entry) => entry.id === id);
+
+        if (item?.serverCartItemId && isServerCartEnabled()) {
+          void syncRemoveServerCartItem(item.serverCartItemId).then(
+            (serverCart) => {
+              if (serverCart) {
+                set({
+                  cartProducts: serverCart,
+                  totalPrice: getTotalPrice(serverCart),
+                });
+              }
+            }
+          );
+          return;
+        }
+
+        const next = cartProducts.filter((entry) => entry.id !== id);
+        set({ cartProducts: next, totalPrice: getTotalPrice(next) });
+      },
+
       updateQuantity: (id, qty) => {
         const { cartProducts, isAddedToCartProducts } = get();
         if (!isAddedToCartProducts(id) || qty < 1) return;
-        const items = cartProducts.map((item) =>
-          item.id === id ? { ...item, quantity: qty } : item
+
+        const item = cartProducts.find((entry) => entry.id === id);
+        if (item?.serverCartItemId && isServerCartEnabled()) {
+          void syncUpdateServerCartItem(item.serverCartItemId, qty).then(
+            (serverCart) => {
+              if (serverCart) {
+                set({
+                  cartProducts: serverCart,
+                  totalPrice: getTotalPrice(serverCart),
+                });
+              }
+            }
+          );
+          return;
+        }
+
+        const items = cartProducts.map((entry) =>
+          entry.id === id ? { ...entry, quantity: qty } : entry
         );
         set({ cartProducts: items, totalPrice: getTotalPrice(items) });
       },
