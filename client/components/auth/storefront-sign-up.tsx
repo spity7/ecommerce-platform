@@ -6,12 +6,10 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import {
   mergeGuestCart,
-  platformApi,
   setAccessToken,
   ApiError,
 } from "@platform/api-client";
 import type { AuthResponse } from "@platform/shared";
-import { setAuthCookies } from "@/lib/auth";
 import { getOrCreateGuestCartId, clearGuestCartId } from "@/lib/guest-cart";
 import { getSiteChromeBranding } from "@/lib/site-branding";
 
@@ -30,19 +28,26 @@ export function StorefrontSignUpForm() {
     setSubmitting(true);
 
     try {
-      const body = (await platformApi.register({
-        name,
-        email,
-        password,
-        phone: phone || undefined,
-      })) as AuthResponse;
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          phone: phone || undefined,
+        }),
+      });
+      const body = (await response.json()) as AuthResponse & {
+        error?: string;
+      };
 
-      if (!body.accessToken || !body.refreshToken) {
-        setError("Registration failed. Please try again.");
+      if (!response.ok || !body.accessToken) {
+        setError(body.error ?? "Registration failed. Please try again.");
         return;
       }
 
-      setAuthCookies(body.accessToken, body.refreshToken);
       setAccessToken(body.accessToken);
 
       const guestSessionId = getOrCreateGuestCartId();

@@ -21,31 +21,9 @@ export const REFRESH_TOKEN_MAX_AGE = parseMaxAge(
   DEFAULT_REFRESH_MAX_AGE
 );
 
-export function setAuthCookies(
-  accessToken: string,
-  refreshToken: string
-): void {
-  document.cookie = `${ACCESS_TOKEN_COOKIE}=${accessToken}; path=/; max-age=${ACCESS_TOKEN_MAX_AGE}; SameSite=Lax`;
-  document.cookie = `${REFRESH_TOKEN_COOKIE}=${refreshToken}; path=/; max-age=${REFRESH_TOKEN_MAX_AGE}; SameSite=Lax`;
-}
-
-export function clearAuthCookies(): void {
+/** Clears legacy non-httpOnly cookies from older sessions. */
+export function clearLegacyAuthCookies(): void {
+  if (typeof document === "undefined") return;
   document.cookie = `${ACCESS_TOKEN_COOKIE}=; path=/; max-age=0`;
   document.cookie = `${REFRESH_TOKEN_COOKIE}=; path=/; max-age=0`;
-}
-
-export function getAccessTokenFromCookie(): string | undefined {
-  if (typeof document === "undefined") return undefined;
-  const match = document.cookie.match(
-    new RegExp(`(?:^|; )${ACCESS_TOKEN_COOKIE}=([^;]*)`)
-  );
-  return match?.[1];
-}
-
-export function getRefreshTokenFromCookie(): string | undefined {
-  if (typeof document === "undefined") return undefined;
-  const match = document.cookie.match(
-    new RegExp(`(?:^|; )${REFRESH_TOKEN_COOKIE}=([^;]*)`)
-  );
-  return match?.[1];
 }

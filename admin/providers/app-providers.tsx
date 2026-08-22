@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, type ReactNode } from "react";
-import { getAccessTokenFromCookie } from "@/lib/auth";
 import { tryRefreshSession } from "@/lib/refresh-session";
 import { clearSessionAndRedirectToSignIn } from "@/lib/session";
 import { AuthSessionProvider } from "@/providers/auth-session-provider";
@@ -14,25 +13,17 @@ type AppProvidersProps = {
   children: ReactNode;
 };
 
-async function handleUnauthorized(): Promise<boolean> {
-  const refreshed = await tryRefreshSession();
-  if (refreshed) {
-    window.dispatchEvent(new Event("auth:session-updated"));
-    return true;
-  }
-  clearSessionAndRedirectToSignIn();
-  return false;
-}
-
 export function AppProviders({ children }: AppProvidersProps) {
   useEffect(() => {
-    const token = getAccessTokenFromCookie();
-    if (token) {
-      setAccessToken(token);
-    }
+    void tryRefreshSession();
 
-    registerUnauthorizedHandler(handleUnauthorized);
-    return () => registerUnauthorizedHandler(null);
+    registerUnauthorizedHandler(async () => {
+      const refreshed = await tryRefreshSession();
+      if (!refreshed) {
+        await clearSessionAndRedirectToSignIn();
+      }
+      return refreshed;
+    });
   }, []);
 
   return <AuthSessionProvider>{children}</AuthSessionProvider>;

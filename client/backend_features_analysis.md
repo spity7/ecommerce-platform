@@ -1,6 +1,6 @@
 # Backend API Feature Breakdown — Beauty Station
 
-> **Status (2026-08-22):** **Roadmap / planning doc** — not all endpoints below exist. **Implemented today:** catalog CRUD, auth, cart, orders (place + list with customer name/email), `PATCH /api/users/me`, `/api/uploads`, `/api/health`. Storefront: customer auth, API cart sync for catalog products, `/checkout`, `/account-info` profile edit when `features.customerAuth` is enabled.
+> **Status (2026-08-22):** **Roadmap / planning doc** — not all endpoints below exist. **Implemented today:** catalog CRUD (mutations require admin JWT), auth with refresh revocation + rate limits, cart, orders (place + list with customer name/email), `PATCH /api/users/me`, `/api/uploads`, `/api/health`. Storefront: customer auth via httpOnly BFF cookies, API cart sync for catalog products, `/checkout`, `/account-info` profile edit when `features.customerAuth` is enabled.
 
 > **Stack context:** Next.js App Router storefront + Express API monorepo. Static mock data remains in `client/data/` for theme demos.
 
@@ -11,9 +11,9 @@
 ### 1.1 Auth
 
 - `POST /api/auth/register` — Register with email/password (name, email, password, phone)
-- `POST /api/auth/login` — Login, return JWT + refresh token
-- `POST /api/auth/logout` — Invalidate session/token
-- `POST /api/auth/refresh` — Refresh access token
+- `POST /api/auth/login` — Login, return JWT + refresh token (rate-limited)
+- `POST /api/auth/logout` — Invalidate refresh token (`refreshTokenVersion` bump)
+- `POST /api/auth/refresh` — Refresh access token (validates `tokenVersion`; rate-limited)
 - `POST /api/auth/forgot-password` — Send reset email
 - `POST /api/auth/reset-password` — Reset with token
 - `POST /api/auth/verify-email` — Verify email via token
@@ -278,7 +278,7 @@
 | ------------------- | --------------------------------------------------------------------------------------------------- |
 | **Auth middleware** | JWT Bearer on all `/api/users/me/*`, `/api/orders/*`, `/api/wishlist`, `/api/cart` (when logged in) |
 | **Admin guard**     | Role check on all `/api/admin/*` routes                                                             |
-| **Rate limiting**   | Auth endpoints (register, login, forgot-password), search suggestions                               |
+| **Rate limiting**   | Auth endpoints (register, login, refresh) — implemented on server                                   |
 | **Pagination**      | Consistent `{ data, meta: { page, limit, total, totalPages } }` envelope                            |
 | **Error format**    | `{ error: { code, message, details? } }`                                                            |
 | **File uploads**    | Product images, review images, user avatars → S3/Cloudflare R2                                      |

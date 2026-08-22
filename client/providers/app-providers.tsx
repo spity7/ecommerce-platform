@@ -6,10 +6,9 @@ import {
   setAccessToken,
   setGuestCartId,
 } from "@platform/api-client";
-import { getAccessTokenFromCookie } from "@/lib/auth";
-import { getOrCreateGuestCartId } from "@/lib/guest-cart";
 import { tryRefreshSession } from "@/lib/refresh-session";
 import { clearSessionAndRedirectToSignIn } from "@/lib/session";
+import { getOrCreateGuestCartId } from "@/lib/guest-cart";
 import { loadServerCart } from "@/lib/cart-sync";
 import { useStore } from "@/context/store";
 import { AuthSessionProvider } from "@/providers/auth-session-provider";
@@ -20,17 +19,14 @@ type AppProvidersProps = {
 
 export function AppProviders({ children }: AppProvidersProps) {
   useEffect(() => {
-    const token = getAccessTokenFromCookie();
-    if (token) {
-      setAccessToken(token);
-    }
-
     setGuestCartId(getOrCreateGuestCartId());
+
+    void tryRefreshSession();
 
     registerUnauthorizedHandler(async () => {
       const refreshed = await tryRefreshSession();
       if (!refreshed) {
-        clearSessionAndRedirectToSignIn();
+        await clearSessionAndRedirectToSignIn();
       }
       return refreshed;
     });

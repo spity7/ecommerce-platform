@@ -5,6 +5,7 @@ export type TokenPayload = {
   userId: string;
   role: string;
   email: string;
+  tokenVersion?: number;
 };
 
 const accessSignOptions: SignOptions = {

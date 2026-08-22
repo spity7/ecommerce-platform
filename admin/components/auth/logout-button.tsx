@@ -2,9 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { routes } from "@/config/routes";
-import { getAccessTokenFromCookie } from "@/lib/auth";
 import { clearSession } from "@/lib/session";
-import { getApiBaseUrl } from "@platform/api-client";
 import { Icon } from "@/components/layout/icon";
 import { cn } from "@/utils/cn";
 
@@ -16,22 +14,9 @@ export function LogoutButton({ className }: LogoutButtonProps) {
   const router = useRouter();
 
   async function handleLogout() {
-    const token = getAccessTokenFromCookie();
-
-    try {
-      if (token) {
-        await fetch(`${getApiBaseUrl()}/api/auth/logout`, {
-          method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
-        });
-      }
-    } catch {
-      // Still clear local session if the API is unreachable.
-    } finally {
-      clearSession();
-      router.push(routes.signIn);
-      router.refresh();
-    }
+    await clearSession();
+    router.push(routes.signIn);
+    router.refresh();
   }
 
   return (

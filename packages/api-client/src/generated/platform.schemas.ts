@@ -1070,6 +1070,10 @@ export type CreateProduct400 = {
   details: CreateProduct400Details;
 };
 
+export type CreateProduct401 = {
+  error: string;
+};
+
 export type CreateProduct409 = {
   error: string;
 };
@@ -1201,11 +1205,19 @@ export type UpdateProduct400 = {
   details: UpdateProduct400Details;
 };
 
+export type UpdateProduct401 = {
+  error: string;
+};
+
 export type UpdateProduct404 = {
   error: string;
 };
 
 export type UpdateProduct409 = {
+  error: string;
+};
+
+export type DeleteProduct401 = {
   error: string;
 };
 
@@ -1305,6 +1317,10 @@ export type CreateCategory400 = {
   details: CreateCategory400Details;
 };
 
+export type CreateCategory401 = {
+  error: string;
+};
+
 export type CreateCategory409 = {
   error: string;
 };
@@ -1384,11 +1400,19 @@ export type UpdateCategory400 = {
   details: UpdateCategory400Details;
 };
 
+export type UpdateCategory401 = {
+  error: string;
+};
+
 export type UpdateCategory404 = {
   error: string;
 };
 
 export type UpdateCategory409 = {
+  error: string;
+};
+
+export type DeleteCategory401 = {
   error: string;
 };
 
@@ -1532,6 +1556,10 @@ export type CreateBrand400 = {
   details: CreateBrand400Details;
 };
 
+export type CreateBrand401 = {
+  error: string;
+};
+
 export type CreateBrand409 = {
   error: string;
 };
@@ -1655,11 +1683,19 @@ export type UpdateBrand400 = {
   details: UpdateBrand400Details;
 };
 
+export type UpdateBrand401 = {
+  error: string;
+};
+
 export type UpdateBrand404 = {
   error: string;
 };
 
 export type UpdateBrand409 = {
+  error: string;
+};
+
+export type DeleteBrand401 = {
   error: string;
 };
 
@@ -1796,6 +1832,10 @@ export type CreateAttribute400 = {
   details: CreateAttribute400Details;
 };
 
+export type CreateAttribute401 = {
+  error: string;
+};
+
 export type CreateAttribute409 = {
   error: string;
 };
@@ -1912,11 +1952,19 @@ export type UpdateAttribute400 = {
   details: UpdateAttribute400Details;
 };
 
+export type UpdateAttribute401 = {
+  error: string;
+};
+
 export type UpdateAttribute404 = {
   error: string;
 };
 
 export type UpdateAttribute409 = {
+  error: string;
+};
+
+export type DeleteAttribute401 = {
   error: string;
 };
 
@@ -2566,6 +2614,10 @@ export type UploadFile201 = {
 };
 
 export type UploadFile400 = {
+  error: string;
+};
+
+export type UploadFile401 = {
   error: string;
 };
 

@@ -6,7 +6,9 @@ import {
   registerSchema,
 } from "@platform/shared";
 import { AppError } from "../middleware/errorHandler.js";
+import { authRateLimiter } from "../middleware/rateLimit.js";
 import { requireAuth, type AuthenticatedRequest } from "../middleware/auth.js";
+import type { UserDocument } from "../models/User.js";
 import { User } from "../models/User.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import {
@@ -15,8 +17,24 @@ import {
   verifyRefreshToken,
 } from "../utils/jwt.js";
 import { toUserDto } from "../utils/serializers.js";
+import {
+  isRefreshTokenValid,
+  toTokenPayload,
+} from "../services/auth.tokens.js";
 
 export const authRouter = Router();
+
+authRouter.use(authRateLimiter);
+
+function issueAuthTokens(user: UserDocument) {
+  const payload = toTokenPayload(user);
+
+  return {
+    accessToken: signAccessToken(payload),
+    refreshToken: signRefreshToken(payload),
+    user: toUserDto(user),
+  };
+}
 
 authRouter.post(
   "/login",
@@ -32,17 +50,7 @@ authRouter.post(
       throw new AppError(401, "Invalid email or password");
     }
 
-    const payload = {
-      userId: user._id.toString(),
-      role: user.role,
-      email: user.email,
-    };
-
-    res.json({
-      accessToken: signAccessToken(payload),
-      refreshToken: signRefreshToken(payload),
-      user: toUserDto(user),
-    });
+    res.json(issueAuthTokens(user));
   })
 );
 
@@ -62,19 +70,10 @@ authRouter.post(
       passwordHash,
       phone: payload.phone ?? "",
       role: "customer",
+      refreshTokenVersion: 0,
     });
 
-    const tokenPayload = {
-      userId: user._id.toString(),
-      role: user.role,
-      email: user.email,
-    };
-
-    res.status(201).json({
-      accessToken: signAccessToken(tokenPayload),
-      refreshToken: signRefreshToken(tokenPayload),
-      user: toUserDto(user),
-    });
+    res.status(201).json(issueAuthTokens(user));
   })
 );
 
@@ -95,17 +94,11 @@ authRouter.post(
       throw new AppError(401, "User not found");
     }
 
-    const tokenPayload = {
-      userId: user._id.toString(),
-      role: user.role,
-      email: user.email,
-    };
+    if (!isRefreshTokenValid(payload, user)) {
+      throw new AppError(401, "Refresh token has been revoked");
+    }
 
-    res.json({
-      accessToken: signAccessToken(tokenPayload),
-      refreshToken: signRefreshToken(tokenPayload),
-      user: toUserDto(user),
-    });
+    res.json(issueAuthTokens(user));
   })
 );
 
@@ -124,7 +117,12 @@ authRouter.get(
 authRouter.post(
   "/logout",
   requireAuth,
-  asyncHandler(async (_req, res) => {
+  asyncHandler(async (req: AuthenticatedRequest, res) => {
+    const user = await User.findById(req.auth?.userId);
+    if (user) {
+      user.refreshTokenVersion = (user.refreshTokenVersion ?? 0) + 1;
+      await user.save();
+    }
     res.json({ ok: true });
   })
 );

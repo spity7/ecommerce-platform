@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import type { AuthResponse } from "@platform/shared";
 import { routes } from "@/config/routes";
 import { adminBrandName } from "@/lib/brand";
-import { setAuthCookies } from "@/lib/auth";
-import { getApiBaseUrl, setAccessToken } from "@platform/api-client";
+import { setAccessToken } from "@platform/api-client";
 import { useAuthSession } from "@/providers/auth-session-provider";
 
 export function SignInForm() {
@@ -23,9 +22,10 @@ export function SignInForm() {
     setError(null);
 
     try {
-      const response = await fetch(`${getApiBaseUrl()}/api/auth/login`, {
+      const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
 
@@ -38,23 +38,17 @@ export function SignInForm() {
         return;
       }
 
-      if (!body.accessToken || !body.refreshToken) {
-        setError("Invalid response from server");
-        return;
-      }
-
-      if (body.user?.role !== "admin") {
+      if (!body.accessToken || body.user?.role !== "admin") {
         setError("Admin access required");
         return;
       }
 
-      setAuthCookies(body.accessToken, body.refreshToken);
       setAccessToken(body.accessToken);
       await refreshUser();
       router.push(routes.dashboard);
       router.refresh();
     } catch {
-      setError("Unable to reach the API server");
+      setError("Unable to reach the sign-in service");
     } finally {
       setLoading(false);
     }

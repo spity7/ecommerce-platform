@@ -42,7 +42,7 @@ The platform skeleton is real (shared contract, multi-site config, catalog API).
 | Admin  | Catalog lists + CRUD forms + sign-in                                 | ~35 other dashboard pages; nav filtered by `SiteConfig.features` |
 | Client | Home layout + `/shop` + `/product/[slug]` + customer auth + checkout | 300+ demo routes; demo catalog items stay local-only in cart     |
 
-**Auth:** JWT on catalog mutations and uploads. Admin: sign-in (admin role only), `proxy.ts` validates token via `/api/auth/me`, 401 refresh with sign-out fallback. Storefront: customer sign-in/sign-up when `features.customerAuth`; `client/proxy.ts` guards account routes; cart/orders API for authenticated customers. Production rejects default JWT secrets.
+**Auth:** JWT on catalog mutations and uploads. Admin and storefront use **httpOnly cookies** (via each app’s `/api/auth/*` routes) for refresh/access tokens; short-lived access tokens are also held in memory for API calls. Logout revokes refresh tokens server-side (`refreshTokenVersion`). Auth routes are rate-limited. Production rejects default JWT secrets.
 
 ## Beauty Station (site #1)
 
@@ -203,7 +203,7 @@ See [ROUTES.md](ROUTES.md) for the full table. Summary:
 - `POST /api/uploads`
 - `GET /api/health`
 
-All catalog routes are **unauthenticated**.
+Catalog **GET** routes are public. Catalog **POST/PATCH/DELETE** and **uploads** require admin JWT (`bearerAuth` in OpenAPI).
 
 ## Database
 

@@ -61,11 +61,22 @@ Dev URL: `http://localhost:3001`. Optional `basePath` via `NEXT_PUBLIC_BASE_URL`
 
 ### Auth
 
-| Path      | Notes                                |
-| --------- | ------------------------------------ |
-| `/signin` | JWT login via API; sets auth cookies |
+| Path      | Notes                                                         |
+| --------- | ------------------------------------------------------------- |
+| `/signin` | JWT login via `/api/auth/login` BFF; httpOnly session cookies |
 
 Protected by `admin/proxy.ts`: validates access token via `GET /api/auth/me` and requires `role: admin`. Clears invalid cookies and redirects to `/signin`. Sign-in rejects non-admin users. Logout calls `POST /api/auth/logout`. Failed token refresh clears session and redirects to sign-in.
+
+### Auth BFF (Next route handlers)
+
+Proxies to `@platform/server` and sets httpOnly cookies on the admin origin (`:3001`).
+
+| Method | Path                | Notes                                    |
+| ------ | ------------------- | ---------------------------------------- |
+| POST   | `/api/auth/login`   | Login; sets access + refresh cookies     |
+| POST   | `/api/auth/refresh` | Refresh; rotates cookies                 |
+| POST   | `/api/auth/logout`  | Logout; revokes refresh + clears cookies |
+| GET    | `/api/auth/me`      | Current user from access cookie          |
 
 ### Dashboard (template + catalog API)
 
@@ -114,12 +125,24 @@ Dev URL: `http://localhost:3000`.
 
 ### Customer auth (when `features.customerAuth`)
 
-| Path                                    | Notes                                                    |
-| --------------------------------------- | -------------------------------------------------------- |
-| `/signin`, `/signup`                    | API login/register; site-branded forms                   |
-| `/account-info`, `/my-order-history`, … | Protected by `client/proxy.ts` when feature enabled      |
-| `/account-info`                         | Profile view/edit (name, phone) via API                  |
-| `/my-order-history`                     | Loads orders from `GET /api/orders` when feature enabled |
+| Path                                    | Notes                                                      |
+| --------------------------------------- | ---------------------------------------------------------- |
+| `/signin`, `/signup`                    | API login/register via `/api/auth/*` BFF; httpOnly cookies |
+| `/account-info`, `/my-order-history`, … | Protected by `client/proxy.ts` when feature enabled        |
+| `/account-info`                         | Profile view/edit (name, phone) via API                    |
+| `/my-order-history`                     | Loads orders from `GET /api/orders` when feature enabled   |
+
+### Auth BFF (Next route handlers)
+
+Proxies to `@platform/server` and sets httpOnly cookies on the storefront origin (`:3000`).
+
+| Method | Path                 | Notes                                    |
+| ------ | -------------------- | ---------------------------------------- |
+| POST   | `/api/auth/login`    | Login; sets access + refresh cookies     |
+| POST   | `/api/auth/register` | Register customer; sets cookies          |
+| POST   | `/api/auth/refresh`  | Refresh; rotates cookies                 |
+| POST   | `/api/auth/logout`   | Logout; revokes refresh + clears cookies |
+| GET    | `/api/auth/me`       | Current user from access cookie          |
 
 ### Theme demo surface
 

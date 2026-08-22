@@ -100,7 +100,7 @@ Catalog list pages fetch from API in Server Components; show inline error banner
 | Tab filtering   | See `client/.cursor/rules/product-tab-filtering-pattern.mdc`                                                                    |
 | Modals          | Register in `components/common/other-components/LayoutModals.tsx`; state in `context/uiStore.ts`                                |
 | Cart / wishlist | Zustand + persist in `context/store.ts`; server cart API when `features.customerAuth` (guest `X-Guest-Cart-Id`, merge on login) |
-| Customer auth   | `client/lib/auth.ts`, `providers/app-providers.tsx`, `proxy.ts` guards account routes when `features.customerAuth`              |
+| Customer auth   | httpOnly session cookies via `/api/auth/*` route handlers; in-memory access token for `@platform/api-client` |
 | API fallback    | Try `@platform/api-client`, fall back to static data where implemented                                                          |
 | Lint            | ESLint + Prettier                                                                                                               |
 

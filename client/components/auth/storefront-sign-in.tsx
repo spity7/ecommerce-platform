@@ -6,12 +6,10 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import {
   mergeGuestCart,
-  platformApi,
   setAccessToken,
   ApiError,
 } from "@platform/api-client";
 import type { AuthResponse } from "@platform/shared";
-import { setAuthCookies } from "@/lib/auth";
 import { getOrCreateGuestCartId, clearGuestCartId } from "@/lib/guest-cart";
 import { getSiteChromeBranding } from "@/lib/site-branding";
 
@@ -28,17 +26,21 @@ export function StorefrontSignInForm() {
     setSubmitting(true);
 
     try {
-      const body = (await platformApi.login({
-        email,
-        password,
-      })) as AuthResponse;
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      });
+      const body = (await response.json()) as AuthResponse & {
+        error?: string;
+      };
 
-      if (!body.accessToken || !body.refreshToken) {
-        setError("Sign in failed. Please try again.");
+      if (!response.ok || !body.accessToken) {
+        setError(body.error ?? "Sign in failed. Please try again.");
         return;
       }
 
-      setAuthCookies(body.accessToken, body.refreshToken);
       setAccessToken(body.accessToken);
 
       const guestSessionId = getOrCreateGuestCartId();

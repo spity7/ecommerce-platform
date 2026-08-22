@@ -9,8 +9,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { getAccessTokenFromCookie } from "@/lib/auth";
-import { getApiBaseUrl, setAccessToken } from "@platform/api-client";
+import { setAccessToken } from "@platform/api-client";
+import { tryRefreshSession } from "@/lib/refresh-session";
 
 type AuthSessionContextValue = {
   user: UserDto | null;
@@ -20,10 +20,10 @@ type AuthSessionContextValue = {
 
 const AuthSessionContext = createContext<AuthSessionContextValue | null>(null);
 
-async function loadAdminUser(token: string): Promise<UserDto | null> {
+async function fetchSessionUser(): Promise<UserDto | null> {
   try {
-    const response = await fetch(`${getApiBaseUrl()}/api/auth/me`, {
-      headers: { Authorization: `Bearer ${token}` },
+    const response = await fetch("/api/auth/me", {
+      credentials: "include",
       cache: "no-store",
     });
 
@@ -47,15 +47,17 @@ export function AuthSessionProvider({ children }: AuthSessionProviderProps) {
   const [loading, setLoading] = useState(true);
 
   const refreshUser = useCallback(async () => {
-    const token = getAccessTokenFromCookie();
-    if (!token) {
-      setUser(null);
-      setLoading(false);
-      return;
+    let sessionUser = await fetchSessionUser();
+
+    if (!sessionUser && (await tryRefreshSession())) {
+      sessionUser = await fetchSessionUser();
     }
 
-    setAccessToken(token);
-    setUser(await loadAdminUser(token));
+    if (!sessionUser) {
+      setAccessToken(null);
+    }
+
+    setUser(sessionUser);
     setLoading(false);
   }, []);
 

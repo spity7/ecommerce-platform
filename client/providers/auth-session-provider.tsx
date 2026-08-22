@@ -9,9 +9,8 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { getAccessTokenFromCookie } from "@/lib/auth";
-import { fetchCustomerUser } from "@/lib/validate-customer-session";
 import { setAccessToken } from "@platform/api-client";
+import { tryRefreshSession } from "@/lib/refresh-session";
 
 type AuthSessionContextValue = {
   user: UserDto | null;
@@ -20,6 +19,24 @@ type AuthSessionContextValue = {
 };
 
 const AuthSessionContext = createContext<AuthSessionContextValue | null>(null);
+
+async function fetchSessionUser(): Promise<UserDto | null> {
+  try {
+    const response = await fetch("/api/auth/me", {
+      credentials: "include",
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const user = (await response.json()) as UserDto;
+    return user.role === "customer" || user.role === "admin" ? user : null;
+  } catch {
+    return null;
+  }
+}
 
 type AuthSessionProviderProps = {
   children: ReactNode;
@@ -30,15 +47,17 @@ export function AuthSessionProvider({ children }: AuthSessionProviderProps) {
   const [loading, setLoading] = useState(true);
 
   const refreshUser = useCallback(async () => {
-    const token = getAccessTokenFromCookie();
-    if (!token) {
-      setUser(null);
-      setLoading(false);
-      return;
+    let sessionUser = await fetchSessionUser();
+
+    if (!sessionUser && (await tryRefreshSession())) {
+      sessionUser = await fetchSessionUser();
     }
 
-    setAccessToken(token);
-    setUser(await fetchCustomerUser(token));
+    if (!sessionUser) {
+      setAccessToken(null);
+    }
+
+    setUser(sessionUser);
     setLoading(false);
   }, []);
 

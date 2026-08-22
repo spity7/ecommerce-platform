@@ -43,6 +43,14 @@ import { z } from "@platform/shared/zod";
 
 export const openApiRegistry = new OpenAPIRegistry();
 
+openApiRegistry.registerComponent("securitySchemes", "bearerAuth", {
+  type: "http",
+  scheme: "bearer",
+  bearerFormat: "JWT",
+  description:
+    "JWT access token from POST /api/auth/login or /api/auth/refresh",
+});
+
 const idParamSchema = z.object({
   id: z.string().openapi({ description: "Resource ID" }),
 });
@@ -130,6 +138,7 @@ function registerCrudPaths(options: {
     tags: [tag],
     operationId: `create${resourceName}`,
     summary: `Create ${resourceName.toLowerCase()}`,
+    security: [{ bearerAuth: [] }],
     request: {
       body: {
         content: { "application/json": { schema: createSchema } },
@@ -145,6 +154,10 @@ function registerCrudPaths(options: {
         content: {
           "application/json": { schema: validationErrorResponseSchema },
         },
+      },
+      401: {
+        description: "Unauthorized",
+        content: { "application/json": { schema: errorResponseSchema } },
       },
       409: {
         description: "Conflict",
@@ -178,6 +191,7 @@ function registerCrudPaths(options: {
     tags: [tag],
     operationId: `update${resourceName}`,
     summary: `Update ${resourceName.toLowerCase()}`,
+    security: [{ bearerAuth: [] }],
     request: {
       params: idParamSchema,
       body: {
@@ -199,6 +213,10 @@ function registerCrudPaths(options: {
         description: "Not found",
         content: { "application/json": { schema: errorResponseSchema } },
       },
+      401: {
+        description: "Unauthorized",
+        content: { "application/json": { schema: errorResponseSchema } },
+      },
       409: {
         description: "Conflict",
         content: { "application/json": { schema: errorResponseSchema } },
@@ -212,9 +230,14 @@ function registerCrudPaths(options: {
     tags: [tag],
     operationId: `delete${resourceName}`,
     summary: `Delete ${resourceName.toLowerCase()}`,
+    security: [{ bearerAuth: [] }],
     request: { params: idParamSchema },
     responses: {
       204: { description: "Deleted" },
+      401: {
+        description: "Unauthorized",
+        content: { "application/json": { schema: errorResponseSchema } },
+      },
       404: {
         description: "Not found",
         content: { "application/json": { schema: errorResponseSchema } },
@@ -580,6 +603,7 @@ openApiRegistry.registerPath({
   tags: ["Uploads"],
   operationId: "uploadFile",
   summary: "Upload a file to storage",
+  security: [{ bearerAuth: [] }],
   request: {
     body: {
       content: {
@@ -599,6 +623,10 @@ openApiRegistry.registerPath({
     },
     400: {
       description: "Bad request",
+      content: { "application/json": { schema: errorResponseSchema } },
+    },
+    401: {
+      description: "Unauthorized",
       content: { "application/json": { schema: errorResponseSchema } },
     },
     503: {
