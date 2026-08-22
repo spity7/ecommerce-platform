@@ -6,46 +6,54 @@ HTTP API routes, admin pages, and storefront routing. **Last reviewed:** 2026-08
 
 Base URL: `http://localhost:5000` (override with `API_URL`).
 
-| Method | Path                      | Tag        | Notes                                              |
-| ------ | ------------------------- | ---------- | -------------------------------------------------- |
-| GET    | `/api/health`             | health     | Liveness                                           |
-| GET    | `/api/products`           | products   | Paginated list (`listProduct`)                     |
-| POST   | `/api/products`           | products   | Create                                             |
-| GET    | `/api/products/:id`       | products   | Get by ID                                          |
-| PATCH  | `/api/products/:id`       | products   | Update                                             |
-| DELETE | `/api/products/:id`       | products   | Delete                                             |
-| GET    | `/api/categories`         | categories | Paginated list                                     |
-| POST   | `/api/categories`         | categories | Create                                             |
-| GET    | `/api/categories/:id`     | categories | Get by ID                                          |
-| PATCH  | `/api/categories/:id`     | categories | Update                                             |
-| DELETE | `/api/categories/:id`     | categories | Delete                                             |
-| GET    | `/api/brands`             | brands     | Paginated list                                     |
-| POST   | `/api/brands`             | brands     | Create                                             |
-| GET    | `/api/brands/:id`         | brands     | Get by ID                                          |
-| PATCH  | `/api/brands/:id`         | brands     | Update                                             |
-| DELETE | `/api/brands/:id`         | brands     | Delete                                             |
-| GET    | `/api/attributes`         | attributes | Paginated list                                     |
-| POST   | `/api/attributes`         | attributes | Create                                             |
-| GET    | `/api/attributes/:id`     | attributes | Get by ID                                          |
-| PATCH  | `/api/attributes/:id`     | attributes | Update                                             |
-| DELETE | `/api/attributes/:id`     | attributes | Delete                                             |
-| POST   | `/api/uploads`            | uploads    | Multipart upload → GCS (503 if GCS not configured) |
-| POST   | `/api/auth/login`         | auth       | Login (public)                                     |
-| POST   | `/api/auth/register`      | auth       | Register customer (public)                         |
-| POST   | `/api/auth/refresh`       | auth       | Refresh tokens (public)                            |
-| GET    | `/api/auth/me`            | auth       | Current user (Bearer token)                        |
-| POST   | `/api/auth/logout`        | auth       | Logout (Bearer token)                              |
-| GET    | `/api/cart`               | cart       | Current cart (Bearer or `X-Guest-Cart-Id`)         |
-| POST   | `/api/cart/items`         | cart       | Add item                                           |
-| PATCH  | `/api/cart/items/:itemId` | cart       | Update quantity                                    |
-| DELETE | `/api/cart/items/:itemId` | cart       | Remove item                                        |
-| DELETE | `/api/cart`               | cart       | Clear cart                                         |
-| POST   | `/api/cart/merge`         | cart       | Merge guest cart on login (Bearer)                 |
-| POST   | `/api/orders`             | orders     | Place order from cart (Bearer)                     |
-| GET    | `/api/orders`             | orders     | List orders (user; admin sees all)                 |
-| GET    | `/api/orders/:id`         | orders     | Order detail (owner or admin)                      |
-| PATCH  | `/api/orders/:id`         | orders     | Update status (admin)                              |
-| PATCH  | `/api/users/me`           | users      | Update profile (name, phone)                       |
+| Method | Path                                         | Tag        | Notes                                              |
+| ------ | -------------------------------------------- | ---------- | -------------------------------------------------- |
+| GET    | `/api/health`                                | health     | Liveness                                           |
+| GET    | `/api/products`                              | products   | Paginated list (`listProduct`)                     |
+| POST   | `/api/products`                              | products   | Create                                             |
+| GET    | `/api/products/:id`                          | products   | Get by ID                                          |
+| PATCH  | `/api/products/:id`                          | products   | Update                                             |
+| DELETE | `/api/products/:id`                          | products   | Delete                                             |
+| GET    | `/api/categories`                            | categories | Paginated list                                     |
+| POST   | `/api/categories`                            | categories | Create                                             |
+| GET    | `/api/categories/:id`                        | categories | Get by ID                                          |
+| PATCH  | `/api/categories/:id`                        | categories | Update                                             |
+| DELETE | `/api/categories/:id`                        | categories | Delete                                             |
+| GET    | `/api/brands`                                | brands     | Paginated list                                     |
+| POST   | `/api/brands`                                | brands     | Create                                             |
+| GET    | `/api/brands/:id`                            | brands     | Get by ID                                          |
+| PATCH  | `/api/brands/:id`                            | brands     | Update                                             |
+| DELETE | `/api/brands/:id`                            | brands     | Delete                                             |
+| GET    | `/api/attributes`                            | attributes | Paginated list                                     |
+| POST   | `/api/attributes`                            | attributes | Create                                             |
+| GET    | `/api/attributes/:id`                        | attributes | Get by ID                                          |
+| PATCH  | `/api/attributes/:id`                        | attributes | Update                                             |
+| DELETE | `/api/attributes/:id`                        | attributes | Delete                                             |
+| POST   | `/api/uploads`                               | uploads    | Multipart upload → GCS (503 if GCS not configured) |
+| POST   | `/api/auth/login`                            | auth       | Login (public, rate-limited)                       |
+| POST   | `/api/auth/register`                         | auth       | Register customer (public, rate-limited)           |
+| POST   | `/api/auth/refresh`                          | auth       | Refresh tokens (public, rate-limited)              |
+| POST   | `/api/auth/forgot-password`                  | auth       | Request password reset code (public, rate-limited) |
+| POST   | `/api/auth/reset-password`                   | auth       | Reset password with code (public, rate-limited)    |
+| GET    | `/api/auth/me`                               | auth       | Current user (Bearer token)                        |
+| POST   | `/api/auth/logout`                           | auth       | Logout (Bearer token)                              |
+| GET    | `/api/cart`                                  | cart       | Current cart (Bearer or `X-Guest-Cart-Id`)         |
+| POST   | `/api/cart/items`                            | cart       | Add item                                           |
+| PATCH  | `/api/cart/items/:itemId`                    | cart       | Update quantity                                    |
+| DELETE | `/api/cart/items/:itemId`                    | cart       | Remove item                                        |
+| DELETE | `/api/cart`                                  | cart       | Clear cart                                         |
+| POST   | `/api/cart/merge`                            | cart       | Merge guest cart on login (Bearer)                 |
+| POST   | `/api/orders`                                | orders     | Place order from cart (Bearer)                     |
+| GET    | `/api/orders`                                | orders     | List orders (user; admin sees all)                 |
+| GET    | `/api/orders/:id`                            | orders     | Order detail (owner or admin)                      |
+| PATCH  | `/api/orders/:id`                            | orders     | Update status (admin)                              |
+| PATCH  | `/api/users/me`                              | users      | Update profile (name, phone)                       |
+| PATCH  | `/api/users/me/password`                     | users      | Change password (revokes refresh tokens)           |
+| GET    | `/api/users/me/addresses`                    | users      | List saved addresses                               |
+| POST   | `/api/users/me/addresses`                    | users      | Add saved address                                  |
+| PATCH  | `/api/users/me/addresses/:addressId`         | users      | Update saved address                               |
+| DELETE | `/api/users/me/addresses/:addressId`         | users      | Delete saved address                               |
+| PATCH  | `/api/users/me/addresses/:addressId/default` | users      | Set default address                                |
 
 **Docs:** Swagger UI at `/api/docs`, raw spec at `/api/openapi.json`.
 
@@ -129,7 +137,8 @@ Dev URL: `http://localhost:3000`.
 | --------------------------------------- | ---------------------------------------------------------- |
 | `/signin`, `/signup`                    | API login/register via `/api/auth/*` BFF; httpOnly cookies |
 | `/account-info`, `/my-order-history`, … | Protected by `client/proxy.ts` when feature enabled        |
-| `/account-info`                         | Profile view/edit (name, phone) via API                    |
+| `/account-info`                         | Profile, password change, and saved addresses via API      |
+| `/forgot-password`                      | Password reset when `features.customerAuth`                |
 | `/my-order-history`                     | Loads orders from `GET /api/orders` when feature enabled   |
 
 ### Auth BFF (Next route handlers)

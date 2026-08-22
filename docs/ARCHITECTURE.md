@@ -42,7 +42,7 @@ The platform skeleton is real (shared contract, multi-site config, catalog API).
 | Admin  | Catalog lists + CRUD forms + sign-in                                 | ~35 other dashboard pages; nav filtered by `SiteConfig.features` |
 | Client | Home layout + `/shop` + `/product/[slug]` + customer auth + checkout | 300+ demo routes; demo catalog items stay local-only in cart     |
 
-**Auth:** JWT on catalog mutations and uploads. Admin and storefront use **httpOnly cookies** (via each app’s `/api/auth/*` routes) for refresh/access tokens; short-lived access tokens are also held in memory for API calls. Logout revokes refresh tokens server-side (`refreshTokenVersion`). Auth routes are rate-limited. Production rejects default JWT secrets.
+**Auth:** JWT on catalog mutations and uploads. Admin and storefront use **httpOnly cookies** (via each app’s `/api/auth/*` routes) for refresh/access tokens; short-lived access tokens are also held in memory for API calls. Logout and password change reset revoke refresh tokens server-side (`refreshTokenVersion`). Password reset emails a 6-digit code via SMTP when `SMTP_HOST` is set; without SMTP, dev logs the code. Auth routes are rate-limited. Production rejects default JWT secrets.
 
 ## Beauty Station (site #1)
 
@@ -58,6 +58,7 @@ Each app reads:
 - `SITE_ID` / `NEXT_PUBLIC_SITE_ID` — selects site config (default `beauty-station`)
 - `MONGODB_URI` — server only, one DB per site
 - `API_URL` / `NEXT_PUBLIC_API_URL` — admin + client → server
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `EMAIL_FROM` — server only, password-reset email (optional in dev)
 
 Copy `.env.example` from each app and `sites/beauty-station/.env.example` for a full local setup.
 

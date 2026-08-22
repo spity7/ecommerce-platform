@@ -999,6 +999,10 @@
             "type": "string",
             "enum": ["configured", "not_configured"]
           },
+          "mail": {
+            "type": "string",
+            "enum": ["configured", "not_configured"]
+          },
           "timestamp": {
             "type": "string",
             "format": "date-time"
@@ -1012,6 +1016,7 @@
           "environment",
           "database",
           "gcs",
+          "mail",
           "timestamp"
         ]
       },
@@ -1579,6 +1584,175 @@
           "phone": {
             "type": "string",
             "maxLength": 40
+          }
+        }
+      },
+      "ChangePasswordInput": {
+        "type": "object",
+        "properties": {
+          "currentPassword": {
+            "type": "string",
+            "minLength": 1
+          },
+          "newPassword": {
+            "type": "string",
+            "minLength": 8
+          }
+        },
+        "required": ["currentPassword", "newPassword"]
+      },
+      "ForgotPasswordInput": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        },
+        "required": ["email"]
+      },
+      "ResetPasswordInput": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "code": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 6
+          },
+          "newPassword": {
+            "type": "string",
+            "minLength": 8
+          }
+        },
+        "required": ["email", "code", "newPassword"]
+      },
+      "OkResponse": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean",
+            "enum": [true]
+          },
+          "devResetCode": {
+            "type": "string"
+          }
+        },
+        "required": ["ok"]
+      },
+      "UserAddressDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "line1": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "city": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "country": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "line2": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "isDefault": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "line1", "city", "country", "id"]
+      },
+      "CreateUserAddressInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "line1": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "city": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "country": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "line2": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "isDefault": {
+            "type": "boolean"
+          }
+        },
+        "required": ["name", "line1", "city", "country"]
+      },
+      "UpdateUserAddressInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "line1": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200
+          },
+          "city": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "country": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "phone": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "line2": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "isDefault": {
+            "type": "boolean"
           }
         }
       },
@@ -4852,6 +5026,121 @@
         }
       }
     },
+    "/api/auth/forgot-password": {
+      "post": {
+        "tags": ["Auth"],
+        "operationId": "forgotPassword",
+        "summary": "Request a password reset code",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                },
+                "required": ["email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Reset code requested",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "enum": [true]
+                    },
+                    "devResetCode": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["ok"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/reset-password": {
+      "post": {
+        "tags": ["Auth"],
+        "operationId": "resetPassword",
+        "summary": "Reset password with verification code",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "code": {
+                    "type": "string",
+                    "minLength": 6,
+                    "maxLength": 6
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "minLength": 8
+                  }
+                },
+                "required": ["email", "code", "newPassword"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "enum": [true]
+                    },
+                    "devResetCode": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["ok"]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/cart": {
       "get": {
         "tags": ["Cart"],
@@ -6147,6 +6436,522 @@
         }
       }
     },
+    "/api/users/me/password": {
+      "patch": {
+        "tags": ["Users"],
+        "operationId": "changePassword",
+        "summary": "Change current user password",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "currentPassword": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "minLength": 8
+                  }
+                },
+                "required": ["currentPassword", "newPassword"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "enum": [true]
+                    },
+                    "devResetCode": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["ok"]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Current password incorrect",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/me/addresses": {
+      "get": {
+        "tags": ["Users"],
+        "operationId": "listUserAddresses",
+        "summary": "List saved addresses for current user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Addresses",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 120
+                      },
+                      "line1": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 200
+                      },
+                      "city": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 120
+                      },
+                      "country": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 120
+                      },
+                      "phone": {
+                        "type": "string",
+                        "maxLength": 40
+                      },
+                      "line2": {
+                        "type": "string",
+                        "maxLength": 200
+                      },
+                      "isDefault": {
+                        "type": "boolean"
+                      },
+                      "id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["name", "line1", "city", "country", "id"]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Users"],
+        "operationId": "createUserAddress",
+        "summary": "Add a saved address",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "line1": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "city": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "country": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "phone": {
+                    "type": "string",
+                    "maxLength": 40
+                  },
+                  "line2": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "isDefault": {
+                    "type": "boolean"
+                  }
+                },
+                "required": ["name", "line1", "city", "country"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Address",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    },
+                    "line1": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200
+                    },
+                    "city": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    },
+                    "country": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    },
+                    "phone": {
+                      "type": "string",
+                      "maxLength": 40
+                    },
+                    "line2": {
+                      "type": "string",
+                      "maxLength": 200
+                    },
+                    "isDefault": {
+                      "type": "boolean"
+                    },
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["name", "line1", "city", "country", "id"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/me/addresses/{addressId}": {
+      "patch": {
+        "tags": ["Users"],
+        "operationId": "updateUserAddress",
+        "summary": "Update a saved address",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "Saved address ID"
+            },
+            "required": true,
+            "description": "Saved address ID",
+            "name": "addressId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "line1": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                  },
+                  "city": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "country": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "phone": {
+                    "type": "string",
+                    "maxLength": 40
+                  },
+                  "line2": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "isDefault": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Address",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    },
+                    "line1": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200
+                    },
+                    "city": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    },
+                    "country": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    },
+                    "phone": {
+                      "type": "string",
+                      "maxLength": 40
+                    },
+                    "line2": {
+                      "type": "string",
+                      "maxLength": 200
+                    },
+                    "isDefault": {
+                      "type": "boolean"
+                    },
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["name", "line1", "city", "country", "id"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Address not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "operationId": "deleteUserAddress",
+        "summary": "Delete a saved address",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "Saved address ID"
+            },
+            "required": true,
+            "description": "Saved address ID",
+            "name": "addressId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "enum": [true]
+                    },
+                    "devResetCode": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["ok"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Address not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/me/addresses/{addressId}/default": {
+      "patch": {
+        "tags": ["Users"],
+        "operationId": "setDefaultUserAddress",
+        "summary": "Set default saved address",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "Saved address ID"
+            },
+            "required": true,
+            "description": "Saved address ID",
+            "name": "addressId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Address",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    },
+                    "line1": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 200
+                    },
+                    "city": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    },
+                    "country": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 120
+                    },
+                    "phone": {
+                      "type": "string",
+                      "maxLength": 40
+                    },
+                    "line2": {
+                      "type": "string",
+                      "maxLength": 200
+                    },
+                    "isDefault": {
+                      "type": "boolean"
+                    },
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["name", "line1", "city", "country", "id"]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Address not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/health": {
       "get": {
         "tags": ["Health"],
@@ -6183,6 +6988,10 @@
                       "type": "string",
                       "enum": ["configured", "not_configured"]
                     },
+                    "mail": {
+                      "type": "string",
+                      "enum": ["configured", "not_configured"]
+                    },
                     "timestamp": {
                       "type": "string",
                       "format": "date-time"
@@ -6196,6 +7005,7 @@
                     "environment",
                     "database",
                     "gcs",
+                    "mail",
                     "timestamp"
                   ]
                 }

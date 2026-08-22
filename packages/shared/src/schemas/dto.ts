@@ -103,6 +103,7 @@ export const healthResponseSchema = z.object({
   environment: z.string(),
   database: z.enum(["connected", "disconnected"]),
   gcs: z.enum(["configured", "not_configured"]),
+  mail: z.enum(["configured", "not_configured"]),
   timestamp: z.string().datetime(),
 });
 

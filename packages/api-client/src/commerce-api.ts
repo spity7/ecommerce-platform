@@ -48,3 +48,61 @@ export async function updateUserProfile(input: {
 }) {
   return platformApi.updateUserProfile(input);
 }
+
+export async function changePassword(input: {
+  currentPassword: string;
+  newPassword: string;
+}) {
+  return platformApi.changePassword(input);
+}
+
+export async function forgotPassword(email: string) {
+  return platformApi.forgotPassword({ email });
+}
+
+export async function resetPassword(input: {
+  email: string;
+  code: string;
+  newPassword: string;
+}) {
+  return platformApi.resetPassword(input);
+}
+
+export async function fetchUserAddresses() {
+  return platformApi.listUserAddresses();
+}
+
+export async function createUserAddress(input: {
+  name: string;
+  line1: string;
+  line2?: string;
+  city: string;
+  country: string;
+  phone?: string;
+  isDefault?: boolean;
+}) {
+  return platformApi.createUserAddress(input);
+}
+
+export async function updateUserAddress(
+  addressId: string,
+  input: {
+    name?: string;
+    line1?: string;
+    line2?: string;
+    city?: string;
+    country?: string;
+    phone?: string;
+    isDefault?: boolean;
+  }
+) {
+  return platformApi.updateUserAddress(addressId, input);
+}
+
+export async function deleteUserAddress(addressId: string) {
+  return platformApi.deleteUserAddress(addressId);
+}
+
+export async function setDefaultUserAddress(addressId: string) {
+  return platformApi.setDefaultUserAddress(addressId);
+}

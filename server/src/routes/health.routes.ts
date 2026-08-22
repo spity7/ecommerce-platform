@@ -14,6 +14,7 @@ healthRouter.get("/", (_req, res) => {
     database:
       mongoose.connection.readyState === 1 ? "connected" : "disconnected",
     gcs: env.gcs.isConfigured ? "configured" : "not_configured",
+    mail: env.mail.isConfigured ? "configured" : "not_configured",
     timestamp: new Date().toISOString(),
   });
 });

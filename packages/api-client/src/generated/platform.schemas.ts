@@ -603,6 +603,15 @@ export const HealthResponseGcs = {
   not_configured: "not_configured",
 } as const;
 
+export type HealthResponseMail =
+  (typeof HealthResponseMail)[keyof typeof HealthResponseMail];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const HealthResponseMail = {
+  configured: "configured",
+  not_configured: "not_configured",
+} as const;
+
 export interface HealthResponse {
   ok: boolean;
   service: string;
@@ -611,6 +620,7 @@ export interface HealthResponse {
   environment: string;
   database: HealthResponseDatabase;
   gcs: HealthResponseGcs;
+  mail: HealthResponseMail;
   timestamp: string;
 }
 
@@ -911,6 +921,118 @@ export interface UpdateUserProfileInput {
   name?: string;
   /** @maxLength 40 */
   phone?: string;
+}
+
+export interface ChangePasswordInput {
+  /** @minLength 1 */
+  currentPassword: string;
+  /** @minLength 8 */
+  newPassword: string;
+}
+
+export interface ForgotPasswordInput {
+  email: string;
+}
+
+export interface ResetPasswordInput {
+  email: string;
+  /**
+   * @minLength 6
+   * @maxLength 6
+   */
+  code: string;
+  /** @minLength 8 */
+  newPassword: string;
+}
+
+export interface OkResponse {
+  ok: boolean;
+  devResetCode?: string;
+}
+
+export interface UserAddressDto {
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  name: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  line1: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  city: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  country: string;
+  /** @maxLength 40 */
+  phone?: string;
+  /** @maxLength 200 */
+  line2?: string;
+  isDefault?: boolean;
+  id: string;
+}
+
+export interface CreateUserAddressInput {
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  name: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  line1: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  city: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  country: string;
+  /** @maxLength 40 */
+  phone?: string;
+  /** @maxLength 200 */
+  line2?: string;
+  isDefault?: boolean;
+}
+
+export interface UpdateUserAddressInput {
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  name?: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  line1?: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  city?: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  country?: string;
+  /** @maxLength 40 */
+  phone?: string;
+  /** @maxLength 200 */
+  line2?: string;
+  isDefault?: boolean;
 }
 
 export interface ErrorResponse {
@@ -2108,6 +2230,35 @@ export type Logout200 = {
   ok: boolean;
 };
 
+export type ForgotPasswordBody = {
+  email: string;
+};
+
+export type ForgotPassword200 = {
+  ok: boolean;
+  devResetCode?: string;
+};
+
+export type ResetPasswordBody = {
+  email: string;
+  /**
+   * @minLength 6
+   * @maxLength 6
+   */
+  code: string;
+  /** @minLength 8 */
+  newPassword: string;
+};
+
+export type ResetPassword200 = {
+  ok: boolean;
+  devResetCode?: string;
+};
+
+export type ResetPassword400 = {
+  error: string;
+};
+
 export type GetCart200ItemsItem = {
   id: string;
   productId: string;
@@ -2574,6 +2725,211 @@ export type UpdateUserProfile200 = {
   updatedAt: string;
 };
 
+export type ChangePasswordBody = {
+  /** @minLength 1 */
+  currentPassword: string;
+  /** @minLength 8 */
+  newPassword: string;
+};
+
+export type ChangePassword200 = {
+  ok: boolean;
+  devResetCode?: string;
+};
+
+export type ChangePassword401 = {
+  error: string;
+};
+
+export type ListUserAddresses200Item = {
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  name: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  line1: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  city: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  country: string;
+  /** @maxLength 40 */
+  phone?: string;
+  /** @maxLength 200 */
+  line2?: string;
+  isDefault?: boolean;
+  id: string;
+};
+
+export type CreateUserAddressBody = {
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  name: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  line1: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  city: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  country: string;
+  /** @maxLength 40 */
+  phone?: string;
+  /** @maxLength 200 */
+  line2?: string;
+  isDefault?: boolean;
+};
+
+export type CreateUserAddress201 = {
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  name: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  line1: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  city: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  country: string;
+  /** @maxLength 40 */
+  phone?: string;
+  /** @maxLength 200 */
+  line2?: string;
+  isDefault?: boolean;
+  id: string;
+};
+
+export type UpdateUserAddressBody = {
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  name?: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  line1?: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  city?: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  country?: string;
+  /** @maxLength 40 */
+  phone?: string;
+  /** @maxLength 200 */
+  line2?: string;
+  isDefault?: boolean;
+};
+
+export type UpdateUserAddress200 = {
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  name: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  line1: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  city: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  country: string;
+  /** @maxLength 40 */
+  phone?: string;
+  /** @maxLength 200 */
+  line2?: string;
+  isDefault?: boolean;
+  id: string;
+};
+
+export type UpdateUserAddress404 = {
+  error: string;
+};
+
+export type DeleteUserAddress200 = {
+  ok: boolean;
+  devResetCode?: string;
+};
+
+export type DeleteUserAddress404 = {
+  error: string;
+};
+
+export type SetDefaultUserAddress200 = {
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  name: string;
+  /**
+   * @minLength 1
+   * @maxLength 200
+   */
+  line1: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  city: string;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  country: string;
+  /** @maxLength 40 */
+  phone?: string;
+  /** @maxLength 200 */
+  line2?: string;
+  isDefault?: boolean;
+  id: string;
+};
+
+export type SetDefaultUserAddress404 = {
+  error: string;
+};
+
 export type GetHealth200Database =
   (typeof GetHealth200Database)[keyof typeof GetHealth200Database];
 
@@ -2592,6 +2948,15 @@ export const GetHealth200Gcs = {
   not_configured: "not_configured",
 } as const;
 
+export type GetHealth200Mail =
+  (typeof GetHealth200Mail)[keyof typeof GetHealth200Mail];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetHealth200Mail = {
+  configured: "configured",
+  not_configured: "not_configured",
+} as const;
+
 export type GetHealth200 = {
   ok: boolean;
   service: string;
@@ -2600,6 +2965,7 @@ export type GetHealth200 = {
   environment: string;
   database: GetHealth200Database;
   gcs: GetHealth200Gcs;
+  mail: GetHealth200Mail;
   timestamp: string;
 };
 

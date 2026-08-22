@@ -7,6 +7,11 @@ import {
   authResponseSchema,
   brandDtoSchema,
   categoryDtoSchema,
+  changePasswordSchema,
+  createUserAddressSchema,
+  forgotPasswordSchema,
+  okResponseSchema,
+  resetPasswordSchema,
   createAttributeSchema,
   createBrandSchema,
   createCategorySchema,
@@ -37,7 +42,10 @@ import {
   paginatedOrdersSchema,
   createOrderSchema,
   updateOrderStatusSchema,
+  updateUserAddressSchema,
   updateUserProfileSchema,
+  userAddressDtoSchema,
+  userAddressListSchema,
 } from "@platform/shared";
 import { z } from "@platform/shared/zod";
 
@@ -57,6 +65,10 @@ const idParamSchema = z.object({
 
 const itemIdParamSchema = z.object({
   itemId: z.string().openapi({ description: "Cart item ID" }),
+});
+
+const addressIdParamSchema = z.object({
+  addressId: z.string().openapi({ description: "Saved address ID" }),
 });
 
 openApiRegistry.register("ProductDto", productDtoSchema);
@@ -92,6 +104,13 @@ openApiRegistry.register("PaginatedOrders", paginatedOrdersSchema);
 openApiRegistry.register("CreateOrderInput", createOrderSchema);
 openApiRegistry.register("UpdateOrderStatusInput", updateOrderStatusSchema);
 openApiRegistry.register("UpdateUserProfileInput", updateUserProfileSchema);
+openApiRegistry.register("ChangePasswordInput", changePasswordSchema);
+openApiRegistry.register("ForgotPasswordInput", forgotPasswordSchema);
+openApiRegistry.register("ResetPasswordInput", resetPasswordSchema);
+openApiRegistry.register("OkResponse", okResponseSchema);
+openApiRegistry.register("UserAddressDto", userAddressDtoSchema);
+openApiRegistry.register("CreateUserAddressInput", createUserAddressSchema);
+openApiRegistry.register("UpdateUserAddressInput", updateUserAddressSchema);
 openApiRegistry.register("ErrorResponse", errorResponseSchema);
 openApiRegistry.register(
   "ValidationErrorResponse",
@@ -394,6 +413,48 @@ openApiRegistry.registerPath({
 });
 
 openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/auth/forgot-password",
+  tags: ["Auth"],
+  operationId: "forgotPassword",
+  summary: "Request a password reset code",
+  request: {
+    body: {
+      content: { "application/json": { schema: forgotPasswordSchema } },
+    },
+  },
+  responses: {
+    200: {
+      description: "Reset code requested",
+      content: { "application/json": { schema: okResponseSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/auth/reset-password",
+  tags: ["Auth"],
+  operationId: "resetPassword",
+  summary: "Reset password with verification code",
+  request: {
+    body: {
+      content: { "application/json": { schema: resetPasswordSchema } },
+    },
+  },
+  responses: {
+    200: {
+      description: "Password reset",
+      content: { "application/json": { schema: okResponseSchema } },
+    },
+    400: {
+      description: "Invalid code",
+      content: { "application/json": { schema: errorResponseSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
   method: "get",
   path: "/api/cart",
   tags: ["Cart"],
@@ -579,6 +640,134 @@ openApiRegistry.registerPath({
     200: {
       description: "User",
       content: { "application/json": { schema: userDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "patch",
+  path: "/api/users/me/password",
+  tags: ["Users"],
+  operationId: "changePassword",
+  summary: "Change current user password",
+  security: [{ bearerAuth: [] }],
+  request: {
+    body: {
+      content: { "application/json": { schema: changePasswordSchema } },
+    },
+  },
+  responses: {
+    200: {
+      description: "Password changed",
+      content: { "application/json": { schema: okResponseSchema } },
+    },
+    401: {
+      description: "Current password incorrect",
+      content: { "application/json": { schema: errorResponseSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "get",
+  path: "/api/users/me/addresses",
+  tags: ["Users"],
+  operationId: "listUserAddresses",
+  summary: "List saved addresses for current user",
+  security: [{ bearerAuth: [] }],
+  responses: {
+    200: {
+      description: "Addresses",
+      content: { "application/json": { schema: userAddressListSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/users/me/addresses",
+  tags: ["Users"],
+  operationId: "createUserAddress",
+  summary: "Add a saved address",
+  security: [{ bearerAuth: [] }],
+  request: {
+    body: {
+      content: { "application/json": { schema: createUserAddressSchema } },
+    },
+  },
+  responses: {
+    201: {
+      description: "Address",
+      content: { "application/json": { schema: userAddressDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "patch",
+  path: "/api/users/me/addresses/{addressId}",
+  tags: ["Users"],
+  operationId: "updateUserAddress",
+  summary: "Update a saved address",
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: addressIdParamSchema,
+    body: {
+      content: { "application/json": { schema: updateUserAddressSchema } },
+    },
+  },
+  responses: {
+    200: {
+      description: "Address",
+      content: { "application/json": { schema: userAddressDtoSchema } },
+    },
+    404: {
+      description: "Address not found",
+      content: { "application/json": { schema: errorResponseSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "delete",
+  path: "/api/users/me/addresses/{addressId}",
+  tags: ["Users"],
+  operationId: "deleteUserAddress",
+  summary: "Delete a saved address",
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: addressIdParamSchema,
+  },
+  responses: {
+    200: {
+      description: "Deleted",
+      content: { "application/json": { schema: okResponseSchema } },
+    },
+    404: {
+      description: "Address not found",
+      content: { "application/json": { schema: errorResponseSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "patch",
+  path: "/api/users/me/addresses/{addressId}/default",
+  tags: ["Users"],
+  operationId: "setDefaultUserAddress",
+  summary: "Set default saved address",
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: addressIdParamSchema,
+  },
+  responses: {
+    200: {
+      description: "Address",
+      content: { "application/json": { schema: userAddressDtoSchema } },
+    },
+    404: {
+      description: "Address not found",
+      content: { "application/json": { schema: errorResponseSchema } },
     },
   },
 });

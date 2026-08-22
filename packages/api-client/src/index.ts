@@ -52,4 +52,12 @@ export {
   fetchOrders,
   fetchOrder,
   updateUserProfile,
+  changePassword,
+  forgotPassword,
+  resetPassword,
+  fetchUserAddresses,
+  createUserAddress,
+  updateUserAddress,
+  deleteUserAddress,
+  setDefaultUserAddress,
 } from "./commerce-api.js";

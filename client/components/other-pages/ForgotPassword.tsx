@@ -7,14 +7,28 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUiElement } from "@/context/uiStore";
 import {
+  ApiError,
+  forgotPassword,
+  resetPassword,
+} from "@platform/api-client";
+import {
   getPasswordStrength,
   getPasswordValidationError,
 } from "@/lib/passwordValidation";
 import PasswordStrengthIndicator from "@/components/common/forms/PasswordStrengthIndicator";
+import { getStorefrontSiteConfig } from "@/lib/site";
 
 const DEMO_OTP_CODE = "123456";
 
 export default function ForgotPassword() {
+  const site = getStorefrontSiteConfig();
+  if (site.features.customerAuth) {
+    return <ForgotPasswordApi />;
+  }
+  return <ForgotPasswordDemo />;
+}
+
+function ForgotPasswordDemo() {
   const router = useRouter();
   const { showToaster } = useUiElement();
   const [step, setStep] = useState<"request" | "reset" | "done">("request");
@@ -96,6 +110,211 @@ export default function ForgotPassword() {
   };
 
   return (
+    <ForgotPasswordLayout
+      step={step}
+      email={email}
+      setEmail={setEmail}
+      code={code}
+      setCode={setCode}
+      newPassword={newPassword}
+      setNewPassword={setNewPassword}
+      confirmPassword={confirmPassword}
+      setConfirmPassword={setConfirmPassword}
+      showPassword={showPassword}
+      setShowPassword={setShowPassword}
+      showConfirmPassword={showConfirmPassword}
+      setShowConfirmPassword={setShowConfirmPassword}
+      error={error}
+      loading={loading}
+      strength={strength}
+      strengthHint={strengthHint}
+      passwordError={passwordError}
+      onSendCode={handleSendCode}
+      onResetPassword={handleResetPassword}
+      devCodeHint={DEMO_OTP_CODE}
+    />
+  );
+}
+
+function ForgotPasswordApi() {
+  const router = useRouter();
+  const { showToaster } = useUiElement();
+  const [step, setStep] = useState<"request" | "reset" | "done">("request");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [devCodeHint, setDevCodeHint] = useState<string | null>(null);
+
+  const strength = getPasswordStrength(newPassword);
+  const missingRequirements: string[] = [];
+  if (newPassword.length < 8) missingRequirements.push("8+ characters");
+  if (!/[A-Z]/.test(newPassword))
+    missingRequirements.push("an uppercase letter");
+  if (!/[a-z]/.test(newPassword))
+    missingRequirements.push("a lowercase letter");
+  if (!/[0-9]/.test(newPassword)) missingRequirements.push("a number");
+  if (!/[^A-Za-z0-9]/.test(newPassword))
+    missingRequirements.push("a special symbol");
+
+  const strengthHint =
+    strength.label === "Strong"
+      ? "Great! Your password is strong."
+      : `Add ${missingRequirements.join(", ")}.`;
+  const passwordError = getPasswordValidationError(
+    newPassword,
+    confirmPassword,
+    {
+      requireStrong: true,
+    }
+  );
+
+  async function handleSendCode() {
+    if (!email.trim()) {
+      setError("Please enter your email.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const result = await forgotPassword(email.trim());
+      setDevCodeHint(result.devResetCode ?? null);
+      showToaster("Verification code sent");
+      setStep("reset");
+      setCode("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setShowPassword(false);
+      setShowConfirmPassword(false);
+    } catch (err) {
+      setError(
+        err instanceof ApiError
+          ? err.message
+          : "Could not send a verification code."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleResetPassword() {
+    if (!code.trim()) {
+      setError("Please enter verification code.");
+      return;
+    }
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      await resetPassword({
+        email: email.trim(),
+        code: code.trim(),
+        newPassword,
+      });
+      showToaster("Password reset successful");
+      setStep("done");
+      setTimeout(() => {
+        router.push("/signin");
+      }, 1200);
+    } catch (err) {
+      setError(
+        err instanceof ApiError
+          ? err.message
+          : "Could not reset your password."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <ForgotPasswordLayout
+      step={step}
+      email={email}
+      setEmail={setEmail}
+      code={code}
+      setCode={setCode}
+      newPassword={newPassword}
+      setNewPassword={setNewPassword}
+      confirmPassword={confirmPassword}
+      setConfirmPassword={setConfirmPassword}
+      showPassword={showPassword}
+      setShowPassword={setShowPassword}
+      showConfirmPassword={showConfirmPassword}
+      setShowConfirmPassword={setShowConfirmPassword}
+      error={error}
+      loading={loading}
+      strength={strength}
+      strengthHint={strengthHint}
+      passwordError={passwordError}
+      onSendCode={handleSendCode}
+      onResetPassword={handleResetPassword}
+      devCodeHint={devCodeHint}
+    />
+  );
+}
+
+type ForgotPasswordLayoutProps = {
+  step: "request" | "reset" | "done";
+  email: string;
+  setEmail: (value: string) => void;
+  code: string;
+  setCode: (value: string) => void;
+  newPassword: string;
+  setNewPassword: (value: string) => void;
+  confirmPassword: string;
+  setConfirmPassword: (value: string) => void;
+  showPassword: boolean;
+  setShowPassword: (value: boolean | ((prev: boolean) => boolean)) => void;
+  showConfirmPassword: boolean;
+  setShowConfirmPassword: (
+    value: boolean | ((prev: boolean) => boolean)
+  ) => void;
+  error: string;
+  loading: boolean;
+  strength: ReturnType<typeof getPasswordStrength>;
+  strengthHint: string;
+  passwordError: string | null;
+  onSendCode: () => void;
+  onResetPassword: () => void;
+  devCodeHint?: string | null;
+};
+
+function ForgotPasswordLayout({
+  step,
+  email,
+  setEmail,
+  code,
+  setCode,
+  newPassword,
+  setNewPassword,
+  confirmPassword,
+  setConfirmPassword,
+  showPassword,
+  setShowPassword,
+  showConfirmPassword,
+  setShowConfirmPassword,
+  error,
+  loading,
+  strength,
+  strengthHint,
+  passwordError,
+  onSendCode,
+  onResetPassword,
+  devCodeHint,
+}: ForgotPasswordLayoutProps) {
+  return (
     <div className="rbt-component-area rbt-section-gap2Bottom rbt-section-gap2Top">
       <div className="container">
         <div className="row">
@@ -121,7 +340,7 @@ export default function ForgotPassword() {
                     <form
                       onSubmit={(e) => {
                         e.preventDefault();
-                        handleSendCode();
+                        onSendCode();
                       }}
                     >
                       <p className="rbt-description mb--16">
@@ -160,25 +379,27 @@ export default function ForgotPassword() {
                     <form
                       onSubmit={(e) => {
                         e.preventDefault();
-                        handleResetPassword();
+                        onResetPassword();
                       }}
                     >
                       <p className="rbt-description mb--16">
                         We sent a code to <strong>{email}</strong>.
                       </p>
-                      <div
-                        className="mb--16"
-                        style={{
-                          backgroundColor: "rgba(13,110,253,0.08)",
-                          borderLeft: "3px solid #0d6efd",
-                          borderRadius: "4px",
-                          padding: "8px 12px",
-                          color: "#0d6efd",
-                          fontWeight: 500,
-                        }}
-                      >
-                        For demo: use OTP <strong>{DEMO_OTP_CODE}</strong>
-                      </div>
+                      {devCodeHint ? (
+                        <div
+                          className="mb--16"
+                          style={{
+                            backgroundColor: "rgba(13,110,253,0.08)",
+                            borderLeft: "3px solid #0d6efd",
+                            borderRadius: "4px",
+                            padding: "8px 12px",
+                            color: "#0d6efd",
+                            fontWeight: 500,
+                          }}
+                        >
+                          Dev reset code: <strong>{devCodeHint}</strong>
+                        </div>
+                      ) : null}
                       <div className="rbt-input-field-grp mt--16">
                         <label
                           className="rbt-field-label"
@@ -194,8 +415,8 @@ export default function ForgotPassword() {
                           value={code}
                           onChange={(e) => {
                             setCode(e.target.value);
-                            if (error) setError("");
                           }}
+                          maxLength={6}
                         />
                       </div>
                       <div className="rbt-input-field-grp">
@@ -214,7 +435,6 @@ export default function ForgotPassword() {
                             value={newPassword}
                             onChange={(e) => {
                               setNewPassword(e.target.value);
-                              if (error) setError("");
                             }}
                           />
                           <button
@@ -256,7 +476,6 @@ export default function ForgotPassword() {
                             value={confirmPassword}
                             onChange={(e) => {
                               setConfirmPassword(e.target.value);
-                              if (error) setError("");
                             }}
                           />
                           <button
@@ -303,7 +522,7 @@ export default function ForgotPassword() {
                       <button
                         type="button"
                         className="rbt-btn rbt-btn-border d-block w-100 mt--16"
-                        onClick={handleSendCode}
+                        onClick={onSendCode}
                         disabled={loading}
                       >
                         Resend Code
@@ -329,9 +548,7 @@ export default function ForgotPassword() {
                         Password Updated Successfully
                       </div>
                       <p className="rbt-description mb--0">
-                        Welcome back! Your password has been reset and your
-                        account is now secure. Redirecting to your account
-                        page...
+                        Your password has been reset. Redirecting to sign in…
                       </p>
                     </div>
                   )}

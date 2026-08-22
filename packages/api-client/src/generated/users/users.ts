@@ -6,6 +6,15 @@
  * OpenAPI spec version: 1.0.0
  */
 import type {
+  ChangePassword200,
+  ChangePasswordBody,
+  CreateUserAddress201,
+  CreateUserAddressBody,
+  DeleteUserAddress200,
+  ListUserAddresses200Item,
+  SetDefaultUserAddress200,
+  UpdateUserAddress200,
+  UpdateUserAddressBody,
   UpdateUserProfile200,
   UpdateUserProfileBody,
 } from "../platform.schemas";
@@ -24,8 +33,97 @@ export const getUsers = () => {
       data: updateUserProfileBody,
     });
   };
-  return { updateUserProfile };
+  /**
+   * @summary Change current user password
+   */
+  const changePassword = (changePasswordBody: ChangePasswordBody) => {
+    return customInstance<ChangePassword200>({
+      url: `/api/users/me/password`,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      data: changePasswordBody,
+    });
+  };
+  /**
+   * @summary List saved addresses for current user
+   */
+  const listUserAddresses = () => {
+    return customInstance<ListUserAddresses200Item[]>({
+      url: `/api/users/me/addresses`,
+      method: "GET",
+    });
+  };
+  /**
+   * @summary Add a saved address
+   */
+  const createUserAddress = (createUserAddressBody: CreateUserAddressBody) => {
+    return customInstance<CreateUserAddress201>({
+      url: `/api/users/me/addresses`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: createUserAddressBody,
+    });
+  };
+  /**
+   * @summary Update a saved address
+   */
+  const updateUserAddress = (
+    addressId: string,
+    updateUserAddressBody: UpdateUserAddressBody
+  ) => {
+    return customInstance<UpdateUserAddress200>({
+      url: `/api/users/me/addresses/${addressId}`,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      data: updateUserAddressBody,
+    });
+  };
+  /**
+   * @summary Delete a saved address
+   */
+  const deleteUserAddress = (addressId: string) => {
+    return customInstance<DeleteUserAddress200>({
+      url: `/api/users/me/addresses/${addressId}`,
+      method: "DELETE",
+    });
+  };
+  /**
+   * @summary Set default saved address
+   */
+  const setDefaultUserAddress = (addressId: string) => {
+    return customInstance<SetDefaultUserAddress200>({
+      url: `/api/users/me/addresses/${addressId}/default`,
+      method: "PATCH",
+    });
+  };
+  return {
+    updateUserProfile,
+    changePassword,
+    listUserAddresses,
+    createUserAddress,
+    updateUserAddress,
+    deleteUserAddress,
+    setDefaultUserAddress,
+  };
 };
 export type UpdateUserProfileResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getUsers>["updateUserProfile"]>>
+>;
+export type ChangePasswordResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getUsers>["changePassword"]>>
+>;
+export type ListUserAddressesResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getUsers>["listUserAddresses"]>>
+>;
+export type CreateUserAddressResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getUsers>["createUserAddress"]>>
+>;
+export type UpdateUserAddressResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getUsers>["updateUserAddress"]>>
+>;
+export type DeleteUserAddressResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getUsers>["deleteUserAddress"]>>
+>;
+export type SetDefaultUserAddressResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getUsers>["setDefaultUserAddress"]>>
 >;

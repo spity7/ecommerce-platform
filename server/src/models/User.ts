@@ -1,5 +1,6 @@
-import mongoose, { Schema, type InferSchemaType } from "mongoose";
+import mongoose, { Schema, type InferSchemaType, type Types } from "mongoose";
 import type { UserRole } from "@platform/shared";
+import { userAddressSchema } from "./UserAddress.js";
 
 const userSchema = new Schema(
   {
@@ -13,12 +14,22 @@ const userSchema = new Schema(
     },
     phone: { type: String, default: "" },
     refreshTokenVersion: { type: Number, default: 0, min: 0 },
+    passwordResetCodeHash: { type: String },
+    passwordResetExpires: { type: Date },
+    addresses: [userAddressSchema],
   },
   { timestamps: true }
 );
 
+export type UserAddressSubdocument = InferSchemaType<
+  typeof userAddressSchema
+> & {
+  _id: Types.ObjectId;
+};
+
 export type UserDocument = InferSchemaType<typeof userSchema> & {
   _id: mongoose.Types.ObjectId;
+  addresses: Types.DocumentArray<UserAddressSubdocument>;
 };
 
 export const User = mongoose.model("User", userSchema);

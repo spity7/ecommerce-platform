@@ -4,12 +4,15 @@ import {
   loginSchema,
   refreshTokenSchema,
   registerSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
 } from "@platform/shared";
 import { AppError } from "../middleware/errorHandler.js";
 import { authRateLimiter } from "../middleware/rateLimit.js";
 import { requireAuth, type AuthenticatedRequest } from "../middleware/auth.js";
 import type { UserDocument } from "../models/User.js";
 import { User } from "../models/User.js";
+import { env } from "../config/env.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import {
   signAccessToken,
@@ -21,6 +24,13 @@ import {
   isRefreshTokenValid,
   toTokenPayload,
 } from "../services/auth.tokens.js";
+import {
+  clearPasswordResetCode,
+  generatePasswordResetCode,
+  setPasswordResetCode,
+  verifyPasswordResetCode,
+} from "../services/password-reset.js";
+import { sendPasswordResetEmail } from "../services/password-reset-email.js";
 
 export const authRouter = Router();
 
@@ -124,5 +134,61 @@ authRouter.post(
       await user.save();
     }
     res.json({ ok: true });
+  })
+);
+
+authRouter.post(
+  "/forgot-password",
+  asyncHandler(async (req, res) => {
+    const { email } = forgotPasswordSchema.parse(req.body);
+    const user = await User.findOne({ email: email.toLowerCase() });
+
+    if (user) {
+      const code = generatePasswordResetCode();
+      await setPasswordResetCode(user, code);
+      await user.save();
+
+      if (env.mail.isConfigured) {
+        await sendPasswordResetEmail({
+          to: user.email,
+          name: user.name,
+          code,
+          siteName: env.site.name,
+        });
+      } else if (env.NODE_ENV === "development") {
+        console.info(`[password-reset] ${user.email}: ${code}`);
+        res.json({ ok: true as const, devResetCode: code });
+        return;
+      } else {
+        console.error(
+          `[password-reset] SMTP is not configured; reset code for ${user.email} was not emailed`
+        );
+      }
+    }
+
+    res.json({ ok: true as const });
+  })
+);
+
+authRouter.post(
+  "/reset-password",
+  asyncHandler(async (req, res) => {
+    const { email, code, newPassword } = resetPasswordSchema.parse(req.body);
+    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      throw new AppError(400, "Invalid verification code");
+    }
+
+    const validCode = await verifyPasswordResetCode(user, code);
+    if (!validCode) {
+      throw new AppError(400, "Invalid or expired verification code");
+    }
+
+    user.passwordHash = await bcrypt.hash(newPassword, 12);
+    user.refreshTokenVersion = (user.refreshTokenVersion ?? 0) + 1;
+    await clearPasswordResetCode(user);
+    await user.save();
+
+    res.json({ ok: true as const });
   })
 );

@@ -24,6 +24,15 @@ const envSchema = z.object({
     .default("dev-refresh-secret-change-me"),
   JWT_ACCESS_EXPIRES_IN: z.string().default("15m"),
   JWT_REFRESH_EXPIRES_IN: z.string().default("7d"),
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.coerce.number().int().positive().default(587),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+  SMTP_SECURE: z
+    .enum(["true", "false", "1", "0"])
+    .optional()
+    .transform((value) => value === "true" || value === "1"),
+  EMAIL_FROM: z.string().optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -71,5 +80,14 @@ export const env = {
     refreshSecret: data.JWT_REFRESH_SECRET,
     accessExpiresIn: data.JWT_ACCESS_EXPIRES_IN,
     refreshExpiresIn: data.JWT_REFRESH_EXPIRES_IN,
+  },
+  mail: {
+    host: data.SMTP_HOST,
+    port: data.SMTP_PORT,
+    user: data.SMTP_USER,
+    pass: data.SMTP_PASS,
+    secure: data.SMTP_SECURE ?? false,
+    from: data.EMAIL_FROM ?? site.contact.email,
+    isConfigured: Boolean(data.SMTP_HOST),
   },
 } as const;

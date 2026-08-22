@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
-import { ApiError, createOrderFromCart } from "@platform/api-client";
+import { ApiError, createOrderFromCart, fetchUserAddresses } from "@platform/api-client";
 import { useContextElement } from "@/context/Context";
 import { getCheckoutPath } from "@/lib/checkout";
 import { formatCurrency } from "@/lib/price";
@@ -29,6 +29,37 @@ export default function StorefrontCheckout() {
     if (!user) return;
     setName((current) => current || user.name);
     setPhone((current) => current || user.phone || "");
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    let cancelled = false;
+
+    async function loadDefaultAddress() {
+      try {
+        const addresses = await fetchUserAddresses();
+        const defaultAddress =
+          addresses.find((address) => address.isDefault) ?? addresses[0];
+        if (!defaultAddress || cancelled) {
+          return;
+        }
+
+        setName((current) => current || defaultAddress.name);
+        setLine1((current) => current || defaultAddress.line1);
+        setCity((current) => current || defaultAddress.city);
+        setCountry((current) => current || defaultAddress.country);
+        setPhone((current) => current || defaultAddress.phone || "");
+      } catch {
+        // Checkout still works with manual entry.
+      }
+    }
+
+    loadDefaultAddress();
+
+    return () => {
+      cancelled = true;
+    };
   }, [user]);
 
   if (!site.features.customerAuth) {

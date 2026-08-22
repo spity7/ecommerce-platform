@@ -6,6 +6,8 @@
  * OpenAPI spec version: 1.0.0
  */
 import type {
+  ForgotPassword200,
+  ForgotPasswordBody,
   GetMe200,
   Login200,
   LoginBody,
@@ -14,6 +16,8 @@ import type {
   RefreshTokenBody,
   Register201,
   RegisterBody,
+  ResetPassword200,
+  ResetPasswordBody,
 } from "../platform.schemas";
 
 import { customInstance } from "../../mutator";
@@ -67,7 +71,37 @@ export const getAuth = () => {
       method: "POST",
     });
   };
-  return { login, register, refreshToken, getMe, logout };
+  /**
+   * @summary Request a password reset code
+   */
+  const forgotPassword = (forgotPasswordBody: ForgotPasswordBody) => {
+    return customInstance<ForgotPassword200>({
+      url: `/api/auth/forgot-password`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: forgotPasswordBody,
+    });
+  };
+  /**
+   * @summary Reset password with verification code
+   */
+  const resetPassword = (resetPasswordBody: ResetPasswordBody) => {
+    return customInstance<ResetPassword200>({
+      url: `/api/auth/reset-password`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: resetPasswordBody,
+    });
+  };
+  return {
+    login,
+    register,
+    refreshToken,
+    getMe,
+    logout,
+    forgotPassword,
+    resetPassword,
+  };
 };
 export type LoginResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getAuth>["login"]>>
@@ -83,4 +117,10 @@ export type GetMeResult = NonNullable<
 >;
 export type LogoutResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getAuth>["logout"]>>
+>;
+export type ForgotPasswordResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getAuth>["forgotPassword"]>>
+>;
+export type ResetPasswordResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getAuth>["resetPassword"]>>
 >;

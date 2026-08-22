@@ -4,13 +4,14 @@ import type {
   BrandDto,
   CategoryDto,
   ProductDto,
+  UserAddressDto,
   UserDto,
 } from "@platform/shared";
 import type { AttributeDocument } from "../models/Attribute.js";
 import type { BrandDocument } from "../models/Brand.js";
 import type { CategoryDocument } from "../models/Category.js";
 import type { ProductDocument } from "../models/Product.js";
-import type { UserDocument } from "../models/User.js";
+import type { UserAddressSubdocument, UserDocument } from "../models/User.js";
 
 function toIsoString(value: Date | string | undefined): string {
   if (!value) {
@@ -97,6 +98,19 @@ export function toUserDto(doc: UserDocument): UserDto {
     phone: doc.phone || undefined,
     createdAt: toIsoString(doc.createdAt),
     updatedAt: toIsoString(doc.updatedAt),
+  };
+}
+
+export function toUserAddressDto(doc: UserAddressSubdocument): UserAddressDto {
+  return {
+    id: doc._id.toString(),
+    name: doc.name,
+    line1: doc.line1,
+    line2: doc.line2 || undefined,
+    city: doc.city,
+    country: doc.country,
+    phone: doc.phone || undefined,
+    isDefault: doc.isDefault ?? false,
   };
 }
 

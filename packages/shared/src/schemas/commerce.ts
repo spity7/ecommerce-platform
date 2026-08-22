@@ -22,6 +22,21 @@ export const shippingAddressSchema = z.object({
   phone: z.string().max(40).optional(),
 });
 
+export const userAddressFieldsSchema = shippingAddressSchema.extend({
+  line2: z.string().max(200).optional(),
+  isDefault: z.boolean().optional(),
+});
+
+export const createUserAddressSchema = userAddressFieldsSchema;
+
+export const updateUserAddressSchema = userAddressFieldsSchema.partial();
+
+export const userAddressDtoSchema = userAddressFieldsSchema.extend({
+  id: z.string(),
+});
+
+export const userAddressListSchema = z.array(userAddressDtoSchema);
+
 export const createOrderSchema = z.object({
   shippingAddress: shippingAddressSchema.optional(),
 });
@@ -91,3 +106,6 @@ export type CartDto = z.infer<typeof cartDtoSchema>;
 export type OrderDto = z.infer<typeof orderDtoSchema>;
 export type CreateOrderInput = z.infer<typeof createOrderSchema>;
 export type UpdateUserProfileInput = z.infer<typeof updateUserProfileSchema>;
+export type UserAddressDto = z.infer<typeof userAddressDtoSchema>;
+export type CreateUserAddressInput = z.infer<typeof createUserAddressSchema>;
+export type UpdateUserAddressInput = z.infer<typeof updateUserAddressSchema>;

@@ -5,6 +5,8 @@ import { ApiError, updateUserProfile } from "@platform/api-client";
 import { getStorefrontSiteConfig } from "@/lib/site";
 import { useAuthSession } from "@/providers/auth-session-provider";
 import AccountInfo from "./AccountInfo";
+import AccountPasswordSection from "./AccountPasswordSection";
+import AccountAddressesSection from "./AccountAddressesSection";
 
 export default function AccountInfoPanel() {
   const site = getStorefrontSiteConfig();
@@ -155,9 +157,11 @@ function AccountInfoApi() {
           </form>
         )}
         <hr className="mt--24" />
-        <p className="b3 mb--0">
-          Password, saved addresses, and account deletion are not available yet.
-        </p>
+        <AccountPasswordSection />
+        <hr />
+        <AccountAddressesSection />
+        <hr />
+        <p className="b3 mb--0">Account deletion is not available yet.</p>
       </div>
     </div>
   );
