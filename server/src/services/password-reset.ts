@@ -14,7 +14,9 @@ export async function setPasswordResetCode(
   user.passwordResetExpires = new Date(Date.now() + 15 * 60 * 1000);
 }
 
-export async function clearPasswordResetCode(user: UserDocument): Promise<void> {
+export async function clearPasswordResetCode(
+  user: UserDocument
+): Promise<void> {
   user.passwordResetCodeHash = undefined;
   user.passwordResetExpires = undefined;
 }

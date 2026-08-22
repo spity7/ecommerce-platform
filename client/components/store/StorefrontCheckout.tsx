@@ -4,7 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
-import { ApiError, createOrderFromCart, fetchUserAddresses } from "@platform/api-client";
+import {
+  ApiError,
+  createOrderFromCart,
+  fetchUserAddresses,
+} from "@platform/api-client";
 import { useContextElement } from "@/context/Context";
 import { getCheckoutPath } from "@/lib/checkout";
 import { formatCurrency } from "@/lib/price";

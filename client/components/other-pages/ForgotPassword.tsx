@@ -6,11 +6,7 @@ import ReviewSlider from "./ReviewSlider";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUiElement } from "@/context/uiStore";
-import {
-  ApiError,
-  forgotPassword,
-  resetPassword,
-} from "@platform/api-client";
+import { ApiError, forgotPassword, resetPassword } from "@platform/api-client";
 import {
   getPasswordStrength,
   getPasswordValidationError,
@@ -229,9 +225,7 @@ function ForgotPasswordApi() {
       }, 1200);
     } catch (err) {
       setError(
-        err instanceof ApiError
-          ? err.message
-          : "Could not reset your password."
+        err instanceof ApiError ? err.message : "Could not reset your password."
       );
     } finally {
       setLoading(false);

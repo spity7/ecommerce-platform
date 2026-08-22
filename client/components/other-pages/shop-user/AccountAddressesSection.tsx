@@ -242,7 +242,10 @@ export default function AccountAddressesSection() {
                 className="rbt-input-field"
                 value={form.name}
                 onChange={(event) =>
-                  setForm((current) => ({ ...current, name: event.target.value }))
+                  setForm((current) => ({
+                    ...current,
+                    name: event.target.value,
+                  }))
                 }
                 required
               />
@@ -257,7 +260,10 @@ export default function AccountAddressesSection() {
                 type="tel"
                 value={form.phone}
                 onChange={(event) =>
-                  setForm((current) => ({ ...current, phone: event.target.value }))
+                  setForm((current) => ({
+                    ...current,
+                    phone: event.target.value,
+                  }))
                 }
               />
             </div>
@@ -270,7 +276,10 @@ export default function AccountAddressesSection() {
                 className="rbt-input-field"
                 value={form.line1}
                 onChange={(event) =>
-                  setForm((current) => ({ ...current, line1: event.target.value }))
+                  setForm((current) => ({
+                    ...current,
+                    line1: event.target.value,
+                  }))
                 }
                 required
               />
@@ -284,7 +293,10 @@ export default function AccountAddressesSection() {
                 className="rbt-input-field"
                 value={form.line2}
                 onChange={(event) =>
-                  setForm((current) => ({ ...current, line2: event.target.value }))
+                  setForm((current) => ({
+                    ...current,
+                    line2: event.target.value,
+                  }))
                 }
               />
             </div>
@@ -297,7 +309,10 @@ export default function AccountAddressesSection() {
                 className="rbt-input-field"
                 value={form.city}
                 onChange={(event) =>
-                  setForm((current) => ({ ...current, city: event.target.value }))
+                  setForm((current) => ({
+                    ...current,
+                    city: event.target.value,
+                  }))
                 }
                 required
               />

@@ -23,7 +23,10 @@ export async function POST(request: Request) {
   }
 
   if (payload.user?.role !== "admin") {
-    return NextResponse.json({ error: "Admin access required" }, { status: 403 });
+    return NextResponse.json(
+      { error: "Admin access required" },
+      { status: 403 }
+    );
   }
 
   const response = NextResponse.json({

@@ -85,8 +85,7 @@ export function addUserAddress(
   }
 ): Types.ObjectId {
   const addresses = getAddresses(user);
-  const shouldBeDefault =
-    input.isDefault === true || addresses.length === 0;
+  const shouldBeDefault = input.isDefault === true || addresses.length === 0;
 
   if (shouldBeDefault) {
     for (const address of addresses) {

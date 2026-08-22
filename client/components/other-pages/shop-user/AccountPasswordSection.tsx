@@ -17,7 +17,10 @@ export default function AccountPasswordSection() {
   const [submitting, setSubmitting] = useState(false);
 
   const strength = getPasswordStrength(newPassword);
-  const passwordError = getPasswordValidationError(newPassword, confirmPassword);
+  const passwordError = getPasswordValidationError(
+    newPassword,
+    confirmPassword
+  );
 
   function resetForm() {
     setCurrentPassword("");
@@ -74,7 +77,10 @@ export default function AccountPasswordSection() {
       ) : (
         <form onSubmit={handleSubmit}>
           <div className="rbt-input-field-grp">
-            <label className="rbt-field-label" htmlFor="account_current_password">
+            <label
+              className="rbt-field-label"
+              htmlFor="account_current_password"
+            >
               Current password
             </label>
             <input
@@ -113,7 +119,10 @@ export default function AccountPasswordSection() {
             ) : null}
           </div>
           <div className="rbt-input-field-grp mt--16">
-            <label className="rbt-field-label" htmlFor="account_confirm_password">
+            <label
+              className="rbt-field-label"
+              htmlFor="account_confirm_password"
+            >
               Confirm new password
             </label>
             <input

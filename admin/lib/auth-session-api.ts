@@ -25,6 +25,8 @@ export async function proxyAuthRequest(
 
 export type AuthApiSuccess = AuthResponse & { error?: string };
 
-export async function readAuthResponse(response: Response): Promise<AuthApiSuccess> {
+export async function readAuthResponse(
+  response: Response
+): Promise<AuthApiSuccess> {
   return (await response.json()) as AuthApiSuccess;
 }
