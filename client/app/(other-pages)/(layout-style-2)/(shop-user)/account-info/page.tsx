@@ -1,21 +1,17 @@
 import Breadcrumb from "@/components/common/other-components/Breadcrumb";
 import Sidebar from "@/components/other-pages/shop-user/Sidebar";
-import AccountInfo from "@/components/other-pages/shop-user/AccountInfo";
-import BasicInfoEdit from "@/components/modals/BasicInfoEdit";
-import ContactInfoEdit from "@/components/modals/ContactInfoEdit";
-import PasswordEdit from "@/components/modals/PasswordEdit";
-import DeliveryEdit from "@/components/modals/DeliveryEdit";
-import AlternativeDelivery from "@/components/modals/AlternativeDelivery";
+import AccountInfoPanel from "@/components/other-pages/shop-user/AccountInfoPanel";
+import { getStorefrontSiteConfig } from "@/lib/site";
+import type { Metadata } from "next";
 
-import { Metadata } from "next";
+const site = getStorefrontSiteConfig();
 
 export const metadata: Metadata = {
-  title: "Account Info | Beauty Station | Cosmetics & Skincare",
-  description:
-    "View and update your Beauty Station account information and addresses.",
+  title: `Account Info | ${site.name}`,
+  description: `View and update your ${site.name} account information.`,
 };
 
-export default function page() {
+export default function AccountInfoPage() {
   return (
     <>
       <Breadcrumb
@@ -30,16 +26,11 @@ export default function page() {
               <Sidebar />
             </div>
             <div className="col-12 col-md-12 col-lg-8 col-xl-9 mt--24">
-              <AccountInfo />
+              <AccountInfoPanel />
             </div>
           </div>
         </div>
       </div>
-      <BasicInfoEdit />
-      <ContactInfoEdit />
-      <PasswordEdit />
-      <DeliveryEdit />
-      <AlternativeDelivery />
     </>
   );
 }

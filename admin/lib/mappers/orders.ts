@@ -28,9 +28,14 @@ function mapStatusToAdmin(status: OrderStatus): Order["status"] {
 }
 
 export function mapOrderDtoToAdminOrder(order: OrderDto): Order {
+  const customerLabel =
+    order.customerName ??
+    order.customerEmail ??
+    `Customer ${order.userId.slice(-6)}`;
+
   return {
     id: order.id.slice(-8).toUpperCase(),
-    customer: `Customer ${order.userId.slice(-6)}`,
+    customer: customerLabel,
     status: mapStatusToAdmin(order.status),
     total: formatMoney(order.total),
     added: formatDate(order.createdAt),
@@ -41,6 +46,7 @@ export function mapOrderDtoToAdminOrder(order: OrderDto): Order {
 export type ApiOrderRow = Order & {
   apiId: string;
   apiStatus: OrderStatus;
+  customerEmail?: string;
 };
 
 export function mapOrderDtoToApiOrderRow(order: OrderDto): ApiOrderRow {
@@ -49,5 +55,6 @@ export function mapOrderDtoToApiOrderRow(order: OrderDto): ApiOrderRow {
     ...mapped,
     apiId: order.id,
     apiStatus: order.status,
+    customerEmail: order.customerEmail,
   };
 }

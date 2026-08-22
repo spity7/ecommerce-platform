@@ -118,6 +118,7 @@ Dev URL: `http://localhost:3000`.
 | --------------------------------------- | -------------------------------------------------------- |
 | `/signin`, `/signup`                    | API login/register; site-branded forms                   |
 | `/account-info`, `/my-order-history`, … | Protected by `client/proxy.ts` when feature enabled      |
+| `/account-info`                         | Profile view/edit (name, phone) via API                  |
 | `/my-order-history`                     | Loads orders from `GET /api/orders` when feature enabled |
 
 ### Theme demo surface

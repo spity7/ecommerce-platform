@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { ApiError, createOrderFromCart } from "@platform/api-client";
 import { useContextElement } from "@/context/Context";
 import { getCheckoutPath } from "@/lib/checkout";
@@ -24,6 +24,12 @@ export default function StorefrontCheckout() {
   const [phone, setPhone] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    setName((current) => current || user.name);
+    setPhone((current) => current || user.phone || "");
+  }, [user]);
 
   if (!site.features.customerAuth) {
     return (

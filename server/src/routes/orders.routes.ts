@@ -12,9 +12,14 @@ import {
 } from "../middleware/auth.js";
 import { Order } from "../models/Order.js";
 import { Product } from "../models/Product.js";
+import { User } from "../models/User.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { getOrCreateUserCart } from "../services/cart.service.js";
 import { toOrderDto } from "../services/commerce.serializers.js";
+import {
+  getOrderCustomer,
+  getOrderUserId,
+} from "../services/order-customer.js";
 
 export const ordersRouter = Router();
 
@@ -72,7 +77,15 @@ ordersRouter.post(
     cart.set("items", []);
     await cart.save();
 
-    res.status(201).json(toOrderDto(order));
+    const user = await User.findById(req.auth!.userId);
+    res
+      .status(201)
+      .json(
+        toOrderDto(
+          order,
+          user ? { name: user.name, email: user.email } : undefined
+        )
+      );
   })
 );
 
@@ -90,12 +103,16 @@ ordersRouter.get(
     const skip = (page - 1) * limit;
 
     const [orders, total] = await Promise.all([
-      Order.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+      Order.find(filter)
+        .populate("userId", "name email")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
       Order.countDocuments(filter),
     ]);
 
     res.json({
-      data: orders.map(toOrderDto),
+      data: orders.map((order) => toOrderDto(order, getOrderCustomer(order))),
       total,
       page,
       limit,
@@ -107,17 +124,20 @@ ordersRouter.get(
   "/:id",
   requireAuth,
   asyncHandler(async (req: AuthenticatedRequest, res) => {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate(
+      "userId",
+      "name email"
+    );
     if (!order) {
       throw new AppError(404, "Order not found");
     }
 
-    const isOwner = order.userId.toString() === req.auth!.userId;
+    const isOwner = getOrderUserId(order) === req.auth!.userId;
     if (!isOwner && req.auth!.role !== "admin") {
       throw new AppError(403, "Forbidden");
     }
 
-    res.json(toOrderDto(order));
+    res.json(toOrderDto(order, getOrderCustomer(order)));
   })
 );
 
@@ -134,6 +154,7 @@ ordersRouter.patch(
 
     order.status = payload.status;
     await order.save();
-    res.json(toOrderDto(order));
+    await order.populate("userId", "name email");
+    res.json(toOrderDto(order, getOrderCustomer(order)));
   })
 );

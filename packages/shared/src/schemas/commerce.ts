@@ -67,6 +67,8 @@ export const orderItemDtoSchema = z.object({
 export const orderDtoSchema = z.object({
   id: z.string(),
   userId: z.string(),
+  customerName: z.string().optional(),
+  customerEmail: z.string().email().optional(),
   status: z.enum(ORDER_STATUSES),
   items: z.array(orderItemDtoSchema),
   itemCount: z.number().int(),

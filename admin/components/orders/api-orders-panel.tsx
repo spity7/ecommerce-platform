@@ -95,7 +95,12 @@ export function ApiOrdersPanel() {
           <span className="grid h-9 w-9 rounded-full bg-brand-50 text-[13px] font-semibold text-brand-600 place-items-center">
             {initials(order.customer)}
           </span>
-          <span className="font-semibold text-ink-900">{order.customer}</span>
+          <div>
+            <span className="font-semibold text-ink-900">{order.customer}</span>
+            {order.customerEmail ? (
+              <p className="text-[13px] text-ink-500">{order.customerEmail}</p>
+            ) : null}
+          </div>
         </div>
       ),
       sortValue: (order) => order.customer,

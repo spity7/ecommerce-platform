@@ -1252,6 +1252,13 @@
           "userId": {
             "type": "string"
           },
+          "customerName": {
+            "type": "string"
+          },
+          "customerEmail": {
+            "type": "string",
+            "format": "email"
+          },
           "status": {
             "type": "string",
             "enum": [
@@ -1373,6 +1380,13 @@
                 },
                 "userId": {
                   "type": "string"
+                },
+                "customerName": {
+                  "type": "string"
+                },
+                "customerEmail": {
+                  "type": "string",
+                  "format": "email"
                 },
                 "status": {
                   "type": "string",
@@ -5178,6 +5192,13 @@
                     "userId": {
                       "type": "string"
                     },
+                    "customerName": {
+                      "type": "string"
+                    },
+                    "customerEmail": {
+                      "type": "string",
+                      "format": "email"
+                    },
                     "status": {
                       "type": "string",
                       "enum": [
@@ -5318,6 +5339,13 @@
                           },
                           "userId": {
                             "type": "string"
+                          },
+                          "customerName": {
+                            "type": "string"
+                          },
+                          "customerEmail": {
+                            "type": "string",
+                            "format": "email"
                           },
                           "status": {
                             "type": "string",
@@ -5481,6 +5509,13 @@
                     },
                     "userId": {
                       "type": "string"
+                    },
+                    "customerName": {
+                      "type": "string"
+                    },
+                    "customerEmail": {
+                      "type": "string",
+                      "format": "email"
                     },
                     "status": {
                       "type": "string",
@@ -5651,6 +5686,13 @@
                     },
                     "userId": {
                       "type": "string"
+                    },
+                    "customerName": {
+                      "type": "string"
+                    },
+                    "customerEmail": {
+                      "type": "string",
+                      "format": "email"
                     },
                     "status": {
                       "type": "string",

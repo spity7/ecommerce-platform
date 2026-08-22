@@ -36,11 +36,11 @@ ecommerce-platform/
 
 The platform skeleton is real (shared contract, multi-site config, catalog API). UI is largely a purchased theme with early API wiring:
 
-| Layer  | API-connected                                             | Template / static                                                |
-| ------ | --------------------------------------------------------- | ---------------------------------------------------------------- |
-| Server | Catalog CRUD + auth + cart/orders + uploads               | No payment gateway, wishlist API, addresses API                  |
-| Admin  | Catalog lists + CRUD forms + sign-in                      | ~35 other dashboard pages; nav filtered by `SiteConfig.features` |
-| Client | Home layout + `/shop` + `/product/[slug]` + customer auth | 300+ demo routes; Zustand cart not fully synced to API           |
+| Layer  | API-connected                                                        | Template / static                                                |
+| ------ | -------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Server | Catalog CRUD + auth + cart/orders + uploads                          | No payment gateway, wishlist API, addresses API                  |
+| Admin  | Catalog lists + CRUD forms + sign-in                                 | ~35 other dashboard pages; nav filtered by `SiteConfig.features` |
+| Client | Home layout + `/shop` + `/product/[slug]` + customer auth + checkout | 300+ demo routes; demo catalog items stay local-only in cart     |
 
 **Auth:** JWT on catalog mutations and uploads. Admin: sign-in (admin role only), `proxy.ts` validates token via `/api/auth/me`, 401 refresh with sign-out fallback. Storefront: customer sign-in/sign-up when `features.customerAuth`; `client/proxy.ts` guards account routes; cart/orders API for authenticated customers. Production rejects default JWT secrets.
 

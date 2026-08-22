@@ -777,6 +777,8 @@ export type OrderDtoShippingAddress = {
 export interface OrderDto {
   id: string;
   userId: string;
+  customerName?: string;
+  customerEmail?: string;
   status: OrderDtoStatus;
   items: OrderDtoItemsItem[];
   itemCount: number;
@@ -837,6 +839,8 @@ export type PaginatedOrdersDataItemShippingAddress = {
 export type PaginatedOrdersDataItem = {
   id: string;
   userId: string;
+  customerName?: string;
+  customerEmail?: string;
   status: PaginatedOrdersDataItemStatus;
   items: PaginatedOrdersDataItemItemsItem[];
   itemCount: number;
@@ -2272,6 +2276,8 @@ export type CreateOrder201ShippingAddress = {
 export type CreateOrder201 = {
   id: string;
   userId: string;
+  customerName?: string;
+  customerEmail?: string;
   status: CreateOrder201Status;
   items: CreateOrder201ItemsItem[];
   itemCount: number;
@@ -2332,6 +2338,8 @@ export type ListOrders200DataItemShippingAddress = {
 export type ListOrders200DataItem = {
   id: string;
   userId: string;
+  customerName?: string;
+  customerEmail?: string;
   status: ListOrders200DataItemStatus;
   items: ListOrders200DataItemItemsItem[];
   itemCount: number;
@@ -2399,6 +2407,8 @@ export type GetOrder200ShippingAddress = {
 export type GetOrder200 = {
   id: string;
   userId: string;
+  customerName?: string;
+  customerEmail?: string;
   status: GetOrder200Status;
   items: GetOrder200ItemsItem[];
   itemCount: number;
@@ -2475,6 +2485,8 @@ export type UpdateOrder200ShippingAddress = {
 export type UpdateOrder200 = {
   id: string;
   userId: string;
+  customerName?: string;
+  customerEmail?: string;
   status: UpdateOrder200Status;
   items: UpdateOrder200ItemsItem[];
   itemCount: number;
