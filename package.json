@@ -25,7 +25,9 @@
     "dev:server": "npm run dev -w @platform/server",
     "seed": "npm run seed -w @platform/server",
     "create-site": "tsx scripts/create-site.ts",
-    "typecheck": "npm run typecheck -w @platform/shared && npm run typecheck -w @platform/site-config && npm run typecheck -w @platform/api-client && npm run typecheck -w @platform/server && tsc --noEmit -p admin && tsc --noEmit -p client && tsc --noEmit -p tsconfig.json"
+    "typecheck": "npm run typecheck -w @platform/shared && npm run typecheck -w @platform/site-config && npm run typecheck -w @platform/api-client && npm run typecheck -w @platform/server && tsc --noEmit -p admin && tsc --noEmit -p client && tsc --noEmit -p tsconfig.json",
+    "test": "npm run build:packages && npm run test -w @platform/server",
+    "test:ci": "npm run test"
   },
   "devDependencies": {
     "@types/node": "^20",

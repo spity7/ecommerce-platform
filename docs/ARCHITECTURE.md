@@ -38,7 +38,7 @@ The platform skeleton is real (shared contract, multi-site config, catalog API).
 
 | Layer  | API-connected                                                        | Template / static                                                |
 | ------ | -------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| Server | Catalog CRUD + auth + cart/orders + uploads                          | No payment gateway, wishlist API, addresses API                  |
+| Server | Catalog CRUD + auth + cart/orders + uploads + user addresses         | No payment gateway, wishlist API                                 |
 | Admin  | Catalog lists + CRUD forms + sign-in                                 | ~35 other dashboard pages; nav filtered by `SiteConfig.features` |
 | Client | Home layout + `/shop` + `/product/[slug]` + customer auth + checkout | 300+ demo routes; demo catalog items stay local-only in cart     |
 
@@ -190,8 +190,19 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every push and PR:
 1. `npm run api:check` — fails if the OpenAPI spec or generated client is stale
 2. `npm run build:packages`
 3. `npm run typecheck` — full monorepo type check
+4. `npm run test:ci` — API integration tests against MongoDB 7 (`MONGODB_URI_TEST`)
 
 CI does **not** run Next.js builds or workspace lint yet.
+
+### API integration tests
+
+Location: `server/test/` (`health`, `auth`, `commerce` suites). Run from repo root:
+
+```bash
+npm run test
+```
+
+Requires MongoDB on `127.0.0.1:27017` (default DB `ecommerce-platform-test`). Override with `MONGODB_URI_TEST`. Tests drop the test database on each suite setup — never point this at production data.
 
 ## API (catalog)
 

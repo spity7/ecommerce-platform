@@ -39,6 +39,7 @@ npm run dev:client    # :3000
 
 npm run api:generate  # After OpenAPI / shared schema changes
 npm run typecheck     # Full monorepo
+npm run test          # API integration tests (MongoDB required)
 npm run format:check  # Prettier across workspaces
 ```
 

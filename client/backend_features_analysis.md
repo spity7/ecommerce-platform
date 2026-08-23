@@ -274,17 +274,18 @@
 
 ## 17. Cross-Cutting Concerns
 
-| Concern             | Details                                                                                             |
-| ------------------- | --------------------------------------------------------------------------------------------------- |
-| **Auth middleware** | JWT Bearer on all `/api/users/me/*`, `/api/orders/*`, `/api/wishlist`, `/api/cart` (when logged in) |
-| **Admin guard**     | Role check on all `/api/admin/*` routes                                                             |
-| **Rate limiting**   | Auth endpoints (register, login, refresh) — implemented on server                                   |
-| **Pagination**      | Consistent `{ data, meta: { page, limit, total, totalPages } }` envelope                            |
-| **Error format**    | `{ error: { code, message, details? } }`                                                            |
-| **File uploads**    | Product images, review images, user avatars → S3/Cloudflare R2                                      |
-| **Webhooks**        | Payment provider (Stripe), inventory sync                                                           |
-| **Caching**         | Products list, categories, brands, collections → Redis or Next.js `revalidate`                      |
-| **Localization**    | `Accept-Language` header; currency via `?currency=USD`                                              |
+| Concern               | Details                                                                                             |
+| --------------------- | --------------------------------------------------------------------------------------------------- |
+| **Auth middleware**   | JWT Bearer on all `/api/users/me/*`, `/api/orders/*`, `/api/wishlist`, `/api/cart` (when logged in) |
+| **Admin guard**       | Role check on all `/api/admin/*` routes                                                             |
+| **Rate limiting**     | Auth endpoints (register, login, refresh) — implemented on server                                   |
+| **Integration tests** | `server/test/` health + auth + commerce smoke tests (`npm run test`)                                |
+| **Pagination**        | Consistent `{ data, meta: { page, limit, total, totalPages } }` envelope                            |
+| **Error format**      | `{ error: { code, message, details? } }`                                                            |
+| **File uploads**      | Product images, review images, user avatars → S3/Cloudflare R2                                      |
+| **Webhooks**          | Payment provider (Stripe), inventory sync                                                           |
+| **Caching**           | Products list, categories, brands, collections → Redis or Next.js `revalidate`                      |
+| **Localization**      | `Accept-Language` header; currency via `?currency=USD`                                              |
 
 ---
 

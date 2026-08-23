@@ -9,6 +9,15 @@ jobs:
   ci:
     runs-on: ubuntu-latest
 
+    services:
+      mongodb:
+        image: mongo:7
+        ports:
+          - 27017:27017
+
+    env:
+      MONGODB_URI_TEST: mongodb://127.0.0.1:27017/ecommerce-platform-ci-test
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,3 +39,6 @@ jobs:
 
       - name: Typecheck
         run: npm run typecheck
+
+      - name: Integration tests
+        run: npm run test:ci

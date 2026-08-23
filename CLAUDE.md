@@ -6,25 +6,26 @@ Quick commands and conventions for developing, building, and maintaining the mon
 
 Run from **repo root** unless noted.
 
-| Command                           | Purpose                                              |
-| --------------------------------- | ---------------------------------------------------- |
-| `npm install`                     | Install all workspaces                               |
-| `npm run build:packages`          | Build shared → site-config → api-client              |
-| `npm run dev:server`              | API on :5000 (`predev`: api:ensure + build:packages) |
-| `npm run dev:admin`               | Admin on :3001                                       |
-| `npm run dev:client`              | Storefront on :3000                                  |
-| `npm run seed`                    | Seed MongoDB for current `SITE_ID`                   |
-| `npm run api:generate`            | Regenerate OpenAPI + Orval client                    |
-| `npm run api:check`               | CI: fail if contract artifacts are stale             |
-| `npm run typecheck`               | Typecheck all workspaces                             |
-| `npm run format` / `format:check` | Prettier (api-client, admin, storefront, server)     |
-| `npm run create-site <id>`        | Scaffold `sites/<id>/`                               |
+| Command                           | Purpose                                                |
+| --------------------------------- | ------------------------------------------------------ |
+| `npm install`                     | Install all workspaces                                 |
+| `npm run build:packages`          | Build shared → site-config → api-client                |
+| `npm run dev:server`              | API on :5000 (`predev`: api:ensure + build:packages)   |
+| `npm run dev:admin`               | Admin on :3001                                         |
+| `npm run dev:client`              | Storefront on :3000                                    |
+| `npm run seed`                    | Seed MongoDB for current `SITE_ID`                     |
+| `npm run api:generate`            | Regenerate OpenAPI + Orval client                      |
+| `npm run api:check`               | CI: fail if contract artifacts are stale               |
+| `npm run typecheck`               | Typecheck all workspaces                               |
+| `npm run test`                    | Build packages + API integration tests (needs MongoDB) |
+| `npm run format` / `format:check` | Prettier (api-client, admin, storefront, server)       |
+| `npm run create-site <id>`        | Scaffold `sites/<id>/`                                 |
 
 **Per workspace:**
 
 - Admin: `npm run check -w @platform/admin` (format + Biome lint)
 - Client: `npm run lint -w @platform/storefront`, `npm run analyze` (bundle)
-- Server: `npm run openapi:generate -w @platform/server` (spec only)
+- Server: `npm run openapi:generate -w @platform/server` (spec only), `npm run test -w @platform/server` (after `build:packages`)
 
 ## Key Guidelines
 
