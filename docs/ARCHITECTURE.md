@@ -2,7 +2,7 @@
 
 Multipurpose ecommerce monorepo: one codebase, many site deployments.
 
-**Last reviewed:** 2026-08-22. See [AI-INDEX.md](AI-INDEX.md) for the full doc map and tree.
+**Last reviewed:** 2026-08-24. See [AI-INDEX.md](AI-INDEX.md) for the full doc map and tree.
 
 ## Layout
 
@@ -42,7 +42,7 @@ The platform skeleton is real (shared contract, multi-site config, catalog API).
 | Admin  | Catalog lists + CRUD forms + sign-in                                 | ~35 other dashboard pages; nav filtered by `SiteConfig.features` |
 | Client | Home layout + `/shop` + `/product/[slug]` + customer auth + checkout | 300+ demo routes; demo catalog items stay local-only in cart     |
 
-**Auth:** JWT on catalog mutations and uploads. Admin and storefront use **httpOnly cookies** (via each app’s `/api/auth/*` routes) for refresh/access tokens; short-lived access tokens are also held in memory for API calls. Logout and password change reset revoke refresh tokens server-side (`refreshTokenVersion`). Password reset emails a 6-digit code via SMTP when `SMTP_HOST` is set; without SMTP, dev logs the code. Auth routes are rate-limited. Production rejects default JWT secrets.
+**Auth:** JWT on catalog mutations and uploads. Admin and storefront use **httpOnly cookies** (via each app’s `/api/auth/*` routes) for refresh/access tokens; short-lived access tokens are also held in memory for API calls. Logout, password change, and account deletion revoke refresh tokens (`refreshTokenVersion`). Password reset and **email verification on register** email 6-digit codes via SMTP when `SMTP_HOST` is set; without SMTP, dev returns/logs codes. **Customers must verify email before `POST /api/orders`.** Storefront Google sign-in (`POST /api/auth/social`) verifies ID tokens when `GOOGLE_CLIENT_ID` is set and can import Google profile photos. OAuth-only users confirm delete/set-password with a Google `idToken`. Customer account deletion is a soft delete with a 14-day reactivation window on login. Auth routes are rate-limited. Production rejects default JWT secrets.
 
 ## Beauty Station (site #1)
 
@@ -196,7 +196,7 @@ CI does **not** run Next.js builds or workspace lint yet.
 
 ### API integration tests
 
-Location: `server/test/` (`health`, `auth`, `commerce` suites). Run from repo root:
+Location: `server/test/` (`health`, `auth`, `catalog`, `commerce`, `uploads` suites). Run from repo root:
 
 ```bash
 npm run test

@@ -1,4 +1,9 @@
-import mongoose, { Schema, type InferSchemaType, type Types } from "mongoose";
+import mongoose, {
+  Schema,
+  type InferSchemaType,
+  type Types,
+  type HydratedDocument,
+} from "mongoose";
 import type { UserRole } from "@platform/shared";
 import { userAddressSchema } from "./UserAddress.js";
 
@@ -13,13 +18,23 @@ const userSchema = new Schema(
       default: "customer",
     },
     phone: { type: String, default: "" },
+    avatarUrl: { type: String, default: "" },
+    emailVerified: { type: Boolean, default: false },
+    emailVerificationCodeHash: { type: String },
+    emailVerificationExpires: { type: Date },
+    oauthProvider: { type: String },
+    oauthId: { type: String },
     refreshTokenVersion: { type: Number, default: 0, min: 0 },
+    passwordSetByUser: { type: Boolean, default: true },
     passwordResetCodeHash: { type: String },
     passwordResetExpires: { type: Date },
+    deletedAt: { type: Date },
     addresses: [userAddressSchema],
   },
   { timestamps: true }
 );
+
+userSchema.index({ oauthProvider: 1, oauthId: 1 }, { sparse: true });
 
 export type UserAddressSubdocument = InferSchemaType<
   typeof userAddressSchema
@@ -27,8 +42,9 @@ export type UserAddressSubdocument = InferSchemaType<
   _id: Types.ObjectId;
 };
 
-export type UserDocument = InferSchemaType<typeof userSchema> & {
-  _id: mongoose.Types.ObjectId;
+export type UserDocument = HydratedDocument<
+  InferSchemaType<typeof userSchema>
+> & {
   addresses: Types.DocumentArray<UserAddressSubdocument>;
 };
 

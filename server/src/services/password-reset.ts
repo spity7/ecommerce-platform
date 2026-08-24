@@ -1,16 +1,19 @@
-import crypto from "node:crypto";
-import bcrypt from "bcryptjs";
 import type { UserDocument } from "../models/User.js";
+import {
+  generateVerificationCode,
+  hashVerificationCode,
+  verifyVerificationCode,
+} from "./verification-code.js";
 
 export function generatePasswordResetCode(): string {
-  return crypto.randomInt(100000, 1000000).toString();
+  return generateVerificationCode();
 }
 
 export async function setPasswordResetCode(
   user: UserDocument,
   code: string
 ): Promise<void> {
-  user.passwordResetCodeHash = await bcrypt.hash(code, 10);
+  user.passwordResetCodeHash = await hashVerificationCode(code);
   user.passwordResetExpires = new Date(Date.now() + 15 * 60 * 1000);
 }
 
@@ -33,5 +36,5 @@ export async function verifyPasswordResetCode(
     return false;
   }
 
-  return bcrypt.compare(code, user.passwordResetCodeHash);
+  return verifyVerificationCode(code, user.passwordResetCodeHash);
 }

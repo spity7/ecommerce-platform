@@ -12,8 +12,8 @@
     "start": "node dist/index.js",
     "seed": "tsx src/scripts/seed.ts",
     "openapi:generate": "tsx src/openapi/generate.ts",
-    "test": "node --import tsx --test test/health.test.ts test/auth.test.ts test/commerce.test.ts",
-    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test --test-concurrency=1 test/health.test.ts test/auth.test.ts test/catalog.test.ts test/commerce.test.ts test/uploads.test.ts",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p test/tsconfig.json",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
@@ -27,6 +27,7 @@
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "express-rate-limit": "^8.6.2",
+    "google-auth-library": "^9.15.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.2.3",
     "multer": "^2.1.1",

@@ -34,6 +34,15 @@ ordersRouter.post(
       throw new AppError(400, "Cart is empty");
     }
 
+    const user = await User.findById(req.auth!.userId);
+    if (!user || user.deletedAt) {
+      throw new AppError(404, "User not found");
+    }
+
+    if (req.auth!.role !== "admin" && !user.emailVerified) {
+      throw new AppError(403, "Verify your email before placing an order");
+    }
+
     for (const item of cart.items) {
       const product = await Product.findById(item.productId);
       if (!product || product.status !== "published") {
@@ -77,15 +86,9 @@ ordersRouter.post(
     cart.set("items", []);
     await cart.save();
 
-    const user = await User.findById(req.auth!.userId);
     res
       .status(201)
-      .json(
-        toOrderDto(
-          order,
-          user ? { name: user.name, email: user.email } : undefined
-        )
-      );
+      .json(toOrderDto(order, { name: user.name, email: user.email }));
   })
 );
 

@@ -1,6 +1,6 @@
 # Backend API Feature Breakdown — Beauty Station
 
-> **Status (2026-08-22):** **Roadmap / planning doc** — not all endpoints below exist. **Implemented today:** catalog CRUD (mutations require admin JWT), auth with refresh revocation + rate limits + password reset codes, user profile + password change + saved addresses, cart, orders (place + list with customer name/email), `/api/uploads`, `/api/health`. Storefront: customer auth via httpOnly BFF cookies, API cart sync, `/checkout` with default-address pre-fill, `/account-info` profile/password/addresses, `/forgot-password` when `features.customerAuth` is enabled.
+> **Status (2026-08-24):** **Roadmap / planning doc** — not all endpoints below exist. **Implemented today:** catalog CRUD (mutations require admin JWT), auth with refresh revocation + rate limits + password reset + email verification (sent on register) + Google social sign-in (profile photo import), user profile (`GET /api/users/me`) + avatar URL + soft-delete account (password or Google `idToken`), OAuth set-password flow, saved addresses, cart, orders (place requires verified email for customers), `/api/uploads`, `/api/health`. Storefront: customer auth via httpOnly BFF cookies, Google sign-in when `NEXT_PUBLIC_GOOGLE_CLIENT_ID` is set, API cart sync, `/checkout` with default-address pre-fill, `/account-info` profile/avatar/email verification/password/addresses/delete, `/forgot-password` when `features.customerAuth` is enabled.
 
 > **Stack context:** Next.js App Router storefront + Express API monorepo. Static mock data remains in `client/data/` for theme demos.
 
@@ -16,15 +16,15 @@
 - `POST /api/auth/refresh` — Refresh access token (validates `tokenVersion`; rate-limited)
 - `POST /api/auth/forgot-password` — Request 6-digit reset code (emailed when SMTP configured; dev logs code when unset)
 - `POST /api/auth/reset-password` — Reset with email + code + new password
-- `POST /api/auth/verify-email` — Verify email via token
-- `POST /api/auth/social` — OAuth (Google, Facebook)
+- `POST /api/auth/verify-email` — Verify email via 6-digit code _(implemented)_
+- `POST /api/auth/social` — Google OAuth sign-in _(implemented)_
 
 ### 1.2 User Profile
 
-- `GET /api/users/me` — Get current user profile
-- `PATCH /api/users/me` — Update name, phone, avatar
+- `GET /api/users/me` — Get current user profile _(implemented)_
+- `PATCH /api/users/me` — Update name, phone, avatar _(implemented)_
 - `PATCH /api/users/me/password` — Change password
-- `DELETE /api/users/me` — Delete account
+- `DELETE /api/users/me` — Soft-delete account (14-day reactivation) _(implemented)_
 - `GET /api/users/me/addresses` — List saved addresses
 - `POST /api/users/me/addresses` — Add address
 - `PATCH /api/users/me/addresses/:id` — Update address

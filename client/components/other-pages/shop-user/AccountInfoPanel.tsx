@@ -7,6 +7,9 @@ import { useAuthSession } from "@/providers/auth-session-provider";
 import AccountInfo from "./AccountInfo";
 import AccountPasswordSection from "./AccountPasswordSection";
 import AccountAddressesSection from "./AccountAddressesSection";
+import AccountEmailVerificationSection from "./AccountEmailVerificationSection";
+import AccountAvatarSection from "./AccountAvatarSection";
+import AccountDeleteSection from "./AccountDeleteSection";
 
 export default function AccountInfoPanel() {
   const site = getStorefrontSiteConfig();
@@ -96,7 +99,12 @@ function AccountInfoApi() {
               </div>
               <p className="b1 rbt-text-medium mb--8">{user.name}</p>
               <p className="b1 mb--0">{user.email}</p>
+              {!user.emailVerified ? (
+                <p className="b3 mt--8 mb--0">Email not verified yet.</p>
+              ) : null}
             </div>
+            <hr />
+            <AccountAvatarSection />
             <hr />
             <div className="rbt-single-info mb--24">
               <h6 className="mb--12 pt--4">Contact</h6>
@@ -157,11 +165,13 @@ function AccountInfoApi() {
           </form>
         )}
         <hr className="mt--24" />
+        <AccountEmailVerificationSection />
+        <hr />
         <AccountPasswordSection />
         <hr />
         <AccountAddressesSection />
         <hr />
-        <p className="b3 mb--0">Account deletion is not available yet.</p>
+        <AccountDeleteSection />
       </div>
     </div>
   );

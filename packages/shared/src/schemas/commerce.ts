@@ -48,6 +48,7 @@ export const updateOrderStatusSchema = z.object({
 export const updateUserProfileSchema = z.object({
   name: z.string().min(1).max(120).optional(),
   phone: z.string().max(40).optional(),
+  avatarUrl: z.union([z.string().url(), z.literal("")]).optional(),
 });
 
 export const cartItemDtoSchema = z.object({

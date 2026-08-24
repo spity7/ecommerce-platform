@@ -96,6 +96,10 @@ export function toUserDto(doc: UserDocument): UserDto {
     email: doc.email,
     role: doc.role,
     phone: doc.phone || undefined,
+    avatarUrl: doc.avatarUrl || undefined,
+    emailVerified: doc.emailVerified ?? false,
+    passwordSetByUser: doc.passwordSetByUser ?? true,
+    oauthProvider: doc.oauthProvider === "google" ? "google" : undefined,
     createdAt: toIsoString(doc.createdAt),
     updatedAt: toIsoString(doc.updatedAt),
   };

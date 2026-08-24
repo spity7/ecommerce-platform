@@ -637,12 +637,24 @@ export const UserDtoRole = {
   customer: "customer",
 } as const;
 
+export type UserDtoOauthProvider =
+  (typeof UserDtoOauthProvider)[keyof typeof UserDtoOauthProvider];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UserDtoOauthProvider = {
+  google: "google",
+} as const;
+
 export interface UserDto {
   id: string;
   name: string;
   email: string;
   role: UserDtoRole;
   phone?: string;
+  avatarUrl?: string;
+  emailVerified: boolean;
+  passwordSetByUser: boolean;
+  oauthProvider?: UserDtoOauthProvider;
   createdAt: string;
   updatedAt: string;
 }
@@ -656,12 +668,24 @@ export const AuthResponseUserRole = {
   customer: "customer",
 } as const;
 
+export type AuthResponseUserOauthProvider =
+  (typeof AuthResponseUserOauthProvider)[keyof typeof AuthResponseUserOauthProvider];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const AuthResponseUserOauthProvider = {
+  google: "google",
+} as const;
+
 export type AuthResponseUser = {
   id: string;
   name: string;
   email: string;
   role: AuthResponseUserRole;
   phone?: string;
+  avatarUrl?: string;
+  emailVerified: boolean;
+  passwordSetByUser: boolean;
+  oauthProvider?: AuthResponseUserOauthProvider;
   createdAt: string;
   updatedAt: string;
 };
@@ -913,6 +937,8 @@ export interface UpdateOrderStatusInput {
   status: UpdateOrderStatusInputStatus;
 }
 
+export type UpdateUserProfileInputAvatarUrl = string | "";
+
 export interface UpdateUserProfileInput {
   /**
    * @minLength 1
@@ -921,13 +947,45 @@ export interface UpdateUserProfileInput {
   name?: string;
   /** @maxLength 40 */
   phone?: string;
+  avatarUrl?: UpdateUserProfileInputAvatarUrl;
 }
 
 export interface ChangePasswordInput {
   /** @minLength 1 */
-  currentPassword: string;
+  currentPassword?: string;
   /** @minLength 8 */
   newPassword: string;
+  /** @minLength 1 */
+  idToken?: string;
+}
+
+export interface ConfirmEmailVerificationInput {
+  /**
+   * @minLength 6
+   * @maxLength 6
+   */
+  code: string;
+}
+
+export interface DeleteAccountInput {
+  /** @minLength 1 */
+  password?: string;
+  /** @minLength 1 */
+  idToken?: string;
+}
+
+export type SocialAuthInputProvider =
+  (typeof SocialAuthInputProvider)[keyof typeof SocialAuthInputProvider];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const SocialAuthInputProvider = {
+  google: "google",
+} as const;
+
+export interface SocialAuthInput {
+  provider: SocialAuthInputProvider;
+  /** @minLength 1 */
+  idToken: string;
 }
 
 export interface ForgotPasswordInput {
@@ -948,6 +1006,7 @@ export interface ResetPasswordInput {
 export interface OkResponse {
   ok: boolean;
   devResetCode?: string;
+  devVerificationCode?: string;
 }
 
 export interface UserAddressDto {
@@ -2109,12 +2168,24 @@ export const Login200UserRole = {
   customer: "customer",
 } as const;
 
+export type Login200UserOauthProvider =
+  (typeof Login200UserOauthProvider)[keyof typeof Login200UserOauthProvider];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const Login200UserOauthProvider = {
+  google: "google",
+} as const;
+
 export type Login200User = {
   id: string;
   name: string;
   email: string;
   role: Login200UserRole;
   phone?: string;
+  avatarUrl?: string;
+  emailVerified: boolean;
+  passwordSetByUser: boolean;
+  oauthProvider?: Login200UserOauthProvider;
   createdAt: string;
   updatedAt: string;
 };
@@ -2150,12 +2221,24 @@ export const Register201UserRole = {
   customer: "customer",
 } as const;
 
+export type Register201UserOauthProvider =
+  (typeof Register201UserOauthProvider)[keyof typeof Register201UserOauthProvider];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const Register201UserOauthProvider = {
+  google: "google",
+} as const;
+
 export type Register201User = {
   id: string;
   name: string;
   email: string;
   role: Register201UserRole;
   phone?: string;
+  avatarUrl?: string;
+  emailVerified: boolean;
+  passwordSetByUser: boolean;
+  oauthProvider?: Register201UserOauthProvider;
   createdAt: string;
   updatedAt: string;
 };
@@ -2184,12 +2267,24 @@ export const RefreshToken200UserRole = {
   customer: "customer",
 } as const;
 
+export type RefreshToken200UserOauthProvider =
+  (typeof RefreshToken200UserOauthProvider)[keyof typeof RefreshToken200UserOauthProvider];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const RefreshToken200UserOauthProvider = {
+  google: "google",
+} as const;
+
 export type RefreshToken200User = {
   id: string;
   name: string;
   email: string;
   role: RefreshToken200UserRole;
   phone?: string;
+  avatarUrl?: string;
+  emailVerified: boolean;
+  passwordSetByUser: boolean;
+  oauthProvider?: RefreshToken200UserOauthProvider;
   createdAt: string;
   updatedAt: string;
 };
@@ -2212,12 +2307,24 @@ export const GetMe200Role = {
   customer: "customer",
 } as const;
 
+export type GetMe200OauthProvider =
+  (typeof GetMe200OauthProvider)[keyof typeof GetMe200OauthProvider];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetMe200OauthProvider = {
+  google: "google",
+} as const;
+
 export type GetMe200 = {
   id: string;
   name: string;
   email: string;
   role: GetMe200Role;
   phone?: string;
+  avatarUrl?: string;
+  emailVerified: boolean;
+  passwordSetByUser: boolean;
+  oauthProvider?: GetMe200OauthProvider;
   createdAt: string;
   updatedAt: string;
 };
@@ -2237,6 +2344,7 @@ export type ForgotPasswordBody = {
 export type ForgotPassword200 = {
   ok: boolean;
   devResetCode?: string;
+  devVerificationCode?: string;
 };
 
 export type ResetPasswordBody = {
@@ -2253,9 +2361,155 @@ export type ResetPasswordBody = {
 export type ResetPassword200 = {
   ok: boolean;
   devResetCode?: string;
+  devVerificationCode?: string;
 };
 
 export type ResetPassword400 = {
+  error: string;
+};
+
+export type RequestEmailVerification200 = {
+  ok: boolean;
+  devResetCode?: string;
+  devVerificationCode?: string;
+};
+
+export type VerifyEmailBody = {
+  /**
+   * @minLength 6
+   * @maxLength 6
+   */
+  code: string;
+};
+
+export type VerifyEmail200Role =
+  (typeof VerifyEmail200Role)[keyof typeof VerifyEmail200Role];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const VerifyEmail200Role = {
+  admin: "admin",
+  customer: "customer",
+} as const;
+
+export type VerifyEmail200OauthProvider =
+  (typeof VerifyEmail200OauthProvider)[keyof typeof VerifyEmail200OauthProvider];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const VerifyEmail200OauthProvider = {
+  google: "google",
+} as const;
+
+export type VerifyEmail200 = {
+  id: string;
+  name: string;
+  email: string;
+  role: VerifyEmail200Role;
+  phone?: string;
+  avatarUrl?: string;
+  emailVerified: boolean;
+  passwordSetByUser: boolean;
+  oauthProvider?: VerifyEmail200OauthProvider;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type VerifyEmail400 = {
+  error: string;
+};
+
+export type SocialAuthBodyProvider =
+  (typeof SocialAuthBodyProvider)[keyof typeof SocialAuthBodyProvider];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const SocialAuthBodyProvider = {
+  google: "google",
+} as const;
+
+export type SocialAuthBody = {
+  provider: SocialAuthBodyProvider;
+  /** @minLength 1 */
+  idToken: string;
+};
+
+export type SocialAuth200UserRole =
+  (typeof SocialAuth200UserRole)[keyof typeof SocialAuth200UserRole];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const SocialAuth200UserRole = {
+  admin: "admin",
+  customer: "customer",
+} as const;
+
+export type SocialAuth200UserOauthProvider =
+  (typeof SocialAuth200UserOauthProvider)[keyof typeof SocialAuth200UserOauthProvider];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const SocialAuth200UserOauthProvider = {
+  google: "google",
+} as const;
+
+export type SocialAuth200User = {
+  id: string;
+  name: string;
+  email: string;
+  role: SocialAuth200UserRole;
+  phone?: string;
+  avatarUrl?: string;
+  emailVerified: boolean;
+  passwordSetByUser: boolean;
+  oauthProvider?: SocialAuth200UserOauthProvider;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type SocialAuth200 = {
+  accessToken: string;
+  refreshToken: string;
+  user: SocialAuth200User;
+};
+
+export type SocialAuth201UserRole =
+  (typeof SocialAuth201UserRole)[keyof typeof SocialAuth201UserRole];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const SocialAuth201UserRole = {
+  admin: "admin",
+  customer: "customer",
+} as const;
+
+export type SocialAuth201UserOauthProvider =
+  (typeof SocialAuth201UserOauthProvider)[keyof typeof SocialAuth201UserOauthProvider];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const SocialAuth201UserOauthProvider = {
+  google: "google",
+} as const;
+
+export type SocialAuth201User = {
+  id: string;
+  name: string;
+  email: string;
+  role: SocialAuth201UserRole;
+  phone?: string;
+  avatarUrl?: string;
+  emailVerified: boolean;
+  passwordSetByUser: boolean;
+  oauthProvider?: SocialAuth201UserOauthProvider;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type SocialAuth201 = {
+  accessToken: string;
+  refreshToken: string;
+  user: SocialAuth201User;
+};
+
+export type SocialAuth401 = {
+  error: string;
+};
+
+export type SocialAuth503 = {
   error: string;
 };
 
@@ -2696,6 +2950,39 @@ export type UpdateOrder200 = {
   updatedAt: string;
 };
 
+export type GetUserProfile200Role =
+  (typeof GetUserProfile200Role)[keyof typeof GetUserProfile200Role];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetUserProfile200Role = {
+  admin: "admin",
+  customer: "customer",
+} as const;
+
+export type GetUserProfile200OauthProvider =
+  (typeof GetUserProfile200OauthProvider)[keyof typeof GetUserProfile200OauthProvider];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetUserProfile200OauthProvider = {
+  google: "google",
+} as const;
+
+export type GetUserProfile200 = {
+  id: string;
+  name: string;
+  email: string;
+  role: GetUserProfile200Role;
+  phone?: string;
+  avatarUrl?: string;
+  emailVerified: boolean;
+  passwordSetByUser: boolean;
+  oauthProvider?: GetUserProfile200OauthProvider;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type UpdateUserProfileBodyAvatarUrl = string | "";
+
 export type UpdateUserProfileBody = {
   /**
    * @minLength 1
@@ -2704,6 +2991,7 @@ export type UpdateUserProfileBody = {
   name?: string;
   /** @maxLength 40 */
   phone?: string;
+  avatarUrl?: UpdateUserProfileBodyAvatarUrl;
 };
 
 export type UpdateUserProfile200Role =
@@ -2715,26 +3003,58 @@ export const UpdateUserProfile200Role = {
   customer: "customer",
 } as const;
 
+export type UpdateUserProfile200OauthProvider =
+  (typeof UpdateUserProfile200OauthProvider)[keyof typeof UpdateUserProfile200OauthProvider];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UpdateUserProfile200OauthProvider = {
+  google: "google",
+} as const;
+
 export type UpdateUserProfile200 = {
   id: string;
   name: string;
   email: string;
   role: UpdateUserProfile200Role;
   phone?: string;
+  avatarUrl?: string;
+  emailVerified: boolean;
+  passwordSetByUser: boolean;
+  oauthProvider?: UpdateUserProfile200OauthProvider;
   createdAt: string;
   updatedAt: string;
 };
 
+export type DeleteAccountBody = {
+  /** @minLength 1 */
+  password?: string;
+  /** @minLength 1 */
+  idToken?: string;
+};
+
+export type DeleteAccount200 = {
+  ok: boolean;
+  devResetCode?: string;
+  devVerificationCode?: string;
+};
+
+export type DeleteAccount401 = {
+  error: string;
+};
+
 export type ChangePasswordBody = {
   /** @minLength 1 */
-  currentPassword: string;
+  currentPassword?: string;
   /** @minLength 8 */
   newPassword: string;
+  /** @minLength 1 */
+  idToken?: string;
 };
 
 export type ChangePassword200 = {
   ok: boolean;
   devResetCode?: string;
+  devVerificationCode?: string;
 };
 
 export type ChangePassword401 = {
@@ -2891,6 +3211,7 @@ export type UpdateUserAddress404 = {
 export type DeleteUserAddress200 = {
   ok: boolean;
   devResetCode?: string;
+  devVerificationCode?: string;
 };
 
 export type DeleteUserAddress404 = {

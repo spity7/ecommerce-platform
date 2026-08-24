@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import {
   changePasswordSchema,
   createUserAddressSchema,
+  deleteAccountSchema,
   updateUserAddressSchema,
   updateUserProfileSchema,
 } from "@platform/shared";
@@ -15,10 +16,29 @@ import {
   removeUserAddress,
   setDefaultAddress,
 } from "../services/user-addresses.js";
+import { clearPasswordResetCode } from "../services/password-reset.js";
+import { clearEmailVerificationCode } from "../services/email-verification.js";
+import {
+  userHasPassword,
+  verifyGoogleIdTokenForUser,
+} from "../services/google-account.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { toUserAddressDto, toUserDto } from "../utils/serializers.js";
 
 export const usersRouter = Router();
+
+usersRouter.get(
+  "/me",
+  requireAuth,
+  asyncHandler(async (req: AuthenticatedRequest, res) => {
+    const user = await User.findById(req.auth?.userId);
+    if (!user || user.deletedAt) {
+      throw new AppError(404, "User not found");
+    }
+
+    res.json(toUserDto(user));
+  })
+);
 
 usersRouter.patch(
   "/me",
@@ -26,7 +46,7 @@ usersRouter.patch(
   asyncHandler(async (req: AuthenticatedRequest, res) => {
     const payload = updateUserProfileSchema.parse(req.body);
     const user = await User.findById(req.auth?.userId);
-    if (!user) {
+    if (!user || user.deletedAt) {
       throw new AppError(404, "User not found");
     }
 
@@ -36,9 +56,52 @@ usersRouter.patch(
     if (payload.phone !== undefined) {
       user.phone = payload.phone;
     }
+    if (payload.avatarUrl !== undefined) {
+      user.avatarUrl = payload.avatarUrl;
+    }
 
     await user.save();
     res.json(toUserDto(user));
+  })
+);
+
+usersRouter.delete(
+  "/me",
+  requireAuth,
+  asyncHandler(async (req: AuthenticatedRequest, res) => {
+    const { password, idToken } = deleteAccountSchema.parse(req.body);
+    const user = await User.findById(req.auth?.userId);
+    if (!user || user.deletedAt) {
+      throw new AppError(404, "User not found");
+    }
+
+    if (user.role === "admin") {
+      throw new AppError(
+        403,
+        "Admin accounts cannot be deleted from the storefront"
+      );
+    }
+
+    if (password) {
+      const valid = await bcrypt.compare(password, user.passwordHash);
+      if (!valid) {
+        throw new AppError(401, "Password is incorrect");
+      }
+    } else if (idToken) {
+      await verifyGoogleIdTokenForUser(user, idToken);
+    } else if (!userHasPassword(user)) {
+      throw new AppError(400, "Google confirmation is required");
+    } else {
+      throw new AppError(400, "Password is required");
+    }
+
+    user.deletedAt = new Date();
+    user.refreshTokenVersion = (user.refreshTokenVersion ?? 0) + 1;
+    await clearPasswordResetCode(user);
+    await clearEmailVerificationCode(user);
+    await user.save();
+
+    res.json({ ok: true as const });
   })
 );
 
@@ -46,20 +109,33 @@ usersRouter.patch(
   "/me/password",
   requireAuth,
   asyncHandler(async (req: AuthenticatedRequest, res) => {
-    const { currentPassword, newPassword } = changePasswordSchema.parse(
-      req.body
-    );
+    const { currentPassword, newPassword, idToken } =
+      changePasswordSchema.parse(req.body);
     const user = await User.findById(req.auth?.userId);
     if (!user) {
       throw new AppError(404, "User not found");
     }
 
-    const valid = await bcrypt.compare(currentPassword, user.passwordHash);
-    if (!valid) {
-      throw new AppError(401, "Current password is incorrect");
+    if (userHasPassword(user)) {
+      if (!currentPassword) {
+        throw new AppError(400, "Current password is required");
+      }
+
+      const valid = await bcrypt.compare(currentPassword, user.passwordHash);
+      if (!valid) {
+        throw new AppError(401, "Current password is incorrect");
+      }
+    } else if (idToken) {
+      await verifyGoogleIdTokenForUser(user, idToken);
+    } else {
+      throw new AppError(
+        400,
+        "Google confirmation is required to set a password"
+      );
     }
 
     user.passwordHash = await bcrypt.hash(newPassword, 12);
+    user.passwordSetByUser = true;
     user.refreshTokenVersion = (user.refreshTokenVersion ?? 0) + 1;
     user.passwordResetCodeHash = undefined;
     user.passwordResetExpires = undefined;

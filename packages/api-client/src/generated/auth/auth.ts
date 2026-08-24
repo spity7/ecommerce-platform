@@ -16,8 +16,14 @@ import type {
   RefreshTokenBody,
   Register201,
   RegisterBody,
+  RequestEmailVerification200,
   ResetPassword200,
   ResetPasswordBody,
+  SocialAuth200,
+  SocialAuth201,
+  SocialAuthBody,
+  VerifyEmail200,
+  VerifyEmailBody,
 } from "../platform.schemas";
 
 import { customInstance } from "../../mutator";
@@ -93,6 +99,37 @@ export const getAuth = () => {
       data: resetPasswordBody,
     });
   };
+  /**
+   * @summary Send email verification code to current user
+   */
+  const requestEmailVerification = () => {
+    return customInstance<RequestEmailVerification200>({
+      url: `/api/auth/request-email-verification`,
+      method: "POST",
+    });
+  };
+  /**
+   * @summary Confirm email with verification code
+   */
+  const verifyEmail = (verifyEmailBody: VerifyEmailBody) => {
+    return customInstance<VerifyEmail200>({
+      url: `/api/auth/verify-email`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: verifyEmailBody,
+    });
+  };
+  /**
+   * @summary Sign in or register with Google
+   */
+  const socialAuth = (socialAuthBody: SocialAuthBody) => {
+    return customInstance<SocialAuth200 | SocialAuth201>({
+      url: `/api/auth/social`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: socialAuthBody,
+    });
+  };
   return {
     login,
     register,
@@ -101,6 +138,9 @@ export const getAuth = () => {
     logout,
     forgotPassword,
     resetPassword,
+    requestEmailVerification,
+    verifyEmail,
+    socialAuth,
   };
 };
 export type LoginResult = NonNullable<
@@ -123,4 +163,13 @@ export type ForgotPasswordResult = NonNullable<
 >;
 export type ResetPasswordResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getAuth>["resetPassword"]>>
+>;
+export type RequestEmailVerificationResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getAuth>["requestEmailVerification"]>>
+>;
+export type VerifyEmailResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getAuth>["verifyEmail"]>>
+>;
+export type SocialAuthResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getAuth>["socialAuth"]>>
 >;

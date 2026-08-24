@@ -1,6 +1,6 @@
 # Code conventions
 
-Per-workspace patterns for humans and AI. **Last reviewed:** 2026-08-22.
+Per-workspace patterns for humans and AI. **Last reviewed:** 2026-08-24.
 
 ## Monorepo
 
@@ -38,7 +38,8 @@ const site = getSiteConfig(process.env.SITE_ID);
 | `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`         | server        | Sign access/refresh tokens                  |
 | `JWT_ACCESS_EXPIRES_IN`, `JWT_REFRESH_EXPIRES_IN` | server        | Token lifetime (e.g. `15m`, `7d`)           |
 | `NEXT_PUBLIC_ACCESS_TOKEN_MAX_AGE`                | admin         | Cookie max-age (seconds); match access JWT  |
-| `NEXT_PUBLIC_REFRESH_TOKEN_MAX_AGE`               | admin         | Cookie max-age (seconds); match refresh JWT |
+| `GOOGLE_CLIENT_ID` / `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | server, client | Google OAuth (same Web client ID)            |
+| `SMTP_*`, `EMAIL_FROM`                              | server        | Password reset + email verification codes   |
 
 Reference templates: `server/.env.example`, `admin/.env.example`, `client/.env.example`, and `sites/{id}/.env.example` from `npm run create-site`.
 
@@ -101,6 +102,8 @@ Catalog list pages fetch from API in Server Components; show inline error banner
 | Modals          | Register in `components/common/other-components/LayoutModals.tsx`; state in `context/uiStore.ts`                                |
 | Cart / wishlist | Zustand + persist in `context/store.ts`; server cart API when `features.customerAuth` (guest `X-Guest-Cart-Id`, merge on login) |
 | Customer auth   | httpOnly session cookies via `/api/auth/*` route handlers; in-memory access token for `@platform/api-client` |
+| Google sign-in  | `@react-oauth/google` + BFF `POST /api/auth/social`; requires `NEXT_PUBLIC_GOOGLE_CLIENT_ID` (must match server `GOOGLE_CLIENT_ID`) |
+| Email verify    | Code emailed on register when SMTP set; `POST /api/orders` requires verified email for customers |
 | API fallback    | Try `@platform/api-client`, fall back to static data where implemented                                                          |
 | Lint            | ESLint + Prettier                                                                                                               |
 

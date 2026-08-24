@@ -2,9 +2,11 @@ import "./setup-env.js";
 import type { Express } from "express";
 import mongoose from "mongoose";
 import request from "supertest";
+import type { AuthResponse } from "@platform/shared";
 import { createApp } from "../src/app.js";
 import { connectDatabase, disconnectDatabase } from "../src/config/database.js";
 import { Product } from "../src/models/Product.js";
+import { User } from "../src/models/User.js";
 import type { ProductDocument } from "../src/models/Product.js";
 
 export function createTestApp(): Express {
@@ -33,16 +35,37 @@ export async function seedPublishedProduct(): Promise<ProductDocument> {
   });
 }
 
-type AuthBody = {
-  accessToken: string;
-  refreshToken: string;
-  user: { id: string; email: string; role: string };
-};
+export async function seedDraftProduct(): Promise<ProductDocument> {
+  return Product.create({
+    name: "Draft Test Product",
+    slug: `draft-product-${Date.now()}`,
+    sku: `DRAFT-${Date.now()}`,
+    price: 19.99,
+    stock: 10,
+    status: "draft",
+  });
+}
+
+export async function registerAdmin(
+  app: Express,
+  email = `admin-${Date.now()}@example.com`
+): Promise<{ body: AuthResponse; email: string }> {
+  const password = "Password1!Strong";
+  await registerCustomer(app, email);
+  await User.updateOne({ email }, { $set: { role: "admin" } });
+
+  const loginResponse = await request(app)
+    .post("/api/auth/login")
+    .send({ email, password })
+    .expect(200);
+
+  return { body: loginResponse.body as AuthResponse, email };
+}
 
 export async function registerCustomer(
   app: Express,
   email = `customer-${Date.now()}@example.com`
-): Promise<{ body: AuthBody; email: string }> {
+): Promise<{ body: AuthResponse; email: string }> {
   const response = await request(app)
     .post("/api/auth/register")
     .send({
@@ -53,9 +76,59 @@ export async function registerCustomer(
     })
     .expect(201);
 
-  return { body: response.body as AuthBody, email };
+  return { body: response.body as AuthResponse, email };
 }
 
 export function authHeader(accessToken: string): { Authorization: string } {
   return { Authorization: `Bearer ${accessToken}` };
+}
+
+export function testGoogleIdToken(
+  email: string,
+  sub = "google-test-sub",
+  picture?: string
+): string {
+  const base = `test-google|${email.toLowerCase()}|${sub}`;
+  return picture ? `${base}|${picture}` : base;
+}
+
+export async function verifyCustomerEmail(
+  app: Express,
+  accessToken: string
+): Promise<void> {
+  const requestResponse = await request(app)
+    .post("/api/auth/request-email-verification")
+    .set(authHeader(accessToken))
+    .expect(200);
+
+  const code = requestResponse.body.devVerificationCode;
+  if (!code) {
+    throw new Error("Expected devVerificationCode in test environment");
+  }
+
+  await request(app)
+    .post("/api/auth/verify-email")
+    .set(authHeader(accessToken))
+    .send({ code })
+    .expect(200);
+}
+
+export async function registerGoogleCustomer(
+  app: Express,
+  email = `google-${Date.now()}@example.com`,
+  sub = `google-sub-${Date.now()}`
+): Promise<{ body: AuthResponse; email: string; sub: string }> {
+  const response = await request(app)
+    .post("/api/auth/social")
+    .send({
+      provider: "google",
+      idToken: testGoogleIdToken(email, sub),
+    })
+    .expect(201);
+
+  return {
+    body: response.body as AuthResponse,
+    email,
+    sub,
+  };
 }

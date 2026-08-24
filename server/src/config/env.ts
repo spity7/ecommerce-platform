@@ -33,6 +33,7 @@ const envSchema = z.object({
     .optional()
     .transform((value) => value === "true" || value === "1"),
   EMAIL_FROM: z.string().optional(),
+  GOOGLE_CLIENT_ID: z.string().optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -89,5 +90,9 @@ export const env = {
     secure: data.SMTP_SECURE ?? false,
     from: data.EMAIL_FROM ?? site.contact.email,
     isConfigured: Boolean(data.SMTP_HOST),
+  },
+  google: {
+    clientId: data.GOOGLE_CLIENT_ID,
+    isConfigured: Boolean(data.GOOGLE_CLIENT_ID),
   },
 } as const;

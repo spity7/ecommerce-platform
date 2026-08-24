@@ -10,7 +10,10 @@ import type {
   ChangePasswordBody,
   CreateUserAddress201,
   CreateUserAddressBody,
+  DeleteAccount200,
+  DeleteAccountBody,
   DeleteUserAddress200,
+  GetUserProfile200,
   ListUserAddresses200Item,
   SetDefaultUserAddress200,
   UpdateUserAddress200,
@@ -23,6 +26,15 @@ import { customInstance } from "../../mutator";
 
 export const getUsers = () => {
   /**
+   * @summary Get current user profile
+   */
+  const getUserProfile = () => {
+    return customInstance<GetUserProfile200>({
+      url: `/api/users/me`,
+      method: "GET",
+    });
+  };
+  /**
    * @summary Update current user profile
    */
   const updateUserProfile = (updateUserProfileBody: UpdateUserProfileBody) => {
@@ -31,6 +43,17 @@ export const getUsers = () => {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       data: updateUserProfileBody,
+    });
+  };
+  /**
+   * @summary Deactivate current user account
+   */
+  const deleteAccount = (deleteAccountBody: DeleteAccountBody) => {
+    return customInstance<DeleteAccount200>({
+      url: `/api/users/me`,
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      data: deleteAccountBody,
     });
   };
   /**
@@ -97,7 +120,9 @@ export const getUsers = () => {
     });
   };
   return {
+    getUserProfile,
     updateUserProfile,
+    deleteAccount,
     changePassword,
     listUserAddresses,
     createUserAddress,
@@ -106,8 +131,14 @@ export const getUsers = () => {
     setDefaultUserAddress,
   };
 };
+export type GetUserProfileResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getUsers>["getUserProfile"]>>
+>;
 export type UpdateUserProfileResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getUsers>["updateUserProfile"]>>
+>;
+export type DeleteAccountResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getUsers>["deleteAccount"]>>
 >;
 export type ChangePasswordResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getUsers>["changePassword"]>>

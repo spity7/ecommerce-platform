@@ -24,7 +24,7 @@ Cross-tool entry point (**Cursor**, **Claude Code**, **Antigravity / Gemini**, *
 - **Node:** **20.x** (root `engines`). Run commands from repo root unless noted.
 - **Multi-site:** `SITE_ID` / `NEXT_PUBLIC_SITE_ID` → `getSiteConfig()` from `@platform/site-config`. First site: **beauty-station**.
 - **API client:** Orval from OpenAPI — **do not edit** `packages/api-client/src/generated/**` by hand. Run `npm run api:generate` after contract changes.
-- **Auth:** JWT API + admin sign-in (admin role enforced in UI and proxy). Admin and storefront use **httpOnly cookies** via each app’s `/api/auth/*` BFF routes; access tokens are also held in memory for cross-origin API calls. Logout revokes refresh tokens (`refreshTokenVersion`). Storefront customer auth when `features.customerAuth`.
+- **Auth:** JWT API + admin sign-in (admin role enforced in UI and proxy). Admin and storefront use **httpOnly cookies** via each app’s `/api/auth/*` BFF routes; access tokens are also held in memory for cross-origin API calls. Logout revokes refresh tokens (`refreshTokenVersion`). Storefront: Google sign-in, email verification on register, verified email required to place orders, OAuth users can delete/set password via Google `idToken` confirmation. Customer auth when `features.customerAuth`.
 - **Integration maturity:** Server catalog + cart/orders API; admin catalog CRUD + feature-filtered nav; client `/shop`/`/product/[slug]` + customer auth when enabled.
 
 ## Common commands

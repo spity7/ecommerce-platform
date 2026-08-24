@@ -1,5 +1,6 @@
 "use client";
 
+import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { useState, type FormEvent } from "react";
 import { ApiError, changePassword } from "@platform/api-client";
 import {
@@ -7,8 +8,10 @@ import {
   getPasswordValidationError,
 } from "@/lib/passwordValidation";
 import PasswordStrengthIndicator from "@/components/common/forms/PasswordStrengthIndicator";
+import { useAuthSession } from "@/providers/auth-session-provider";
 
 export default function AccountPasswordSection() {
+  const { user } = useAuthSession();
   const [editing, setEditing] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -21,6 +24,9 @@ export default function AccountPasswordSection() {
     newPassword,
     confirmPassword
   );
+  const settingInitialPassword = Boolean(user && !user.passwordSetByUser);
+  const requiresGoogleConfirmation =
+    settingInitialPassword && user?.oauthProvider === "google";
 
   function resetForm() {
     setCurrentPassword("");
@@ -30,22 +36,18 @@ export default function AccountPasswordSection() {
     setEditing(false);
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (passwordError) {
-      setError(passwordError);
-      return;
-    }
-
-    setError(null);
+  async function savePassword(input: {
+    currentPassword?: string;
+    newPassword: string;
+    idToken?: string;
+  }) {
     setSubmitting(true);
+    setError(null);
 
     try {
-      await changePassword({
-        currentPassword,
-        newPassword,
-      });
+      await changePassword(input);
       resetForm();
+      window.dispatchEvent(new Event("auth:session-updated"));
     } catch (err) {
       setError(
         err instanceof ApiError
@@ -55,6 +57,40 @@ export default function AccountPasswordSection() {
     } finally {
       setSubmitting(false);
     }
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+
+    await savePassword({
+      currentPassword: settingInitialPassword ? undefined : currentPassword,
+      newPassword,
+    });
+  }
+
+  async function handleGoogleSetPassword(
+    credentialResponse: CredentialResponse
+  ) {
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
+
+    const idToken = credentialResponse.credential;
+    if (!idToken) {
+      setError("Google confirmation did not return a token.");
+      return;
+    }
+
+    await savePassword({ newPassword, idToken });
+  }
+
+  if (!user) {
+    return null;
   }
 
   return (
@@ -68,34 +104,40 @@ export default function AccountPasswordSection() {
             onClick={() => setEditing(true)}
           >
             <i className="fa-light fa-pen-to-square mr--4" />
-            Edit
+            {settingInitialPassword ? "Set password" : "Edit"}
           </button>
         ) : null}
       </div>
       {!editing ? (
-        <p className="b1 mb--0">**********</p>
+        <p className="b1 mb--0">
+          {settingInitialPassword ? "No password set yet." : "**********"}
+        </p>
       ) : (
         <form onSubmit={handleSubmit}>
-          <div className="rbt-input-field-grp">
-            <label
-              className="rbt-field-label"
-              htmlFor="account_current_password"
-            >
-              Current password
-            </label>
-            <input
-              id="account_current_password"
-              className="rbt-input-field"
-              type="password"
-              value={currentPassword}
-              onChange={(event) => setCurrentPassword(event.target.value)}
-              required
-              autoComplete="current-password"
-            />
-          </div>
-          <div className="rbt-input-field-grp mt--16">
+          {!settingInitialPassword ? (
+            <div className="rbt-input-field-grp">
+              <label
+                className="rbt-field-label"
+                htmlFor="account_current_password"
+              >
+                Current password
+              </label>
+              <input
+                id="account_current_password"
+                className="rbt-input-field"
+                type="password"
+                value={currentPassword}
+                onChange={(event) => setCurrentPassword(event.target.value)}
+                required
+                autoComplete="current-password"
+              />
+            </div>
+          ) : null}
+          <div
+            className={`rbt-input-field-grp ${settingInitialPassword ? "" : "mt--16"}`}
+          >
             <label className="rbt-field-label" htmlFor="account_new_password">
-              New password
+              {settingInitialPassword ? "Password" : "New password"}
             </label>
             <input
               id="account_new_password"
@@ -123,7 +165,7 @@ export default function AccountPasswordSection() {
               className="rbt-field-label"
               htmlFor="account_confirm_password"
             >
-              Confirm new password
+              Confirm {settingInitialPassword ? "password" : "new password"}
             </label>
             <input
               id="account_confirm_password"
@@ -135,25 +177,44 @@ export default function AccountPasswordSection() {
               autoComplete="new-password"
             />
           </div>
+          {requiresGoogleConfirmation ? (
+            <div className="mt--16">
+              <GoogleLogin
+                onSuccess={handleGoogleSetPassword}
+                onError={() => setError("Google confirmation failed.")}
+                text="continue_with"
+              />
+            </div>
+          ) : (
+            <div className="d-flex gap-2 mt--24">
+              <button
+                type="submit"
+                className="rbt-btn rbt-btn-sm"
+                disabled={submitting || strength.label !== "Strong"}
+              >
+                {submitting ? "Saving…" : "Save password"}
+              </button>
+              <button
+                type="button"
+                className="rbt-btn rbt-btn-sm rbt-btn-secondary"
+                onClick={resetForm}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
           {error ? (
             <p className="rbt-text-color-danger mt--12 mb--0 b3">{error}</p>
           ) : null}
-          <div className="d-flex gap-2 mt--24">
-            <button
-              type="submit"
-              className="rbt-btn rbt-btn-sm"
-              disabled={submitting || strength.label !== "Strong"}
-            >
-              {submitting ? "Saving…" : "Save password"}
-            </button>
+          {requiresGoogleConfirmation ? (
             <button
               type="button"
-              className="rbt-btn rbt-btn-sm rbt-btn-secondary"
+              className="rbt-btn rbt-btn-sm rbt-btn-secondary mt--16"
               onClick={resetForm}
             >
               Cancel
             </button>
-          </div>
+          ) : null}
         </form>
       )}
     </div>

@@ -14,6 +14,16 @@ Copy `.env.example` values into each app (`client`, `admin`, `server`) for local
 
 **Admin access:** register via `POST /api/auth/register`, then set `role: "admin"` on that user in MongoDB. Run `npm run seed` for catalog demo data (dataset follows `homeLayout`: beauty, sport, or general).
 
+## Google sign-in (optional)
+
+1. Google Cloud Console → APIs & Services → Credentials → OAuth 2.0 Web client.
+2. Authorized JavaScript origins: `http://localhost:3000` (and production storefront URL).
+3. Set the same client ID in `server/.env` as `GOOGLE_CLIENT_ID` and in `client/.env.local` as `NEXT_PUBLIC_GOOGLE_CLIENT_ID`.
+
+## Email (SMTP)
+
+Password reset and registration email verification use the same SMTP vars (`SMTP_HOST`, `SMTP_PORT`, …). Without SMTP, dev logs verification codes to the server console.
+
 ## Resources (production)
 
 | Resource   | Value                                   |

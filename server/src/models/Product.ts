@@ -1,4 +1,9 @@
-import { Schema, model, type InferSchemaType, Types } from "mongoose";
+import {
+  Schema,
+  model,
+  type InferSchemaType,
+  type HydratedDocument,
+} from "mongoose";
 
 const productSchema = new Schema(
   {
@@ -28,10 +33,8 @@ const productSchema = new Schema(
 productSchema.index({ name: "text", sku: "text", description: "text" });
 productSchema.index({ status: 1, createdAt: -1 });
 
-export type ProductDocument = InferSchemaType<typeof productSchema> & {
-  _id: Types.ObjectId;
-  createdAt: Date;
-  updatedAt: Date;
-};
+export type ProductDocument = HydratedDocument<
+  InferSchemaType<typeof productSchema>
+>;
 
 export const Product = model("Product", productSchema);

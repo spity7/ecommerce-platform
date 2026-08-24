@@ -8,10 +8,13 @@ import {
   brandDtoSchema,
   categoryDtoSchema,
   changePasswordSchema,
+  confirmEmailVerificationSchema,
   createUserAddressSchema,
+  deleteAccountSchema,
   forgotPasswordSchema,
   okResponseSchema,
   resetPasswordSchema,
+  socialAuthSchema,
   createAttributeSchema,
   createBrandSchema,
   createCategorySchema,
@@ -105,6 +108,12 @@ openApiRegistry.register("CreateOrderInput", createOrderSchema);
 openApiRegistry.register("UpdateOrderStatusInput", updateOrderStatusSchema);
 openApiRegistry.register("UpdateUserProfileInput", updateUserProfileSchema);
 openApiRegistry.register("ChangePasswordInput", changePasswordSchema);
+openApiRegistry.register(
+  "ConfirmEmailVerificationInput",
+  confirmEmailVerificationSchema
+);
+openApiRegistry.register("DeleteAccountInput", deleteAccountSchema);
+openApiRegistry.register("SocialAuthInput", socialAuthSchema);
 openApiRegistry.register("ForgotPasswordInput", forgotPasswordSchema);
 openApiRegistry.register("ResetPasswordInput", resetPasswordSchema);
 openApiRegistry.register("OkResponse", okResponseSchema);
@@ -455,6 +464,78 @@ openApiRegistry.registerPath({
 });
 
 openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/auth/request-email-verification",
+  tags: ["Auth"],
+  operationId: "requestEmailVerification",
+  summary: "Send email verification code to current user",
+  security: [{ bearerAuth: [] }],
+  responses: {
+    200: {
+      description: "Verification code requested",
+      content: { "application/json": { schema: okResponseSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/auth/verify-email",
+  tags: ["Auth"],
+  operationId: "verifyEmail",
+  summary: "Confirm email with verification code",
+  security: [{ bearerAuth: [] }],
+  request: {
+    body: {
+      content: {
+        "application/json": { schema: confirmEmailVerificationSchema },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: "Verified user",
+      content: { "application/json": { schema: userDtoSchema } },
+    },
+    400: {
+      description: "Invalid code",
+      content: { "application/json": { schema: errorResponseSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/auth/social",
+  tags: ["Auth"],
+  operationId: "socialAuth",
+  summary: "Sign in or register with Google",
+  request: {
+    body: {
+      content: { "application/json": { schema: socialAuthSchema } },
+    },
+  },
+  responses: {
+    200: {
+      description: "Authenticated",
+      content: { "application/json": { schema: authResponseSchema } },
+    },
+    201: {
+      description: "Registered via social provider",
+      content: { "application/json": { schema: authResponseSchema } },
+    },
+    401: {
+      description: "Invalid token",
+      content: { "application/json": { schema: errorResponseSchema } },
+    },
+    503: {
+      description: "Provider not configured",
+      content: { "application/json": { schema: errorResponseSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
   method: "get",
   path: "/api/cart",
   tags: ["Cart"],
@@ -625,6 +706,21 @@ openApiRegistry.registerPath({
 });
 
 openApiRegistry.registerPath({
+  method: "get",
+  path: "/api/users/me",
+  tags: ["Users"],
+  operationId: "getUserProfile",
+  summary: "Get current user profile",
+  security: [{ bearerAuth: [] }],
+  responses: {
+    200: {
+      description: "User",
+      content: { "application/json": { schema: userDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
   method: "patch",
   path: "/api/users/me",
   tags: ["Users"],
@@ -640,6 +736,30 @@ openApiRegistry.registerPath({
     200: {
       description: "User",
       content: { "application/json": { schema: userDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "delete",
+  path: "/api/users/me",
+  tags: ["Users"],
+  operationId: "deleteAccount",
+  summary: "Deactivate current user account",
+  security: [{ bearerAuth: [] }],
+  request: {
+    body: {
+      content: { "application/json": { schema: deleteAccountSchema } },
+    },
+  },
+  responses: {
+    200: {
+      description: "Account deactivated",
+      content: { "application/json": { schema: okResponseSchema } },
+    },
+    401: {
+      description: "Password incorrect",
+      content: { "application/json": { schema: errorResponseSchema } },
     },
   },
 });

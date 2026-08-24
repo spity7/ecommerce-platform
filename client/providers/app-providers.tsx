@@ -1,5 +1,6 @@
 "use client";
 
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useEffect, type ReactNode } from "react";
 import {
   registerUnauthorizedHandler,
@@ -63,5 +64,16 @@ export function AppProviders({ children }: AppProvidersProps) {
     };
   }, []);
 
-  return <AuthSessionProvider>{children}</AuthSessionProvider>;
+  const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  const session = <AuthSessionProvider>{children}</AuthSessionProvider>;
+
+  if (!googleClientId) {
+    return session;
+  }
+
+  return (
+    <GoogleOAuthProvider clientId={googleClientId}>
+      {session}
+    </GoogleOAuthProvider>
+  );
 }

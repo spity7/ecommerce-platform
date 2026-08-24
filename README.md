@@ -45,6 +45,8 @@ npm run dev:client
 
 Copy `.env.example` from each app (and `sites/beauty-station/.env.example`) into `.env.local` / `.env` as needed.
 
+**Optional storefront Google sign-in:** set matching `GOOGLE_CLIENT_ID` (server) and `NEXT_PUBLIC_GOOGLE_CLIENT_ID` (client). Create a Google Cloud OAuth Web client with `http://localhost:3000` as an authorized JavaScript origin. **Email verification:** register sends a verification code when SMTP is configured (logged in dev without SMTP). Customers must verify email before placing orders.
+
 **Node:** 20.x
 
 ## Common commands

@@ -45,13 +45,38 @@ export async function fetchOrder(id: string) {
 export async function updateUserProfile(input: {
   name?: string;
   phone?: string;
+  avatarUrl?: string;
 }) {
   return platformApi.updateUserProfile(input);
 }
 
+export async function getUserProfile() {
+  return platformApi.getUserProfile();
+}
+
+export async function deleteAccount(input: {
+  password?: string;
+  idToken?: string;
+}) {
+  return platformApi.deleteAccount(input);
+}
+
+export async function requestEmailVerification() {
+  return platformApi.requestEmailVerification();
+}
+
+export async function verifyEmail(code: string) {
+  return platformApi.verifyEmail({ code });
+}
+
+export async function socialAuthWithGoogle(idToken: string) {
+  return platformApi.socialAuth({ provider: "google", idToken });
+}
+
 export async function changePassword(input: {
-  currentPassword: string;
+  currentPassword?: string;
   newPassword: string;
+  idToken?: string;
 }) {
   return platformApi.changePassword(input);
 }

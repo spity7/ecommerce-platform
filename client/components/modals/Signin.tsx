@@ -165,19 +165,6 @@ export default function Signin() {
                   {/* Start social login button */}
                   <button
                     type="submit"
-                    className="rbt-btn rbt-btn-border rbt-social-login-btn d-block w-100 mb--16 rbt-social-login-btn"
-                  >
-                    <Image
-                      className="icon"
-                      alt="Icon"
-                      src="/assets/images/icons/fb-icon.webp"
-                      width={37}
-                      height={36}
-                    />
-                    Continue with Facebook
-                  </button>
-                  <button
-                    type="submit"
                     className="rbt-btn rbt-btn-border rbt-social-login-btn d-block w-100 rbt-social-login-btn"
                   >
                     <Image

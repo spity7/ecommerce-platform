@@ -1053,6 +1053,20 @@
           "phone": {
             "type": "string"
           },
+          "avatarUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "emailVerified": {
+            "type": "boolean"
+          },
+          "passwordSetByUser": {
+            "type": "boolean"
+          },
+          "oauthProvider": {
+            "type": "string",
+            "enum": ["google"]
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time"
@@ -1062,7 +1076,16 @@
             "format": "date-time"
           }
         },
-        "required": ["id", "name", "email", "role", "createdAt", "updatedAt"]
+        "required": [
+          "id",
+          "name",
+          "email",
+          "role",
+          "emailVerified",
+          "passwordSetByUser",
+          "createdAt",
+          "updatedAt"
+        ]
       },
       "AuthResponse": {
         "type": "object",
@@ -1093,6 +1116,20 @@
               "phone": {
                 "type": "string"
               },
+              "avatarUrl": {
+                "type": "string",
+                "format": "uri"
+              },
+              "emailVerified": {
+                "type": "boolean"
+              },
+              "passwordSetByUser": {
+                "type": "boolean"
+              },
+              "oauthProvider": {
+                "type": "string",
+                "enum": ["google"]
+              },
               "createdAt": {
                 "type": "string",
                 "format": "date-time"
@@ -1107,6 +1144,8 @@
               "name",
               "email",
               "role",
+              "emailVerified",
+              "passwordSetByUser",
               "createdAt",
               "updatedAt"
             ]
@@ -1584,6 +1623,18 @@
           "phone": {
             "type": "string",
             "maxLength": 40
+          },
+          "avatarUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "string",
+                "enum": [""]
+              }
+            ]
           }
         }
       },
@@ -1597,9 +1648,51 @@
           "newPassword": {
             "type": "string",
             "minLength": 8
+          },
+          "idToken": {
+            "type": "string",
+            "minLength": 1
           }
         },
-        "required": ["currentPassword", "newPassword"]
+        "required": ["newPassword"]
+      },
+      "ConfirmEmailVerificationInput": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 6
+          }
+        },
+        "required": ["code"]
+      },
+      "DeleteAccountInput": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "minLength": 1
+          },
+          "idToken": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "SocialAuthInput": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": ["google"]
+          },
+          "idToken": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": ["provider", "idToken"]
       },
       "ForgotPasswordInput": {
         "type": "object",
@@ -1638,6 +1731,9 @@
             "enum": [true]
           },
           "devResetCode": {
+            "type": "string"
+          },
+          "devVerificationCode": {
             "type": "string"
           }
         },
@@ -4670,6 +4766,20 @@
                         "phone": {
                           "type": "string"
                         },
+                        "avatarUrl": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "emailVerified": {
+                          "type": "boolean"
+                        },
+                        "passwordSetByUser": {
+                          "type": "boolean"
+                        },
+                        "oauthProvider": {
+                          "type": "string",
+                          "enum": ["google"]
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time"
@@ -4684,6 +4794,8 @@
                         "name",
                         "email",
                         "role",
+                        "emailVerified",
+                        "passwordSetByUser",
                         "createdAt",
                         "updatedAt"
                       ]
@@ -4780,6 +4892,20 @@
                         "phone": {
                           "type": "string"
                         },
+                        "avatarUrl": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "emailVerified": {
+                          "type": "boolean"
+                        },
+                        "passwordSetByUser": {
+                          "type": "boolean"
+                        },
+                        "oauthProvider": {
+                          "type": "string",
+                          "enum": ["google"]
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time"
@@ -4794,6 +4920,8 @@
                         "name",
                         "email",
                         "role",
+                        "emailVerified",
+                        "passwordSetByUser",
                         "createdAt",
                         "updatedAt"
                       ]
@@ -4878,6 +5006,20 @@
                         "phone": {
                           "type": "string"
                         },
+                        "avatarUrl": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "emailVerified": {
+                          "type": "boolean"
+                        },
+                        "passwordSetByUser": {
+                          "type": "boolean"
+                        },
+                        "oauthProvider": {
+                          "type": "string",
+                          "enum": ["google"]
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time"
@@ -4892,6 +5034,8 @@
                         "name",
                         "email",
                         "role",
+                        "emailVerified",
+                        "passwordSetByUser",
                         "createdAt",
                         "updatedAt"
                       ]
@@ -4956,6 +5100,20 @@
                     "phone": {
                       "type": "string"
                     },
+                    "avatarUrl": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "emailVerified": {
+                      "type": "boolean"
+                    },
+                    "passwordSetByUser": {
+                      "type": "boolean"
+                    },
+                    "oauthProvider": {
+                      "type": "string",
+                      "enum": ["google"]
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time"
@@ -4970,6 +5128,8 @@
                     "name",
                     "email",
                     "role",
+                    "emailVerified",
+                    "passwordSetByUser",
                     "createdAt",
                     "updatedAt"
                   ]
@@ -5061,6 +5221,9 @@
                     },
                     "devResetCode": {
                       "type": "string"
+                    },
+                    "devVerificationCode": {
+                      "type": "string"
                     }
                   },
                   "required": ["ok"]
@@ -5115,6 +5278,9 @@
                     },
                     "devResetCode": {
                       "type": "string"
+                    },
+                    "devVerificationCode": {
+                      "type": "string"
                     }
                   },
                   "required": ["ok"]
@@ -5124,6 +5290,358 @@
           },
           "400": {
             "description": "Invalid code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/request-email-verification": {
+      "post": {
+        "tags": ["Auth"],
+        "operationId": "requestEmailVerification",
+        "summary": "Send email verification code to current user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Verification code requested",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "enum": [true]
+                    },
+                    "devResetCode": {
+                      "type": "string"
+                    },
+                    "devVerificationCode": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["ok"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/verify-email": {
+      "post": {
+        "tags": ["Auth"],
+        "operationId": "verifyEmail",
+        "summary": "Confirm email with verification code",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "minLength": 6,
+                    "maxLength": 6
+                  }
+                },
+                "required": ["code"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verified user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "role": {
+                      "type": "string",
+                      "enum": ["admin", "customer"]
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "avatarUrl": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "emailVerified": {
+                      "type": "boolean"
+                    },
+                    "passwordSetByUser": {
+                      "type": "boolean"
+                    },
+                    "oauthProvider": {
+                      "type": "string",
+                      "enum": ["google"]
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "email",
+                    "role",
+                    "emailVerified",
+                    "passwordSetByUser",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/social": {
+      "post": {
+        "tags": ["Auth"],
+        "operationId": "socialAuth",
+        "summary": "Sign in or register with Google",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "provider": {
+                    "type": "string",
+                    "enum": ["google"]
+                  },
+                  "idToken": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["provider", "idToken"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string"
+                    },
+                    "refreshToken": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email"
+                        },
+                        "role": {
+                          "type": "string",
+                          "enum": ["admin", "customer"]
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "avatarUrl": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "emailVerified": {
+                          "type": "boolean"
+                        },
+                        "passwordSetByUser": {
+                          "type": "boolean"
+                        },
+                        "oauthProvider": {
+                          "type": "string",
+                          "enum": ["google"]
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "email",
+                        "role",
+                        "emailVerified",
+                        "passwordSetByUser",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": ["accessToken", "refreshToken", "user"]
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Registered via social provider",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string"
+                    },
+                    "refreshToken": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string",
+                          "format": "email"
+                        },
+                        "role": {
+                          "type": "string",
+                          "enum": ["admin", "customer"]
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "avatarUrl": {
+                          "type": "string",
+                          "format": "uri"
+                        },
+                        "emailVerified": {
+                          "type": "boolean"
+                        },
+                        "passwordSetByUser": {
+                          "type": "boolean"
+                        },
+                        "oauthProvider": {
+                          "type": "string",
+                          "enum": ["google"]
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updatedAt": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "email",
+                        "role",
+                        "emailVerified",
+                        "passwordSetByUser",
+                        "createdAt",
+                        "updatedAt"
+                      ]
+                    }
+                  },
+                  "required": ["accessToken", "refreshToken", "user"]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Provider not configured",
             "content": {
               "application/json": {
                 "schema": {
@@ -6358,6 +6876,79 @@
       }
     },
     "/api/users/me": {
+      "get": {
+        "tags": ["Users"],
+        "operationId": "getUserProfile",
+        "summary": "Get current user profile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "role": {
+                      "type": "string",
+                      "enum": ["admin", "customer"]
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "avatarUrl": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "emailVerified": {
+                      "type": "boolean"
+                    },
+                    "passwordSetByUser": {
+                      "type": "boolean"
+                    },
+                    "oauthProvider": {
+                      "type": "string",
+                      "enum": ["google"]
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "email",
+                    "role",
+                    "emailVerified",
+                    "passwordSetByUser",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
       "patch": {
         "tags": ["Users"],
         "operationId": "updateUserProfile",
@@ -6381,6 +6972,18 @@
                   "phone": {
                     "type": "string",
                     "maxLength": 40
+                  },
+                  "avatarUrl": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "uri"
+                      },
+                      {
+                        "type": "string",
+                        "enum": [""]
+                      }
+                    ]
                   }
                 }
               }
@@ -6412,6 +7015,20 @@
                     "phone": {
                       "type": "string"
                     },
+                    "avatarUrl": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "emailVerified": {
+                      "type": "boolean"
+                    },
+                    "passwordSetByUser": {
+                      "type": "boolean"
+                    },
+                    "oauthProvider": {
+                      "type": "string",
+                      "enum": ["google"]
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time"
@@ -6426,9 +7043,81 @@
                     "name",
                     "email",
                     "role",
+                    "emailVerified",
+                    "passwordSetByUser",
                     "createdAt",
                     "updatedAt"
                   ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "operationId": "deleteAccount",
+        "summary": "Deactivate current user account",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "idToken": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Account deactivated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "type": "boolean",
+                      "enum": [true]
+                    },
+                    "devResetCode": {
+                      "type": "string"
+                    },
+                    "devVerificationCode": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["ok"]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Password incorrect",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"]
                 }
               }
             }
@@ -6459,9 +7148,13 @@
                   "newPassword": {
                     "type": "string",
                     "minLength": 8
+                  },
+                  "idToken": {
+                    "type": "string",
+                    "minLength": 1
                   }
                 },
-                "required": ["currentPassword", "newPassword"]
+                "required": ["newPassword"]
               }
             }
           }
@@ -6479,6 +7172,9 @@
                       "enum": [true]
                     },
                     "devResetCode": {
+                      "type": "string"
+                    },
+                    "devVerificationCode": {
                       "type": "string"
                     }
                   },
@@ -6836,6 +7532,9 @@
                       "enum": [true]
                     },
                     "devResetCode": {
+                      "type": "string"
+                    },
+                    "devVerificationCode": {
                       "type": "string"
                     }
                   },

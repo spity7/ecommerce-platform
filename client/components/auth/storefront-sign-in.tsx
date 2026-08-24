@@ -8,6 +8,7 @@ import { mergeGuestCart, setAccessToken, ApiError } from "@platform/api-client";
 import type { AuthResponse } from "@platform/shared";
 import { getOrCreateGuestCartId, clearGuestCartId } from "@/lib/guest-cart";
 import { getSiteChromeBranding } from "@/lib/site-branding";
+import StorefrontGoogleSignIn from "./storefront-google-sign-in";
 
 export function StorefrontSignInForm() {
   const router = useRouter();
@@ -130,6 +131,9 @@ export function StorefrontSignInShell() {
       </div>
       <h6 className="rbt-title rbt-text-bold mb--16">Sign In To {brandName}</h6>
       <StorefrontSignInForm />
+      {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ? (
+        <StorefrontGoogleSignIn />
+      ) : null}
     </div>
   );
 }

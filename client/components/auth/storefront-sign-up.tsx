@@ -8,6 +8,7 @@ import { mergeGuestCart, setAccessToken, ApiError } from "@platform/api-client";
 import type { AuthResponse } from "@platform/shared";
 import { getOrCreateGuestCartId, clearGuestCartId } from "@/lib/guest-cart";
 import { getSiteChromeBranding } from "@/lib/site-branding";
+import StorefrontGoogleSignIn from "./storefront-google-sign-in";
 
 export function StorefrontSignUpForm() {
   const router = useRouter();
@@ -167,6 +168,9 @@ export function StorefrontSignUpShell() {
         Create your {brandName} account
       </h6>
       <StorefrontSignUpForm />
+      {process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ? (
+        <StorefrontGoogleSignIn />
+      ) : null}
     </div>
   );
 }
