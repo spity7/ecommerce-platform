@@ -7,6 +7,7 @@ import {
   setAccessToken,
   setGuestCartId,
 } from "@platform/api-client";
+import { isAuthPublicPath } from "@/lib/auth-public-paths";
 import { tryRefreshSession } from "@/lib/refresh-session";
 import { clearSessionAndRedirectToSignIn } from "@/lib/session";
 import { getOrCreateGuestCartId } from "@/lib/guest-cart";
@@ -24,7 +25,11 @@ export function AppProviders({ children }: AppProvidersProps) {
 
     registerUnauthorizedHandler(async () => {
       const refreshed = await tryRefreshSession();
-      if (!refreshed) {
+      if (
+        !refreshed &&
+        typeof window !== "undefined" &&
+        !isAuthPublicPath(window.location.pathname)
+      ) {
         await clearSessionAndRedirectToSignIn();
       }
       return refreshed;

@@ -9,6 +9,7 @@ import { useState } from "react";
 import Tooltip from "@/components/common/ui/Tooltip";
 import AddToWishlist from "../action-buttons/AddToWishlistOne";
 import AddToQuickViewOne from "../action-buttons/AddToQuickViewOne";
+import { AuthSignInTrigger } from "@/components/auth/storefront-auth-entry";
 import ModalTriggerButton from "../action-buttons/ModalTriggerButton";
 
 export default function ProductCard23({
@@ -140,12 +141,11 @@ export default function ProductCard23({
 
             <div className="prd-btn-grp">
               {loginRequired ? (
-                <ModalTriggerButton
+                <AuthSignInTrigger
                   className="rbt-btn rbt-btn-border rbt-btn-sm rbt-square-btn d-block has-left-icon"
-                  openModalName="signinModal"
                 >
                   <i className="fa-regular fa-user" /> Login/Registration
-                </ModalTriggerButton>
+                </AuthSignInTrigger>
               ) : (
                 <ModalTriggerButton
                   className="rbt-btn rbt-btn-border rbt-btn-sm rbt-square-btn d-block has-left-icon"

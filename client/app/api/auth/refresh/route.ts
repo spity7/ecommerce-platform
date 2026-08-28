@@ -10,7 +10,11 @@ import { proxyAuthRequest, readAuthResponse } from "@/lib/auth-session-api";
 export async function POST() {
   const refreshToken = (await cookies()).get(REFRESH_TOKEN_COOKIE)?.value;
   if (!refreshToken) {
-    return NextResponse.json({ error: "No refresh token" });
+    const response = NextResponse.json(
+      { error: "No refresh token" },
+      { status: 401 }
+    );
+    return clearAuthCookies(response);
   }
 
   const upstream = await proxyAuthRequest("/api/auth/refresh", {

@@ -87,24 +87,27 @@ export async function mergeGuestCartIntoUser(
   guestSessionId: string
 ) {
   const guestCart = await Cart.findOne({ guestSessionId });
-  if (!guestCart || guestCart.items.length === 0) {
-    return toCartDto(await getOrCreateUserCart(userId));
-  }
-
   const userCart = await getOrCreateUserCart(userId);
 
-  for (const guestItem of guestCart.items) {
-    const existing = userCart.items.find(
-      (item) => item.productId.toString() === guestItem.productId.toString()
-    );
-    if (existing) {
-      existing.quantity += guestItem.quantity;
-    } else {
-      userCart.items.push(guestItem);
-    }
+  if (!guestCart) {
+    return toCartDto(userCart);
   }
 
-  await userCart.save();
+  if (guestCart.items.length > 0) {
+    for (const guestItem of guestCart.items) {
+      const existing = userCart.items.find(
+        (item) => item.productId.toString() === guestItem.productId.toString()
+      );
+      if (existing) {
+        existing.quantity += guestItem.quantity;
+      } else {
+        userCart.items.push(guestItem);
+      }
+    }
+
+    await userCart.save();
+  }
+
   await Cart.deleteOne({ _id: guestCart._id });
   return toCartDto(userCart);
 }

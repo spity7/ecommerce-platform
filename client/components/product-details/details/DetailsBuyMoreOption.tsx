@@ -8,7 +8,7 @@ import ProductActionPanel from "../ProductActionPanel";
 import BuyMoreOption1 from "../others/BuyMoreOption1";
 
 import { Product } from "@/types";
-import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
+import { AuthSignInTrigger } from "@/components/auth/storefront-auth-entry";
 export default function DetailsBuyMoreOption({
   product,
 }: {
@@ -42,12 +42,12 @@ export default function DetailsBuyMoreOption({
                   </p>
                 </div>
                 <div className="rbt-quick-access-banner-action-btn">
-                  <ModalTriggerButton
-                    openModalName="signinModal"
+                  <AuthSignInTrigger
                     className="rbt-btn rbt-btn-xs"
+                    href="/signup"
                   >
                     <i className="fa-light fa-user mr--4" /> Register Now
-                  </ModalTriggerButton>
+                  </AuthSignInTrigger>
                 </div>
                 <a
                   href="#"

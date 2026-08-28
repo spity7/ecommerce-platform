@@ -1,3 +1,5 @@
+import { setGuestCartId } from "@platform/api-client";
+
 const GUEST_CART_KEY = "platform_guest_cart_id";
 
 export function getOrCreateGuestCartId(): string {
@@ -23,4 +25,5 @@ export function clearGuestCartId(): void {
   if (typeof window !== "undefined") {
     localStorage.removeItem(GUEST_CART_KEY);
   }
+  setGuestCartId(null);
 }

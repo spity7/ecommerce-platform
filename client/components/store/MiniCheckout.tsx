@@ -4,6 +4,7 @@ import { FireIcon } from "../svg-icons";
 import Image from "next/image";
 import Link from "next/link";
 import { useContextElement } from "@/context/Context";
+import { AuthSignInTrigger } from "@/components/auth/storefront-auth-entry";
 import ModalTriggerButton from "../action-buttons/ModalTriggerButton";
 import { getCartSummary } from "../../lib/cartSummaryUtils";
 
@@ -148,12 +149,9 @@ export default function MiniCheckout() {
             <FireIcon />
             <p className="rbt-link-hover b1">
               Unlock <strong>256 points</strong> rewards!{" "}
-              <ModalTriggerButton
-                openModalName="signinModal"
-                className="border-0 bg-transparent p-0 text-primary"
-              >
+              <AuthSignInTrigger className="border-0 bg-transparent p-0 text-primary">
                 Sign in
-              </ModalTriggerButton>{" "}
+              </AuthSignInTrigger>{" "}
               to your account.
             </p>
           </div>

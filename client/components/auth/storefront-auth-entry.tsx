@@ -187,6 +187,42 @@ type ToolbarProfileActionProps = {
   label: string;
 };
 
+type AuthSignInTriggerProps = {
+  className?: string;
+  children: ReactNode;
+  href?: string;
+  signedInHref?: string;
+};
+
+export function AuthSignInTrigger({
+  className,
+  children,
+  href = "/signin",
+  signedInHref = "/account-info",
+}: AuthSignInTriggerProps) {
+  const { customerAuth, user, loading } = useStorefrontAuthEntry();
+
+  if (!customerAuth) {
+    return (
+      <ModalTriggerButton className={className} openModalName="signinModal">
+        {children}
+      </ModalTriggerButton>
+    );
+  }
+
+  if (loading) {
+    return <span className={className}>{children}</span>;
+  }
+
+  const targetHref = user ? signedInHref : href;
+
+  return (
+    <Link className={className} href={targetHref}>
+      {children}
+    </Link>
+  );
+}
+
 export function ToolbarProfileAction({
   className,
   label,

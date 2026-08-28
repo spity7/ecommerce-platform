@@ -4,7 +4,7 @@ import Tooltip from "@/components/common/ui/Tooltip";
 import { Product } from "@/types";
 import AddToQuickViewOne from "../action-buttons/AddToQuickViewOne";
 import AddToWishlistTwo from "../action-buttons/AddToWishlistTwo";
-import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
+import { AuthSignInTrigger } from "@/components/auth/storefront-auth-entry";
 
 export default function ProductCard22({
   product,
@@ -89,12 +89,11 @@ export default function ProductCard22({
           </Tooltip>
         </div>
 
-        <ModalTriggerButton
+        <AuthSignInTrigger
           className="rbt-btn hover-appear-element bottom-position text-center rbt-btn-sm rbt-square-btn d-block has-left-icon"
-          openModalName="signinModal"
         >
           Sign In to See Price
-        </ModalTriggerButton>
+        </AuthSignInTrigger>
       </div>
       <div
         className={`rbt-card-body rbt-card-body-center-align ${contentBgClass}`}

@@ -12,6 +12,7 @@ import {
   teardownTestDatabase,
   verifyCustomerEmail,
 } from "./helpers.js";
+import { Cart } from "../src/models/Cart.js";
 
 describe("commerce API", () => {
   const app = createTestApp();
@@ -103,6 +104,26 @@ describe("commerce API", () => {
       .expect(200);
 
     assert.equal(mergeResponse.body.itemCount, 2);
+  });
+
+  it("deletes an empty guest cart on merge", async () => {
+    const guestSessionId = `guest-empty-merge-${Date.now()}`;
+    const { body } = await registerCustomer(app);
+    await verifyCustomerEmail(app, body.accessToken);
+
+    await request(app)
+      .get("/api/cart")
+      .set("X-Guest-Cart-Id", guestSessionId)
+      .expect(200);
+
+    const mergeResponse = await request(app)
+      .post("/api/cart/merge")
+      .set(authHeader(body.accessToken))
+      .send({ guestSessionId })
+      .expect(200);
+
+    assert.equal(mergeResponse.body.itemCount, 0);
+    assert.equal(await Cart.findOne({ guestSessionId }), null);
   });
 
   it("updates, removes, and clears cart items", async () => {

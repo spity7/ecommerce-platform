@@ -11,7 +11,7 @@ import {
   socialAuthSchema,
 } from "@platform/shared";
 import { AppError } from "../middleware/errorHandler.js";
-import { authRateLimiter } from "../middleware/rateLimit.js";
+import { credentialAuthRateLimiter } from "../middleware/rateLimit.js";
 import { requireAuth, type AuthenticatedRequest } from "../middleware/auth.js";
 import type { UserDocument } from "../models/User.js";
 import { User } from "../models/User.js";
@@ -49,8 +49,6 @@ import {
 
 export const authRouter = Router();
 
-authRouter.use(authRateLimiter);
-
 function issueAuthTokens(user: UserDocument) {
   const payload = toTokenPayload(user);
 
@@ -78,6 +76,7 @@ async function findActiveUserByEmail(
 
 authRouter.post(
   "/login",
+  credentialAuthRateLimiter,
   asyncHandler(async (req, res) => {
     const { email, password } = loginSchema.parse(req.body);
     const user = await User.findOne({ email: email.toLowerCase() });
@@ -112,6 +111,7 @@ authRouter.post(
 
 authRouter.post(
   "/register",
+  credentialAuthRateLimiter,
   asyncHandler(async (req, res) => {
     const payload = registerSchema.parse(req.body);
     const existing = await User.findOne({ email: payload.email.toLowerCase() });
@@ -264,6 +264,7 @@ authRouter.post(
 
 authRouter.post(
   "/social",
+  credentialAuthRateLimiter,
   asyncHandler(async (req, res) => {
     const { provider, idToken } = socialAuthSchema.parse(req.body);
 
@@ -320,6 +321,7 @@ authRouter.post(
 
 authRouter.post(
   "/forgot-password",
+  credentialAuthRateLimiter,
   asyncHandler(async (req, res) => {
     const { email } = forgotPasswordSchema.parse(req.body);
     const user = await findActiveUserByEmail(email);
@@ -353,6 +355,7 @@ authRouter.post(
 
 authRouter.post(
   "/reset-password",
+  credentialAuthRateLimiter,
   asyncHandler(async (req, res) => {
     const { email, code, newPassword } = resetPasswordSchema.parse(req.body);
     const user = await findActiveUserByEmail(email);

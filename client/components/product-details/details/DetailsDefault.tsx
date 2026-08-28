@@ -14,6 +14,7 @@ import AdditionalOffers from "../others/AdditionalOffers";
 import AlternativeProducts from "../others/AlternativeProducts";
 import ProductActionPanel from "../ProductActionPanel";
 import ProductOptionsPanel1 from "../productOptionsPanels/ProductOptionsPanel1";
+import { AuthSignInTrigger } from "@/components/auth/storefront-auth-entry";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
 
 export default function DetailsDefault({
@@ -48,12 +49,12 @@ export default function DetailsDefault({
                   </p>
                 </div>
                 <div className="rbt-quick-access-banner-action-btn">
-                  <ModalTriggerButton
+                  <AuthSignInTrigger
                     className="rbt-btn rbt-btn-xs"
-                    openModalName="signinModal"
+                    href="/signup"
                   >
                     <i className="fa-light fa-user mr--4" /> Register Now
-                  </ModalTriggerButton>
+                  </AuthSignInTrigger>
                 </div>
                 <a
                   href="#"

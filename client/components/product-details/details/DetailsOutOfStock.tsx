@@ -12,6 +12,7 @@ import Tooltip from "@/components/common/ui/Tooltip";
 
 import { Product } from "@/types";
 
+import { AuthSignInTrigger } from "@/components/auth/storefront-auth-entry";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
 export default function DetailsOutOfStock({ product }: { product: Product }) {
   return (
@@ -42,12 +43,12 @@ export default function DetailsOutOfStock({ product }: { product: Product }) {
                   </p>
                 </div>
                 <div className="rbt-quick-access-banner-action-btn">
-                  <ModalTriggerButton
-                    openModalName="signinModal"
+                  <AuthSignInTrigger
                     className="rbt-btn rbt-btn-xs"
+                    href="/signup"
                   >
                     <i className="fa-light fa-user mr--4" /> Register Now
-                  </ModalTriggerButton>
+                  </AuthSignInTrigger>
                 </div>
                 <a
                   href="#"

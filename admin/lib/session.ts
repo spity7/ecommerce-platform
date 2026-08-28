@@ -8,6 +8,16 @@ export function notifyAuthSessionUpdated(): void {
   }
 }
 
+export async function clearLocalSession(): Promise<void> {
+  try {
+    await fetch("/api/auth/clear", { method: "POST", credentials: "include" });
+  } catch {
+    // Still clear in-memory token if API is unreachable.
+  }
+  clearLegacyAuthCookies();
+  setAccessToken(null);
+}
+
 export async function clearSession(): Promise<void> {
   try {
     await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
@@ -20,7 +30,7 @@ export async function clearSession(): Promise<void> {
 }
 
 export async function clearSessionAndRedirectToSignIn(): Promise<void> {
-  await clearSession();
+  await clearLocalSession();
   if (typeof window !== "undefined") {
     window.location.href = adminPath("/signin");
   }

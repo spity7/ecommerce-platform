@@ -70,9 +70,13 @@ export async function proxy(request: NextRequest) {
     return onAuthPage ? NextResponse.next() : redirectToSignIn(request);
   }
 
-  const user = await fetchCustomerUser(token);
+  const session = await fetchCustomerUser(token);
 
-  if (!user) {
+  if (session.status === "rate_limited") {
+    return NextResponse.next();
+  }
+
+  if (session.status === "invalid") {
     if (onAuthPage) {
       const response = NextResponse.next();
       response.cookies.delete(ACCESS_TOKEN_COOKIE);
