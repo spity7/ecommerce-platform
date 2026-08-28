@@ -11,6 +11,7 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "seed": "tsx src/scripts/seed.ts",
+    "seed:admin": "tsx src/scripts/seed-admin.ts",
     "openapi:generate": "tsx src/openapi/generate.ts",
     "test": "node --import tsx --test --test-concurrency=1 test/health.test.ts test/auth.test.ts test/catalog.test.ts test/commerce.test.ts test/uploads.test.ts",
     "typecheck": "tsc --noEmit && tsc --noEmit -p test/tsconfig.json",

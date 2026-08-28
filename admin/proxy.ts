@@ -24,10 +24,14 @@ export async function proxy(request: NextRequest) {
   }
 
   const token = request.cookies.get(ACCESS_TOKEN_COOKIE)?.value;
+  const refreshToken = request.cookies.get(REFRESH_TOKEN_COOKIE)?.value;
   const isSignIn = pathname === "/signin";
 
   if (!token) {
-    return isSignIn ? NextResponse.next() : redirectToSignIn(request);
+    if (isSignIn || refreshToken) {
+      return NextResponse.next();
+    }
+    return redirectToSignIn(request);
   }
 
   const user = await fetchAdminUser(token);
@@ -38,6 +42,9 @@ export async function proxy(request: NextRequest) {
       response.cookies.delete(ACCESS_TOKEN_COOKIE);
       response.cookies.delete(REFRESH_TOKEN_COOKIE);
       return response;
+    }
+    if (refreshToken) {
+      return NextResponse.next();
     }
     return redirectToSignIn(request, true);
   }

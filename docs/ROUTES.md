@@ -78,7 +78,7 @@ Dev URL: `http://localhost:3001`. Optional `basePath` via `NEXT_PUBLIC_BASE_URL`
 | --------- | ------------------------------------------------------------- |
 | `/signin` | JWT login via `/api/auth/login` BFF; httpOnly session cookies |
 
-Protected by `admin/proxy.ts`: validates access token via `GET /api/auth/me` and requires `role: admin`. Clears invalid cookies and redirects to `/signin`. Sign-in rejects non-admin users. Logout calls `POST /api/auth/logout`. Failed token refresh clears session and redirects to sign-in.
+Protected by `admin/proxy.ts`: validates access token via `GET /api/auth/me` and requires `role: admin`. `/api/auth/*` BFF routes are excluded from the gate. When the access cookie is missing or expired but a refresh cookie is present, the proxy allows the request so the client can rotate tokens. Clears invalid cookies and redirects to `/signin` when both tokens are unusable. Sign-in rejects non-admin users. Logout calls `POST /api/auth/logout`.
 
 ### Auth BFF (Next route handlers)
 
@@ -141,6 +141,7 @@ Dev URL: `http://localhost:3000`.
 | Path                                    | Notes                                                                          |
 | --------------------------------------- | ------------------------------------------------------------------------------ |
 | `/signin`, `/signup`                    | API login/register via `/api/auth/*` BFF; httpOnly cookies                     |
+| `/checkout`                             | Protected by `client/proxy.ts` when feature enabled; requires sign-in          |
 | `/account-info`, `/my-order-history`, … | Protected by `client/proxy.ts` when feature enabled                            |
 | `/account-info`                         | Profile, avatar URL, email verification, password, addresses, account deletion |
 | `/forgot-password`                      | Password reset when `features.customerAuth`                                    |

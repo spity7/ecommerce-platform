@@ -14,6 +14,7 @@ Run from **repo root** unless noted.
 | `npm run dev:admin`               | Admin on :3001                                         |
 | `npm run dev:client`              | Storefront on :3000                                    |
 | `npm run seed`                    | Seed MongoDB for current `SITE_ID`                     |
+| `npm run seed:admin`              | Create or promote admin user (`ADMIN_*` in server env) |
 | `npm run api:generate`            | Regenerate OpenAPI + Orval client                      |
 | `npm run api:check`               | CI: fail if contract artifacts are stale               |
 | `npm run typecheck`               | Typecheck all workspaces                               |

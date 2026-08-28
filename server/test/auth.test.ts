@@ -84,6 +84,20 @@ describe("auth API", () => {
       .expect(401);
   });
 
+  it("revokes access token after logout", async () => {
+    const { body } = await registerCustomer(app);
+
+    await request(app)
+      .post("/api/auth/logout")
+      .set(authHeader(body.accessToken))
+      .expect(200);
+
+    await request(app)
+      .get("/api/auth/me")
+      .set(authHeader(body.accessToken))
+      .expect(401);
+  });
+
   it("runs forgot-password and reset-password flow", async () => {
     const email = `reset-${Date.now()}@example.com`;
     await registerCustomer(app, email);
@@ -190,7 +204,7 @@ describe("auth API", () => {
     await request(app)
       .get("/api/users/me")
       .set(authHeader(body.accessToken))
-      .expect(404);
+      .expect(401);
 
     const loginResponse = await request(app)
       .post("/api/auth/login")

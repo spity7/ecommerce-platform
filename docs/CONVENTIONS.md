@@ -29,17 +29,17 @@ const site = getSiteConfig(process.env.SITE_ID);
 | `getStorefrontSiteConfig()` | `client/lib/site.ts` | `NEXT_PUBLIC_SITE_URL`, `API_URL` / `NEXT_PUBLIC_API_URL` |
 | `getAdminSiteConfig()`      | `admin/lib/site.ts`  | None (uses config as-is)                                  |
 
-| Env var                                           | Where         | Purpose                                     |
-| ------------------------------------------------- | ------------- | ------------------------------------------- |
-| `SITE_ID`                                         | server        | Select site config + DB context             |
-| `NEXT_PUBLIC_SITE_ID`                             | admin, client | Select site config in browser               |
-| `MONGODB_URI`                                     | server        | MongoDB connection (one DB per site)        |
-| `API_URL` / `NEXT_PUBLIC_API_URL`                 | admin, client | Backend base URL                            |
-| `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`         | server        | Sign access/refresh tokens                  |
-| `JWT_ACCESS_EXPIRES_IN`, `JWT_REFRESH_EXPIRES_IN` | server        | Token lifetime (e.g. `15m`, `7d`)           |
-| `NEXT_PUBLIC_ACCESS_TOKEN_MAX_AGE`                | admin         | Cookie max-age (seconds); match access JWT  |
-| `GOOGLE_CLIENT_ID` / `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | server, client | Google OAuth (same Web client ID)            |
-| `SMTP_*`, `EMAIL_FROM`                              | server        | Password reset + email verification codes   |
+| Env var                                             | Where          | Purpose                                    |
+| --------------------------------------------------- | -------------- | ------------------------------------------ |
+| `SITE_ID`                                           | server         | Select site config + DB context            |
+| `NEXT_PUBLIC_SITE_ID`                               | admin, client  | Select site config in browser              |
+| `MONGODB_URI`                                       | server         | MongoDB connection (one DB per site)       |
+| `API_URL` / `NEXT_PUBLIC_API_URL`                   | admin, client  | Backend base URL                           |
+| `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`           | server         | Sign access/refresh tokens                 |
+| `JWT_ACCESS_EXPIRES_IN`, `JWT_REFRESH_EXPIRES_IN`   | server         | Token lifetime (e.g. `15m`, `7d`)          |
+| `NEXT_PUBLIC_ACCESS_TOKEN_MAX_AGE`                  | admin          | Cookie max-age (seconds); match access JWT |
+| `GOOGLE_CLIENT_ID` / `NEXT_PUBLIC_GOOGLE_CLIENT_ID` | server, client | Google OAuth (same Web client ID)          |
+| `SMTP_*`, `EMAIL_FROM`                              | server         | Password reset + email verification codes  |
 
 Reference templates: `server/.env.example`, `admin/.env.example`, `client/.env.example`, and `sites/{id}/.env.example` from `npm run create-site`.
 
@@ -48,7 +48,7 @@ Reference templates: `server/.env.example`, `admin/.env.example`, `client/.env.e
 - Run `npm run create-site` for env scaffolding.
 - Do **not** hardcode site names in feature code.
 
-**First admin:** register a user (`POST /api/auth/register`), then set `role: "admin"` on that document in MongoDB. Seed does not create users.
+**First admin:** `npm run seed:admin` (uses `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` in `server/.env`; defaults are dev-only). Re-running promotes an existing user to `admin` and resets the password.
 
 ## API contract
 
@@ -64,48 +64,48 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) § API contract and `.cursor/rules/api-co
 
 ## Server (`@platform/server`)
 
-| Pattern      | Location                                      |
-| ------------ | --------------------------------------------- |
-| Routes       | `server/src/routes/*.routes.ts`               |
-| Models       | Mongoose in `server/src/models/`              |
-| Errors       | `AppError` + `middleware/errorHandler.ts`     |
-| Async routes | `asyncHandler` wrapper                        |
-| OpenAPI      | `server/src/openapi/registry.ts`              |
-| Seed         | `npm run seed` → `server/src/scripts/seed.ts` |
-| Format       | Prettier                                      |
+| Pattern      | Location                                                                                                 |
+| ------------ | -------------------------------------------------------------------------------------------------------- |
+| Routes       | `server/src/routes/*.routes.ts`                                                                          |
+| Models       | Mongoose in `server/src/models/`                                                                         |
+| Errors       | `AppError` + `middleware/errorHandler.ts`                                                                |
+| Async routes | `asyncHandler` wrapper                                                                                   |
+| OpenAPI      | `server/src/openapi/registry.ts`                                                                         |
+| Seed         | `npm run seed` → `server/src/scripts/seed.ts`; `npm run seed:admin` → `server/src/scripts/seed-admin.ts` |
+| Format       | Prettier                                                                                                 |
 
 ## Admin (`@platform/admin`)
 
-| Topic       | Convention                                                                                                     |
-| ----------- | -------------------------------------------------------------------------------------------------------------- |
-| Styling     | Tailwind CSS 4 — semantic tokens in `app/globals.css` (`bg-brand-600`, `text-ink-500`, …)                      |
-| Icons       | `lucide-react`                                                                                                 |
-| Navigation  | `config/routes.ts` + `config/navigation.ts`; optional `feature` keys filter nav via `lib/navigation-filter.ts` |
-| Site        | `lib/site.ts` → `getAdminSiteConfig()`; `config/site.ts` exposes `branding`, `features`, `displayName`         |
-| Auth UI     | `lib/brand.ts` → `createAdminMetadata()`; sign-in shell uses `siteConfig.branding`                             |
-| API mappers | `lib/mappers/` — map DTOs to UI types                                                                          |
-| Lint        | Biome + Prettier (`npm run check`)                                                                             |
-| Auth        | **Not implemented** — sign-in is a demo page                                                                   |
+| Topic       | Convention                                                                                                                         |
+| ----------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Styling     | Tailwind CSS 4 — semantic tokens in `app/globals.css` (`bg-brand-600`, `text-ink-500`, …)                                          |
+| Icons       | `lucide-react`                                                                                                                     |
+| Navigation  | `config/routes.ts` + `config/navigation.ts`; optional `feature` keys filter nav via `lib/navigation-filter.ts`                     |
+| Site        | `lib/site.ts` → `getAdminSiteConfig()`; `config/site.ts` exposes `branding`, `features`, `displayName`                             |
+| Auth UI     | `lib/brand.ts` → `createAdminMetadata()`; sign-in shell uses `siteConfig.branding`                                                 |
+| API mappers | `lib/mappers/` — map DTOs to UI types                                                                                              |
+| Lint        | Biome + Prettier (`npm run check`)                                                                                                 |
+| Auth        | JWT via BFF `/api/auth/*` (httpOnly cookies + in-memory Bearer); `admin/proxy.ts` guards dashboard; sign-in requires `role: admin` |
 
 Catalog list pages fetch from API in Server Components; show inline error banner with seed hint on failure.
 
 ## Storefront (`@platform/storefront`)
 
-| Topic           | Convention                                                                                                                      |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Styling         | Bootstrap 5 + SCSS (`public/assets/scss/`)                                                                                      |
-| Site theme      | `SiteThemeStyles` injects CSS variables from `site.theme`                                                                       |
-| Site branding   | `lib/site-branding.ts` → logo/phone for `Header13` / `Footer7` on production routes                                             |
-| Home layout     | `SiteConfig.homeLayout` → `HomeLayoutRenderer`                                                                                  |
-| Demo catalog    | Static data in `data/products/*.ts` with optional `demoTab` for tabs                                                            |
-| Tab filtering   | See `client/.cursor/rules/product-tab-filtering-pattern.mdc`                                                                    |
-| Modals          | Register in `components/common/other-components/LayoutModals.tsx`; state in `context/uiStore.ts`                                |
-| Cart / wishlist | Zustand + persist in `context/store.ts`; server cart API when `features.customerAuth` (guest `X-Guest-Cart-Id`, merge on login) |
-| Customer auth   | httpOnly session cookies via `/api/auth/*` route handlers; in-memory access token for `@platform/api-client` |
-| Google sign-in  | `@react-oauth/google` + BFF `POST /api/auth/social`; requires `NEXT_PUBLIC_GOOGLE_CLIENT_ID` (must match server `GOOGLE_CLIENT_ID`) |
-| Email verify    | Code emailed on register when SMTP set; `POST /api/orders` requires verified email for customers |
-| API fallback    | Try `@platform/api-client`, fall back to static data where implemented                                                          |
-| Lint            | ESLint + Prettier                                                                                                               |
+| Topic           | Convention                                                                                                                                                                 |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Styling         | Bootstrap 5 + SCSS (`public/assets/scss/`)                                                                                                                                 |
+| Site theme      | `SiteThemeStyles` injects CSS variables from `site.theme`                                                                                                                  |
+| Site branding   | `lib/site-branding.ts` → logo/phone for `Header13` / `Footer7` on production routes                                                                                        |
+| Home layout     | `SiteConfig.homeLayout` → `HomeLayoutRenderer`                                                                                                                             |
+| Demo catalog    | Static data in `data/products/*.ts` with optional `demoTab` for tabs                                                                                                       |
+| Tab filtering   | See `client/.cursor/rules/product-tab-filtering-pattern.mdc`                                                                                                               |
+| Modals          | Register in `components/common/other-components/LayoutModals.tsx`; state in `context/uiStore.ts`                                                                           |
+| Cart / wishlist | Zustand + persist in `context/store.ts`; server cart API when `features.customerAuth` (guest `X-Guest-Cart-Id`, merge on login)                                            |
+| Customer auth   | httpOnly session cookies via `/api/auth/*` route handlers; in-memory access token for `@platform/api-client`; `HeaderAuthAction` on production headers when `customerAuth` |
+| Google sign-in  | `@react-oauth/google` + BFF `POST /api/auth/social`; requires `NEXT_PUBLIC_GOOGLE_CLIENT_ID` (must match server `GOOGLE_CLIENT_ID`)                                        |
+| Email verify    | Code emailed on register when SMTP set; `POST /api/orders` requires verified email for customers; checkout blocks submit until verified                                    |
+| API fallback    | Try `@platform/api-client`, fall back to static data where implemented                                                                                                     |
+| Lint            | ESLint + Prettier                                                                                                                                                          |
 
 The storefront is primarily a **theme demo** (~300 routes). Wire API only for production paths the product needs.
 

@@ -1,16 +1,42 @@
 import type { NextFunction, Request, Response } from "express";
 import { AppError } from "./errorHandler.js";
 import { verifyAccessToken, type TokenPayload } from "../utils/jwt.js";
+import { User } from "../models/User.js";
+import { isRefreshTokenValid } from "../services/auth.tokens.js";
+import { isAccountDeleted } from "../services/user-lifecycle.js";
 
 export type AuthenticatedRequest = Request & {
   auth?: TokenPayload;
 };
 
-export function requireAuth(
+async function validateAccessToken(
+  token: string
+): Promise<TokenPayload | null> {
+  try {
+    const payload = verifyAccessToken(token);
+    const user = await User.findById(payload.userId).select(
+      "refreshTokenVersion deletedAt"
+    );
+
+    if (!user || isAccountDeleted(user)) {
+      return null;
+    }
+
+    if (!isRefreshTokenValid(payload, user)) {
+      return null;
+    }
+
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
+export async function requireAuth(
   req: AuthenticatedRequest,
   _res: Response,
   next: NextFunction
-): void {
+): Promise<void> {
   const header = req.headers.authorization;
   if (!header?.startsWith("Bearer ")) {
     next(new AppError(401, "Authentication required"));
@@ -18,12 +44,15 @@ export function requireAuth(
   }
 
   const token = header.slice(7);
-  try {
-    req.auth = verifyAccessToken(token);
-    next();
-  } catch {
+  const payload = await validateAccessToken(token);
+
+  if (!payload) {
     next(new AppError(401, "Invalid or expired token"));
+    return;
   }
+
+  req.auth = payload;
+  next();
 }
 
 export function requireAdmin(
@@ -42,11 +71,11 @@ export function requireAdmin(
   next();
 }
 
-export function optionalAuth(
+export async function optionalAuth(
   req: AuthenticatedRequest,
   _res: Response,
   next: NextFunction
-): void {
+): Promise<void> {
   const header = req.headers.authorization;
   if (!header?.startsWith("Bearer ")) {
     next();
@@ -54,10 +83,10 @@ export function optionalAuth(
   }
 
   const token = header.slice(7);
-  try {
-    req.auth = verifyAccessToken(token);
-  } catch {
-    // Invalid token — treat as guest for cart routes.
+  const payload = await validateAccessToken(token);
+  if (payload) {
+    req.auth = payload;
   }
+
   next();
 }

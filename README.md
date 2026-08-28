@@ -33,6 +33,7 @@ npm install
 npm run build:packages
 npm run dev:server
 npm run seed
+npm run seed:admin   # Create or promote first admin (server/.env ADMIN_*)
 npm run dev:admin
 npm run dev:client
 ```
