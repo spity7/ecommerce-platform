@@ -3,6 +3,10 @@ import LayoutEffectsLoader from "@/components/common/other-components/LayoutEffe
 import BootstrapJsLoader from "@/components/common/other-components/BootstrapJsLoader";
 import { SiteThemeStyles } from "@/components/site/SiteThemeStyles";
 import { getStorefrontSiteConfig } from "@/lib/site";
+
+import LayoutModals from "@/components/common/other-components/LayoutModals";
+import Toolbar from "@/components/modals/Toolbar";
+import { AppProviders } from "@/providers/app-providers";
 import type { Metadata } from "next";
 
 import "../public/assets/scss/main.scss";
@@ -30,9 +34,6 @@ const caprasimo = Caprasimo({
   weight: "400",
   variable: "--font-caprasimo",
 });
-import LayoutModals from "@/components/common/other-components/LayoutModals";
-import Toolbar from "@/components/modals/Toolbar";
-import { AppProviders } from "@/providers/app-providers";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),

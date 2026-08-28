@@ -101,6 +101,8 @@ export default function StorefrontCheckout() {
     );
   }
 
+  const emailVerificationRequired = !user.emailVerified;
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
@@ -133,6 +135,19 @@ export default function StorefrontCheckout() {
 
   return (
     <div className="row row--12 mt_dec--24">
+      {emailVerificationRequired ? (
+        <div className="col-12 mt--24">
+          <div className="rbt-transparent-table-one-wrapper rbt-has-bg-gray p--24">
+            <p className="mb--12 b2">
+              Verify your email before placing an order. We sent a code when you
+              signed up.
+            </p>
+            <Link className="rbt-btn" href="/account-info">
+              Verify email in account settings
+            </Link>
+          </div>
+        </div>
+      ) : null}
       <div className="col-12 col-lg-7 mt--24">
         <div className="rbt-transparent-table-one-wrapper rbt-has-bg-gray p--24">
           <h5 className="title mb--24">Shipping details</h5>
@@ -203,7 +218,7 @@ export default function StorefrontCheckout() {
             <button
               type="submit"
               className="rbt-btn d-block w-100 mt--24"
-              disabled={submitting}
+              disabled={submitting || emailVerificationRequired}
             >
               {submitting ? "Placing order…" : "Place order"}
             </button>

@@ -16,8 +16,14 @@ function redirectToSignIn(
 }
 
 export async function proxy(request: NextRequest) {
-  const token = request.cookies.get(ACCESS_TOKEN_COOKIE)?.value;
   const { pathname } = request.nextUrl;
+
+  // BFF auth routes must stay reachable without a session (login, refresh, logout).
+  if (pathname.startsWith("/api/auth")) {
+    return NextResponse.next();
+  }
+
+  const token = request.cookies.get(ACCESS_TOKEN_COOKIE)?.value;
   const isSignIn = pathname === "/signin";
 
   if (!token) {

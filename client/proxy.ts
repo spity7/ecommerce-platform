@@ -13,12 +13,24 @@ const ACCOUNT_PATHS = [
   "/my-payment-methods",
 ];
 
+const CHECKOUT_PATHS = ["/checkout"];
+
 const AUTH_PATHS = ["/signin", "/signup"];
 
 function isAccountPath(pathname: string): boolean {
   return ACCOUNT_PATHS.some(
     (path) => pathname === path || pathname.startsWith(`${path}/`)
   );
+}
+
+function isCheckoutPath(pathname: string): boolean {
+  return CHECKOUT_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  );
+}
+
+function isProtectedPath(pathname: string): boolean {
+  return isAccountPath(pathname) || isCheckoutPath(pathname);
 }
 
 function isAuthPath(pathname: string): boolean {
@@ -48,9 +60,9 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get(ACCESS_TOKEN_COOKIE)?.value;
   const onAuthPage = isAuthPath(pathname);
-  const onAccountPage = isAccountPath(pathname);
+  const onProtectedPage = isProtectedPath(pathname);
 
-  if (!onAuthPage && !onAccountPage) {
+  if (!onAuthPage && !onProtectedPage) {
     return NextResponse.next();
   }
 
@@ -81,6 +93,7 @@ export const config = {
   matcher: [
     "/signin",
     "/signup",
+    "/checkout",
     "/account-info",
     "/account-notifications",
     "/my-order-history",
