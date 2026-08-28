@@ -6,6 +6,7 @@ import CompareItemLength from "../store/CompareItemLength";
 import WishlistLength from "../store/WishlistLength";
 import { useUiElement } from "@/context/uiStore";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
+import { ToolbarProfileAction } from "@/components/auth/storefront-auth-entry";
 import { toolbarItems } from "@/data/toolbar";
 
 export default function Toolbar() {
@@ -53,6 +54,11 @@ export default function Toolbar() {
                       <div className="modern-close-wrapper" />
                       <span className="rbt-toolbar-label"> {item.label}</span>
                     </button>
+                  ) : item.id === "profile" ? (
+                    <ToolbarProfileAction
+                      className="rbt-round-btn has-rbt-md-fsize"
+                      label={item.label}
+                    />
                   ) : item.href ? (
                     <Link
                       className="rbt-round-btn has-rbt-md-fsize"

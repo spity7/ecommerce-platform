@@ -22,6 +22,7 @@ import MobileMenuToggler from "../action-buttons/MobileMenuToggler";
 import Tooltip from "@/components/common/ui/Tooltip";
 import { productCategories } from "@/data/menu";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
+import { AuthAccessBox, AuthIconButton } from "@/components/auth/storefront-auth-entry";
 
 export default function Header4({ sticky = false }) {
   const isSticky = useSticky();
@@ -210,53 +211,11 @@ export default function Header4({ sticky = false }) {
                   </Tooltip>
                 </li>
                 <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-1 rbt-access-box-has-bg-hover d-none d-lg-flex">
-                  <ModalTriggerButton
-                    as="div"
-                    className="rbt-access-box-wrapper"
-                    openModalName="compareReviewModal"
-                  >
-                    <span className="rbt-round-btn rbt-bg-static-gray has-rbt-md-fsize">
-                      <i className="fa-regular fa-code-compare" />
-                      <div className="access-box-count">
-                        {" "}
-                        <CompareItemLength />
-                      </div>
-                    </span>
-                    <div className="content">
-                      <span className="title-text">Compare</span>
-                    </div>
-                  </ModalTriggerButton>
-                </li>
-                <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-1 rbt-access-box-has-bg-hover d-none d-lg-flex">
-                  <ModalTriggerButton
-                    as="div"
-                    className="rbt-access-box-wrapper"
-                    openModalName="wishlistModal"
-                  >
-                    <span className="rbt-round-btn rbt-bg-static-gray has-rbt-md-fsize">
-                      <i className="fa-regular fa-heart" />
-                      <span className="access-box-count">
-                        <WishlistLength />
-                      </span>
-                    </span>
-                    <div className="content">
-                      <span className="title-text">Wishlist</span>
-                    </div>
-                  </ModalTriggerButton>
-                </li>
-                <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-1 rbt-access-box-has-bg-hover d-none d-lg-flex">
-                  <ModalTriggerButton
-                    as="div"
-                    className="rbt-access-box-wrapper"
-                    openModalName="signinModal"
-                  >
-                    <span className="rbt-round-btn rbt-bg-static-gray has-rbt-md-fsize">
-                      <i className="fa-regular fa-user" />
-                    </span>
-                    <div className="content">
-                      <span className="title-text">Log In/Register</span>
-                    </div>
-                  </ModalTriggerButton>
+                  <AuthAccessBox
+                    iconClassName="rbt-round-btn rbt-bg-static-gray has-rbt-md-fsize"
+                    title="Compare"
+                    subtitle="Access Account"
+                  />
                 </li>
               </ul>
             </div>
@@ -343,14 +302,9 @@ export default function Header4({ sticky = false }) {
                   </Tooltip>
                 </li>
                 <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-3 d-none d-lg-flex">
-                  <Tooltip content="Sign In" placement="bottom">
-                    <ModalTriggerButton
-                      className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg"
-                      openModalName="signinModal"
-                    >
-                      <i className="fa-regular fa-user" />
-                    </ModalTriggerButton>
-                  </Tooltip>
+                  <div className="tooltips tooltip-distance-lg">
+                      <AuthIconButton className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg" />
+                    </div>
                 </li>
                 <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-4 d-none d-lg-flex">
                   <Tooltip content="Compare" placement="bottom">

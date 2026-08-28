@@ -58,7 +58,7 @@ export function StorefrontSignUpForm() {
       }
 
       window.dispatchEvent(new Event("auth:session-updated"));
-      router.push("/account-info");
+      router.push("/account-info?verify=1");
       router.refresh();
     } catch (err) {
       setError(

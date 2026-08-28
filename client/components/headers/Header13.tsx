@@ -21,7 +21,7 @@ import SearchToggler from "./headerComponents/SearchToggler";
 import { useSticky } from "@/hooks/useSticky";
 import Tooltip from "@/components/common/ui/Tooltip";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
-import HeaderAuthAction from "@/components/auth/header-auth-action";
+import { AuthIconButton } from "@/components/auth/storefront-auth-entry";
 import {
   getSiteChromeBranding,
   type SiteChromeBranding,
@@ -113,7 +113,7 @@ export default function Header13({ sticky = true, branding }: Header13Props) {
                   </li>
                   <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-3 d-none d-lg-flex">
                     <div className="tooltips tooltip-distance-lg">
-                      <HeaderAuthAction className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg" />
+                      <AuthIconButton className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg" />
                     </div>
                   </li>
                   <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-4 rbt-wishlist d-none d-lg-flex">
@@ -245,7 +245,7 @@ export default function Header13({ sticky = true, branding }: Header13Props) {
                 </li>
                 <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-3 d-none d-lg-flex">
                   <div className="tooltips tooltip-distance-lg">
-                    <HeaderAuthAction className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg" />
+                    <AuthIconButton className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg" />
                   </div>
                 </li>
                 <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-4 d-none d-lg-flex">

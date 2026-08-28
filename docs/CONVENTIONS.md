@@ -91,21 +91,21 @@ Catalog list pages fetch from API in Server Components; show inline error banner
 
 ## Storefront (`@platform/storefront`)
 
-| Topic           | Convention                                                                                                                                                                 |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Styling         | Bootstrap 5 + SCSS (`public/assets/scss/`)                                                                                                                                 |
-| Site theme      | `SiteThemeStyles` injects CSS variables from `site.theme`                                                                                                                  |
-| Site branding   | `lib/site-branding.ts` → logo/phone for `Header13` / `Footer7` on production routes                                                                                        |
-| Home layout     | `SiteConfig.homeLayout` → `HomeLayoutRenderer`                                                                                                                             |
-| Demo catalog    | Static data in `data/products/*.ts` with optional `demoTab` for tabs                                                                                                       |
-| Tab filtering   | See `client/.cursor/rules/product-tab-filtering-pattern.mdc`                                                                                                               |
-| Modals          | Register in `components/common/other-components/LayoutModals.tsx`; state in `context/uiStore.ts`                                                                           |
-| Cart / wishlist | Zustand + persist in `context/store.ts`; server cart API when `features.customerAuth` (guest `X-Guest-Cart-Id`, merge on login)                                            |
-| Customer auth   | httpOnly session cookies via `/api/auth/*` route handlers; in-memory access token for `@platform/api-client`; `HeaderAuthAction` on production headers when `customerAuth` |
-| Google sign-in  | `@react-oauth/google` + BFF `POST /api/auth/social`; requires `NEXT_PUBLIC_GOOGLE_CLIENT_ID` (must match server `GOOGLE_CLIENT_ID`)                                        |
-| Email verify    | Code emailed on register when SMTP set; `POST /api/orders` requires verified email for customers; checkout blocks submit until verified                                    |
-| API fallback    | Try `@platform/api-client`, fall back to static data where implemented                                                                                                     |
-| Lint            | ESLint + Prettier                                                                                                                                                          |
+| Topic           | Convention                                                                                                                                                                                                                                   |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Styling         | Bootstrap 5 + SCSS (`public/assets/scss/`)                                                                                                                                                                                                   |
+| Site theme      | `SiteThemeStyles` injects CSS variables from `site.theme`                                                                                                                                                                                    |
+| Site branding   | `lib/site-branding.ts` → logo/phone for `Header13` / `Footer7` on production routes                                                                                                                                                          |
+| Home layout     | `SiteConfig.homeLayout` → `HomeLayoutRenderer`                                                                                                                                                                                               |
+| Demo catalog    | Static data in `data/products/*.ts` with optional `demoTab` for tabs                                                                                                                                                                         |
+| Tab filtering   | See `client/.cursor/rules/product-tab-filtering-pattern.mdc`                                                                                                                                                                                 |
+| Modals          | Register in `components/common/other-components/LayoutModals.tsx`; state in `context/uiStore.ts`                                                                                                                                             |
+| Cart / wishlist | Zustand + persist in `context/store.ts`; server cart API when `features.customerAuth` (guest `X-Guest-Cart-Id`, merge on login)                                                                                                              |
+| Customer auth   | httpOnly session cookies via `/api/auth/*` route handlers; in-memory access token for `@platform/api-client`; `AuthIconButton` / `AuthAccessBox` / `ToolbarProfileAction` in `components/auth/storefront-auth-entry.tsx` when `customerAuth` |
+| Google sign-in  | `@react-oauth/google` + BFF `POST /api/auth/social`; requires `NEXT_PUBLIC_GOOGLE_CLIENT_ID` (must match server `GOOGLE_CLIENT_ID`)                                                                                                          |
+| Email verify    | Code emailed on register when SMTP set; `POST /api/orders` requires verified email for customers; checkout blocks submit until verified                                                                                                      |
+| API fallback    | Try `@platform/api-client`, fall back to static data where implemented                                                                                                                                                                       |
+| Lint            | ESLint + Prettier                                                                                                                                                                                                                            |
 
 The storefront is primarily a **theme demo** (~300 routes). Wire API only for production paths the product needs.
 

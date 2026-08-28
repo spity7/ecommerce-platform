@@ -22,6 +22,7 @@ import MobileMenuToggler from "../action-buttons/MobileMenuToggler";
 import NavFilterTab from "./headerComponents/NavFilterTab";
 import Tooltip from "@/components/common/ui/Tooltip";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
+import { AuthAccessBox, AuthIconButton } from "@/components/auth/storefront-auth-entry";
 
 export default function Header3({ showFeatures = true, sticky = false }) {
   const isSticky = useSticky();
@@ -109,14 +110,9 @@ export default function Header3({ showFeatures = true, sticky = false }) {
                     </Tooltip>
                   </li>
                   <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-3 d-none d-lg-flex">
-                    <Tooltip content="Profile" placement="bottom">
-                      <ModalTriggerButton
-                        className="rbt-round-btn rbt-bg-static-gray tooltips tooltip-distance-lg"
-                        openModalName="signinModal"
-                      >
-                        <i className="fa-regular fa-user" />
-                      </ModalTriggerButton>
-                    </Tooltip>
+                    <div className="tooltips tooltip-distance-lg">
+                      <AuthIconButton className="rbt-round-btn rbt-bg-static-gray tooltips tooltip-distance-lg" />
+                    </div>
                   </li>
                   <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-4">
                     <Tooltip content="Compare" placement="bottom">
@@ -336,14 +332,9 @@ export default function Header3({ showFeatures = true, sticky = false }) {
                   </Tooltip>
                 </li>
                 <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-3 d-none d-lg-flex">
-                  <Tooltip content="Sign In" placement="bottom">
-                    <ModalTriggerButton
-                      className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg"
-                      openModalName="signinModal"
-                    >
-                      <i className="fa-regular fa-user" />
-                    </ModalTriggerButton>
-                  </Tooltip>
+                  <div className="tooltips tooltip-distance-lg">
+                    <AuthIconButton className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg" />
+                  </div>
                 </li>
                 <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-4 d-none d-lg-flex">
                   <Tooltip content="Compare" placement="bottom">

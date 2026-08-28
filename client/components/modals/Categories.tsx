@@ -4,7 +4,7 @@ import { useManagedModalPanel } from "@/hooks/useManagedModalPanel";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
+import { AuthAccessBox } from "@/components/auth/storefront-auth-entry";
 import {
   categorySidebarData,
   sidebarQuickLinks,
@@ -56,19 +56,11 @@ export default function Categories() {
                   </button>
                 </div>
                 <div className="rbt-access-box rbt-scroll-trigger fade_in animation-order-1 rbt-access-box-has-bg-hover rbt-access-box-has-bg-hover-white d-inline-block">
-                  <ModalTriggerButton
-                    as="div"
-                    openModalName="signinModal"
-                    className="rbt-access-box-wrapper"
-                  >
-                    <div className="rbt-round-btn rbt-bg-color-brand-300 rbt-text-color-primary has-rbt-sm-fsize">
-                      <i className="fa-regular fa-user" />
-                    </div>
-                    <div className="content">
-                      <p>Log in/Sign Up</p>
-                      <span>Access Account</span>
-                    </div>
-                  </ModalTriggerButton>
+                  <AuthAccessBox
+                    iconClassName="rbt-round-btn rbt-bg-color-brand-300 rbt-text-color-primary has-rbt-sm-fsize"
+                    title="Log in/Sign Up"
+                    subtitle="Access Account"
+                  />
                 </div>
               </div>
               {/* End sidebar left header */}

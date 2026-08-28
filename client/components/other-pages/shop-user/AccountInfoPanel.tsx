@@ -28,6 +28,17 @@ function AccountInfoApi() {
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [showVerifyPrompt, setShowVerifyPrompt] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("verify") === "1") {
+      setShowVerifyPrompt(true);
+      const url = new URL(window.location.href);
+      url.searchParams.delete("verify");
+      window.history.replaceState({}, "", `${url.pathname}${url.search}`);
+    }
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -72,6 +83,22 @@ function AccountInfoApi() {
 
   return (
     <div className="rbt-profile-content-area">
+      {showVerifyPrompt && user && !user.emailVerified ? (
+        <div className="rbt-transparent-table-one-wrapper rbt-has-bg-gray p--24 mb--24">
+          <h6 className="mb--8">Verify your email</h6>
+          <p className="b3 mb--12">
+            We sent a 6-digit code to <strong>{user.email}</strong>. Enter it
+            below to verify your account and place orders.
+          </p>
+          <button
+            className="rbt-btn rbt-btn-sm rbt-btn-secondary"
+            onClick={() => setShowVerifyPrompt(false)}
+            type="button"
+          >
+            Dismiss
+          </button>
+        </div>
+      ) : null}
       <div className="row row--12 mt_dec--24">
         <div className="col-12 mt--24">
           <div className="rbt-component-section-title rbt-gap--4 mb--0 p-0 border-0">
