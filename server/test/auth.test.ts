@@ -201,6 +201,9 @@ describe("auth API", () => {
       .send({ password: "Password1!Strong" })
       .expect(200);
 
+    const deletedUser = await User.findOne({ email }).lean();
+    assert.ok(deletedUser?.deletedAt);
+
     await request(app)
       .get("/api/users/me")
       .set(authHeader(body.accessToken))
@@ -219,6 +222,39 @@ describe("auth API", () => {
       .expect(200);
 
     assert.equal(profileResponse.body.email, email);
+
+    const reactivatedUser = await User.findOne({ email }).lean();
+    assert.equal(reactivatedUser?.deletedAt, undefined);
+    assert.equal("deletedAt" in (reactivatedUser ?? {}), false);
+  });
+
+  it("reactivates a soft-deleted Google account on social sign-in", async () => {
+    const email = `google-reactivate-${Date.now()}@example.com`;
+    const sub = "google-reactivate-sub";
+    const { body } = await registerGoogleCustomer(app, email, sub);
+
+    await request(app)
+      .delete("/api/users/me")
+      .set(authHeader(body.accessToken))
+      .send({ idToken: testGoogleIdToken(email, sub) })
+      .expect(200);
+
+    const deletedUser = await User.findOne({ email }).lean();
+    assert.ok(deletedUser?.deletedAt);
+
+    const loginResponse = await request(app)
+      .post("/api/auth/social")
+      .send({
+        provider: "google",
+        idToken: testGoogleIdToken(email, sub),
+      })
+      .expect(200);
+
+    assert.ok(loginResponse.body.accessToken);
+
+    const reactivatedUser = await User.findOne({ email }).lean();
+    assert.equal(reactivatedUser?.deletedAt, undefined);
+    assert.equal("deletedAt" in (reactivatedUser ?? {}), false);
   });
 
   it("returns profile from GET /api/users/me", async () => {

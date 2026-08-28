@@ -1,4 +1,5 @@
 import type { UserDocument } from "../models/User.js";
+import { User } from "../models/User.js";
 
 export const ACCOUNT_REACTIVATION_MS = 14 * 24 * 60 * 60 * 1000;
 
@@ -16,4 +17,5 @@ export function canReactivateAccount(user: UserDocument): boolean {
 
 export async function reactivateAccount(user: UserDocument): Promise<void> {
   user.deletedAt = undefined;
+  await User.updateOne({ _id: user._id }, { $unset: { deletedAt: 1 } });
 }

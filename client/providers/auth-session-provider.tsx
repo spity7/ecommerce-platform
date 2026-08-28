@@ -86,7 +86,6 @@ export function AuthSessionProvider({ children }: AuthSessionProviderProps) {
   useEffect(() => {
     if (isAuthPublicPath(pathname)) {
       setUser(null);
-      setAccessToken(null);
       setLoading(false);
       return;
     }

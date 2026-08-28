@@ -31,10 +31,11 @@ platformInstance.interceptors.request.use((config) => {
   const token = getAccessToken();
   if (token) {
     config.headers.set("Authorization", `Bearer ${token}`);
-  }
-  const guestCartId = getGuestCartId();
-  if (guestCartId) {
-    config.headers.set("X-Guest-Cart-Id", guestCartId);
+  } else {
+    const guestCartId = getGuestCartId();
+    if (guestCartId) {
+      config.headers.set("X-Guest-Cart-Id", guestCartId);
+    }
   }
   return config;
 });
