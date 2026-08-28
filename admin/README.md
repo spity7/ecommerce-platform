@@ -49,6 +49,7 @@ Copy `admin/.env.example` → `admin/.env.local`:
 ```text
 app/
   (auth)/signin/          JWT sign-in (admin role required)
+  (auth)/forgot-password/ Admin password reset
   (dashboard)/            Dashboard pages
 config/                   routes.ts, navigation.ts, site.ts
 components/               layout, products, charts, auth, …
@@ -65,9 +66,9 @@ proxy.ts                  Route gate via /api/auth/me (admin role)
 
 ## Auth
 
-JWT sign-in against `POST /api/auth/login`. Only users with `role: admin` may enter the dashboard. [`proxy.ts`](proxy.ts) validates each request via `GET /api/auth/me`. Tokens live in cookies + in-memory Bearer header for mutations. Logout calls `POST /api/auth/logout`.
+JWT sign-in against `POST /api/auth/login`. Only users with `role: admin` may enter the dashboard. [`proxy.ts`](proxy.ts) validates each request via `GET /api/auth/me`. Tokens live in cookies + in-memory Bearer header for mutations. Logout calls `POST /api/auth/logout`. Forgot password: `/forgot-password` (API codes; SMTP required in production).
 
-**First admin:** register via API, then set `role: "admin"` on that user in MongoDB (see [docs/CONVENTIONS.md](../docs/CONVENTIONS.md)).
+**First admin:** `npm run seed:admin` from repo root (see [docs/CONVENTIONS.md](../docs/CONVENTIONS.md)).
 
 Do not expose admin publicly without strong JWT secrets (`NODE_ENV=production` rejects default secrets on the server).
 

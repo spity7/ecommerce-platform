@@ -191,7 +191,8 @@ export function ToolbarProfileAction({
   className,
   label,
 }: ToolbarProfileActionProps) {
-  const { customerAuth, user, loading, handleLogout } = useStorefrontAuthEntry();
+  const { customerAuth, user, loading, handleLogout } =
+    useStorefrontAuthEntry();
 
   if (!customerAuth) {
     return (

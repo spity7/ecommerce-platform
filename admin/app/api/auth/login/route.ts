@@ -1,10 +1,5 @@
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/lib/auth";
-import {
-  attachAuthCookies,
-  clearAuthCookies,
-} from "@/lib/auth-session-cookies";
+import { attachAuthCookies } from "@/lib/auth-session-cookies";
 import { proxyAuthRequest, readAuthResponse } from "@/lib/auth-session-api";
 
 export async function POST(request: Request) {

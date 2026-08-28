@@ -1,13 +1,22 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { routes } from "@/config/routes";
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/lib/auth";
 import { fetchAdminUser } from "@/lib/validate-admin-session";
+
+const AUTH_PUBLIC_PATHS = [routes.signIn, routes.forgotPassword];
+
+function isAuthPublicPath(pathname: string): boolean {
+  return AUTH_PUBLIC_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  );
+}
 
 function redirectToSignIn(
   request: NextRequest,
   clearCookies = false
 ): NextResponse {
-  const response = NextResponse.redirect(new URL("/signin", request.url));
+  const response = NextResponse.redirect(new URL(routes.signIn, request.url));
   if (clearCookies) {
     response.cookies.delete(ACCESS_TOKEN_COOKIE);
     response.cookies.delete(REFRESH_TOKEN_COOKIE);
@@ -25,10 +34,10 @@ export async function proxy(request: NextRequest) {
 
   const token = request.cookies.get(ACCESS_TOKEN_COOKIE)?.value;
   const refreshToken = request.cookies.get(REFRESH_TOKEN_COOKIE)?.value;
-  const isSignIn = pathname === "/signin";
+  const onAuthPage = isAuthPublicPath(pathname);
 
   if (!token) {
-    if (isSignIn || refreshToken) {
+    if (onAuthPage || refreshToken) {
       return NextResponse.next();
     }
     return redirectToSignIn(request);
@@ -37,7 +46,7 @@ export async function proxy(request: NextRequest) {
   const user = await fetchAdminUser(token);
 
   if (!user) {
-    if (isSignIn) {
+    if (onAuthPage) {
       const response = NextResponse.next();
       response.cookies.delete(ACCESS_TOKEN_COOKIE);
       response.cookies.delete(REFRESH_TOKEN_COOKIE);
@@ -49,8 +58,8 @@ export async function proxy(request: NextRequest) {
     return redirectToSignIn(request, true);
   }
 
-  if (isSignIn) {
-    return NextResponse.redirect(new URL("/", request.url));
+  if (pathname === routes.signIn) {
+    return NextResponse.redirect(new URL(routes.dashboard, request.url));
   }
 
   return NextResponse.next();

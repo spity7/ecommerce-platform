@@ -31,7 +31,11 @@ async function fetchSessionUser(): Promise<UserDto | null> {
       return null;
     }
 
-    const user = (await response.json()) as UserDto;
+    const user = (await response.json()) as UserDto | null;
+    if (!user) {
+      return null;
+    }
+
     return user.role === "customer" || user.role === "admin" ? user : null;
   } catch {
     return null;

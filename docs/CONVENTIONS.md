@@ -85,7 +85,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) § API contract and `.cursor/rules/api-co
 | Auth UI     | `lib/brand.ts` → `createAdminMetadata()`; sign-in shell uses `siteConfig.branding`                                                 |
 | API mappers | `lib/mappers/` — map DTOs to UI types                                                                                              |
 | Lint        | Biome + Prettier (`npm run check`)                                                                                                 |
-| Auth        | JWT via BFF `/api/auth/*` (httpOnly cookies + in-memory Bearer); `admin/proxy.ts` guards dashboard; sign-in requires `role: admin` |
+| Auth        | JWT via BFF `/api/auth/*` (httpOnly cookies + in-memory Bearer); `admin/proxy.ts` guards dashboard; sign-in requires `role: admin`; `/forgot-password` for self-service reset; `adminPath()` for subdirectory client redirects |
 
 Catalog list pages fetch from API in Server Components; show inline error banner with seed hint on failure.
 

@@ -6,7 +6,7 @@ import { proxyAuthRequest } from "@/lib/auth-session-api";
 export async function GET() {
   const accessToken = (await cookies()).get(ACCESS_TOKEN_COOKIE)?.value;
   if (!accessToken) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json(null);
   }
 
   const upstream = await proxyAuthRequest("/api/auth/me", {

@@ -22,7 +22,10 @@ import MobileMenuToggler from "../action-buttons/MobileMenuToggler";
 import Tooltip from "@/components/common/ui/Tooltip";
 import { productCategories } from "@/data/menu";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
-import { AuthAccessBox, AuthIconButton } from "@/components/auth/storefront-auth-entry";
+import {
+  AuthAccessBox,
+  AuthIconButton,
+} from "@/components/auth/storefront-auth-entry";
 
 export default function Header4({ sticky = false }) {
   const isSticky = useSticky();
@@ -303,8 +306,8 @@ export default function Header4({ sticky = false }) {
                 </li>
                 <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-3 d-none d-lg-flex">
                   <div className="tooltips tooltip-distance-lg">
-                      <AuthIconButton className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg" />
-                    </div>
+                    <AuthIconButton className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg" />
+                  </div>
                 </li>
                 <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-4 d-none d-lg-flex">
                   <Tooltip content="Compare" placement="bottom">

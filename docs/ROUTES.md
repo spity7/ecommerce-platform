@@ -74,9 +74,10 @@ Dev URL: `http://localhost:3001`. Optional `basePath` via `NEXT_PUBLIC_BASE_URL`
 
 ### Auth
 
-| Path      | Notes                                                         |
-| --------- | ------------------------------------------------------------- |
-| `/signin` | JWT login via `/api/auth/login` BFF; httpOnly session cookies |
+| Path               | Notes                                                                                 |
+| ------------------ | ------------------------------------------------------------------------------------- |
+| `/signin`          | JWT login via `/api/auth/login` BFF; httpOnly session cookies                         |
+| `/forgot-password` | Password reset via API (`forgot-password` / `reset-password`); public when signed out |
 
 Protected by `admin/proxy.ts`: validates access token via `GET /api/auth/me` and requires `role: admin`. `/api/auth/*` BFF routes are excluded from the gate. When the access cookie is missing or expired but a refresh cookie is present, the proxy allows the request so the client can rotate tokens. Clears invalid cookies and redirects to `/signin` when both tokens are unusable. Sign-in rejects non-admin users. Logout calls `POST /api/auth/logout`.
 
@@ -84,36 +85,36 @@ Protected by `admin/proxy.ts`: validates access token via `GET /api/auth/me` and
 
 Proxies to `@platform/server` and sets httpOnly cookies on the admin origin (`:3001`).
 
-| Method | Path                | Notes                                    |
-| ------ | ------------------- | ---------------------------------------- |
-| POST   | `/api/auth/login`   | Login; sets access + refresh cookies     |
-| POST   | `/api/auth/refresh` | Refresh; rotates cookies                 |
-| POST   | `/api/auth/logout`  | Logout; revokes refresh + clears cookies |
-| GET    | `/api/auth/me`      | Current user from access cookie          |
+| Method | Path                | Notes                                                   |
+| ------ | ------------------- | ------------------------------------------------------- |
+| POST   | `/api/auth/login`   | Login; sets access + refresh cookies                    |
+| POST   | `/api/auth/refresh` | Refresh; rotates cookies                                |
+| POST   | `/api/auth/logout`  | Logout; revokes refresh + clears cookies                |
+| GET    | `/api/auth/me`      | Current user from access cookie; requires `role: admin` |
 
 ### Dashboard (template + catalog API)
 
-| Path                                                                             | API-connected? | Notes                          |
-| -------------------------------------------------------------------------------- | -------------- | ------------------------------ |
-| `/`                                                                              | No             | Dashboard home (demo charts)   |
-| `/products`                                                                      | **Yes**        | List + delete from API         |
-| `/products/new`, `/products/[id]/edit`                                           | **Yes**        | Create/update via API          |
-| `/categories`                                                                    | **Yes**        | List + delete from API         |
-| `/categories/new`, `/categories/[id]/edit`                                       | **Yes**        | Create/update via API          |
-| `/brands`                                                                        | **Yes**        | List + delete from API         |
-| `/brands/new`, `/brands/[id]/edit`                                               | **Yes**        | Create/update via API          |
-| `/attributes`                                                                    | **Yes**        | List + delete from API         |
-| `/attributes/new`, `/attributes/[id]/edit`                                       | **Yes**        | Create/update via API          |
-| `/products/demo/edit`, `/categories/demo/edit`, …                                | No             | Legacy demo routes (optional)  |
-| `/orders`                                                                        | **Yes**        | List + status updates from API |
-| `/customers`, `/users/new`                                                       | No             | Demo data                      |
-| `/coupons`, `/coupons/new`, `/coupons/demo/edit`                                 | No             | Demo data                      |
-| `/roles`, `/roles/new`                                                           | No             | Demo data                      |
-| `/reports`, `/tax`, `/media`, `/history`                                         | No             | Demo data                      |
-| `/product-reviews`, `/support-tickets`, `/notifications`                         | No             | Demo data                      |
-| `/integrations`, `/upgrade`, `/update-app`, `/list-page`                         | No             | Template pages                 |
-| `/settings`, `/settings/shipping`, `/settings/payments`, `/settings/permissions` | No             | Demo data                      |
-| `/localization/currency-rates`, `/localization/translation`                      | No             | Demo data                      |
+| Path                                                                             | API-connected? | Notes                             |
+| -------------------------------------------------------------------------------- | -------------- | --------------------------------- |
+| `/`                                                                              | No             | Dashboard home (demo charts)      |
+| `/products`                                                                      | **Yes**        | List + delete from API            |
+| `/products/new`, `/products/[id]/edit`                                           | **Yes**        | Create/update via API             |
+| `/categories`                                                                    | **Yes**        | List + delete from API            |
+| `/categories/new`, `/categories/[id]/edit`                                       | **Yes**        | Create/update via API             |
+| `/brands`                                                                        | **Yes**        | List + delete from API            |
+| `/brands/new`, `/brands/[id]/edit`                                               | **Yes**        | Create/update via API             |
+| `/attributes`                                                                    | **Yes**        | List + delete from API            |
+| `/attributes/new`, `/attributes/[id]/edit`                                       | **Yes**        | Create/update via API             |
+| `/products/demo/edit`, `/categories/demo/edit`, …                                | No             | Legacy demo routes (optional)     |
+| `/orders`                                                                        | **Yes**        | List + status updates from API    |
+| `/customers`, `/users/new`                                                       | No             | Demo data                         |
+| `/coupons`, `/coupons/new`, `/coupons/demo/edit`                                 | No             | Demo data                         |
+| `/roles`, `/roles/new`                                                           | No             | Demo data — not wired to API RBAC |
+| `/reports`, `/tax`, `/media`, `/history`                                         | No             | Demo data                         |
+| `/product-reviews`, `/support-tickets`, `/notifications`                         | No             | Demo data                         |
+| `/integrations`, `/upgrade`, `/update-app`, `/list-page`                         | No             | Template pages                    |
+| `/settings`, `/settings/shipping`, `/settings/payments`, `/settings/permissions` | No             | Demo data                         |
+| `/localization/currency-rates`, `/localization/translation`                      | No             | Demo data                         |
 
 Navigation source: `admin/config/navigation.ts` + `admin/config/routes.ts`. Optional nav items are hidden when matching `SiteConfig.features` is `false` (e.g. `coupons`, `reviews`).
 
@@ -151,14 +152,14 @@ Dev URL: `http://localhost:3000`.
 
 Proxies to `@platform/server` and sets httpOnly cookies on the storefront origin (`:3000`).
 
-| Method | Path                 | Notes                                    |
-| ------ | -------------------- | ---------------------------------------- |
-| POST   | `/api/auth/login`    | Login; sets access + refresh cookies     |
-| POST   | `/api/auth/register` | Register customer; sets cookies          |
-| POST   | `/api/auth/social`   | Google sign-in; sets cookies             |
-| POST   | `/api/auth/refresh`  | Refresh; rotates cookies                 |
-| POST   | `/api/auth/logout`   | Logout; revokes refresh + clears cookies |
-| GET    | `/api/auth/me`       | Current user from access cookie          |
+| Method | Path                 | Notes                                                                  |
+| ------ | -------------------- | ---------------------------------------------------------------------- |
+| POST   | `/api/auth/login`    | Login; sets access + refresh cookies                                   |
+| POST   | `/api/auth/register` | Register customer; sets cookies                                        |
+| POST   | `/api/auth/social`   | Google sign-in; sets cookies                                           |
+| POST   | `/api/auth/refresh`  | Refresh; rotates cookies; `200` with error body when no refresh cookie |
+| POST   | `/api/auth/logout`   | Logout; revokes refresh + clears cookies                               |
+| GET    | `/api/auth/me`       | Current user from access cookie; `200` + `null` when no access cookie  |
 
 ### Theme demo surface
 

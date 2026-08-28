@@ -1,6 +1,7 @@
 "use client";
 
 import type { UserDto } from "@platform/shared";
+import { usePathname } from "next/navigation";
 import {
   createContext,
   useCallback,
@@ -10,6 +11,7 @@ import {
   type ReactNode,
 } from "react";
 import { setAccessToken } from "@platform/api-client";
+import { routes } from "@/config/routes";
 import { tryRefreshSession } from "@/lib/refresh-session";
 
 type AuthSessionContextValue = {
@@ -19,6 +21,14 @@ type AuthSessionContextValue = {
 };
 
 const AuthSessionContext = createContext<AuthSessionContextValue | null>(null);
+
+const AUTH_PUBLIC_PATHS = [routes.signIn, routes.forgotPassword];
+
+function isAuthPublicPath(pathname: string): boolean {
+  return AUTH_PUBLIC_PATHS.some(
+    (path) => pathname === path || pathname.startsWith(`${path}/`)
+  );
+}
 
 async function fetchSessionUser(): Promise<UserDto | null> {
   try {
@@ -43,6 +53,7 @@ type AuthSessionProviderProps = {
 };
 
 export function AuthSessionProvider({ children }: AuthSessionProviderProps) {
+  const pathname = usePathname();
   const [user, setUser] = useState<UserDto | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -62,6 +73,13 @@ export function AuthSessionProvider({ children }: AuthSessionProviderProps) {
   }, []);
 
   useEffect(() => {
+    if (isAuthPublicPath(pathname)) {
+      setUser(null);
+      setAccessToken(null);
+      setLoading(false);
+      return;
+    }
+
     void refreshUser();
 
     function onSessionUpdated() {
@@ -72,7 +90,7 @@ export function AuthSessionProvider({ children }: AuthSessionProviderProps) {
     return () => {
       window.removeEventListener("auth:session-updated", onSessionUpdated);
     };
-  }, [refreshUser]);
+  }, [pathname, refreshUser]);
 
   return (
     <AuthSessionContext.Provider value={{ user, loading, refreshUser }}>

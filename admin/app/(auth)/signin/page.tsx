@@ -23,7 +23,7 @@ export default function SignInPage() {
           height={36}
           priority
           src={`${baseURL}${siteConfig.branding.logo.replace(/^\//, "")}`}
-          style={{ width: "auto" }}
+          style={{ width: "auto", height: "auto" }}
           width={160}
         />
       </Link>

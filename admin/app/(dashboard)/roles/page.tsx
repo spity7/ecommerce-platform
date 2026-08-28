@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DemoNotice } from "@/components/admin/demo-notice";
 import { RoleListTable } from "@/components/admin/operation-list-pages";
 import { Icon } from "@/components/layout/icon";
 import { PageHeader } from "@/components/layout/page-header";
@@ -22,6 +23,7 @@ export default function RolesPage() {
         eyebrow="Access Control"
         title="Roles"
       />
+      <DemoNotice description="Role management is template UI only. Access control is enforced by the admin role on the API — not by these demo roles." />
       <RoleListTable roles={roles} />
     </>
   );

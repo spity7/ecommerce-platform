@@ -1,5 +1,12 @@
 import { clearLegacyAuthCookies } from "@/lib/auth";
+import { adminPath } from "@/lib/paths";
 import { setAccessToken } from "@platform/api-client";
+
+export function notifyAuthSessionUpdated(): void {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("auth:session-updated"));
+  }
+}
 
 export async function clearSession(): Promise<void> {
   try {
@@ -9,11 +16,12 @@ export async function clearSession(): Promise<void> {
   }
   clearLegacyAuthCookies();
   setAccessToken(null);
+  notifyAuthSessionUpdated();
 }
 
 export async function clearSessionAndRedirectToSignIn(): Promise<void> {
   await clearSession();
   if (typeof window !== "undefined") {
-    window.location.href = "/signin";
+    window.location.href = adminPath("/signin");
   }
 }

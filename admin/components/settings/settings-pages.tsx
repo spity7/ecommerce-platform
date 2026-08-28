@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DemoNotice } from "@/components/admin/demo-notice";
 import {
   Field,
   FormCard,
@@ -319,6 +320,7 @@ export function PermissionSettingsPage() {
         description="Set default admin access, approval rules, and security controls."
         title="Permissions"
       />
+      <DemoNotice description="Permission settings are demo UI only. Admin access is binary (admin vs customer) on the API today." />
       <section className="space-y-6">
         <FormCard title="Default Access">
           <div className="grid gap-5 md:grid-cols-2">

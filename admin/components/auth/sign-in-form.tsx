@@ -1,10 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { AuthResponse } from "@platform/shared";
 import { routes } from "@/config/routes";
 import { adminBrandName } from "@/lib/brand";
+import { notifyAuthSessionUpdated } from "@/lib/session";
 import { setAccessToken } from "@platform/api-client";
 import { useAuthSession } from "@/providers/auth-session-provider";
 
@@ -45,6 +47,7 @@ export function SignInForm() {
 
       setAccessToken(body.accessToken);
       await refreshUser();
+      notifyAuthSessionUpdated();
       router.push(routes.dashboard);
       router.refresh();
     } catch {
@@ -98,6 +101,14 @@ export function SignInForm() {
             value={password}
           />
         </label>
+        <p className="text-right text-[13px]">
+          <Link
+            className="font-semibold text-brand-600 hover:text-brand-700"
+            href={routes.forgotPassword}
+          >
+            Forgot password?
+          </Link>
+        </p>
       </div>
 
       {error ? (

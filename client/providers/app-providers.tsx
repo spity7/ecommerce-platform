@@ -22,8 +22,6 @@ export function AppProviders({ children }: AppProvidersProps) {
   useEffect(() => {
     setGuestCartId(getOrCreateGuestCartId());
 
-    void tryRefreshSession();
-
     registerUnauthorizedHandler(async () => {
       const refreshed = await tryRefreshSession();
       if (!refreshed) {

@@ -22,7 +22,10 @@ import MobileMenuToggler from "../action-buttons/MobileMenuToggler";
 import NavFilterTab from "./headerComponents/NavFilterTab";
 import Tooltip from "@/components/common/ui/Tooltip";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
-import { AuthAccessBox, AuthIconButton } from "@/components/auth/storefront-auth-entry";
+import {
+  AuthAccessBox,
+  AuthIconButton,
+} from "@/components/auth/storefront-auth-entry";
 
 export default function Header3({ showFeatures = true, sticky = false }) {
   const isSticky = useSticky();

@@ -28,7 +28,7 @@ export function AuthShell({ children }: AuthShellProps) {
             height={40}
             priority
             src={`${baseURL}${logo.replace(/^\//, "")}`}
-            style={{ width: "auto" }}
+            style={{ width: "auto", height: "auto" }}
             width={178}
           />
         </Link>

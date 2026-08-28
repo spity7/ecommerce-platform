@@ -35,6 +35,7 @@ export const routes = {
   settings: "/settings",
   shippingSettings: "/settings/shipping",
   signIn: "/signin",
+  forgotPassword: "/forgot-password",
   supportTickets: "/support-tickets",
   tax: "/tax",
   translation: "/localization/translation",

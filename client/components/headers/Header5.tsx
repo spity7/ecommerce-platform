@@ -18,7 +18,10 @@ import { useSticky } from "@/hooks/useSticky";
 import MobileMenuToggler from "../action-buttons/MobileMenuToggler";
 import Tooltip from "@/components/common/ui/Tooltip";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
-import { AuthAccessBox, AuthIconButton } from "@/components/auth/storefront-auth-entry";
+import {
+  AuthAccessBox,
+  AuthIconButton,
+} from "@/components/auth/storefront-auth-entry";
 
 export default function Header5({ sticky = false }) {
   const isSticky = useSticky();
@@ -107,10 +110,10 @@ export default function Header5({ sticky = false }) {
                     </li>
                     <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-2 rbt-access-box-has-bg-hover d-none d-lg-flex">
                       <AuthAccessBox
-                    iconClassName="rbt-round-btn rbt-bg-static-gray"
-                    title="Log in/Sign Up"
-                    subtitle="Access Account"
-                  />
+                        iconClassName="rbt-round-btn rbt-bg-static-gray"
+                        title="Log in/Sign Up"
+                        subtitle="Access Account"
+                      />
                     </li>
                     <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-3 rbt-access-box-has-bg-hover rbt-mini-cart">
                       <CartSidebarToggler className="rbt-access-box-wrapper rbt-cart-sidenav-activation">
@@ -222,8 +225,8 @@ export default function Header5({ sticky = false }) {
                 </li>
                 <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-3 d-none d-lg-flex">
                   <div className="tooltips tooltip-distance-lg">
-                      <AuthIconButton className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg" />
-                    </div>
+                    <AuthIconButton className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg" />
+                  </div>
                 </li>
                 <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-4 d-none d-lg-flex">
                   <Tooltip content="Compare" placement="bottom">
