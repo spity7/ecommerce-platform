@@ -1,5 +1,11 @@
 import { z } from "../zod.js";
 import { USER_ROLES } from "../types/auth.js";
+import { isStrongPassword, STRONG_PASSWORD_MESSAGE } from "../password.js";
+
+const strongPasswordSchema = z
+  .string()
+  .min(8)
+  .refine(isStrongPassword, STRONG_PASSWORD_MESSAGE);
 
 export const loginSchema = z.object({
   email: z.string().email(),
@@ -20,7 +26,7 @@ export const refreshTokenSchema = z.object({
 export const changePasswordSchema = z
   .object({
     currentPassword: z.string().min(1).optional(),
-    newPassword: z.string().min(8),
+    newPassword: strongPasswordSchema,
     idToken: z.string().min(1).optional(),
   })
   .refine(
@@ -34,7 +40,7 @@ export const forgotPasswordSchema = z.object({
 
 export const resetPasswordSchema = z.object({
   token: z.string().min(1),
-  newPassword: z.string().min(8),
+  newPassword: strongPasswordSchema,
 });
 
 export const verifyEmailSchema = z.object({

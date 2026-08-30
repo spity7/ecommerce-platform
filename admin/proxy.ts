@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { routes } from "@/config/routes";
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/lib/auth";
-import { fetchAdminUser } from "@/lib/validate-admin-session";
+import { fetchSessionUser } from "@/lib/validate-admin-session";
 
 const AUTH_PUBLIC_PATHS = [
   routes.signIn,
@@ -47,14 +47,18 @@ export async function proxy(request: NextRequest) {
     return redirectToSignIn(request);
   }
 
-  const user = await fetchAdminUser(token);
+  const sessionUser = await fetchSessionUser(token);
 
-  if (!user) {
+  if (!sessionUser || sessionUser.role !== "admin") {
+    if (sessionUser && sessionUser.role !== "admin") {
+      if (onAuthPage) {
+        return NextResponse.next();
+      }
+      return redirectToSignIn(request);
+    }
+
     if (onAuthPage) {
-      const response = NextResponse.next();
-      response.cookies.delete(ACCESS_TOKEN_COOKIE);
-      response.cookies.delete(REFRESH_TOKEN_COOKIE);
-      return response;
+      return NextResponse.next();
     }
     if (refreshToken) {
       return NextResponse.next();

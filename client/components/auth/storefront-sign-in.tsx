@@ -14,6 +14,7 @@ export function StorefrontSignInForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -84,16 +85,35 @@ export function StorefrontSignInForm() {
         <label className="rbt-field-label" htmlFor="signin_password">
           Password <span className="rbt-text-color-danger">*</span>
         </label>
-        <input
-          className="rbt-input-field"
-          type="password"
-          id="signin_password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          required
-          autoComplete="current-password"
-        />
+        <div className="position-relative">
+          <input
+            className="rbt-input-field"
+            type={showPassword ? "text" : "password"}
+            id="signin_password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+            autoComplete="current-password"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="rbt-password-toggle-btn"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            <i
+              className={`fa-regular ${
+                showPassword ? "fa-eye-slash" : "fa-eye"
+              }`}
+            />
+          </button>
+        </div>
       </div>
+      <p className="text-end mt--8 mb--0 b2">
+        <Link className="rbt-switch-btn" href="/forgot-password">
+          Forgot password?
+        </Link>
+      </p>
       {error ? (
         <p className="rbt-text-color-danger mt--12 mb--0 b3">{error}</p>
       ) : null}

@@ -32,11 +32,10 @@ export async function POST() {
   }
 
   if (payload.user?.role !== "admin") {
-    const response = NextResponse.json(
+    return NextResponse.json(
       { error: "Admin access required" },
       { status: 403 }
     );
-    return clearAuthCookies(response);
   }
 
   const response = NextResponse.json({

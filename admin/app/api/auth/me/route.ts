@@ -2,7 +2,6 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import type { UserDto } from "@platform/shared";
 import { ACCESS_TOKEN_COOKIE } from "@/lib/auth";
-import { clearAuthCookies } from "@/lib/auth-session-cookies";
 import { proxyAuthRequest } from "@/lib/auth-session-api";
 
 export async function GET() {
@@ -19,11 +18,7 @@ export async function GET() {
   const body = (await upstream.json()) as UserDto & { error?: string };
 
   if (upstream.ok && body.role !== "admin") {
-    const response = NextResponse.json(
-      { error: "Admin access required" },
-      { status: 403 }
-    );
-    return clearAuthCookies(response);
+    return NextResponse.json({ error: "Admin access required" }, { status: 401 });
   }
 
   return NextResponse.json(body, { status: upstream.status });

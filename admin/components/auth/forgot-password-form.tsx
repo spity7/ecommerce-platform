@@ -100,8 +100,8 @@ export function ForgotPasswordForm() {
           Reset {adminBrandName} access
         </h1>
         <p className="mt-2 text-[14px] text-ink-500">
-          Enter the email for your admin account. We will send a reset link when
-          SMTP is configured.
+          Enter the email address for your admin account. We&apos;ll send you a
+          link to choose a new password.
         </p>
       </div>
 

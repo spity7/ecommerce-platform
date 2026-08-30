@@ -11,6 +11,7 @@ import {
   socialAuthSchema,
 } from "@platform/shared";
 import { AppError } from "../middleware/errorHandler.js";
+import { env } from "../config/env.js";
 import { credentialAuthRateLimiter } from "../middleware/rateLimit.js";
 import { requireAuth, type AuthenticatedRequest } from "../middleware/auth.js";
 import type { UserDocument } from "../models/User.js";
@@ -93,6 +94,7 @@ authRouter.post(
       }
 
       await reactivateAccount(user);
+      await clearPasswordResetToken(user);
       await user.save();
       res.json(issueAuthTokens(user));
       return;
@@ -102,6 +104,9 @@ authRouter.post(
     if (!valid) {
       throw new AppError(401, "Invalid email or password");
     }
+
+    await clearPasswordResetToken(user);
+    await user.save();
 
     res.json(issueAuthTokens(user));
   })
@@ -314,6 +319,8 @@ authRouter.post(
     user.oauthProvider = "google";
     user.oauthId = profile.sub;
     user.emailVerified = true;
+    await clearEmailVerificationToken(user);
+    await clearPasswordResetToken(user);
     if (!user.name) {
       user.name = profile.name;
     }
@@ -328,6 +335,13 @@ authRouter.post(
   "/forgot-password",
   credentialAuthRateLimiter,
   asyncHandler(async (req, res) => {
+    if (env.NODE_ENV === "production" && !env.mail.isConfigured) {
+      throw new AppError(
+        503,
+        "Password reset is temporarily unavailable. Please contact support."
+      );
+    }
+
     const { email } = forgotPasswordSchema.parse(req.body);
     const user = await findActiveUserByEmail(email);
 

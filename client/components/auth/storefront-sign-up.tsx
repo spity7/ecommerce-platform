@@ -15,6 +15,7 @@ export function StorefrontSignUpForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [phone, setPhone] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -118,16 +119,30 @@ export function StorefrontSignUpForm() {
         <label className="rbt-field-label" htmlFor="signup_password">
           Password <span className="rbt-text-color-danger">*</span>
         </label>
-        <input
-          className="rbt-input-field"
-          type="password"
-          id="signup_password"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          required
-          minLength={8}
-          autoComplete="new-password"
-        />
+        <div className="position-relative">
+          <input
+            className="rbt-input-field"
+            type={showPassword ? "text" : "password"}
+            id="signup_password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            required
+            minLength={8}
+            autoComplete="new-password"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="rbt-password-toggle-btn"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            <i
+              className={`fa-regular ${
+                showPassword ? "fa-eye-slash" : "fa-eye"
+              }`}
+            />
+          </button>
+        </div>
       </div>
       {error ? (
         <p className="rbt-text-color-danger mt--12 mb--0 b3">{error}</p>

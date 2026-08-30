@@ -3,8 +3,22 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import {
+  getMissingPasswordRequirements,
+  getPasswordStrengthLabel,
+  getPasswordValidationError,
+} from "@platform/shared";
 import { ApiError, resetPassword } from "@platform/api-client";
 import { routes } from "@/config/routes";
+
+function passwordStrengthHint(password: string): string {
+  const label = getPasswordStrengthLabel(password);
+  if (label === "Strong") {
+    return "Great! Your password is strong.";
+  }
+  const missing = getMissingPasswordRequirements(password);
+  return missing.length > 0 ? `Add ${missing.join(", ")}.` : "";
+}
 
 export function ResetPasswordForm() {
   const router = useRouter();
@@ -16,6 +30,13 @@ export function ResetPasswordForm() {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
 
+  const strengthLabel = getPasswordStrengthLabel(newPassword);
+  const validationError = getPasswordValidationError(
+    newPassword,
+    confirmPassword
+  );
+  const strengthHint = passwordStrengthHint(newPassword);
+
   async function handleResetPassword(event: React.FormEvent) {
     event.preventDefault();
     setError(null);
@@ -25,13 +46,8 @@ export function ResetPasswordForm() {
       return;
     }
 
-    if (newPassword.length < 8) {
-      setError("Password must be at least 8 characters.");
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      setError("Passwords do not match.");
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
@@ -98,6 +114,10 @@ export function ResetPasswordForm() {
         <h1 className="text-[26px] font-semibold text-ink-900">
           Choose a new password
         </h1>
+        <p className="mt-2 text-[14px] text-ink-500">
+          Use at least 8 characters with uppercase, lowercase, a number, and a
+          special symbol.
+        </p>
       </div>
 
       <div className="mt-6 space-y-4">
@@ -114,6 +134,15 @@ export function ResetPasswordForm() {
             type="password"
             value={newPassword}
           />
+          {newPassword.length > 0 ? (
+            <p
+              className={`mt-2 text-[13px] ${
+                strengthLabel === "Strong" ? "text-success-600" : "text-ink-500"
+              }`}
+            >
+              {strengthHint}
+            </p>
+          ) : null}
         </label>
         <label className="block">
           <span className="text-[14px] font-semibold text-ink-700">
@@ -137,7 +166,7 @@ export function ResetPasswordForm() {
 
       <button
         className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-base bg-brand-600 text-[14px] font-semibold text-white hover:bg-brand-700 disabled:opacity-60"
-        disabled={loading}
+        disabled={loading || strengthLabel !== "Strong"}
         type="submit"
       >
         {loading ? "Updating…" : "Update password"}

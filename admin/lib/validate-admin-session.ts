@@ -8,7 +8,7 @@ function getApiUrl(): string {
   );
 }
 
-export async function fetchAdminUser(
+export async function fetchSessionUser(
   accessToken: string
 ): Promise<UserDto | null> {
   try {
@@ -21,9 +21,15 @@ export async function fetchAdminUser(
       return null;
     }
 
-    const user = (await response.json()) as UserDto;
-    return user.role === "admin" ? user : null;
+    return (await response.json()) as UserDto;
   } catch {
     return null;
   }
+}
+
+export async function fetchAdminUser(
+  accessToken: string
+): Promise<UserDto | null> {
+  const user = await fetchSessionUser(accessToken);
+  return user?.role === "admin" ? user : null;
 }

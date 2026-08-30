@@ -124,6 +124,30 @@ describe("auth API", () => {
       .expect(200);
   });
 
+  it("clears password reset tokens when user logs in instead of resetting", async () => {
+    const email = `login-clears-reset-${Date.now()}@example.com`;
+    await registerCustomer(app, email);
+
+    await request(app)
+      .post("/api/auth/forgot-password")
+      .send({ email })
+      .expect(200);
+
+    const beforeLogin = await User.findOne({ email });
+    assert.ok(beforeLogin?.passwordResetTokenHash);
+    assert.ok(beforeLogin?.passwordResetExpires);
+
+    await request(app)
+      .post("/api/auth/login")
+      .send({ email, password: "Password1!Strong" })
+      .expect(200);
+
+    const afterLogin = await User.findOne({ email });
+    assert.ok(afterLogin);
+    assert.equal(afterLogin.passwordResetTokenHash, undefined);
+    assert.equal(afterLogin.passwordResetExpires, undefined);
+  });
+
   it("changes password for the authenticated user", async () => {
     const { body } = await registerCustomer(app);
 
@@ -300,6 +324,36 @@ describe("auth API", () => {
     assert.equal(body.user.emailVerified, true);
     assert.equal(body.user.passwordSetByUser, false);
     assert.equal(body.user.oauthProvider, "google");
+  });
+
+  it("clears email verification tokens when linking Google to an email account", async () => {
+    const email = `link-google-${Date.now()}@example.com`;
+    const sub = "link-google-sub";
+    await registerCustomer(app, email);
+
+    const beforeLink = await User.findOne({ email });
+    assert.ok(beforeLink?.emailVerificationTokenHash);
+    assert.ok(beforeLink?.emailVerificationExpires);
+    assert.equal(beforeLink.emailVerified, false);
+
+    const response = await request(app)
+      .post("/api/auth/social")
+      .send({
+        provider: "google",
+        idToken: testGoogleIdToken(email, sub),
+      })
+      .expect(200);
+
+    assert.equal(response.body.user.emailVerified, true);
+    assert.equal(response.body.user.oauthProvider, "google");
+
+    const afterLink = await User.findOne({ email });
+    assert.ok(afterLink);
+    assert.equal(afterLink.emailVerified, true);
+    assert.equal(afterLink.oauthProvider, "google");
+    assert.equal(afterLink.oauthId, sub);
+    assert.equal(afterLink.emailVerificationTokenHash, undefined);
+    assert.equal(afterLink.emailVerificationExpires, undefined);
   });
 
   it("imports Google profile picture on social sign-in", async () => {

@@ -10,6 +10,7 @@ import { useUiElement } from "@/context/uiStore";
 import {
   getPasswordStrength,
   getPasswordValidationError,
+  getMissingPasswordRequirements,
 } from "@/lib/passwordValidation";
 import PasswordStrengthIndicator from "@/components/common/forms/PasswordStrengthIndicator";
 import { getStorefrontSiteConfig } from "@/lib/site";
@@ -187,20 +188,13 @@ function ResetPasswordLayout({
   passwordError,
   onReset,
 }: ResetPasswordLayoutProps) {
-  const missingRequirements: string[] = [];
-  if (newPassword.length < 8) missingRequirements.push("8+ characters");
-  if (!/[A-Z]/.test(newPassword))
-    missingRequirements.push("an uppercase letter");
-  if (!/[a-z]/.test(newPassword))
-    missingRequirements.push("a lowercase letter");
-  if (!/[0-9]/.test(newPassword)) missingRequirements.push("a number");
-  if (!/[^A-Za-z0-9]/.test(newPassword))
-    missingRequirements.push("a special symbol");
-
+  const missingRequirements = getMissingPasswordRequirements(newPassword);
   const strengthHint =
     strength.label === "Strong"
       ? "Great! Your password is strong."
-      : `Add ${missingRequirements.join(", ")}.`;
+      : missingRequirements.length > 0
+        ? `Add ${missingRequirements.join(", ")}.`
+        : "";
 
   return (
     <div className="rbt-component-area rbt-section-gap2Bottom rbt-section-gap2Top">

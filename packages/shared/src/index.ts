@@ -6,3 +6,4 @@ export * from "./schemas/catalog.js";
 export * from "./schemas/dto.js";
 export * from "./schemas/auth.js";
 export * from "./schemas/commerce.js";
+export * from "./password.js";
