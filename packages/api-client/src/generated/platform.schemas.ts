@@ -959,12 +959,9 @@ export interface ChangePasswordInput {
   idToken?: string;
 }
 
-export interface ConfirmEmailVerificationInput {
-  /**
-   * @minLength 6
-   * @maxLength 6
-   */
-  code: string;
+export interface VerifyEmailInput {
+  /** @minLength 1 */
+  token: string;
 }
 
 export interface DeleteAccountInput {
@@ -993,20 +990,16 @@ export interface ForgotPasswordInput {
 }
 
 export interface ResetPasswordInput {
-  email: string;
-  /**
-   * @minLength 6
-   * @maxLength 6
-   */
-  code: string;
+  /** @minLength 1 */
+  token: string;
   /** @minLength 8 */
   newPassword: string;
 }
 
 export interface OkResponse {
   ok: boolean;
-  devResetCode?: string;
-  devVerificationCode?: string;
+  devResetToken?: string;
+  devVerificationToken?: string;
 }
 
 export interface UserAddressDto {
@@ -2343,25 +2336,21 @@ export type ForgotPasswordBody = {
 
 export type ForgotPassword200 = {
   ok: boolean;
-  devResetCode?: string;
-  devVerificationCode?: string;
+  devResetToken?: string;
+  devVerificationToken?: string;
 };
 
 export type ResetPasswordBody = {
-  email: string;
-  /**
-   * @minLength 6
-   * @maxLength 6
-   */
-  code: string;
+  /** @minLength 1 */
+  token: string;
   /** @minLength 8 */
   newPassword: string;
 };
 
 export type ResetPassword200 = {
   ok: boolean;
-  devResetCode?: string;
-  devVerificationCode?: string;
+  devResetToken?: string;
+  devVerificationToken?: string;
 };
 
 export type ResetPassword400 = {
@@ -2370,16 +2359,13 @@ export type ResetPassword400 = {
 
 export type RequestEmailVerification200 = {
   ok: boolean;
-  devResetCode?: string;
-  devVerificationCode?: string;
+  devResetToken?: string;
+  devVerificationToken?: string;
 };
 
 export type VerifyEmailBody = {
-  /**
-   * @minLength 6
-   * @maxLength 6
-   */
-  code: string;
+  /** @minLength 1 */
+  token: string;
 };
 
 export type VerifyEmail200Role =
@@ -3034,8 +3020,8 @@ export type DeleteAccountBody = {
 
 export type DeleteAccount200 = {
   ok: boolean;
-  devResetCode?: string;
-  devVerificationCode?: string;
+  devResetToken?: string;
+  devVerificationToken?: string;
 };
 
 export type DeleteAccount401 = {
@@ -3053,8 +3039,8 @@ export type ChangePasswordBody = {
 
 export type ChangePassword200 = {
   ok: boolean;
-  devResetCode?: string;
-  devVerificationCode?: string;
+  devResetToken?: string;
+  devVerificationToken?: string;
 };
 
 export type ChangePassword401 = {
@@ -3210,8 +3196,8 @@ export type UpdateUserAddress404 = {
 
 export type DeleteUserAddress200 = {
   ok: boolean;
-  devResetCode?: string;
-  devVerificationCode?: string;
+  devResetToken?: string;
+  devVerificationToken?: string;
 };
 
 export type DeleteUserAddress404 = {

@@ -65,8 +65,8 @@ export async function requestEmailVerification() {
   return platformApi.requestEmailVerification();
 }
 
-export async function verifyEmail(code: string) {
-  return platformApi.verifyEmail({ code });
+export async function verifyEmail(token: string) {
+  return platformApi.verifyEmail({ token });
 }
 
 export async function socialAuthWithGoogle(idToken: string) {
@@ -86,8 +86,7 @@ export async function forgotPassword(email: string) {
 }
 
 export async function resetPassword(input: {
-  email: string;
-  code: string;
+  token: string;
   newPassword: string;
 }) {
   return platformApi.resetPassword(input);

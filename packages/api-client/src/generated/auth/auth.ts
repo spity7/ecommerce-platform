@@ -78,7 +78,7 @@ export const getAuth = () => {
     });
   };
   /**
-   * @summary Request a password reset code
+   * @summary Request a password reset link
    */
   const forgotPassword = (forgotPasswordBody: ForgotPasswordBody) => {
     return customInstance<ForgotPassword200>({
@@ -89,7 +89,7 @@ export const getAuth = () => {
     });
   };
   /**
-   * @summary Reset password with verification code
+   * @summary Reset password with verification link token
    */
   const resetPassword = (resetPasswordBody: ResetPasswordBody) => {
     return customInstance<ResetPassword200>({
@@ -100,7 +100,7 @@ export const getAuth = () => {
     });
   };
   /**
-   * @summary Send email verification code to current user
+   * @summary Send email verification link to current user
    */
   const requestEmailVerification = () => {
     return customInstance<RequestEmailVerification200>({
@@ -109,7 +109,7 @@ export const getAuth = () => {
     });
   };
   /**
-   * @summary Confirm email with verification code
+   * @summary Confirm email with verification link token
    */
   const verifyEmail = (verifyEmailBody: VerifyEmailBody) => {
     return customInstance<VerifyEmail200>({

@@ -4,17 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import ReviewSlider from "./ReviewSlider";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { ApiError, forgotPassword } from "@platform/api-client";
 import { useUiElement } from "@/context/uiStore";
-import { ApiError, forgotPassword, resetPassword } from "@platform/api-client";
-import {
-  getPasswordStrength,
-  getPasswordValidationError,
-} from "@/lib/passwordValidation";
-import PasswordStrengthIndicator from "@/components/common/forms/PasswordStrengthIndicator";
 import { getStorefrontSiteConfig } from "@/lib/site";
-
-const DEMO_OTP_CODE = "123456";
 
 export default function ForgotPassword() {
   const site = getStorefrontSiteConfig();
@@ -25,42 +17,13 @@ export default function ForgotPassword() {
 }
 
 function ForgotPasswordDemo() {
-  const router = useRouter();
   const { showToaster } = useUiElement();
-  const [step, setStep] = useState<"request" | "reset" | "done">("request");
+  const [step, setStep] = useState<"request" | "sent">("request");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const strength = getPasswordStrength(newPassword);
-  const missingRequirements: string[] = [];
-  if (newPassword.length < 8) missingRequirements.push("8+ characters");
-  if (!/[A-Z]/.test(newPassword))
-    missingRequirements.push("an uppercase letter");
-  if (!/[a-z]/.test(newPassword))
-    missingRequirements.push("a lowercase letter");
-  if (!/[0-9]/.test(newPassword)) missingRequirements.push("a number");
-  if (!/[^A-Za-z0-9]/.test(newPassword))
-    missingRequirements.push("a special symbol");
-
-  const strengthHint =
-    strength.label === "Strong"
-      ? "Great! Your password is strong."
-      : `Add ${missingRequirements.join(", ")}.`;
-  const passwordError = getPasswordValidationError(
-    newPassword,
-    confirmPassword,
-    {
-      requireStrong: true,
-    }
-  );
-
-  const handleSendCode = () => {
+  const handleSendLink = () => {
     if (!email.trim()) {
       setError("Please enter your email.");
       return;
@@ -69,39 +32,8 @@ function ForgotPasswordDemo() {
     setError("");
     setTimeout(() => {
       setLoading(false);
-      showToaster("OTP code sent");
-      setStep("reset");
-      setError("");
-      setCode("");
-      setNewPassword("");
-      setConfirmPassword("");
-      setShowPassword(false);
-      setShowConfirmPassword(false);
-    }, 600);
-  };
-
-  const handleResetPassword = () => {
-    if (!code.trim()) {
-      setError("Please enter verification code.");
-      return;
-    }
-    if (code.trim() !== DEMO_OTP_CODE) {
-      setError("Invalid verification code. Use the demo OTP.");
-      return;
-    }
-    if (passwordError) {
-      setError(passwordError);
-      return;
-    }
-    setLoading(true);
-    setError("");
-    setTimeout(() => {
-      setLoading(false);
-      showToaster("Password reset successful");
-      setStep("done");
-      setTimeout(() => {
-        router.push("/account-info");
-      }, 1200);
+      showToaster("Reset link sent");
+      setStep("sent");
     }, 600);
   };
 
@@ -110,66 +42,22 @@ function ForgotPasswordDemo() {
       step={step}
       email={email}
       setEmail={setEmail}
-      code={code}
-      setCode={setCode}
-      newPassword={newPassword}
-      setNewPassword={setNewPassword}
-      confirmPassword={confirmPassword}
-      setConfirmPassword={setConfirmPassword}
-      showPassword={showPassword}
-      setShowPassword={setShowPassword}
-      showConfirmPassword={showConfirmPassword}
-      setShowConfirmPassword={setShowConfirmPassword}
       error={error}
       loading={loading}
-      strength={strength}
-      strengthHint={strengthHint}
-      passwordError={passwordError}
-      onSendCode={handleSendCode}
-      onResetPassword={handleResetPassword}
-      devCodeHint={DEMO_OTP_CODE}
+      onSendLink={handleSendLink}
     />
   );
 }
 
 function ForgotPasswordApi() {
-  const router = useRouter();
   const { showToaster } = useUiElement();
-  const [step, setStep] = useState<"request" | "reset" | "done">("request");
+  const [step, setStep] = useState<"request" | "sent">("request");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [devCodeHint, setDevCodeHint] = useState<string | null>(null);
+  const [devResetUrl, setDevResetUrl] = useState<string | null>(null);
 
-  const strength = getPasswordStrength(newPassword);
-  const missingRequirements: string[] = [];
-  if (newPassword.length < 8) missingRequirements.push("8+ characters");
-  if (!/[A-Z]/.test(newPassword))
-    missingRequirements.push("an uppercase letter");
-  if (!/[a-z]/.test(newPassword))
-    missingRequirements.push("a lowercase letter");
-  if (!/[0-9]/.test(newPassword)) missingRequirements.push("a number");
-  if (!/[^A-Za-z0-9]/.test(newPassword))
-    missingRequirements.push("a special symbol");
-
-  const strengthHint =
-    strength.label === "Strong"
-      ? "Great! Your password is strong."
-      : `Add ${missingRequirements.join(", ")}.`;
-  const passwordError = getPasswordValidationError(
-    newPassword,
-    confirmPassword,
-    {
-      requireStrong: true,
-    }
-  );
-
-  async function handleSendCode() {
+  async function handleSendLink() {
     if (!email.trim()) {
       setError("Please enter your email.");
       return;
@@ -177,55 +65,22 @@ function ForgotPasswordApi() {
 
     setLoading(true);
     setError("");
+    setDevResetUrl(null);
 
     try {
       const result = await forgotPassword(email.trim());
-      setDevCodeHint(result.devResetCode ?? null);
-      showToaster("Verification code sent");
-      setStep("reset");
-      setCode("");
-      setNewPassword("");
-      setConfirmPassword("");
-      setShowPassword(false);
-      setShowConfirmPassword(false);
+      if (result.devResetToken) {
+        setDevResetUrl(
+          `/reset-password?token=${encodeURIComponent(result.devResetToken)}`
+        );
+      }
+      showToaster("Reset link sent");
+      setStep("sent");
     } catch (err) {
       setError(
         err instanceof ApiError
           ? err.message
-          : "Could not send a verification code."
-      );
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function handleResetPassword() {
-    if (!code.trim()) {
-      setError("Please enter verification code.");
-      return;
-    }
-    if (passwordError) {
-      setError(passwordError);
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-
-    try {
-      await resetPassword({
-        email: email.trim(),
-        code: code.trim(),
-        newPassword,
-      });
-      showToaster("Password reset successful");
-      setStep("done");
-      setTimeout(() => {
-        router.push("/signin");
-      }, 1200);
-    } catch (err) {
-      setError(
-        err instanceof ApiError ? err.message : "Could not reset your password."
+          : "Could not send a password reset link."
       );
     } finally {
       setLoading(false);
@@ -237,76 +92,32 @@ function ForgotPasswordApi() {
       step={step}
       email={email}
       setEmail={setEmail}
-      code={code}
-      setCode={setCode}
-      newPassword={newPassword}
-      setNewPassword={setNewPassword}
-      confirmPassword={confirmPassword}
-      setConfirmPassword={setConfirmPassword}
-      showPassword={showPassword}
-      setShowPassword={setShowPassword}
-      showConfirmPassword={showConfirmPassword}
-      setShowConfirmPassword={setShowConfirmPassword}
       error={error}
       loading={loading}
-      strength={strength}
-      strengthHint={strengthHint}
-      passwordError={passwordError}
-      onSendCode={handleSendCode}
-      onResetPassword={handleResetPassword}
-      devCodeHint={devCodeHint}
+      onSendLink={handleSendLink}
+      devResetUrl={devResetUrl}
     />
   );
 }
 
 type ForgotPasswordLayoutProps = {
-  step: "request" | "reset" | "done";
+  step: "request" | "sent";
   email: string;
   setEmail: (value: string) => void;
-  code: string;
-  setCode: (value: string) => void;
-  newPassword: string;
-  setNewPassword: (value: string) => void;
-  confirmPassword: string;
-  setConfirmPassword: (value: string) => void;
-  showPassword: boolean;
-  setShowPassword: (value: boolean | ((prev: boolean) => boolean)) => void;
-  showConfirmPassword: boolean;
-  setShowConfirmPassword: (
-    value: boolean | ((prev: boolean) => boolean)
-  ) => void;
   error: string;
   loading: boolean;
-  strength: ReturnType<typeof getPasswordStrength>;
-  strengthHint: string;
-  passwordError: string | null;
-  onSendCode: () => void;
-  onResetPassword: () => void;
-  devCodeHint?: string | null;
+  onSendLink: () => void;
+  devResetUrl?: string | null;
 };
 
 function ForgotPasswordLayout({
   step,
   email,
   setEmail,
-  code,
-  setCode,
-  newPassword,
-  setNewPassword,
-  confirmPassword,
-  setConfirmPassword,
-  showPassword,
-  setShowPassword,
-  showConfirmPassword,
-  setShowConfirmPassword,
   error,
   loading,
-  strength,
-  strengthHint,
-  passwordError,
-  onSendCode,
-  onResetPassword,
-  devCodeHint,
+  onSendLink,
+  devResetUrl,
 }: ForgotPasswordLayoutProps) {
   return (
     <div className="rbt-component-area rbt-section-gap2Bottom rbt-section-gap2Top">
@@ -334,11 +145,12 @@ function ForgotPasswordLayout({
                     <form
                       onSubmit={(e) => {
                         e.preventDefault();
-                        onSendCode();
+                        onSendLink();
                       }}
                     >
                       <p className="rbt-description mb--16">
-                        Enter your email to receive a verification code.
+                        Enter your email and we will send you a link to reset
+                        your password.
                       </p>
                       <div className="rbt-input-field-grp">
                         <label
@@ -364,197 +176,61 @@ function ForgotPasswordLayout({
                         className="rbt-btn d-block w-100 mt--24 mb--16"
                         disabled={loading}
                       >
-                        {loading ? "Sending..." : "Send Code"}
+                        {loading ? "Sending..." : "Send reset link"}
                       </button>
                     </form>
                   )}
 
-                  {step === "reset" && (
-                    <form
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        onResetPassword();
-                      }}
-                    >
-                      <p className="rbt-description mb--16">
-                        We sent a code to <strong>{email}</strong>.
-                      </p>
-                      {devCodeHint ? (
-                        <div
-                          className="mb--16"
-                          style={{
-                            backgroundColor: "rgba(13,110,253,0.08)",
-                            borderLeft: "3px solid #0d6efd",
-                            borderRadius: "4px",
-                            padding: "8px 12px",
-                            color: "#0d6efd",
-                            fontWeight: 500,
-                          }}
-                        >
-                          Dev reset code: <strong>{devCodeHint}</strong>
-                        </div>
-                      ) : null}
-                      <div className="rbt-input-field-grp mt--16">
-                        <label
-                          className="rbt-field-label"
-                          htmlFor="forgot_page_code"
-                        >
-                          Verification Code
-                          <span className="rbt-text-color-danger">*</span>
-                        </label>
-                        <input
-                          className="rbt-input-field"
-                          type="text"
-                          id="forgot_page_code"
-                          value={code}
-                          onChange={(e) => {
-                            setCode(e.target.value);
-                          }}
-                          maxLength={6}
-                        />
-                      </div>
-                      <div className="rbt-input-field-grp">
-                        <label
-                          className="rbt-field-label"
-                          htmlFor="forgot_page_new_password"
-                        >
-                          New Password
-                          <span className="rbt-text-color-danger">*</span>
-                        </label>
-                        <div className="position-relative">
-                          <input
-                            className="rbt-input-field"
-                            type={showPassword ? "text" : "password"}
-                            id="forgot_page_new_password"
-                            value={newPassword}
-                            onChange={(e) => {
-                              setNewPassword(e.target.value);
-                            }}
-                          />
-                          <button
-                            type="button"
-                            onClick={() => setShowPassword((prev) => !prev)}
-                            className="rbt-password-toggle-btn"
-                            aria-label={
-                              showPassword ? "Hide password" : "Show password"
-                            }
-                          >
-                            <i
-                              className={`fa-regular ${
-                                showPassword ? "fa-eye-slash" : "fa-eye"
-                              }`}
-                            />
-                          </button>
-                        </div>
-                        {newPassword.length > 0 && (
-                          <PasswordStrengthIndicator
-                            label={strength.label}
-                            hint={strengthHint}
-                            compact
-                          />
-                        )}
-                      </div>
-                      <div className="rbt-input-field-grp mt--16">
-                        <label
-                          className="rbt-field-label"
-                          htmlFor="forgot_page_confirm_password"
-                        >
-                          Confirm Password
-                          <span className="rbt-text-color-danger">*</span>
-                        </label>
-                        <div className="position-relative">
-                          <input
-                            className="rbt-input-field"
-                            type={showConfirmPassword ? "text" : "password"}
-                            id="forgot_page_confirm_password"
-                            value={confirmPassword}
-                            onChange={(e) => {
-                              setConfirmPassword(e.target.value);
-                            }}
-                          />
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setShowConfirmPassword((prev) => !prev)
-                            }
-                            className="rbt-password-toggle-btn"
-                            aria-label={
-                              showConfirmPassword
-                                ? "Hide confirm password"
-                                : "Show confirm password"
-                            }
-                          >
-                            <i
-                              className={`fa-regular ${
-                                showConfirmPassword ? "fa-eye-slash" : "fa-eye"
-                              }`}
-                            />
-                          </button>
-                        </div>
-                      </div>
-                      {error && (
-                        <p
-                          className="rbt-form-error mt--12 mb--0"
-                          style={{
-                            color: "#dc3545",
-                            backgroundColor: "rgba(220,53,69,0.08)",
-                            borderLeft: "3px solid #dc3545",
-                            borderRadius: "4px",
-                            padding: "6px 10px",
-                          }}
-                        >
-                          {error}
-                        </p>
-                      )}
-                      <button
-                        type="submit"
-                        className="rbt-btn d-block w-100 mt--24"
-                        disabled={loading || strength.label !== "Strong"}
-                      >
-                        {loading ? "Updating..." : "Reset Password"}
-                      </button>
-                      <button
-                        type="button"
-                        className="rbt-btn rbt-btn-border d-block w-100 mt--16"
-                        onClick={onSendCode}
-                        disabled={loading}
-                      >
-                        Resend Code
-                      </button>
-                    </form>
-                  )}
-
-                  {step === "done" && (
+                  {step === "sent" && (
                     <div
                       style={{
                         background:
-                          "linear-gradient(135deg, rgba(25,135,84,0.1), rgba(13,110,253,0.08))",
-                        border: "1px solid rgba(25,135,84,0.25)",
+                          "linear-gradient(135deg, rgba(13,110,253,0.08), rgba(25,135,84,0.06))",
+                        border: "1px solid rgba(13,110,253,0.2)",
                         borderRadius: "12px",
                         padding: "18px 16px",
                       }}
                     >
                       <div
                         className="d-flex align-items-center mb--8"
-                        style={{ color: "#198754", fontWeight: 700 }}
+                        style={{ color: "#0d6efd", fontWeight: 700 }}
                       >
-                        <i className="fa-regular fa-circle-check mr--8" />
-                        Password Updated Successfully
+                        <i className="fa-regular fa-envelope mr--8" />
+                        Check your email
                       </div>
                       <p className="rbt-description mb--0">
-                        Your password has been reset. Redirecting to sign in…
+                        If an account exists for <strong>{email}</strong>, we
+                        sent a password reset link. The link expires in 15
+                        minutes.
                       </p>
+                      {devResetUrl ? (
+                        <p
+                          className="b3 mt--12 mb--0"
+                          style={{ color: "#0d6efd" }}
+                        >
+                          Dev reset link:{" "}
+                          <Link href={devResetUrl}>
+                            <strong>Open reset page</strong>
+                          </Link>
+                        </p>
+                      ) : null}
+                      <button
+                        type="button"
+                        className="rbt-btn rbt-btn-border d-block w-100 mt--16"
+                        onClick={onSendLink}
+                        disabled={loading}
+                      >
+                        {loading ? "Sending..." : "Resend link"}
+                      </button>
                     </div>
                   )}
 
-                  {step !== "done" && (
-                    <div className="rbt-login-system-switch rbt-link-hover mt--24">
-                      Remember your password?{" "}
-                      <Link className="rbt-switch-btn ml--4" href={`/signin`}>
-                        <span>Sign In</span>
-                      </Link>
-                    </div>
-                  )}
+                  <div className="rbt-login-system-switch rbt-link-hover mt--24">
+                    Remember your password?{" "}
+                    <Link className="rbt-switch-btn ml--4" href={`/signin`}>
+                      <span>Sign In</span>
+                    </Link>
+                  </div>
                 </div>
                 <ReviewSlider />
               </div>

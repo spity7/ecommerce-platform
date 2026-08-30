@@ -33,12 +33,12 @@ Base URL: `http://localhost:5000` (override with `API_URL`).
 | POST   | `/api/auth/login`                            | auth       | Login (public, rate-limited)                                       |
 | POST   | `/api/auth/register`                         | auth       | Register customer (public, rate-limited)                           |
 | POST   | `/api/auth/refresh`                          | auth       | Refresh tokens (public, rate-limited)                              |
-| POST   | `/api/auth/forgot-password`                  | auth       | Request password reset code (public, rate-limited)                 |
-| POST   | `/api/auth/reset-password`                   | auth       | Reset password with code (public, rate-limited)                    |
+| POST   | `/api/auth/forgot-password`                  | auth       | Request password reset link (public, rate-limited)                 |
+| POST   | `/api/auth/reset-password`                   | auth       | Reset password with link token (public, rate-limited)              |
 | GET    | `/api/auth/me`                               | auth       | Current user (Bearer token)                                        |
 | POST   | `/api/auth/logout`                           | auth       | Logout (Bearer token)                                              |
-| POST   | `/api/auth/request-email-verification`       | auth       | Send 6-digit email verification code (Bearer)                      |
-| POST   | `/api/auth/verify-email`                     | auth       | Confirm email with code (Bearer)                                   |
+| POST   | `/api/auth/request-email-verification`       | auth       | Send email verification link (Bearer)                              |
+| POST   | `/api/auth/verify-email`                     | auth       | Confirm email with link token (public)                             |
 | POST   | `/api/auth/social`                           | auth       | Google ID token sign-in/register (public)                          |
 | GET    | `/api/users/me`                              | users      | Current user profile (Bearer)                                      |
 | GET    | `/api/cart`                                  | cart       | Current cart (Bearer or `X-Guest-Cart-Id`)                         |
@@ -74,10 +74,11 @@ Dev URL: `http://localhost:3001`. Optional `basePath` via `NEXT_PUBLIC_BASE_URL`
 
 ### Auth
 
-| Path               | Notes                                                                                 |
-| ------------------ | ------------------------------------------------------------------------------------- |
-| `/signin`          | JWT login via `/api/auth/login` BFF; httpOnly session cookies                         |
-| `/forgot-password` | Password reset via API (`forgot-password` / `reset-password`); public when signed out |
+| Path               | Notes                                                            |
+| ------------------ | ---------------------------------------------------------------- |
+| `/signin`          | JWT login via `/api/auth/login` BFF; httpOnly session cookies    |
+| `/forgot-password` | Request password reset link via API; public when signed out      |
+| `/reset-password`  | Set new password from emailed link token; public when signed out |
 
 Protected by `admin/proxy.ts`: validates access token via `GET /api/auth/me` and requires `role: admin`. `/api/auth/*` BFF routes are excluded from the gate. When the access cookie is missing or expired but a refresh cookie is present, the proxy allows the request so the client can rotate tokens. Clears invalid cookies and redirects to `/signin` when both tokens are unusable. Sign-in rejects non-admin users. Logout calls `POST /api/auth/logout`.
 
@@ -145,7 +146,9 @@ Dev URL: `http://localhost:3000`.
 | `/checkout`                             | Protected by `client/proxy.ts` when feature enabled; requires sign-in          |
 | `/account-info`, `/my-order-history`, … | Protected by `client/proxy.ts` when feature enabled                            |
 | `/account-info`                         | Profile, avatar URL, email verification, password, addresses, account deletion |
-| `/forgot-password`                      | Password reset when `features.customerAuth`                                    |
+| `/forgot-password`                      | Request password reset link when `features.customerAuth`                       |
+| `/reset-password`                       | Set new password from emailed link token                                       |
+| `/verify-email`                         | Confirm email from registration/account verification link                      |
 | `/my-order-history`                     | Loads orders from `GET /api/orders` when feature enabled                       |
 
 ### Auth BFF (Next route handlers)

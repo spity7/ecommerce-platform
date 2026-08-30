@@ -7,7 +7,7 @@ import {
   registerSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
-  confirmEmailVerificationSchema,
+  verifyEmailSchema,
   socialAuthSchema,
 } from "@platform/shared";
 import { AppError } from "../middleware/errorHandler.js";
@@ -15,7 +15,6 @@ import { credentialAuthRateLimiter } from "../middleware/rateLimit.js";
 import { requireAuth, type AuthenticatedRequest } from "../middleware/auth.js";
 import type { UserDocument } from "../models/User.js";
 import { User } from "../models/User.js";
-import { env } from "../config/env.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import {
   signAccessToken,
@@ -27,16 +26,15 @@ import {
   isRefreshTokenValid,
   toTokenPayload,
 } from "../services/auth.tokens.js";
+import { parseActionToken, isValidObjectId } from "../services/action-token.js";
 import {
-  clearPasswordResetCode,
-  generatePasswordResetCode,
-  setPasswordResetCode,
-  verifyPasswordResetCode,
+  clearPasswordResetToken,
+  verifyPasswordResetToken,
 } from "../services/password-reset.js";
-import { sendPasswordResetEmail } from "../services/password-reset-email.js";
+import { deliverPasswordReset } from "../services/password-reset-delivery.js";
 import {
-  clearEmailVerificationCode,
-  verifyEmailVerificationCode,
+  clearEmailVerificationToken,
+  verifyEmailVerificationToken,
 } from "../services/email-verification.js";
 import { deliverEmailVerification } from "../services/email-verification-delivery.js";
 import { verifyGoogleIdToken } from "../services/google-auth.js";
@@ -222,11 +220,11 @@ authRouter.post(
       return;
     }
 
-    const devCode = await deliverEmailVerification(user);
+    const devToken = await deliverEmailVerification(user);
     await user.save();
 
-    if (devCode) {
-      res.json({ ok: true as const, devVerificationCode: devCode });
+    if (devToken) {
+      res.json({ ok: true as const, devVerificationToken: devToken });
       return;
     }
 
@@ -236,12 +234,16 @@ authRouter.post(
 
 authRouter.post(
   "/verify-email",
-  requireAuth,
-  asyncHandler(async (req: AuthenticatedRequest, res) => {
-    const { code } = confirmEmailVerificationSchema.parse(req.body);
-    const user = await User.findById(req.auth?.userId);
+  asyncHandler(async (req, res) => {
+    const { token } = verifyEmailSchema.parse(req.body);
+    const parsedToken = parseActionToken(token);
+    if (!parsedToken || !isValidObjectId(parsedToken.userId)) {
+      throw new AppError(400, "Invalid or expired verification link");
+    }
+
+    const user = await User.findById(parsedToken.userId);
     if (!user || isAccountDeleted(user)) {
-      throw new AppError(404, "User not found");
+      throw new AppError(400, "Invalid or expired verification link");
     }
 
     if (user.emailVerified) {
@@ -249,13 +251,16 @@ authRouter.post(
       return;
     }
 
-    const validCode = await verifyEmailVerificationCode(user, code);
-    if (!validCode) {
-      throw new AppError(400, "Invalid or expired verification code");
+    const validToken = await verifyEmailVerificationToken(
+      user,
+      parsedToken.secret
+    );
+    if (!validToken) {
+      throw new AppError(400, "Invalid or expired verification link");
     }
 
     user.emailVerified = true;
-    await clearEmailVerificationCode(user);
+    await clearEmailVerificationToken(user);
     await user.save();
 
     res.json(toUserDto(user));
@@ -327,25 +332,12 @@ authRouter.post(
     const user = await findActiveUserByEmail(email);
 
     if (user) {
-      const code = generatePasswordResetCode();
-      await setPasswordResetCode(user, code);
+      const devToken = await deliverPasswordReset(user);
       await user.save();
 
-      if (env.mail.isConfigured) {
-        await sendPasswordResetEmail({
-          to: user.email,
-          name: user.name,
-          code,
-          siteName: env.site.name,
-        });
-      } else if (env.NODE_ENV === "development") {
-        console.info(`[password-reset] ${user.email}: ${code}`);
-        res.json({ ok: true as const, devResetCode: code });
+      if (devToken) {
+        res.json({ ok: true as const, devResetToken: devToken });
         return;
-      } else {
-        console.error(
-          `[password-reset] SMTP is not configured; reset code for ${user.email} was not emailed`
-        );
       }
     }
 
@@ -357,21 +349,26 @@ authRouter.post(
   "/reset-password",
   credentialAuthRateLimiter,
   asyncHandler(async (req, res) => {
-    const { email, code, newPassword } = resetPasswordSchema.parse(req.body);
-    const user = await findActiveUserByEmail(email);
-    if (!user) {
-      throw new AppError(400, "Invalid verification code");
+    const { token, newPassword } = resetPasswordSchema.parse(req.body);
+    const parsedToken = parseActionToken(token);
+    if (!parsedToken || !isValidObjectId(parsedToken.userId)) {
+      throw new AppError(400, "Invalid or expired reset link");
     }
 
-    const validCode = await verifyPasswordResetCode(user, code);
-    if (!validCode) {
-      throw new AppError(400, "Invalid or expired verification code");
+    const user = await User.findById(parsedToken.userId);
+    if (!user || isAccountDeleted(user)) {
+      throw new AppError(400, "Invalid or expired reset link");
+    }
+
+    const validToken = await verifyPasswordResetToken(user, parsedToken.secret);
+    if (!validToken) {
+      throw new AppError(400, "Invalid or expired reset link");
     }
 
     user.passwordHash = await bcrypt.hash(newPassword, 12);
     user.passwordSetByUser = true;
     user.refreshTokenVersion = (user.refreshTokenVersion ?? 0) + 1;
-    await clearPasswordResetCode(user);
+    await clearPasswordResetToken(user);
     await user.save();
 
     res.json({ ok: true as const });

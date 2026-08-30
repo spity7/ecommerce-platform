@@ -1,30 +1,46 @@
 import type { UserDocument } from "../models/User.js";
 import {
-  generateVerificationCode,
-  hashVerificationCode,
-  verifyVerificationCode,
-} from "./verification-code.js";
+  generateActionTokenSecret,
+  hashActionTokenSecret,
+  verifyActionTokenSecret,
+  buildActionToken,
+} from "./action-token.js";
 
-export async function setEmailVerificationCode(
-  user: UserDocument,
-  code: string
-): Promise<void> {
-  user.emailVerificationCodeHash = await hashVerificationCode(code);
-  user.emailVerificationExpires = new Date(Date.now() + 15 * 60 * 1000);
+const VERIFICATION_TOKEN_TTL_MS = 15 * 60 * 1000;
+
+export function generateEmailVerificationToken(user: UserDocument): {
+  token: string;
+  secret: string;
+} {
+  const secret = generateActionTokenSecret();
+  return {
+    token: buildActionToken(user._id.toString(), secret),
+    secret,
+  };
 }
 
-export async function clearEmailVerificationCode(
+export async function setEmailVerificationToken(
+  user: UserDocument,
+  secret: string
+): Promise<void> {
+  user.emailVerificationTokenHash = await hashActionTokenSecret(secret);
+  user.emailVerificationExpires = new Date(
+    Date.now() + VERIFICATION_TOKEN_TTL_MS
+  );
+}
+
+export async function clearEmailVerificationToken(
   user: UserDocument
 ): Promise<void> {
-  user.emailVerificationCodeHash = undefined;
+  user.emailVerificationTokenHash = undefined;
   user.emailVerificationExpires = undefined;
 }
 
-export async function verifyEmailVerificationCode(
+export async function verifyEmailVerificationToken(
   user: UserDocument,
-  code: string
+  secret: string
 ): Promise<boolean> {
-  if (!user.emailVerificationCodeHash || !user.emailVerificationExpires) {
+  if (!user.emailVerificationTokenHash || !user.emailVerificationExpires) {
     return false;
   }
 
@@ -32,9 +48,5 @@ export async function verifyEmailVerificationCode(
     return false;
   }
 
-  return verifyVerificationCode(code, user.emailVerificationCodeHash);
-}
-
-export function createEmailVerificationCode(): string {
-  return generateVerificationCode();
+  return verifyActionTokenSecret(secret, user.emailVerificationTokenHash);
 }

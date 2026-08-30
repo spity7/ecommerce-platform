@@ -66,7 +66,7 @@ proxy.ts                  Route gate via /api/auth/me (admin role)
 
 ## Auth
 
-JWT sign-in against `POST /api/auth/login`. Only users with `role: admin` may enter the dashboard. [`proxy.ts`](proxy.ts) validates each request via `GET /api/auth/me`. Tokens live in cookies + in-memory Bearer header for mutations. Logout calls `POST /api/auth/logout`. Forgot password: `/forgot-password` (API codes; SMTP required in production).
+JWT sign-in against `POST /api/auth/login`. Only users with `role: admin` may enter the dashboard. [`proxy.ts`](proxy.ts) validates each request via `GET /api/auth/me`. Tokens live in cookies + in-memory Bearer header for mutations. Logout calls `POST /api/auth/logout`. Forgot password: `/forgot-password` and `/reset-password` (magic links; SMTP required in production).
 
 **First admin:** `npm run seed:admin` from repo root (see [docs/CONVENTIONS.md](../docs/CONVENTIONS.md)).
 

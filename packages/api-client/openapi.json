@@ -1656,16 +1656,15 @@
         },
         "required": ["newPassword"]
       },
-      "ConfirmEmailVerificationInput": {
+      "VerifyEmailInput": {
         "type": "object",
         "properties": {
-          "code": {
+          "token": {
             "type": "string",
-            "minLength": 6,
-            "maxLength": 6
+            "minLength": 1
           }
         },
-        "required": ["code"]
+        "required": ["token"]
       },
       "DeleteAccountInput": {
         "type": "object",
@@ -1707,21 +1706,16 @@
       "ResetPasswordInput": {
         "type": "object",
         "properties": {
-          "email": {
+          "token": {
             "type": "string",
-            "format": "email"
-          },
-          "code": {
-            "type": "string",
-            "minLength": 6,
-            "maxLength": 6
+            "minLength": 1
           },
           "newPassword": {
             "type": "string",
             "minLength": 8
           }
         },
-        "required": ["email", "code", "newPassword"]
+        "required": ["token", "newPassword"]
       },
       "OkResponse": {
         "type": "object",
@@ -1730,10 +1724,10 @@
             "type": "boolean",
             "enum": [true]
           },
-          "devResetCode": {
+          "devResetToken": {
             "type": "string"
           },
-          "devVerificationCode": {
+          "devVerificationToken": {
             "type": "string"
           }
         },
@@ -5190,7 +5184,7 @@
       "post": {
         "tags": ["Auth"],
         "operationId": "forgotPassword",
-        "summary": "Request a password reset code",
+        "summary": "Request a password reset link",
         "requestBody": {
           "content": {
             "application/json": {
@@ -5209,7 +5203,7 @@
         },
         "responses": {
           "200": {
-            "description": "Reset code requested",
+            "description": "Reset link requested",
             "content": {
               "application/json": {
                 "schema": {
@@ -5219,10 +5213,10 @@
                       "type": "boolean",
                       "enum": [true]
                     },
-                    "devResetCode": {
+                    "devResetToken": {
                       "type": "string"
                     },
-                    "devVerificationCode": {
+                    "devVerificationToken": {
                       "type": "string"
                     }
                   },
@@ -5238,28 +5232,23 @@
       "post": {
         "tags": ["Auth"],
         "operationId": "resetPassword",
-        "summary": "Reset password with verification code",
+        "summary": "Reset password with verification link token",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "email": {
+                  "token": {
                     "type": "string",
-                    "format": "email"
-                  },
-                  "code": {
-                    "type": "string",
-                    "minLength": 6,
-                    "maxLength": 6
+                    "minLength": 1
                   },
                   "newPassword": {
                     "type": "string",
                     "minLength": 8
                   }
                 },
-                "required": ["email", "code", "newPassword"]
+                "required": ["token", "newPassword"]
               }
             }
           }
@@ -5276,10 +5265,10 @@
                       "type": "boolean",
                       "enum": [true]
                     },
-                    "devResetCode": {
+                    "devResetToken": {
                       "type": "string"
                     },
-                    "devVerificationCode": {
+                    "devVerificationToken": {
                       "type": "string"
                     }
                   },
@@ -5289,7 +5278,7 @@
             }
           },
           "400": {
-            "description": "Invalid code",
+            "description": "Invalid token",
             "content": {
               "application/json": {
                 "schema": {
@@ -5311,7 +5300,7 @@
       "post": {
         "tags": ["Auth"],
         "operationId": "requestEmailVerification",
-        "summary": "Send email verification code to current user",
+        "summary": "Send email verification link to current user",
         "security": [
           {
             "bearerAuth": []
@@ -5319,7 +5308,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Verification code requested",
+            "description": "Verification link requested",
             "content": {
               "application/json": {
                 "schema": {
@@ -5329,10 +5318,10 @@
                       "type": "boolean",
                       "enum": [true]
                     },
-                    "devResetCode": {
+                    "devResetToken": {
                       "type": "string"
                     },
-                    "devVerificationCode": {
+                    "devVerificationToken": {
                       "type": "string"
                     }
                   },
@@ -5348,25 +5337,19 @@
       "post": {
         "tags": ["Auth"],
         "operationId": "verifyEmail",
-        "summary": "Confirm email with verification code",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "summary": "Confirm email with verification link token",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "code": {
+                  "token": {
                     "type": "string",
-                    "minLength": 6,
-                    "maxLength": 6
+                    "minLength": 1
                   }
                 },
-                "required": ["code"]
+                "required": ["token"]
               }
             }
           }
@@ -5434,7 +5417,7 @@
             }
           },
           "400": {
-            "description": "Invalid code",
+            "description": "Invalid token",
             "content": {
               "application/json": {
                 "schema": {
@@ -7094,10 +7077,10 @@
                       "type": "boolean",
                       "enum": [true]
                     },
-                    "devResetCode": {
+                    "devResetToken": {
                       "type": "string"
                     },
-                    "devVerificationCode": {
+                    "devVerificationToken": {
                       "type": "string"
                     }
                   },
@@ -7171,10 +7154,10 @@
                       "type": "boolean",
                       "enum": [true]
                     },
-                    "devResetCode": {
+                    "devResetToken": {
                       "type": "string"
                     },
-                    "devVerificationCode": {
+                    "devVerificationToken": {
                       "type": "string"
                     }
                   },
@@ -7531,10 +7514,10 @@
                       "type": "boolean",
                       "enum": [true]
                     },
-                    "devResetCode": {
+                    "devResetToken": {
                       "type": "string"
                     },
-                    "devVerificationCode": {
+                    "devVerificationToken": {
                       "type": "string"
                     }
                   },

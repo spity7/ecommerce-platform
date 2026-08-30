@@ -14,9 +14,9 @@
 - `POST /api/auth/login` — Login, return JWT + refresh token (rate-limited)
 - `POST /api/auth/logout` — Invalidate refresh token (`refreshTokenVersion` bump)
 - `POST /api/auth/refresh` — Refresh access token (validates `tokenVersion`; rate-limited)
-- `POST /api/auth/forgot-password` — Request 6-digit reset code (emailed when SMTP configured; dev logs code when unset)
-- `POST /api/auth/reset-password` — Reset with email + code + new password
-- `POST /api/auth/verify-email` — Verify email via 6-digit code _(implemented)_
+- `POST /api/auth/forgot-password` — Request password reset link (emailed when SMTP configured; dev logs link token when unset)
+- `POST /api/auth/reset-password` — Reset with link token + new password
+- `POST /api/auth/verify-email` — Verify email via link token _(implemented)_
 - `POST /api/auth/social` — Google OAuth sign-in _(implemented)_
 
 ### 1.2 User Profile

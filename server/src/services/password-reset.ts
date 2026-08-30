@@ -1,34 +1,44 @@
 import type { UserDocument } from "../models/User.js";
 import {
-  generateVerificationCode,
-  hashVerificationCode,
-  verifyVerificationCode,
-} from "./verification-code.js";
+  generateActionTokenSecret,
+  hashActionTokenSecret,
+  verifyActionTokenSecret,
+  buildActionToken,
+} from "./action-token.js";
 
-export function generatePasswordResetCode(): string {
-  return generateVerificationCode();
+const RESET_TOKEN_TTL_MS = 15 * 60 * 1000;
+
+export function generatePasswordResetToken(user: UserDocument): {
+  token: string;
+  secret: string;
+} {
+  const secret = generateActionTokenSecret();
+  return {
+    token: buildActionToken(user._id.toString(), secret),
+    secret,
+  };
 }
 
-export async function setPasswordResetCode(
+export async function setPasswordResetToken(
   user: UserDocument,
-  code: string
+  secret: string
 ): Promise<void> {
-  user.passwordResetCodeHash = await hashVerificationCode(code);
-  user.passwordResetExpires = new Date(Date.now() + 15 * 60 * 1000);
+  user.passwordResetTokenHash = await hashActionTokenSecret(secret);
+  user.passwordResetExpires = new Date(Date.now() + RESET_TOKEN_TTL_MS);
 }
 
-export async function clearPasswordResetCode(
+export async function clearPasswordResetToken(
   user: UserDocument
 ): Promise<void> {
-  user.passwordResetCodeHash = undefined;
+  user.passwordResetTokenHash = undefined;
   user.passwordResetExpires = undefined;
 }
 
-export async function verifyPasswordResetCode(
+export async function verifyPasswordResetToken(
   user: UserDocument,
-  code: string
+  secret: string
 ): Promise<boolean> {
-  if (!user.passwordResetCodeHash || !user.passwordResetExpires) {
+  if (!user.passwordResetTokenHash || !user.passwordResetExpires) {
     return false;
   }
 
@@ -36,5 +46,5 @@ export async function verifyPasswordResetCode(
     return false;
   }
 
-  return verifyVerificationCode(code, user.passwordResetCodeHash);
+  return verifyActionTokenSecret(secret, user.passwordResetTokenHash);
 }

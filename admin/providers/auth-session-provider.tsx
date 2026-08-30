@@ -22,7 +22,11 @@ type AuthSessionContextValue = {
 
 const AuthSessionContext = createContext<AuthSessionContextValue | null>(null);
 
-const AUTH_PUBLIC_PATHS = [routes.signIn, routes.forgotPassword];
+const AUTH_PUBLIC_PATHS = [
+  routes.signIn,
+  routes.forgotPassword,
+  routes.resetPassword,
+];
 
 function isAuthPublicPath(pathname: string): boolean {
   return AUTH_PUBLIC_PATHS.some(

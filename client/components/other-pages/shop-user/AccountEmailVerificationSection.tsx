@@ -1,19 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import {
-  ApiError,
-  requestEmailVerification,
-  verifyEmail,
-} from "@platform/api-client";
+import Link from "next/link";
+import { ApiError, requestEmailVerification } from "@platform/api-client";
 import { useAuthSession } from "@/providers/auth-session-provider";
 
 export default function AccountEmailVerificationSection() {
-  const { user, refreshUser } = useAuthSession();
-  const [code, setCode] = useState("");
-  const [devCode, setDevCode] = useState<string | null>(null);
+  const { user } = useAuthSession();
+  const [devVerifyUrl, setDevVerifyUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [submitting, setSubmitting] = useState(false);
+  const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
 
   if (!user) {
@@ -32,46 +28,27 @@ export default function AccountEmailVerificationSection() {
     );
   }
 
-  async function handleSendCode() {
+  async function handleSendLink() {
     setSending(true);
     setError(null);
-    setDevCode(null);
+    setDevVerifyUrl(null);
 
     try {
       const result = await requestEmailVerification();
-      setDevCode(result.devVerificationCode ?? null);
+      if (result.devVerificationToken) {
+        setDevVerifyUrl(
+          `/verify-email?token=${encodeURIComponent(result.devVerificationToken)}`
+        );
+      }
+      setSent(true);
     } catch (err) {
       setError(
         err instanceof ApiError
           ? err.message
-          : "Could not send a verification code."
+          : "Could not send a verification link."
       );
     } finally {
       setSending(false);
-    }
-  }
-
-  async function handleVerify() {
-    if (!code.trim()) {
-      setError("Enter the verification code from your email.");
-      return;
-    }
-
-    setSubmitting(true);
-    setError(null);
-
-    try {
-      await verifyEmail(code.trim());
-      await refreshUser();
-      setCode("");
-      setDevCode(null);
-      window.dispatchEvent(new Event("auth:session-updated"));
-    } catch (err) {
-      setError(
-        err instanceof ApiError ? err.message : "Could not verify your email."
-      );
-    } finally {
-      setSubmitting(false);
     }
   }
 
@@ -81,44 +58,37 @@ export default function AccountEmailVerificationSection() {
       <p className="b3 mb--12">
         Verify {user.email} to secure your account and receive order updates.
       </p>
-      {devCode ? (
+      {sent ? (
+        <p className="b3 mb--12">
+          <i className="fa-regular fa-envelope mr--4" />
+          Check your inbox for a verification link. It expires in 15 minutes.
+        </p>
+      ) : null}
+      {devVerifyUrl ? (
         <p className="b3 mb--12" style={{ color: "#0d6efd" }}>
-          Dev verification code: <strong>{devCode}</strong>
+          Dev verification link:{" "}
+          <Link href={devVerifyUrl}>
+            <strong>Open verify page</strong>
+          </Link>
         </p>
       ) : null}
       <div className="d-flex flex-wrap gap-2 mb--12">
         <button
           type="button"
           className="rbt-btn rbt-btn-sm rbt-btn-secondary"
-          onClick={handleSendCode}
+          onClick={handleSendLink}
           disabled={sending}
         >
-          {sending ? "Sending…" : "Send code"}
+          {sending
+            ? "Sending…"
+            : sent
+              ? "Resend link"
+              : "Send verification link"}
         </button>
-      </div>
-      <div className="rbt-input-field-grp">
-        <label className="rbt-field-label" htmlFor="verify_email_code">
-          Verification code
-        </label>
-        <input
-          id="verify_email_code"
-          className="rbt-input-field"
-          value={code}
-          onChange={(event) => setCode(event.target.value)}
-          maxLength={6}
-        />
       </div>
       {error ? (
         <p className="rbt-text-color-danger mt--12 mb--0 b3">{error}</p>
       ) : null}
-      <button
-        type="button"
-        className="rbt-btn rbt-btn-sm mt--16"
-        onClick={handleVerify}
-        disabled={submitting}
-      >
-        {submitting ? "Verifying…" : "Verify email"}
-      </button>
     </div>
   );
 }

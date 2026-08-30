@@ -16,8 +16,8 @@ import {
   removeUserAddress,
   setDefaultAddress,
 } from "../services/user-addresses.js";
-import { clearPasswordResetCode } from "../services/password-reset.js";
-import { clearEmailVerificationCode } from "../services/email-verification.js";
+import { clearPasswordResetToken } from "../services/password-reset.js";
+import { clearEmailVerificationToken } from "../services/email-verification.js";
 import {
   userHasPassword,
   verifyGoogleIdTokenForUser,
@@ -97,8 +97,8 @@ usersRouter.delete(
 
     user.deletedAt = new Date();
     user.refreshTokenVersion = (user.refreshTokenVersion ?? 0) + 1;
-    await clearPasswordResetCode(user);
-    await clearEmailVerificationCode(user);
+    await clearPasswordResetToken(user);
+    await clearEmailVerificationToken(user);
     await user.save();
 
     res.json({ ok: true as const });
@@ -137,8 +137,7 @@ usersRouter.patch(
     user.passwordHash = await bcrypt.hash(newPassword, 12);
     user.passwordSetByUser = true;
     user.refreshTokenVersion = (user.refreshTokenVersion ?? 0) + 1;
-    user.passwordResetCodeHash = undefined;
-    user.passwordResetExpires = undefined;
+    await clearPasswordResetToken(user);
     await user.save();
 
     res.json({ ok: true as const });

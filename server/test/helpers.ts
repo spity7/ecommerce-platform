@@ -101,16 +101,12 @@ export async function verifyCustomerEmail(
     .set(authHeader(accessToken))
     .expect(200);
 
-  const code = requestResponse.body.devVerificationCode;
-  if (!code) {
-    throw new Error("Expected devVerificationCode in test environment");
+  const token = requestResponse.body.devVerificationToken;
+  if (!token) {
+    throw new Error("Expected devVerificationToken in test environment");
   }
 
-  await request(app)
-    .post("/api/auth/verify-email")
-    .set(authHeader(accessToken))
-    .send({ code })
-    .expect(200);
+  await request(app).post("/api/auth/verify-email").send({ token }).expect(200);
 }
 
 export async function registerGoogleCustomer(

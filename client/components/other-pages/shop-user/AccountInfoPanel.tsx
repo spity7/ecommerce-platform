@@ -87,8 +87,8 @@ function AccountInfoApi() {
         <div className="rbt-transparent-table-one-wrapper rbt-has-bg-gray p--24 mb--24">
           <h6 className="mb--8">Verify your email</h6>
           <p className="b3 mb--12">
-            We sent a 6-digit code to <strong>{user.email}</strong>. Enter it
-            below to verify your account and place orders.
+            We sent a verification link to <strong>{user.email}</strong>. Check
+            your inbox to verify your account and place orders.
           </p>
           <button
             className="rbt-btn rbt-btn-sm rbt-btn-secondary"

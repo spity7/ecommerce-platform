@@ -8,7 +8,7 @@ import {
   brandDtoSchema,
   categoryDtoSchema,
   changePasswordSchema,
-  confirmEmailVerificationSchema,
+  verifyEmailSchema,
   createUserAddressSchema,
   deleteAccountSchema,
   forgotPasswordSchema,
@@ -108,10 +108,7 @@ openApiRegistry.register("CreateOrderInput", createOrderSchema);
 openApiRegistry.register("UpdateOrderStatusInput", updateOrderStatusSchema);
 openApiRegistry.register("UpdateUserProfileInput", updateUserProfileSchema);
 openApiRegistry.register("ChangePasswordInput", changePasswordSchema);
-openApiRegistry.register(
-  "ConfirmEmailVerificationInput",
-  confirmEmailVerificationSchema
-);
+openApiRegistry.register("VerifyEmailInput", verifyEmailSchema);
 openApiRegistry.register("DeleteAccountInput", deleteAccountSchema);
 openApiRegistry.register("SocialAuthInput", socialAuthSchema);
 openApiRegistry.register("ForgotPasswordInput", forgotPasswordSchema);
@@ -426,7 +423,7 @@ openApiRegistry.registerPath({
   path: "/api/auth/forgot-password",
   tags: ["Auth"],
   operationId: "forgotPassword",
-  summary: "Request a password reset code",
+  summary: "Request a password reset link",
   request: {
     body: {
       content: { "application/json": { schema: forgotPasswordSchema } },
@@ -434,7 +431,7 @@ openApiRegistry.registerPath({
   },
   responses: {
     200: {
-      description: "Reset code requested",
+      description: "Reset link requested",
       content: { "application/json": { schema: okResponseSchema } },
     },
   },
@@ -445,7 +442,7 @@ openApiRegistry.registerPath({
   path: "/api/auth/reset-password",
   tags: ["Auth"],
   operationId: "resetPassword",
-  summary: "Reset password with verification code",
+  summary: "Reset password with verification link token",
   request: {
     body: {
       content: { "application/json": { schema: resetPasswordSchema } },
@@ -457,7 +454,7 @@ openApiRegistry.registerPath({
       content: { "application/json": { schema: okResponseSchema } },
     },
     400: {
-      description: "Invalid code",
+      description: "Invalid token",
       content: { "application/json": { schema: errorResponseSchema } },
     },
   },
@@ -468,11 +465,11 @@ openApiRegistry.registerPath({
   path: "/api/auth/request-email-verification",
   tags: ["Auth"],
   operationId: "requestEmailVerification",
-  summary: "Send email verification code to current user",
+  summary: "Send email verification link to current user",
   security: [{ bearerAuth: [] }],
   responses: {
     200: {
-      description: "Verification code requested",
+      description: "Verification link requested",
       content: { "application/json": { schema: okResponseSchema } },
     },
   },
@@ -483,12 +480,11 @@ openApiRegistry.registerPath({
   path: "/api/auth/verify-email",
   tags: ["Auth"],
   operationId: "verifyEmail",
-  summary: "Confirm email with verification code",
-  security: [{ bearerAuth: [] }],
+  summary: "Confirm email with verification link token",
   request: {
     body: {
       content: {
-        "application/json": { schema: confirmEmailVerificationSchema },
+        "application/json": { schema: verifyEmailSchema },
       },
     },
   },
@@ -498,7 +494,7 @@ openApiRegistry.registerPath({
       content: { "application/json": { schema: userDtoSchema } },
     },
     400: {
-      description: "Invalid code",
+      description: "Invalid token",
       content: { "application/json": { schema: errorResponseSchema } },
     },
   },

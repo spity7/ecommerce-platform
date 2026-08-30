@@ -33,13 +33,12 @@ export const forgotPasswordSchema = z.object({
 });
 
 export const resetPasswordSchema = z.object({
-  email: z.string().email(),
-  code: z.string().length(6),
+  token: z.string().min(1),
   newPassword: z.string().min(8),
 });
 
-export const confirmEmailVerificationSchema = z.object({
-  code: z.string().length(6),
+export const verifyEmailSchema = z.object({
+  token: z.string().min(1),
 });
 
 export const deleteAccountSchema = z
@@ -59,8 +58,8 @@ export const socialAuthSchema = z.object({
 
 export const okResponseSchema = z.object({
   ok: z.literal(true),
-  devResetCode: z.string().optional(),
-  devVerificationCode: z.string().optional(),
+  devResetToken: z.string().optional(),
+  devVerificationToken: z.string().optional(),
 });
 
 export const userDtoSchema = z.object({
@@ -88,9 +87,7 @@ export type RegisterInput = z.infer<typeof registerSchema>;
 export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
 export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
-export type ConfirmEmailVerificationInput = z.infer<
-  typeof confirmEmailVerificationSchema
->;
+export type VerifyEmailInput = z.infer<typeof verifyEmailSchema>;
 export type DeleteAccountInput = z.infer<typeof deleteAccountSchema>;
 export type SocialAuthInput = z.infer<typeof socialAuthSchema>;
 export type UserDto = z.infer<typeof userDtoSchema>;

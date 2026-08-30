@@ -89,9 +89,7 @@ export default function ProductCard22({
           </Tooltip>
         </div>
 
-        <AuthSignInTrigger
-          className="rbt-btn hover-appear-element bottom-position text-center rbt-btn-sm rbt-square-btn d-block has-left-icon"
-        >
+        <AuthSignInTrigger className="rbt-btn hover-appear-element bottom-position text-center rbt-btn-sm rbt-square-btn d-block has-left-icon">
           Sign In to See Price
         </AuthSignInTrigger>
       </div>

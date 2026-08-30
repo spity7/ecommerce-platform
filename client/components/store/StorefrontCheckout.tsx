@@ -139,8 +139,8 @@ export default function StorefrontCheckout() {
         <div className="col-12 mt--24">
           <div className="rbt-transparent-table-one-wrapper rbt-has-bg-gray p--24">
             <p className="mb--12 b2">
-              Verify your email before placing an order. We sent a code when you
-              signed up.
+              Verify your email before placing an order. We sent a verification
+              link when you signed up.
             </p>
             <Link className="rbt-btn" href="/account-info">
               Verify email in account settings

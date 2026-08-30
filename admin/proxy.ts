@@ -4,7 +4,11 @@ import { routes } from "@/config/routes";
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/lib/auth";
 import { fetchAdminUser } from "@/lib/validate-admin-session";
 
-const AUTH_PUBLIC_PATHS = [routes.signIn, routes.forgotPassword];
+const AUTH_PUBLIC_PATHS = [
+  routes.signIn,
+  routes.forgotPassword,
+  routes.resetPassword,
+];
 
 function isAuthPublicPath(pathname: string): boolean {
   return AUTH_PUBLIC_PATHS.some(

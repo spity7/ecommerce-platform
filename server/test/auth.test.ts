@@ -108,13 +108,12 @@ describe("auth API", () => {
       .expect(200);
 
     assert.equal(forgotResponse.body.ok, true);
-    assert.ok(forgotResponse.body.devResetCode);
+    assert.ok(forgotResponse.body.devResetToken);
 
     await request(app)
       .post("/api/auth/reset-password")
       .send({
-        email,
-        code: forgotResponse.body.devResetCode,
+        token: forgotResponse.body.devResetToken,
         newPassword: "NewPassword1!Strong",
       })
       .expect(200);
@@ -170,7 +169,7 @@ describe("auth API", () => {
     assert.equal(listResponse.body.length, 1);
   });
 
-  it("verifies email with a dev verification code", async () => {
+  it("verifies email with a dev verification token", async () => {
     const { body } = await registerCustomer(app);
 
     assert.equal(body.user.emailVerified, false);
@@ -181,12 +180,11 @@ describe("auth API", () => {
       .expect(200);
 
     assert.equal(requestResponse.body.ok, true);
-    assert.ok(requestResponse.body.devVerificationCode);
+    assert.ok(requestResponse.body.devVerificationToken);
 
     const verifyResponse = await request(app)
       .post("/api/auth/verify-email")
-      .set(authHeader(body.accessToken))
-      .send({ code: requestResponse.body.devVerificationCode })
+      .send({ token: requestResponse.body.devVerificationToken })
       .expect(200);
 
     assert.equal(verifyResponse.body.emailVerified, true);
@@ -353,13 +351,10 @@ describe("auth API", () => {
       .expect(200);
   });
 
-  it("rejects invalid email verification codes", async () => {
-    const { body } = await registerCustomer(app);
-
+  it("rejects invalid email verification tokens", async () => {
     await request(app)
       .post("/api/auth/verify-email")
-      .set(authHeader(body.accessToken))
-      .send({ code: "000000" })
+      .send({ token: "invalid.token" })
       .expect(400);
   });
 

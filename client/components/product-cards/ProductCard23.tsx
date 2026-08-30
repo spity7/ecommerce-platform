@@ -141,9 +141,7 @@ export default function ProductCard23({
 
             <div className="prd-btn-grp">
               {loginRequired ? (
-                <AuthSignInTrigger
-                  className="rbt-btn rbt-btn-border rbt-btn-sm rbt-square-btn d-block has-left-icon"
-                >
+                <AuthSignInTrigger className="rbt-btn rbt-btn-border rbt-btn-sm rbt-square-btn d-block has-left-icon">
                   <i className="fa-regular fa-user" /> Login/Registration
                 </AuthSignInTrigger>
               ) : (

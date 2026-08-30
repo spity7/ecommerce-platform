@@ -22,7 +22,7 @@ Copy `.env.example` values into each app (`client`, `admin`, `server`) for local
 
 ## Email (SMTP)
 
-Password reset and registration email verification use the same SMTP vars (`SMTP_HOST`, `SMTP_PORT`, …). Without SMTP, dev logs verification codes to the server console.
+Password reset and registration email verification use the same SMTP vars (`SMTP_HOST`, `SMTP_PORT`, …). Without SMTP, dev logs verification and reset link tokens to the server console.
 
 ## Resources (production)
 

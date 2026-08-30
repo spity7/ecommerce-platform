@@ -15,8 +15,10 @@ function isAuthPublicPath(pathname: string): boolean {
   return (
     pathname === routes.signIn ||
     pathname === routes.forgotPassword ||
+    pathname === routes.resetPassword ||
     pathname.startsWith(`${routes.signIn}/`) ||
-    pathname.startsWith(`${routes.forgotPassword}/`)
+    pathname.startsWith(`${routes.forgotPassword}/`) ||
+    pathname.startsWith(`${routes.resetPassword}/`)
   );
 }
 
