@@ -9,10 +9,16 @@ import {
   createOrderFromCart,
   fetchUserAddresses,
 } from "@platform/api-client";
+import { getPhoneValidationError } from "@platform/shared";
 import { useContextElement } from "@/context/Context";
 import { getCheckoutPath } from "@/lib/checkout";
 import { formatCurrency } from "@/lib/price";
+import {
+  getStorefrontDefaultPhoneCountry,
+  resolveStorefrontPhoneCountry,
+} from "@/lib/phone";
 import { getStorefrontSiteConfig } from "@/lib/site";
+import StorefrontPhoneInput from "@/components/forms/phone-input";
 import { useAuthSession } from "@/providers/auth-session-provider";
 import { syncClearServerCart } from "@/lib/cart-sync";
 
@@ -26,6 +32,8 @@ export default function StorefrontCheckout() {
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState<string | null>(null);
+  const defaultPhoneCountry = getStorefrontDefaultPhoneCountry();
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -106,6 +114,14 @@ export default function StorefrontCheckout() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+    setPhoneError(null);
+
+    const nextPhoneError = getPhoneValidationError(phone);
+    if (nextPhoneError) {
+      setPhoneError(nextPhoneError);
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -200,16 +216,19 @@ export default function StorefrontCheckout() {
                 required
               />
             </div>
-            <div className="rbt-input-field-grp mt--16">
-              <label className="rbt-field-label" htmlFor="checkout_phone">
-                Phone
-              </label>
-              <input
+            <div className="mt--16">
+              <StorefrontPhoneInput
                 id="checkout_phone"
-                className="rbt-input-field"
-                type="tel"
+                label="Phone"
                 value={phone}
-                onChange={(event) => setPhone(event.target.value)}
+                onChange={(nextValue) => {
+                  setPhone(nextValue);
+                  setPhoneError(getPhoneValidationError(nextValue));
+                }}
+                defaultCountry={defaultPhoneCountry}
+                country={resolveStorefrontPhoneCountry(country)}
+                error={phoneError}
+                hint="Used by the courier for delivery updates."
               />
             </div>
             {error ? (

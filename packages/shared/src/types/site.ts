@@ -43,6 +43,8 @@ export type SiteConfig = {
   theme: SiteTheme;
   homeLayout: HomeLayoutId;
   features: SiteFeatures;
+  /** ISO 3166-1 alpha-2 default for customer phone inputs (e.g. "US"). */
+  defaultPhoneCountry?: string;
   contact: {
     email: string;
     phone: string;

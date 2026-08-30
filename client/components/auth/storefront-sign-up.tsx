@@ -6,8 +6,11 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { mergeGuestCart, setAccessToken, ApiError } from "@platform/api-client";
 import type { AuthResponse } from "@platform/shared";
+import { getPhoneValidationError } from "@platform/shared";
 import { getOrCreateGuestCartId, clearGuestCartId } from "@/lib/guest-cart";
 import { getSiteChromeBranding } from "@/lib/site-branding";
+import { getStorefrontDefaultPhoneCountry } from "@/lib/phone";
+import StorefrontPhoneInput from "@/components/forms/phone-input";
 import StorefrontGoogleSignIn from "./storefront-google-sign-in";
 
 export function StorefrontSignUpForm() {
@@ -17,12 +20,22 @@ export function StorefrontSignUpForm() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState<string | null>(null);
+  const defaultPhoneCountry = getStorefrontDefaultPhoneCountry();
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+    setPhoneError(null);
+
+    const nextPhoneError = getPhoneValidationError(phone);
+    if (nextPhoneError) {
+      setPhoneError(nextPhoneError);
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -102,17 +115,18 @@ export function StorefrontSignUpForm() {
           autoComplete="email"
         />
       </div>
-      <div className="rbt-input-field-grp mt--16">
-        <label className="rbt-field-label" htmlFor="signup_phone">
-          Phone
-        </label>
-        <input
-          className="rbt-input-field"
-          type="tel"
-          id="signup_phone"
-          value={phone}
-          onChange={(event) => setPhone(event.target.value)}
-          autoComplete="tel"
+      <div className="mt--16">
+        <StorefrontPhoneInput
+        id="signup_phone"
+        label="Phone"
+        value={phone}
+        onChange={(nextValue) => {
+          setPhone(nextValue);
+          setPhoneError(getPhoneValidationError(nextValue));
+        }}
+        defaultCountry={defaultPhoneCountry}
+        error={phoneError}
+        hint="Optional. Used for delivery updates."
         />
       </div>
       <div className="rbt-input-field-grp mt--16">

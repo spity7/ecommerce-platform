@@ -1,5 +1,6 @@
 import { z } from "../zod.js";
 import { ORDER_STATUSES } from "../types/commerce.js";
+import { optionalPhoneSchema } from "./auth.js";
 
 export const cartItemInputSchema = z.object({
   productId: z.string().min(1),
@@ -19,7 +20,7 @@ export const shippingAddressSchema = z.object({
   line1: z.string().min(1).max(200),
   city: z.string().min(1).max(120),
   country: z.string().min(1).max(120),
-  phone: z.string().max(40).optional(),
+  phone: optionalPhoneSchema,
 });
 
 export const userAddressFieldsSchema = shippingAddressSchema.extend({
@@ -47,7 +48,7 @@ export const updateOrderStatusSchema = z.object({
 
 export const updateUserProfileSchema = z.object({
   name: z.string().min(1).max(120).optional(),
-  phone: z.string().max(40).optional(),
+  phone: optionalPhoneSchema,
   avatarUrl: z.union([z.string().url(), z.literal("")]).optional(),
 });
 

@@ -9,6 +9,8 @@ import { Product } from "../src/models/Product.js";
 import { User } from "../src/models/User.js";
 import type { ProductDocument } from "../src/models/Product.js";
 
+export const TEST_PHONE = "+12025550100";
+
 export function createTestApp(): Express {
   return createApp();
 }
@@ -72,7 +74,7 @@ export async function registerCustomer(
       name: "Test Customer",
       email,
       password: "Password1!Strong",
-      phone: "555-0100",
+      phone: TEST_PHONE,
     })
     .expect(201);
 

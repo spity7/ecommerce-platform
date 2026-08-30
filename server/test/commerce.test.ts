@@ -10,6 +10,7 @@ import {
   seedPublishedProduct,
   setupTestDatabase,
   teardownTestDatabase,
+  TEST_PHONE,
   verifyCustomerEmail,
 } from "./helpers.js";
 import { Cart } from "../src/models/Cart.js";
@@ -49,7 +50,7 @@ describe("commerce API", () => {
           line1: "123 Test Street",
           city: "Austin",
           country: "United States",
-          phone: "555-0100",
+          phone: TEST_PHONE,
         },
       })
       .expect(201);

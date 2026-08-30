@@ -7,3 +7,4 @@ export * from "./schemas/dto.js";
 export * from "./schemas/auth.js";
 export * from "./schemas/commerce.js";
 export * from "./password.js";
+export * from "./phone.js";

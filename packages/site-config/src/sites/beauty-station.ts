@@ -26,6 +26,7 @@ export const beautyStationConfig = {
     wishlist: true,
     customerAuth: true,
   },
+  defaultPhoneCountry: "US",
   contact: {
     email: "hello@beautystation.com",
     phone: "+1 (555) 123-4567",

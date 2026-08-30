@@ -1,11 +1,18 @@
 import { z } from "../zod.js";
 import { USER_ROLES } from "../types/auth.js";
 import { isStrongPassword, STRONG_PASSWORD_MESSAGE } from "../password.js";
+import { isOptionalValidPhone, PHONE_VALIDATION_MESSAGE } from "../phone.js";
 
 const strongPasswordSchema = z
   .string()
   .min(8)
   .refine(isStrongPassword, STRONG_PASSWORD_MESSAGE);
+
+export const optionalPhoneSchema = z
+  .string()
+  .max(40)
+  .optional()
+  .refine(isOptionalValidPhone, PHONE_VALIDATION_MESSAGE);
 
 export const loginSchema = z.object({
   email: z.string().email(),
@@ -16,7 +23,7 @@ export const registerSchema = z.object({
   name: z.string().min(1).max(120),
   email: z.string().email(),
   password: z.string().min(6),
-  phone: z.string().optional(),
+  phone: optionalPhoneSchema,
 });
 
 export const refreshTokenSchema = z.object({
@@ -73,7 +80,7 @@ export const userDtoSchema = z.object({
   name: z.string(),
   email: z.string().email(),
   role: z.enum(USER_ROLES),
-  phone: z.string().optional(),
+  phone: optionalPhoneSchema,
   avatarUrl: z.string().url().optional(),
   emailVerified: z.boolean(),
   passwordSetByUser: z.boolean(),

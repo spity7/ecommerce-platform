@@ -650,6 +650,7 @@ export interface UserDto {
   name: string;
   email: string;
   role: UserDtoRole;
+  /** @maxLength 40 */
   phone?: string;
   avatarUrl?: string;
   emailVerified: boolean;
@@ -681,6 +682,7 @@ export type AuthResponseUser = {
   name: string;
   email: string;
   role: AuthResponseUserRole;
+  /** @maxLength 40 */
   phone?: string;
   avatarUrl?: string;
   emailVerified: boolean;
@@ -711,6 +713,7 @@ export interface RegisterInput {
   email: string;
   /** @minLength 6 */
   password: string;
+  /** @maxLength 40 */
   phone?: string;
 }
 
@@ -2174,6 +2177,7 @@ export type Login200User = {
   name: string;
   email: string;
   role: Login200UserRole;
+  /** @maxLength 40 */
   phone?: string;
   avatarUrl?: string;
   emailVerified: boolean;
@@ -2202,6 +2206,7 @@ export type RegisterBody = {
   email: string;
   /** @minLength 6 */
   password: string;
+  /** @maxLength 40 */
   phone?: string;
 };
 
@@ -2227,6 +2232,7 @@ export type Register201User = {
   name: string;
   email: string;
   role: Register201UserRole;
+  /** @maxLength 40 */
   phone?: string;
   avatarUrl?: string;
   emailVerified: boolean;
@@ -2273,6 +2279,7 @@ export type RefreshToken200User = {
   name: string;
   email: string;
   role: RefreshToken200UserRole;
+  /** @maxLength 40 */
   phone?: string;
   avatarUrl?: string;
   emailVerified: boolean;
@@ -2313,6 +2320,7 @@ export type GetMe200 = {
   name: string;
   email: string;
   role: GetMe200Role;
+  /** @maxLength 40 */
   phone?: string;
   avatarUrl?: string;
   emailVerified: boolean;
@@ -2390,6 +2398,7 @@ export type VerifyEmail200 = {
   name: string;
   email: string;
   role: VerifyEmail200Role;
+  /** @maxLength 40 */
   phone?: string;
   avatarUrl?: string;
   emailVerified: boolean;
@@ -2439,6 +2448,7 @@ export type SocialAuth200User = {
   name: string;
   email: string;
   role: SocialAuth200UserRole;
+  /** @maxLength 40 */
   phone?: string;
   avatarUrl?: string;
   emailVerified: boolean;
@@ -2476,6 +2486,7 @@ export type SocialAuth201User = {
   name: string;
   email: string;
   role: SocialAuth201UserRole;
+  /** @maxLength 40 */
   phone?: string;
   avatarUrl?: string;
   emailVerified: boolean;
@@ -2958,6 +2969,7 @@ export type GetUserProfile200 = {
   name: string;
   email: string;
   role: GetUserProfile200Role;
+  /** @maxLength 40 */
   phone?: string;
   avatarUrl?: string;
   emailVerified: boolean;
@@ -3002,6 +3014,7 @@ export type UpdateUserProfile200 = {
   name: string;
   email: string;
   role: UpdateUserProfile200Role;
+  /** @maxLength 40 */
   phone?: string;
   avatarUrl?: string;
   emailVerified: boolean;

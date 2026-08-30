@@ -1,0 +1,141 @@
+@use "../../public/assets/scss/default/variables" as *;
+
+.rbt-phone-input-field {
+  .rbt-phone-input-field__control {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .rbt-phone-country-select {
+    position: relative;
+    flex: 0 0 auto;
+    align-self: stretch;
+    min-width: 132px;
+    margin-right: 0;
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-60);
+    background: var(--color-white);
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+
+    &:hover:not(:has(.rbt-phone-country-select__native:disabled)) {
+      border-color: var(--color-gray-400);
+    }
+
+    &:focus-within {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb, 201, 168, 124), 0.18);
+    }
+  }
+
+  .rbt-phone-country-select__native {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  .rbt-phone-country-select__native:disabled {
+    cursor: not-allowed;
+  }
+
+  .rbt-phone-country-select__display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 100%;
+    padding: 0 12px;
+    pointer-events: none;
+  }
+
+  .rbt-phone-country-select__flag {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+
+    .PhoneInputCountryIcon {
+      width: 26px;
+      height: 18px;
+      border-radius: 2px;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .rbt-phone-country-select__code {
+    flex: 1 1 auto;
+    min-width: 0;
+    color: var(--color-heading);
+    font-family: var(--font-primary);
+    font-size: var(--font-size-b2);
+    line-height: var(--line-height-b2);
+    font-weight: var(--f-semi-bold);
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+
+  .rbt-phone-country-select__arrow {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    color: var(--color-gray-600);
+    font-size: 11px;
+    opacity: 0.85;
+  }
+
+  .rbt-phone-country-select:focus-within .rbt-phone-country-select__arrow {
+    color: var(--color-primary);
+    opacity: 1;
+  }
+
+  .rbt-phone-input-field__number {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+  }
+
+  .rbt-phone-input-field__number:-webkit-autofill {
+    animation-name: rbt-phone-autofill-start;
+    animation-duration: 0.01s;
+  }
+
+  @keyframes rbt-phone-autofill-start {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  .rbt-phone-input-field__hint {
+    color: var(--color-gray-600);
+  }
+}
+
+@media #{$small-mobile} {
+  .rbt-phone-input-field {
+    .rbt-phone-input-field__control {
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rbt-phone-country-select {
+      width: 100%;
+      min-width: 100%;
+    }
+  }
+}

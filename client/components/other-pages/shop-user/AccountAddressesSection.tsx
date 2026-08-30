@@ -10,6 +10,15 @@ import {
   updateUserAddress,
   type ListUserAddresses200Item,
 } from "@platform/api-client";
+import {
+  formatPhoneForDisplay,
+  getPhoneValidationError,
+} from "@platform/shared";
+import StorefrontPhoneInput from "@/components/forms/phone-input";
+import {
+  getStorefrontDefaultPhoneCountry,
+  resolveStorefrontPhoneCountry,
+} from "@/lib/phone";
 
 type AddressFormState = {
   name: string;
@@ -47,6 +56,8 @@ export default function AccountAddressesSection() {
   const [editingId, setEditingId] = useState<string | "new" | null>(null);
   const [form, setForm] = useState<AddressFormState>(emptyForm());
   const [submitting, setSubmitting] = useState(false);
+  const [phoneError, setPhoneError] = useState<string | null>(null);
+  const defaultPhoneCountry = getStorefrontDefaultPhoneCountry();
 
   const loadAddresses = useCallback(async () => {
     setLoading(true);
@@ -99,6 +110,14 @@ export default function AccountAddressesSection() {
     event.preventDefault();
     setSubmitting(true);
     setError(null);
+    setPhoneError(null);
+
+    const nextPhoneError = getPhoneValidationError(form.phone);
+    if (nextPhoneError) {
+      setPhoneError(nextPhoneError);
+      setSubmitting(false);
+      return;
+    }
 
     const payload = {
       name: form.name.trim(),
@@ -190,7 +209,9 @@ export default function AccountAddressesSection() {
                     </p>
                     <p className="b1 mb--0">{formatAddress(address)}</p>
                     {address.phone ? (
-                      <p className="b3 mt--8 mb--0">{address.phone}</p>
+                      <p className="b3 mt--8 mb--0">
+                        {formatPhoneForDisplay(address.phone)}
+                      </p>
                     ) : null}
                   </div>
                   {editingId === null ? (
@@ -251,20 +272,20 @@ export default function AccountAddressesSection() {
               />
             </div>
             <div className="col-md-6 mt--16">
-              <label className="rbt-field-label" htmlFor="address_phone">
-                Phone
-              </label>
-              <input
+              <StorefrontPhoneInput
                 id="address_phone"
-                className="rbt-input-field"
-                type="tel"
+                label="Phone"
                 value={form.phone}
-                onChange={(event) =>
+                onChange={(nextValue) => {
                   setForm((current) => ({
                     ...current,
-                    phone: event.target.value,
-                  }))
-                }
+                    phone: nextValue,
+                  }));
+                  setPhoneError(getPhoneValidationError(nextValue));
+                }}
+                defaultCountry={defaultPhoneCountry}
+                country={resolveStorefrontPhoneCountry(form.country)}
+                error={phoneError}
               />
             </div>
             <div className="col-12 mt--16">

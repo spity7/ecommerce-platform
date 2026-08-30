@@ -7,6 +7,7 @@ import {
   SelectField,
   TextAreaField,
 } from "@/components/forms/admin-form-primitives";
+import { AdminPhoneInput } from "@/components/forms/phone-input";
 import { Breadcrumb } from "@/components/layout/breadcrumb";
 import { Icon } from "@/components/layout/icon";
 import { routes } from "@/config/routes";
@@ -47,7 +48,11 @@ export function UserForm() {
                 required
                 type="email"
               />
-              <Field label="Phone" name="phone" placeholder="+1 555 0000" />
+              <AdminPhoneInput
+                help="Stored in E.164 format for courier and SMS integrations."
+                label="Phone"
+                name="phone"
+              />
               <SelectField
                 label="Role"
                 name="role"

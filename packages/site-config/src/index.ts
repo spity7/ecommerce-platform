@@ -25,3 +25,4 @@ export function listSiteIds(): SiteId[] {
 }
 
 export { siteRegistry, beautyStationConfig };
+export { getDefaultPhoneCountry } from "./phone.js";

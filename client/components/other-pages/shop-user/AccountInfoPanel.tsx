@@ -2,7 +2,13 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { ApiError, updateUserProfile } from "@platform/api-client";
+import {
+  formatPhoneForDisplay,
+  getPhoneValidationError,
+} from "@platform/shared";
 import { getStorefrontSiteConfig } from "@/lib/site";
+import { getStorefrontDefaultPhoneCountry } from "@/lib/phone";
+import StorefrontPhoneInput from "@/components/forms/phone-input";
 import { useAuthSession } from "@/providers/auth-session-provider";
 import AccountInfo from "./AccountInfo";
 import AccountPasswordSection from "./AccountPasswordSection";
@@ -25,6 +31,8 @@ function AccountInfoApi() {
   const { user, loading, refreshUser } = useAuthSession();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState<string | null>(null);
+  const defaultPhoneCountry = getStorefrontDefaultPhoneCountry();
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -62,6 +70,14 @@ function AccountInfoApi() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+    setPhoneError(null);
+
+    const nextPhoneError = getPhoneValidationError(phone);
+    if (nextPhoneError) {
+      setPhoneError(nextPhoneError);
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -135,7 +151,11 @@ function AccountInfoApi() {
             <hr />
             <div className="rbt-single-info mb--24">
               <h6 className="mb--12 pt--4">Contact</h6>
-              <p className="b1 mb--0">{user.phone || "No phone number yet"}</p>
+              <p className="b1 mb--0">
+                {user.phone
+                  ? formatPhoneForDisplay(user.phone)
+                  : "No phone number yet"}
+              </p>
             </div>
           </>
         ) : (
@@ -152,16 +172,17 @@ function AccountInfoApi() {
                 required
               />
             </div>
-            <div className="rbt-input-field-grp mt--16">
-              <label className="rbt-field-label" htmlFor="profile_phone">
-                Phone
-              </label>
-              <input
+            <div className="mt--16">
+              <StorefrontPhoneInput
                 id="profile_phone"
-                className="rbt-input-field"
-                type="tel"
+                label="Phone"
                 value={phone}
-                onChange={(event) => setPhone(event.target.value)}
+                onChange={(nextValue) => {
+                  setPhone(nextValue);
+                  setPhoneError(getPhoneValidationError(nextValue));
+                }}
+                defaultCountry={defaultPhoneCountry}
+                error={phoneError}
               />
             </div>
             <p className="b3 mt--12 mb--0">Email: {user.email}</p>

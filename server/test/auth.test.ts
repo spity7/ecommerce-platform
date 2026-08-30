@@ -11,6 +11,7 @@ import {
   setupTestDatabase,
   teardownTestDatabase,
   testGoogleIdToken,
+  TEST_PHONE,
   verifyCustomerEmail,
 } from "./helpers.js";
 
@@ -32,6 +33,22 @@ describe("auth API", () => {
     assert.ok(body.refreshToken);
     assert.equal(body.user.email, email);
     assert.equal(body.user.role, "customer");
+    assert.equal(body.user.phone, TEST_PHONE);
+  });
+
+  it("rejects registration with an invalid phone number", async () => {
+    const response = await request(app)
+      .post("/api/auth/register")
+      .send({
+        name: "Invalid Phone",
+        email: `invalid-phone-${Date.now()}@example.com`,
+        password: "Password1!Strong",
+        phone: "123",
+      })
+      .expect(400);
+
+    assert.equal(response.body.error, "Validation failed");
+    assert.ok(Array.isArray(response.body.details?.phone));
   });
 
   it("logs in with valid credentials", async () => {
@@ -177,7 +194,7 @@ describe("auth API", () => {
         line1: "123 Test Street",
         city: "Austin",
         country: "United States",
-        phone: "555-0100",
+        phone: TEST_PHONE,
         isDefault: true,
       })
       .expect(201);
