@@ -1,31 +1,19 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { fetchOrders } from "@platform/api-client";
 import type { OrderDto } from "@platform/shared";
+import {
+  formatOrderDate,
+  formatOrderNumber,
+  formatOrderStatus,
+  formatOrderTotal,
+  getOrderDetailPath,
+  orderStatusClass,
+} from "@/lib/order-display";
 import { getStorefrontSiteConfig } from "@/lib/site";
 import Orders from "./Orders";
-
-function formatMoney(amount: number): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(amount);
-}
-
-function statusClass(status: OrderDto["status"]): string {
-  switch (status) {
-    case "delivered":
-      return "rbt-badge rbt-badge-bg-green rbt-badge-border rbt-badge-md rbt-badge-rounded";
-    case "cancelled":
-      return "rbt-badge rbt-badge-bg-danger rbt-badge-border rbt-badge-md rbt-badge-rounded";
-    case "shipped":
-    case "processing":
-      return "rbt-badge rbt-badge-bg-warning rbt-badge-border rbt-badge-md rbt-badge-rounded";
-    default:
-      return "rbt-badge rbt-badge-border rbt-badge-md rbt-badge-rounded";
-  }
-}
 
 export default function OrdersPanel() {
   const site = getStorefrontSiteConfig();
@@ -75,30 +63,53 @@ export default function OrdersPanel() {
   }
 
   if (orders.length === 0) {
-    return <p className="mb--0">You have no orders yet.</p>;
+    return (
+      <div>
+        <p className="mb--16">You have no orders yet.</p>
+        <Link className="rbt-btn" href="/shop">
+          Browse products
+        </Link>
+      </div>
+    );
   }
 
   return (
     <div className="rbt-account-orders">
       {orders.map((order) => (
-        <div key={order.id} className="rbt-account-order-item mb--24">
+        <div
+          key={order.id}
+          className="rbt-account-order-item mb--24 rbt-transparent-table-one-wrapper rbt-has-bg-gray p--24"
+        >
           <div className="d-flex flex-wrap align-items-center justify-content-between gap-2 mb--12">
-            <p className="mb--0 b2 rbt-text-medium">
-              Order #{order.id.slice(-8)}
-            </p>
-            <span className={statusClass(order.status)}>{order.status}</span>
+            <div>
+              <p className="mb--4 b2 rbt-text-medium">
+                Order #{formatOrderNumber(order.id)}
+              </p>
+              <p className="mb--0 b3 rbt-text-color-gray-600">
+                {formatOrderDate(order.createdAt)}
+              </p>
+            </div>
+            <span className={orderStatusClass(order.status)}>
+              {formatOrderStatus(order.status)}
+            </span>
           </div>
-          <p className="mb--8 b3">
-            {order.itemCount} items · {formatMoney(order.total)}
+          <p className="mb--12 b3">
+            {order.itemCount} items · {formatOrderTotal(order.total)}
           </p>
-          <ul className="mb--0 pl--0 list-unstyled">
+          <ul className="mb--16 pl--0 list-unstyled">
             {order.items.map((item) => (
               <li key={`${order.id}-${item.productId}`} className="b3">
                 {item.productName} × {item.quantity} —{" "}
-                {formatMoney(item.lineTotal)}
+                {formatOrderTotal(item.lineTotal)}
               </li>
             ))}
           </ul>
+          <Link
+            className="rbt-btn rbt-btn-sm"
+            href={getOrderDetailPath(order.id)}
+          >
+            View details
+          </Link>
         </div>
       ))}
     </div>

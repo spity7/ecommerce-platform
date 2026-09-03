@@ -11,7 +11,7 @@ import {
 } from "@platform/api-client";
 import { getPhoneValidationError } from "@platform/shared";
 import { useContextElement } from "@/context/Context";
-import { getCheckoutPath } from "@/lib/checkout";
+import { getCheckoutPath, getCheckoutThankYouPath } from "@/lib/checkout";
 import { formatCurrency } from "@/lib/price";
 import {
   getStorefrontDefaultPhoneCountry,
@@ -125,7 +125,7 @@ export default function StorefrontCheckout() {
     setSubmitting(true);
 
     try {
-      await createOrderFromCart({
+      const order = await createOrderFromCart({
         name,
         line1,
         city,
@@ -136,7 +136,7 @@ export default function StorefrontCheckout() {
       const cleared = await syncClearServerCart();
       setCartProducts(cleared ?? []);
 
-      router.push("/checkout-thankyou");
+      router.push(getCheckoutThankYouPath(order.id));
       router.refresh();
     } catch (err) {
       setError(

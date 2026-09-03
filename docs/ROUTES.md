@@ -1,6 +1,6 @@
 # Routes reference
 
-HTTP API routes, admin pages, and storefront routing. **Last reviewed:** 2026-08-24.
+HTTP API routes, admin pages, and storefront routing. **Last reviewed:** 2026-09-03.
 
 ## Server API (`@platform/server`)
 
@@ -134,6 +134,7 @@ Dev URL: `http://localhost:3000`.
 | `/shop`           | Published products from API with static fallback (`ShopDefault`)                            |
 | `/product/[slug]` | Product detail from API by slug with static fallback                                        |
 | `/checkout`       | Production checkout (shipping form + place order) when `features.customerAuth`              |
+| `/checkout-thankyou?orderId=` | Order confirmation from `GET /api/orders/:id` when `features.customerAuth` and `orderId` query is present |
 
 **API integration today:** Home `Products1`, `/shop`, and `/product/[slug]` fetch published products from the API with static fallback. Demo routes under `(shop)/` and `(product-single)/` remain for theme previews.
 
@@ -151,6 +152,7 @@ Dev URL: `http://localhost:3000`.
 | `/reset-password`                       | Set new password from emailed link token                                                 |
 | `/verify-email`                         | Confirm email from registration/account verification link                                |
 | `/my-order-history`                     | Loads orders from `GET /api/orders` when feature enabled                                 |
+| `/my-order-history/[orderId]`           | Order detail from `GET /api/orders/:id` when feature enabled                             |
 
 ### Auth BFF (Next route handlers)
 
