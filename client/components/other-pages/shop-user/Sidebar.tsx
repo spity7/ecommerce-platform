@@ -1,5 +1,6 @@
 "use client";
 
+import { type ReactNode } from "react";
 import { GiftIcon } from "../../svg-icons";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,6 +8,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { getStorefrontSiteConfig } from "@/lib/site";
 import { clearSession } from "@/lib/session";
 import { useAuthSession } from "@/providers/auth-session-provider";
+import { useOptionalAccountInfoGuard } from "./AccountInfoGuard";
 
 const primaryNavItems = [
   {
@@ -60,11 +62,43 @@ const customerServiceItems = [
 
 const DEFAULT_AVATAR = "/assets/images/dashboard/user-profile-01.webp";
 
+type SidebarNavLinkProps = {
+  href: string;
+  active: boolean;
+  disabled: boolean;
+  children: ReactNode;
+};
+
+function SidebarNavLink({
+  href,
+  active,
+  disabled,
+  children,
+}: SidebarNavLinkProps) {
+  if (disabled) {
+    return (
+      <span
+        aria-disabled="true"
+        className={`${active ? "active" : ""} opacity-50 pe-none`}
+      >
+        {children}
+      </span>
+    );
+  }
+
+  return (
+    <Link href={href} className={active ? "active" : ""}>
+      {children}
+    </Link>
+  );
+}
+
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const site = getStorefrontSiteConfig();
   const { user, loading } = useAuthSession();
+  const { actionsDisabled } = useOptionalAccountInfoGuard();
   const customerAuth = site.features.customerAuth;
 
   async function handleLogout() {
@@ -117,10 +151,11 @@ export default function Sidebar() {
         <div className="rbt-sidebar-single-widget">
           <nav className="rbt-sidebar-nav-list list-group">
             {primaryNavItems.map((item) => (
-              <Link
+              <SidebarNavLink
                 key={item.label}
+                active={pathname === item.href}
+                disabled={actionsDisabled}
                 href={item.href}
-                className={pathname === item.href ? "active" : ""}
               >
                 <span>
                   <i className={item.iconClass} />
@@ -131,7 +166,7 @@ export default function Sidebar() {
                     {item.badge}
                   </span>
                 ) : null}
-              </Link>
+              </SidebarNavLink>
             ))}
           </nav>
         </div>
@@ -139,16 +174,17 @@ export default function Sidebar() {
           <h6 className="rbt-title">Manage account</h6>
           <nav className="rbt-sidebar-nav-list list-group">
             {manageAccountItems.map((item) => (
-              <Link
+              <SidebarNavLink
                 key={item.label}
+                active={pathname === item.href}
+                disabled={actionsDisabled}
                 href={item.href}
-                className={pathname === item.href ? "active" : ""}
               >
                 <span>
                   <i className={item.iconClass} />
                   {item.label}
                 </span>
-              </Link>
+              </SidebarNavLink>
             ))}
           </nav>
         </div>
@@ -156,16 +192,17 @@ export default function Sidebar() {
           <h6 className="rbt-title">Customer service</h6>
           <nav className="rbt-sidebar-nav-list list-group">
             {customerServiceItems.map((item) => (
-              <Link
+              <SidebarNavLink
                 key={item.label}
+                active={pathname === item.href}
+                disabled={actionsDisabled}
                 href={item.href}
-                className={pathname === item.href ? "active" : ""}
               >
                 <span>
                   <i className={item.iconClass} />
                   {item.label}
                 </span>
-              </Link>
+              </SidebarNavLink>
             ))}
           </nav>
         </div>
@@ -173,6 +210,7 @@ export default function Sidebar() {
         <nav className="rbt-sidebar-nav-list list-group">
           <button
             className="border-0 bg-transparent p-0 text-start w-100"
+            disabled={actionsDisabled}
             onClick={() => void handleLogout()}
             type="button"
           >

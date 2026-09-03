@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import {
   ApiError,
   createUserAddress,
@@ -14,11 +14,14 @@ import {
   formatPhoneForDisplay,
   getPhoneValidationError,
 } from "@platform/shared";
+import { useUiElement } from "@/context/uiStore";
 import StorefrontPhoneInput from "@/components/forms/phone-input";
 import {
   getStorefrontDefaultPhoneCountry,
   resolveStorefrontPhoneCountry,
 } from "@/lib/phone";
+import AccountConfirmDialog from "./AccountConfirmDialog";
+import { useAccountInfoGuard } from "./AccountInfoGuard";
 
 type AddressFormState = {
   name: string;
@@ -49,15 +52,45 @@ function formatAddress(address: ListUserAddresses200Item): string {
   return parts.join(", ");
 }
 
+function hasAddressFormContent(form: AddressFormState): boolean {
+  return Boolean(
+    form.name.trim() ||
+      form.line1.trim() ||
+      form.line2.trim() ||
+      form.city.trim() ||
+      form.country.trim() ||
+      form.phone.trim() ||
+      form.isDefault
+  );
+}
+
 export default function AccountAddressesSection() {
+  const { showToaster } = useUiElement();
+  const { actionsDisabled, reportState } = useAccountInfoGuard("addresses");
   const [addresses, setAddresses] = useState<ListUserAddresses200Item[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | "new" | null>(null);
   const [form, setForm] = useState<AddressFormState>(emptyForm());
   const [submitting, setSubmitting] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [phoneError, setPhoneError] = useState<string | null>(null);
   const defaultPhoneCountry = getStorefrontDefaultPhoneCountry();
+
+  const addressToDelete = useMemo(
+    () => addresses.find((address) => address.id === deleteConfirmId) ?? null,
+    [addresses, deleteConfirmId]
+  );
+
+  const addressDirty = editingId !== null && hasAddressFormContent(form);
+
+  useEffect(() => {
+    reportState({
+      busy: submitting || deletingId !== null,
+      dirty: addressDirty,
+    });
+  }, [addressDirty, deletingId, reportState, submitting]);
 
   const loadAddresses = useCallback(async () => {
     setLoading(true);
@@ -84,6 +117,7 @@ export default function AccountAddressesSection() {
     setEditingId("new");
     setForm(emptyForm());
     setError(null);
+    setPhoneError(null);
   }
 
   function startEdit(address: ListUserAddresses200Item) {
@@ -98,12 +132,18 @@ export default function AccountAddressesSection() {
       isDefault: address.isDefault ?? false,
     });
     setError(null);
+    setPhoneError(null);
   }
 
   function cancelEdit() {
+    if (submitting) {
+      return;
+    }
+
     setEditingId(null);
     setForm(emptyForm());
     setError(null);
+    setPhoneError(null);
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -132,8 +172,10 @@ export default function AccountAddressesSection() {
     try {
       if (editingId === "new") {
         await createUserAddress(payload);
+        showToaster("Address saved");
       } else if (editingId) {
         await updateUserAddress(editingId, payload);
+        showToaster("Address saved");
       }
       await loadAddresses();
       cancelEdit();
@@ -146,34 +188,68 @@ export default function AccountAddressesSection() {
     }
   }
 
-  async function handleDelete(addressId: string) {
+  function openDeleteConfirmation(addressId: string) {
+    if (deletingId || submitting) {
+      return;
+    }
+
     setError(null);
+    setDeleteConfirmId(addressId);
+  }
+
+  function closeDeleteConfirmation() {
+    if (!deletingId) {
+      setDeleteConfirmId(null);
+    }
+  }
+
+  async function handleDelete(addressId: string) {
+    setDeletingId(addressId);
+    setError(null);
+
     try {
       await deleteUserAddress(addressId);
       if (editingId === addressId) {
         cancelEdit();
       }
       await loadAddresses();
+      setDeleteConfirmId(null);
+      showToaster("Address deleted");
     } catch (err) {
       setError(
         err instanceof ApiError ? err.message : "Could not delete this address."
       );
+    } finally {
+      setDeletingId(null);
     }
   }
 
   async function handleSetDefault(addressId: string) {
+    if (actionsDisabled || submitting || deletingId) {
+      return;
+    }
+
     setError(null);
+    setSubmitting(true);
+
     try {
       await setDefaultUserAddress(addressId);
       await loadAddresses();
+      showToaster("Default address updated");
     } catch (err) {
       setError(
         err instanceof ApiError
           ? err.message
           : "Could not update the default address."
       );
+    } finally {
+      setSubmitting(false);
     }
   }
+
+  const listActionsDisabled =
+    actionsDisabled || submitting || deletingId !== null || editingId !== null;
+  const formDisabled = submitting;
 
   return (
     <>
@@ -184,6 +260,7 @@ export default function AccountAddressesSection() {
             <button
               type="button"
               className="rbt-btn rbt-btn-sm rbt-btn-secondary"
+              disabled={actionsDisabled || loading}
               onClick={startCreate}
             >
               <i className="fa-light fa-plus mr--4" />
@@ -220,6 +297,7 @@ export default function AccountAddressesSection() {
                         <button
                           type="button"
                           className="rbt-btn rbt-btn-sm rbt-btn-secondary"
+                          disabled={listActionsDisabled}
                           onClick={() => handleSetDefault(address.id)}
                         >
                           Set default
@@ -228,6 +306,7 @@ export default function AccountAddressesSection() {
                       <button
                         type="button"
                         className="rbt-btn rbt-btn-sm rbt-btn-secondary"
+                        disabled={listActionsDisabled}
                         onClick={() => startEdit(address)}
                       >
                         Edit
@@ -235,7 +314,8 @@ export default function AccountAddressesSection() {
                       <button
                         type="button"
                         className="rbt-btn rbt-btn-sm rbt-bg-color-danger shadow-none"
-                        onClick={() => handleDelete(address.id)}
+                        disabled={listActionsDisabled}
+                        onClick={() => openDeleteConfirmation(address.id)}
                       >
                         Delete
                       </button>
@@ -262,6 +342,7 @@ export default function AccountAddressesSection() {
                 id="address_name"
                 className="rbt-input-field"
                 value={form.name}
+                disabled={formDisabled}
                 onChange={(event) =>
                   setForm((current) => ({
                     ...current,
@@ -285,6 +366,7 @@ export default function AccountAddressesSection() {
                 }}
                 defaultCountry={defaultPhoneCountry}
                 country={resolveStorefrontPhoneCountry(form.country)}
+                disabled={formDisabled}
                 error={phoneError}
               />
             </div>
@@ -296,6 +378,7 @@ export default function AccountAddressesSection() {
                 id="address_line1"
                 className="rbt-input-field"
                 value={form.line1}
+                disabled={formDisabled}
                 onChange={(event) =>
                   setForm((current) => ({
                     ...current,
@@ -313,6 +396,7 @@ export default function AccountAddressesSection() {
                 id="address_line2"
                 className="rbt-input-field"
                 value={form.line2}
+                disabled={formDisabled}
                 onChange={(event) =>
                   setForm((current) => ({
                     ...current,
@@ -329,6 +413,7 @@ export default function AccountAddressesSection() {
                 id="address_city"
                 className="rbt-input-field"
                 value={form.city}
+                disabled={formDisabled}
                 onChange={(event) =>
                   setForm((current) => ({
                     ...current,
@@ -346,6 +431,7 @@ export default function AccountAddressesSection() {
                 id="address_country"
                 className="rbt-input-field"
                 value={form.country}
+                disabled={formDisabled}
                 onChange={(event) =>
                   setForm((current) => ({
                     ...current,
@@ -360,6 +446,7 @@ export default function AccountAddressesSection() {
                 <input
                   type="checkbox"
                   checked={form.isDefault}
+                  disabled={formDisabled}
                   onChange={(event) =>
                     setForm((current) => ({
                       ...current,
@@ -378,13 +465,14 @@ export default function AccountAddressesSection() {
             <button
               type="submit"
               className="rbt-btn rbt-btn-sm"
-              disabled={submitting}
+              disabled={formDisabled}
             >
               {submitting ? "Saving…" : "Save address"}
             </button>
             <button
               type="button"
               className="rbt-btn rbt-btn-sm rbt-btn-secondary"
+              disabled={formDisabled}
               onClick={cancelEdit}
             >
               Cancel
@@ -394,6 +482,34 @@ export default function AccountAddressesSection() {
       ) : error ? (
         <p className="rbt-text-color-danger mb--24 b3">{error}</p>
       ) : null}
+
+      <AccountConfirmDialog
+        confirmLabel="Yes, delete address"
+        description={
+          addressToDelete ? (
+            <>
+              Delete the address for <strong>{addressToDelete.name}</strong> at{" "}
+              {formatAddress(addressToDelete)}?
+            </>
+          ) : (
+            "Delete this saved address?"
+          )
+        }
+        error={deleteConfirmId ? error : null}
+        iconClassName="fa-regular fa-location-dot"
+        loading={deletingId !== null}
+        loadingLabel="Deleting…"
+        onClose={closeDeleteConfirmation}
+        onConfirm={() => {
+          if (deleteConfirmId) {
+            void handleDelete(deleteConfirmId);
+          }
+        }}
+        open={deleteConfirmId !== null}
+        title="Delete this address?"
+        titleId="delete-address-confirm-title"
+        variant="danger"
+      />
     </>
   );
 }

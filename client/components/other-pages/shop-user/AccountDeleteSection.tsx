@@ -2,14 +2,16 @@
 
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { ApiError, deleteAccount, setAccessToken } from "@platform/api-client";
 import { useAuthSession } from "@/providers/auth-session-provider";
+import AccountConfirmDialog from "./AccountConfirmDialog";
+import { useAccountInfoGuard } from "./AccountInfoGuard";
 
 export default function AccountDeleteSection() {
   const router = useRouter();
   const { user } = useAuthSession();
+  const { actionsDisabled, reportState } = useAccountInfoGuard("delete-account");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -19,20 +21,11 @@ export default function AccountDeleteSection() {
     user && !user.passwordSetByUser && user.oauthProvider === "google"
   );
 
+  const deleteDirty = Boolean(password.trim()) || confirmOpen;
+
   useEffect(() => {
-    if (!confirmOpen) {
-      return;
-    }
-
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape" && !submitting) {
-        setConfirmOpen(false);
-      }
-    }
-
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, [confirmOpen, submitting]);
+    reportState({ busy: submitting, dirty: deleteDirty });
+  }, [deleteDirty, reportState, submitting]);
 
   if (!user) {
     return null;
@@ -59,12 +52,17 @@ export default function AccountDeleteSection() {
       setError(
         err instanceof ApiError ? err.message : "Could not delete your account."
       );
+      setConfirmOpen(false);
     } finally {
       setSubmitting(false);
     }
   }
 
   function openDeleteConfirmation() {
+    if (submitting) {
+      return;
+    }
+
     if (!requiresGoogleConfirmation && !password) {
       setError("Enter your password to confirm account deletion.");
       return;
@@ -121,6 +119,7 @@ export default function AccountDeleteSection() {
               className="rbt-input-field"
               type="password"
               value={password}
+              disabled={submitting || actionsDisabled}
               onChange={(event) => setPassword(event.target.value)}
               autoComplete="current-password"
             />
@@ -129,99 +128,58 @@ export default function AccountDeleteSection() {
         <button
           type="button"
           className="rbt-btn rbt-btn-sm rbt-bg-color-danger mt--16 shadow-none"
+          disabled={submitting || actionsDisabled}
           onClick={openDeleteConfirmation}
-          disabled={submitting}
         >
           {submitting ? "Deleting…" : "Delete account"}
         </button>
-        {error ? (
+        {error && !confirmOpen ? (
           <p className="rbt-text-color-danger mt--12 mb--0 b3">{error}</p>
         ) : null}
       </div>
 
-      {confirmOpen
-        ? createPortal(
-            <div
-              aria-labelledby="delete-account-confirm-title"
-              aria-modal="true"
-              className="managed-bs-modal-layer is-open"
-              role="dialog"
-              style={{ zIndex: 1055 }}
+      <AccountConfirmDialog
+        confirmLabel="Yes, delete account"
+        description="Your account will be deactivated immediately. You can sign in again within 14 days to reactivate it."
+        error={confirmOpen ? error : null}
+        footer={
+          <div className="d-flex justify-content-center rbt-gap--16 mt--24">
+            <button
+              className="rbt-btn rbt-btn-sm rbt-btn-secondary"
+              disabled={submitting}
+              onClick={closeDeleteConfirmation}
+              type="button"
             >
-              <div
-                aria-hidden
-                className="modal-backdrop fade show"
-                onClick={closeDeleteConfirmation}
+              Cancel
+            </button>
+            {requiresGoogleConfirmation ? (
+              <GoogleLogin
+                onSuccess={handleGoogleDelete}
+                onError={() => setError("Google confirmation failed.")}
+                text="continue_with"
               />
-              <div className="modal fade show" style={{ display: "block" }}>
-                <div className="modal-dialog modal-dialog-centered">
-                  <div className="modal-content">
-                    <div className="modal-header border-0 pb-0">
-                      <button
-                        aria-label="Close"
-                        className="rbt-round-btn rbt-modal-dis-btn ms-auto"
-                        disabled={submitting}
-                        onClick={closeDeleteConfirmation}
-                        type="button"
-                      >
-                        <i className="fa-solid fa-xmark" />
-                      </button>
-                    </div>
-                    <div className="modal-body pt-0 text-center">
-                      <div className="mx-auto mb--16 d-flex align-items-center justify-content-center rbt-round-btn rbt-bg-color-danger opacity-75">
-                        <i className="fa-regular fa-trash-can-slash" />
-                      </div>
-                      <h5
-                        className="rbt-title mb--12"
-                        id="delete-account-confirm-title"
-                      >
-                        Delete your account?
-                      </h5>
-                      <p className="b3 mb--0">
-                        Your account will be deactivated immediately. You can
-                        sign in again within 14 days to reactivate it.
-                      </p>
-                      {error ? (
-                        <p className="rbt-text-color-danger mt--12 mb--0 b3">
-                          {error}
-                        </p>
-                      ) : null}
-                      <div className="d-flex justify-content-center rbt-gap--16 mt--24">
-                        <button
-                          className="rbt-btn rbt-btn-sm rbt-btn-secondary"
-                          disabled={submitting}
-                          onClick={closeDeleteConfirmation}
-                          type="button"
-                        >
-                          Cancel
-                        </button>
-                        {requiresGoogleConfirmation ? (
-                          <GoogleLogin
-                            onSuccess={handleGoogleDelete}
-                            onError={() =>
-                              setError("Google confirmation failed.")
-                            }
-                            text="continue_with"
-                          />
-                        ) : (
-                          <button
-                            className="rbt-btn rbt-btn-sm rbt-bg-color-danger shadow-none"
-                            disabled={submitting}
-                            onClick={() => void confirmPasswordDelete()}
-                            type="button"
-                          >
-                            {submitting ? "Deleting…" : "Yes, delete account"}
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>,
-            document.body
-          )
-        : null}
+            ) : (
+              <button
+                className="rbt-btn rbt-btn-sm rbt-bg-color-danger shadow-none"
+                disabled={submitting}
+                onClick={() => void confirmPasswordDelete()}
+                type="button"
+              >
+                {submitting ? "Deleting…" : "Yes, delete account"}
+              </button>
+            )}
+          </div>
+        }
+        iconClassName="fa-regular fa-trash-can-slash"
+        loading={submitting}
+        loadingLabel="Deleting…"
+        onClose={closeDeleteConfirmation}
+        onConfirm={() => void confirmPasswordDelete()}
+        open={confirmOpen}
+        title="Delete your account?"
+        titleId="delete-account-confirm-title"
+        variant="danger"
+      />
     </>
   );
 }

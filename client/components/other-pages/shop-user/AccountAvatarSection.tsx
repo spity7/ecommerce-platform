@@ -9,7 +9,6 @@ import {
   type ChangeEvent,
   type FormEvent,
 } from "react";
-import { createPortal } from "react-dom";
 import {
   ApiError,
   removeUserAvatar,
@@ -22,7 +21,10 @@ import {
   AVATAR_MAX_SIZE_LABEL,
   isAllowedAvatarUpload,
 } from "@platform/shared";
+import { useUiElement } from "@/context/uiStore";
 import { useAuthSession } from "@/providers/auth-session-provider";
+import AccountConfirmDialog from "./AccountConfirmDialog";
+import { useAccountInfoGuard } from "./AccountInfoGuard";
 
 function formatFileSize(bytes: number): string {
   if (bytes >= 1024 * 1024) {
@@ -42,7 +44,9 @@ function validateAvatarFile(file: File): string | null {
 }
 
 export default function AccountAvatarSection() {
+  const { showToaster } = useUiElement();
   const { user, refreshUser } = useAuthSession();
+  const { actionsDisabled, reportState } = useAccountInfoGuard("avatar");
   const [editing, setEditing] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -59,6 +63,12 @@ export default function AccountAvatarSection() {
     return user?.avatarUrl ?? null;
   }, [previewUrl, user?.avatarUrl]);
 
+  const avatarDirty = editing && Boolean(selectedFile || previewUrl);
+
+  useEffect(() => {
+    reportState({ busy: submitting || removing, dirty: avatarDirty });
+  }, [avatarDirty, removing, reportState, submitting]);
+
   useEffect(() => {
     return () => {
       if (previewUrl?.startsWith("blob:")) {
@@ -66,21 +76,6 @@ export default function AccountAvatarSection() {
       }
     };
   }, [previewUrl]);
-
-  useEffect(() => {
-    if (!confirmRemoveOpen) {
-      return;
-    }
-
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape" && !removing) {
-        setConfirmRemoveOpen(false);
-      }
-    }
-
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, [confirmRemoveOpen, removing]);
 
   if (!user) {
     return null;
@@ -106,6 +101,10 @@ export default function AccountAvatarSection() {
   }
 
   function cancelEdit() {
+    if (submitting || removing) {
+      return;
+    }
+
     resetSelection();
     setEditing(false);
     setError(null);
@@ -145,6 +144,7 @@ export default function AccountAvatarSection() {
       await uploadUserAvatar(selectedFile);
       await refreshUser();
       cancelEdit();
+      showToaster("Profile photo updated");
       window.dispatchEvent(new Event("auth:session-updated"));
     } catch (err) {
       setError(
@@ -158,7 +158,7 @@ export default function AccountAvatarSection() {
   }
 
   function openRemoveConfirmation() {
-    if (!user?.avatarUrl) {
+    if (!user?.avatarUrl || submitting || removing) {
       return;
     }
 
@@ -185,6 +185,7 @@ export default function AccountAvatarSection() {
       await refreshUser();
       cancelEdit();
       setConfirmRemoveOpen(false);
+      showToaster("Profile photo removed");
       window.dispatchEvent(new Event("auth:session-updated"));
     } catch (err) {
       setError(
@@ -196,6 +197,8 @@ export default function AccountAvatarSection() {
       setRemoving(false);
     }
   }
+
+  const inputsDisabled = submitting || removing;
 
   return (
     <>
@@ -225,6 +228,7 @@ export default function AccountAvatarSection() {
             <button
               type="button"
               className="rbt-btn rbt-btn-sm rbt-btn-secondary"
+              disabled={actionsDisabled}
               onClick={startEdit}
             >
               Edit
@@ -243,6 +247,7 @@ export default function AccountAvatarSection() {
                 className="rbt-input-field"
                 type="file"
                 accept={AVATAR_FILE_INPUT_ACCEPT}
+                disabled={inputsDisabled}
                 onChange={handleFileChange}
               />
               <p className="rbt-phone-input-field__hint b3 mb--0 mt--8">
@@ -263,7 +268,7 @@ export default function AccountAvatarSection() {
               <button
                 type="submit"
                 className="rbt-btn rbt-btn-sm"
-                disabled={submitting || !selectedFile}
+                disabled={inputsDisabled || !selectedFile}
               >
                 {submitting ? "Uploading…" : "Save photo"}
               </button>
@@ -272,7 +277,7 @@ export default function AccountAvatarSection() {
                   type="button"
                   className="rbt-btn rbt-btn-sm rbt-btn-secondary"
                   onClick={openRemoveConfirmation}
-                  disabled={removing || submitting}
+                  disabled={inputsDisabled}
                 >
                   Remove photo
                 </button>
@@ -281,7 +286,7 @@ export default function AccountAvatarSection() {
                 type="button"
                 className="rbt-btn rbt-btn-sm rbt-btn-secondary"
                 onClick={cancelEdit}
-                disabled={submitting || removing}
+                disabled={inputsDisabled}
               >
                 Cancel
               </button>
@@ -290,79 +295,20 @@ export default function AccountAvatarSection() {
         ) : null}
       </div>
 
-      {confirmRemoveOpen
-        ? createPortal(
-            <div
-              aria-labelledby="remove-avatar-confirm-title"
-              aria-modal="true"
-              className="managed-bs-modal-layer is-open"
-              role="dialog"
-              style={{ zIndex: 1055 }}
-            >
-              <div
-                aria-hidden
-                className="modal-backdrop fade show"
-                onClick={closeRemoveConfirmation}
-              />
-              <div className="modal fade show" style={{ display: "block" }}>
-                <div className="modal-dialog modal-dialog-centered">
-                  <div className="modal-content">
-                    <div className="modal-header border-0 pb-0">
-                      <button
-                        aria-label="Close"
-                        className="rbt-round-btn rbt-modal-dis-btn ms-auto"
-                        disabled={removing}
-                        onClick={closeRemoveConfirmation}
-                        type="button"
-                      >
-                        <i className="fa-solid fa-xmark" />
-                      </button>
-                    </div>
-                    <div className="modal-body pt-0 text-center">
-                      <div className="mx-auto mb--16 d-flex align-items-center justify-content-center rbt-round-btn">
-                        <i className="fa-regular fa-user" />
-                      </div>
-                      <h5
-                        className="rbt-title mb--12"
-                        id="remove-avatar-confirm-title"
-                      >
-                        Remove profile photo?
-                      </h5>
-                      <p className="b3 mb--0">
-                        Your current profile photo will be removed. You can
-                        upload a new one anytime.
-                      </p>
-                      {error ? (
-                        <p className="rbt-text-color-danger mt--12 mb--0 b3">
-                          {error}
-                        </p>
-                      ) : null}
-                      <div className="d-flex justify-content-center rbt-gap--16 mt--24">
-                        <button
-                          className="rbt-btn rbt-btn-sm rbt-btn-secondary"
-                          disabled={removing}
-                          onClick={closeRemoveConfirmation}
-                          type="button"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          className="rbt-btn rbt-btn-sm rbt-bg-color-danger shadow-none"
-                          disabled={removing}
-                          onClick={() => void handleRemove()}
-                          type="button"
-                        >
-                          {removing ? "Removing…" : "Yes, remove photo"}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>,
-            document.body
-          )
-        : null}
+      <AccountConfirmDialog
+        confirmLabel="Yes, remove photo"
+        description="Your current profile photo will be removed. You can upload a new one anytime."
+        error={confirmRemoveOpen ? error : null}
+        iconClassName="fa-regular fa-user"
+        loading={removing}
+        loadingLabel="Removing…"
+        onClose={closeRemoveConfirmation}
+        onConfirm={() => void handleRemove()}
+        open={confirmRemoveOpen}
+        title="Remove profile photo?"
+        titleId="remove-avatar-confirm-title"
+        variant="danger"
+      />
     </>
   );
 }

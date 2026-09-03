@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { ApiError, updateUserProfile } from "@platform/api-client";
 import {
   formatPhoneForDisplay,
   getPhoneValidationError,
 } from "@platform/shared";
+import { useUiElement } from "@/context/uiStore";
 import { getStorefrontSiteConfig } from "@/lib/site";
 import { getStorefrontDefaultPhoneCountry } from "@/lib/phone";
 import StorefrontPhoneInput from "@/components/forms/phone-input";
@@ -16,6 +17,7 @@ import AccountAddressesSection from "./AccountAddressesSection";
 import AccountEmailVerificationSection from "./AccountEmailVerificationSection";
 import AccountAvatarSection from "./AccountAvatarSection";
 import AccountDeleteSection from "./AccountDeleteSection";
+import { useAccountInfoGuard } from "./AccountInfoGuard";
 
 export default function AccountInfoPanel() {
   const site = getStorefrontSiteConfig();
@@ -24,11 +26,15 @@ export default function AccountInfoPanel() {
     return <AccountInfo />;
   }
 
-  return <AccountInfoApi />;
+  return (
+    <AccountInfoApi />
+  );
 }
 
 function AccountInfoApi() {
+  const { showToaster } = useUiElement();
   const { user, loading, refreshUser } = useAuthSession();
+  const { actionsDisabled, reportState } = useAccountInfoGuard("profile");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState<string | null>(null);
@@ -54,6 +60,21 @@ function AccountInfoApi() {
       setPhone(user.phone ?? "");
     }
   }, [user]);
+
+  const profileDirty = useMemo(() => {
+    if (!user || !editing) {
+      return false;
+    }
+
+    return (
+      name.trim() !== user.name.trim() ||
+      (phone.trim() || "") !== (user.phone ?? "").trim()
+    );
+  }, [editing, name, phone, user]);
+
+  useEffect(() => {
+    reportState({ busy: submitting, dirty: profileDirty });
+  }, [profileDirty, reportState, submitting]);
 
   if (loading) {
     return <p className="mb--0">Loading profile…</p>;
@@ -87,6 +108,7 @@ function AccountInfoApi() {
       });
       await refreshUser();
       setEditing(false);
+      showToaster("Profile updated");
       window.dispatchEvent(new Event("auth:session-updated"));
     } catch (err) {
       setError(
@@ -108,6 +130,7 @@ function AccountInfoApi() {
           </p>
           <button
             className="rbt-btn rbt-btn-sm rbt-btn-secondary"
+            disabled={actionsDisabled}
             onClick={() => setShowVerifyPrompt(false)}
             type="button"
           >
@@ -134,6 +157,7 @@ function AccountInfoApi() {
                 <button
                   type="button"
                   className="rbt-btn rbt-btn-sm rbt-btn-secondary"
+                  disabled={actionsDisabled}
                   onClick={() => setEditing(true)}
                 >
                   <i className="fa-light fa-pen-to-square mr--4" />
@@ -169,6 +193,7 @@ function AccountInfoApi() {
                 className="rbt-input-field"
                 value={name}
                 onChange={(event) => setName(event.target.value)}
+                disabled={submitting}
                 required
               />
             </div>
@@ -182,6 +207,7 @@ function AccountInfoApi() {
                   setPhoneError(getPhoneValidationError(nextValue));
                 }}
                 defaultCountry={defaultPhoneCountry}
+                disabled={submitting}
                 error={phoneError}
               />
             </div>
@@ -200,6 +226,7 @@ function AccountInfoApi() {
               <button
                 type="button"
                 className="rbt-btn rbt-btn-sm rbt-btn-secondary"
+                disabled={submitting}
                 onClick={() => {
                   setName(user.name);
                   setPhone(user.phone ?? "");

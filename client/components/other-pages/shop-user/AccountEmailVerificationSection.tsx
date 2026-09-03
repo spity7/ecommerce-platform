@@ -1,16 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ApiError, requestEmailVerification } from "@platform/api-client";
+import { useUiElement } from "@/context/uiStore";
 import { useAuthSession } from "@/providers/auth-session-provider";
+import { useAccountInfoGuard } from "./AccountInfoGuard";
 
 export default function AccountEmailVerificationSection() {
+  const { showToaster } = useUiElement();
   const { user } = useAuthSession();
+  const { actionsDisabled, reportState } = useAccountInfoGuard("email-verify");
   const [devVerifyUrl, setDevVerifyUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
+
+  useEffect(() => {
+    reportState({ busy: sending, dirty: false });
+  }, [reportState, sending]);
 
   if (!user) {
     return null;
@@ -41,6 +49,7 @@ export default function AccountEmailVerificationSection() {
         );
       }
       setSent(true);
+      showToaster("Verification link sent");
     } catch (err) {
       setError(
         err instanceof ApiError
@@ -76,8 +85,8 @@ export default function AccountEmailVerificationSection() {
         <button
           type="button"
           className="rbt-btn rbt-btn-sm rbt-btn-secondary"
+          disabled={actionsDisabled || sending}
           onClick={handleSendLink}
-          disabled={sending}
         >
           {sending
             ? "Sending…"
