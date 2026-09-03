@@ -20,6 +20,8 @@ import type {
   UpdateUserAddressBody,
   UpdateUserProfile200,
   UpdateUserProfileBody,
+  UploadUserAvatar201,
+  UploadUserAvatarBody,
 } from "../platform.schemas";
 
 import { customInstance } from "../../mutator";
@@ -119,6 +121,20 @@ export const getUsers = () => {
       method: "PATCH",
     });
   };
+  /**
+   * @summary Upload current user profile photo
+   */
+  const uploadUserAvatar = (uploadUserAvatarBody: UploadUserAvatarBody) => {
+    const formData = new FormData();
+    formData.append(`file`, uploadUserAvatarBody.file);
+
+    return customInstance<UploadUserAvatar201>({
+      url: `/api/users/me/avatar`,
+      method: "POST",
+      headers: { "Content-Type": "multipart/form-data" },
+      data: formData,
+    });
+  };
   return {
     getUserProfile,
     updateUserProfile,
@@ -129,6 +145,7 @@ export const getUsers = () => {
     updateUserAddress,
     deleteUserAddress,
     setDefaultUserAddress,
+    uploadUserAvatar,
   };
 };
 export type GetUserProfileResult = NonNullable<
@@ -157,4 +174,7 @@ export type DeleteUserAddressResult = NonNullable<
 >;
 export type SetDefaultUserAddressResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getUsers>["setDefaultUserAddress"]>>
+>;
+export type UploadUserAvatarResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getUsers>["uploadUserAvatar"]>>
 >;

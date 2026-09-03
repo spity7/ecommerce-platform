@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { mergeGuestCart, setAccessToken, ApiError } from "@platform/api-client";
 import type { AuthResponse } from "@platform/shared";
 import { getOrCreateGuestCartId, clearGuestCartId } from "@/lib/guest-cart";
@@ -134,11 +134,48 @@ export function StorefrontSignInForm() {
   );
 }
 
+function PasswordUpdateNotice() {
+  const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("passwordChanged") === "1") {
+      setMessage("Password updated. Please sign in with your new password.");
+    } else if (params.get("passwordSet") === "1") {
+      setMessage(
+        "Password set. Please sign in with your email and new password."
+      );
+    }
+
+    if (params.has("passwordChanged") || params.has("passwordSet")) {
+      params.delete("passwordChanged");
+      params.delete("passwordSet");
+      const query = params.toString();
+      window.history.replaceState(
+        {},
+        "",
+        `${window.location.pathname}${query ? `?${query}` : ""}`
+      );
+    }
+  }, []);
+
+  if (!message) {
+    return null;
+  }
+
+  return (
+    <div className="rbt-transparent-table-one-wrapper rbt-has-bg-gray p--16 mb--16">
+      <p className="b3 mb--0">{message}</p>
+    </div>
+  );
+}
+
 export function StorefrontSignInShell() {
   const { siteName: brandName, logo } = getSiteChromeBranding();
 
   return (
     <div className="rbt-login-form-top">
+      <PasswordUpdateNotice />
       <div className="logo">
         <Link href="/">
           <Image

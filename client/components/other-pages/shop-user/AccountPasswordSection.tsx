@@ -8,6 +8,8 @@ import {
   getPasswordValidationError,
 } from "@/lib/passwordValidation";
 import PasswordStrengthIndicator from "@/components/common/forms/PasswordStrengthIndicator";
+import { clearLocalSession } from "@/lib/session";
+import { storefrontPath } from "@/lib/paths";
 import { useAuthSession } from "@/providers/auth-session-provider";
 
 export default function AccountPasswordSection() {
@@ -46,8 +48,12 @@ export default function AccountPasswordSection() {
 
     try {
       await changePassword(input);
-      resetForm();
+      await clearLocalSession();
       window.dispatchEvent(new Event("auth:session-updated"));
+      const query = settingInitialPassword
+        ? "passwordSet=1"
+        : "passwordChanged=1";
+      window.location.href = storefrontPath(`/signin?${query}`);
     } catch (err) {
       setError(
         err instanceof ApiError

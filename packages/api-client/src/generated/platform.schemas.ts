@@ -3310,3 +3310,51 @@ export type UploadFile401 = {
 export type UploadFile503 = {
   error: string;
 };
+
+export type UploadUserAvatarBody = {
+  file: Blob;
+};
+
+export type UploadUserAvatar201Role =
+  (typeof UploadUserAvatar201Role)[keyof typeof UploadUserAvatar201Role];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UploadUserAvatar201Role = {
+  admin: "admin",
+  customer: "customer",
+} as const;
+
+export type UploadUserAvatar201OauthProvider =
+  (typeof UploadUserAvatar201OauthProvider)[keyof typeof UploadUserAvatar201OauthProvider];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UploadUserAvatar201OauthProvider = {
+  google: "google",
+} as const;
+
+export type UploadUserAvatar201 = {
+  id: string;
+  name: string;
+  email: string;
+  role: UploadUserAvatar201Role;
+  /** @maxLength 40 */
+  phone?: string;
+  avatarUrl?: string;
+  emailVerified: boolean;
+  passwordSetByUser: boolean;
+  oauthProvider?: UploadUserAvatar201OauthProvider;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type UploadUserAvatar400 = {
+  error: string;
+};
+
+export type UploadUserAvatar401 = {
+  error: string;
+};
+
+export type UploadUserAvatar503 = {
+  error: string;
+};

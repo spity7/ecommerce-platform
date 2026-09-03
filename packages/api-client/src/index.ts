@@ -52,6 +52,8 @@ export {
   fetchOrders,
   fetchOrder,
   updateUserProfile,
+  uploadUserAvatar,
+  removeUserAvatar,
   getUserProfile,
   deleteAccount,
   requestEmailVerification,

@@ -50,6 +50,14 @@ export async function updateUserProfile(input: {
   return platformApi.updateUserProfile(input);
 }
 
+export async function uploadUserAvatar(file: File | Blob) {
+  return platformApi.uploadUserAvatar({ file });
+}
+
+export async function removeUserAvatar() {
+  return platformApi.updateUserProfile({ avatarUrl: "" });
+}
+
 export async function getUserProfile() {
   return platformApi.getUserProfile();
 }

@@ -1,4 +1,5 @@
 import { Router } from "express";
+import multer from "multer";
 import bcrypt from "bcryptjs";
 import {
   changePasswordSchema,
@@ -10,6 +11,11 @@ import {
 import { AppError } from "../middleware/errorHandler.js";
 import { requireAuth, type AuthenticatedRequest } from "../middleware/auth.js";
 import { User } from "../models/User.js";
+import {
+  AVATAR_MAX_BYTES,
+  uploadUserAvatar,
+} from "../services/avatar-upload.js";
+import { deleteManagedAvatarIfPresent } from "../services/managed-avatar-storage.js";
 import {
   addUserAddress,
   findUserAddress,
@@ -26,6 +32,11 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { toUserAddressDto, toUserDto } from "../utils/serializers.js";
 
 export const usersRouter = Router();
+
+const avatarUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: AVATAR_MAX_BYTES },
+});
 
 usersRouter.get(
   "/me",
@@ -56,12 +67,61 @@ usersRouter.patch(
     if (payload.phone !== undefined) {
       user.phone = payload.phone;
     }
+
+    const previousAvatarUrl =
+      payload.avatarUrl !== undefined ? user.avatarUrl : undefined;
+
     if (payload.avatarUrl !== undefined) {
       user.avatarUrl = payload.avatarUrl;
     }
 
     await user.save();
+
+    if (
+      payload.avatarUrl !== undefined &&
+      payload.avatarUrl !== previousAvatarUrl
+    ) {
+      await deleteManagedAvatarIfPresent(
+        previousAvatarUrl,
+        user._id.toString()
+      );
+    }
+
     res.json(toUserDto(user));
+  })
+);
+
+usersRouter.post(
+  "/me/avatar",
+  requireAuth,
+  avatarUpload.single("file"),
+  asyncHandler(async (req: AuthenticatedRequest, res) => {
+    const user = await User.findById(req.auth?.userId);
+    if (!user || user.deletedAt) {
+      throw new AppError(404, "User not found");
+    }
+
+    if (!req.file) {
+      throw new AppError(
+        400,
+        "No profile photo was uploaded. Use field name 'file'."
+      );
+    }
+
+    const previousAvatarUrl = user.avatarUrl;
+
+    const uploaded = await uploadUserAvatar({
+      buffer: req.file.buffer,
+      originalName: req.file.originalname,
+      userId: user._id.toString(),
+    });
+
+    user.avatarUrl = uploaded.publicUrl;
+    await user.save();
+
+    await deleteManagedAvatarIfPresent(previousAvatarUrl, user._id.toString());
+
+    res.status(201).json(toUserDto(user));
   })
 );
 

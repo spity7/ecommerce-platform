@@ -321,6 +321,36 @@ describe("auth API", () => {
     assert.equal(response.body.avatarUrl, avatarUrl);
   });
 
+  it("returns 503 for profile photo upload when GCS is not configured", async () => {
+    const { body } = await registerCustomer(app);
+    const pngBuffer = Buffer.from(
+      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
+      "base64"
+    );
+
+    await request(app)
+      .post("/api/users/me/avatar")
+      .set(authHeader(body.accessToken))
+      .attach("file", pngBuffer, {
+        filename: "avatar.png",
+        contentType: "image/png",
+      })
+      .expect(503);
+  });
+
+  it("rejects invalid profile photo uploads", async () => {
+    const { body } = await registerCustomer(app);
+
+    await request(app)
+      .post("/api/users/me/avatar")
+      .set(authHeader(body.accessToken))
+      .attach("file", Buffer.from("not-an-image"), {
+        filename: "avatar.txt",
+        contentType: "text/plain",
+      })
+      .expect(400);
+  });
+
   it("blocks admin self-delete from storefront", async () => {
     const email = `admin-${Date.now()}@example.com`;
     const { body } = await registerCustomer(app, email);

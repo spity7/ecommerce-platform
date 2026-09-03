@@ -941,6 +941,44 @@ openApiRegistry.registerPath({
   },
 });
 
+openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/users/me/avatar",
+  tags: ["Users"],
+  operationId: "uploadUserAvatar",
+  summary: "Upload current user profile photo",
+  security: [{ bearerAuth: [] }],
+  request: {
+    body: {
+      content: {
+        "multipart/form-data": {
+          schema: z.object({
+            file: z.string().openapi({ format: "binary" }),
+          }),
+        },
+      },
+    },
+  },
+  responses: {
+    201: {
+      description: "Profile updated with uploaded photo",
+      content: { "application/json": { schema: userDtoSchema } },
+    },
+    400: {
+      description: "Invalid image",
+      content: { "application/json": { schema: errorResponseSchema } },
+    },
+    401: {
+      description: "Unauthorized",
+      content: { "application/json": { schema: errorResponseSchema } },
+    },
+    503: {
+      description: "Storage unavailable",
+      content: { "application/json": { schema: errorResponseSchema } },
+    },
+  },
+});
+
 export function createOpenApiDocument() {
   const generator = new OpenApiGeneratorV3(openApiRegistry.definitions);
 

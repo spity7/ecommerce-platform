@@ -8,3 +8,5 @@ export * from "./schemas/auth.js";
 export * from "./schemas/commerce.js";
 export * from "./password.js";
 export * from "./phone.js";
+export * from "./avatar.js";
+export * from "./image-storage.js";
