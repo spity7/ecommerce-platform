@@ -4,7 +4,6 @@ import Nav from "./Nav";
 import Image from "next/image";
 import Link from "next/link";
 import CompareItemLength from "../store/CompareItemLength";
-import WishlistLength from "../store/WishlistLength";
 import CartItemsLength from "../store/CartItemsLength";
 import CartItemsTotal from "../store/CartItemsTotal";
 import CategorySidebarToggler from "./headerComponents/CategorySidebarToggler";
@@ -18,6 +17,7 @@ import { useSticky } from "@/hooks/useSticky";
 import MobileMenuToggler from "../action-buttons/MobileMenuToggler";
 import Tooltip from "@/components/common/ui/Tooltip";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
+import WishlistHeaderAccess from "@/components/store/WishlistHeaderAccess";
 import {
   AuthAccessBox,
   AuthIconButton,
@@ -96,17 +96,7 @@ export default function Header5({ sticky = false }) {
                   {/* Navbar Icons */}
                   <ul className="rbt-quick-access d-none d-xl-flex">
                     <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-1 rbt-wishlist">
-                      <Tooltip content="Wishlist" placement="bottom">
-                        <Link
-                          className="rbt-round-btn rbt-round-btn rbt-bg-static-gray tooltips tooltip-distance-lg"
-                          href="/my-wishlist"
-                        >
-                          <i className="fa-regular fa-heart" />
-                          <div className="access-box-count">
-                            <WishlistLength />
-                          </div>
-                        </Link>
-                      </Tooltip>
+                      <WishlistHeaderAccess />
                     </li>
                     <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-2 rbt-access-box-has-bg-hover d-none d-lg-flex">
                       <AuthAccessBox
@@ -244,18 +234,7 @@ export default function Header5({ sticky = false }) {
                   </Tooltip>
                 </li>
                 <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-5 rbt-wishlist d-none d-lg-flex">
-                  <Tooltip content="Wishlist" placement="bottom">
-                    <ModalTriggerButton
-                      as="div"
-                      className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg"
-                      openModalName="wishlistModal"
-                    >
-                      <i className="fa-regular fa-heart" />
-                      <div className="access-box-count">
-                        <WishlistLength />
-                      </div>
-                    </ModalTriggerButton>
-                  </Tooltip>
+                  <WishlistHeaderAccess />
                 </li>
                 <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-5 rbt-access-box-has-bg-hover rbt-mini-cart">
                   <Tooltip content="Cart" placement="bottom">

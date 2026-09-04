@@ -144,7 +144,7 @@ Dev URL: `http://localhost:3000`.
 
 **API integration today:** Home `Products1`, `/shop`, and `/product/[slug]` fetch published products from the API with static fallback. Demo routes under `(shop)/` and `(product-single)/` remain for theme previews.
 
-**Wishlist:** Canonical page is `/my-wishlist` (account layout, API sync). Header hearts link there; the wishlist modal is a quick preview using the same `WishlistProductTable`. Legacy `/wishlist` redirects to `/my-wishlist`.
+**Wishlist:** Canonical full page is `/my-wishlist` (account layout, API sync). Header heart icons open the wishlist modal (quick preview); modal links to the full page. Legacy `/wishlist` redirects to `/my-wishlist`. Wishlist and cart are independent — adding to cart does not remove favorites.
 
 **Client state:** Zustand cart/wishlist/compare in `client/context/` (browser persisted). Server cart API available when `features.customerAuth` is enabled; guest carts use `X-Guest-Cart-Id` and merge on login. Server wishlist sync when `features.customerAuth` and `features.wishlist` are enabled (auth required; unauthenticated API-product wishlist clicks redirect to `/signin?returnTo=…` and apply after login).
 
