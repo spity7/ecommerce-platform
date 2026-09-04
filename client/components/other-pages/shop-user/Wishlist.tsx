@@ -6,6 +6,12 @@ import { useContextElement } from "@/context/Context";
 import Tooltip from "@/components/common/ui/Tooltip";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import { usePathname } from "next/navigation";
+import { useStore } from "@/context/store";
+import {
+  getWishlistProductPath,
+  isServerWishlistEnabled,
+  syncMoveWishlistItemToCart,
+} from "@/lib/wishlist-sync";
 
 export default function Wishlist() {
   const {
@@ -22,6 +28,34 @@ export default function Wishlist() {
     typeof window !== "undefined" ? `${window.location.origin}${pathname}` : "";
 
   const wishlistProducts = wishList;
+
+  function handleAddToCart(product: (typeof wishlistProducts)[number]) {
+    const inCart = isAddedToCartProducts(product.id);
+    if (inCart) {
+      return;
+    }
+
+    if (product.apiProductId && isServerWishlistEnabled()) {
+      void syncMoveWishlistItemToCart(product.apiProductId).then((result) => {
+        if (!result) {
+          return;
+        }
+
+        useStore.setState({
+          wishList: result.wishlist,
+          cartProducts: result.cart,
+          totalPrice: result.cart.reduce(
+            (sum, item) => sum + item.quantity * item.price,
+            0
+          ),
+        });
+      });
+      return;
+    }
+
+    addProductToCart(product);
+    removeFromWishlist(product.id);
+  }
 
   return (
     <div className="rbt-profile-content-area rbt-scrollable-content">
@@ -44,7 +78,7 @@ export default function Wishlist() {
                     Your wishlist is empty.
                   </p>
                   <Link
-                    href="/shop-default"
+                    href="/shop"
                     className="rbt-btn rbt-btn-md rbt-btn-primary mt--16"
                   >
                     Browse Products
@@ -55,6 +89,9 @@ export default function Wishlist() {
               mounted &&
               wishlistProducts.map((product) => {
                 const inCart = mounted && isAddedToCartProducts(product.id);
+                const productPath = getWishlistProductPath(product);
+                const inStock = product.inStock !== false;
+
                 return (
                   <tr key={product.id}>
                     <td className="rbt-product-remove-btn-wrapper">
@@ -71,7 +108,7 @@ export default function Wishlist() {
                       </Tooltip>
                     </td>
                     <td className="product-thumbnail">
-                      <Link href={`/product-single-default/${product.id}`}>
+                      <Link href={productPath}>
                         <Image
                           alt={product.title || "Product image"}
                           src={
@@ -85,21 +122,23 @@ export default function Wishlist() {
                     </td>
                     <td className="rbt-wish-product-info">
                       <h6 className="rbt-wish-product-name">
-                        <Link href={`/product-single-default/${product.id}`}>
-                          {product.title}
-                        </Link>
+                        <Link href={productPath}>{product.title}</Link>
                       </h6>
                       <div className="rbt-product-price-text rbt-text-color-primary">
                         <span>${product.price.toFixed(2)}</span>
                       </div>
                       <span className="rbt-product-id">
                         <span className="rbt-text-semi-bold">SKU:</span>#
-                        {product.id}
+                        {product.apiProductId ?? product.id}
                       </span>
                     </td>
                     <td className="rbt-product-stock-status">
-                      <div className="rbt-product-badge rbt-product-badge-bg-light-green border-rounded">
-                        IN STOCK
+                      <div
+                        className={`rbt-product-badge rbt-product-badge-bg-light-green border-rounded${
+                          inStock ? "" : " rbt-product-badge-bg-light-red"
+                        }`}
+                      >
+                        {inStock ? "IN STOCK" : "OUT OF STOCK"}
                       </div>
                     </td>
                     <td>
@@ -107,10 +146,8 @@ export default function Wishlist() {
                         <button
                           type="button"
                           className="rbt-btn rbt-btn-sm has-left-icon"
-                          onClick={() => {
-                            if (!inCart) addProductToCart(product);
-                          }}
-                          disabled={inCart}
+                          onClick={() => handleAddToCart(product)}
+                          disabled={inCart || !inStock}
                         >
                           <i className="fa-regular fa-cart-shopping mr--4" />
                           {inCart ? "In Cart" : "Add To Cart"}

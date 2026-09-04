@@ -49,6 +49,10 @@ import {
   updateUserProfileSchema,
   userAddressDtoSchema,
   userAddressListSchema,
+  wishlistDtoSchema,
+  wishlistItemInputSchema,
+  moveWishlistItemSchema,
+  moveWishlistToCartResponseSchema,
 } from "@platform/shared";
 import { z } from "@platform/shared/zod";
 
@@ -72,6 +76,10 @@ const itemIdParamSchema = z.object({
 
 const addressIdParamSchema = z.object({
   addressId: z.string().openapi({ description: "Saved address ID" }),
+});
+
+const productIdParamSchema = z.object({
+  productId: z.string().openapi({ description: "Product ID" }),
 });
 
 openApiRegistry.register("ProductDto", productDtoSchema);
@@ -102,6 +110,13 @@ openApiRegistry.register("CartDto", cartDtoSchema);
 openApiRegistry.register("CartItemInput", cartItemInputSchema);
 openApiRegistry.register("UpdateCartItemInput", updateCartItemSchema);
 openApiRegistry.register("MergeCartInput", mergeCartSchema);
+openApiRegistry.register("WishlistDto", wishlistDtoSchema);
+openApiRegistry.register("WishlistItemInput", wishlistItemInputSchema);
+openApiRegistry.register("MoveWishlistItemInput", moveWishlistItemSchema);
+openApiRegistry.register(
+  "MoveWishlistToCartResponse",
+  moveWishlistToCartResponseSchema
+);
 openApiRegistry.register("OrderDto", orderDtoSchema);
 openApiRegistry.register("PaginatedOrders", paginatedOrdersSchema);
 openApiRegistry.register("CreateOrderInput", createOrderSchema);
@@ -627,6 +642,94 @@ openApiRegistry.registerPath({
     200: {
       description: "Merged cart",
       content: { "application/json": { schema: cartDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "get",
+  path: "/api/wishlist",
+  tags: ["Wishlist"],
+  operationId: "getWishlist",
+  summary: "Get current wishlist",
+  security: [{ bearerAuth: [] }],
+  responses: {
+    200: {
+      description: "Wishlist",
+      content: { "application/json": { schema: wishlistDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/wishlist/items",
+  tags: ["Wishlist"],
+  operationId: "addWishlistItem",
+  summary: "Add product to wishlist",
+  security: [{ bearerAuth: [] }],
+  request: {
+    body: {
+      content: { "application/json": { schema: wishlistItemInputSchema } },
+    },
+  },
+  responses: {
+    201: {
+      description: "Updated wishlist",
+      content: { "application/json": { schema: wishlistDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "delete",
+  path: "/api/wishlist/items/{productId}",
+  tags: ["Wishlist"],
+  operationId: "removeWishlistItem",
+  summary: "Remove product from wishlist",
+  security: [{ bearerAuth: [] }],
+  request: { params: productIdParamSchema },
+  responses: {
+    200: {
+      description: "Updated wishlist",
+      content: { "application/json": { schema: wishlistDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "delete",
+  path: "/api/wishlist",
+  tags: ["Wishlist"],
+  operationId: "clearWishlist",
+  summary: "Clear wishlist",
+  security: [{ bearerAuth: [] }],
+  responses: {
+    200: {
+      description: "Empty wishlist",
+      content: { "application/json": { schema: wishlistDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/wishlist/move-to-cart",
+  tags: ["Wishlist"],
+  operationId: "moveWishlistItemToCart",
+  summary: "Move wishlist item to cart",
+  security: [{ bearerAuth: [] }],
+  request: {
+    body: {
+      content: { "application/json": { schema: moveWishlistItemSchema } },
+    },
+  },
+  responses: {
+    200: {
+      description: "Updated wishlist and cart",
+      content: {
+        "application/json": { schema: moveWishlistToCartResponseSchema },
+      },
     },
   },
 });

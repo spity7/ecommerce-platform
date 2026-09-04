@@ -1,6 +1,6 @@
 import Breadcrumb from "@/components/common/other-components/Breadcrumb";
 import Sidebar from "@/components/other-pages/shop-user/Sidebar";
-import Wishlist from "@/components/other-pages/shop-user/Wishlist";
+import WishlistPanel from "@/components/other-pages/shop-user/WishlistPanel";
 
 import { Metadata } from "next";
 
@@ -24,7 +24,7 @@ export default function page() {
               <Sidebar />
             </div>
             <div className="col-12 col-md-12 col-lg-8 col-xl-9 mt--24">
-              <Wishlist />
+              <WishlistPanel />
             </div>
           </div>
         </div>

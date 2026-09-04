@@ -138,3 +138,26 @@ export async function deleteUserAddress(addressId: string) {
 export async function setDefaultUserAddress(addressId: string) {
   return platformApi.setDefaultUserAddress(addressId);
 }
+
+export async function fetchWishlist() {
+  return platformApi.getWishlist();
+}
+
+export async function addWishlistItem(productId: string) {
+  return platformApi.addWishlistItem({ productId });
+}
+
+export async function removeWishlistItem(productId: string) {
+  return platformApi.removeWishlistItem(productId);
+}
+
+export async function clearWishlist() {
+  return platformApi.clearWishlist();
+}
+
+export async function moveWishlistItemToCart(
+  productId: string,
+  quantity = 1
+) {
+  return platformApi.moveWishlistItemToCart({ productId, quantity });
+}

@@ -764,6 +764,77 @@ export interface MergeCartInput {
   guestSessionId: string;
 }
 
+export type WishlistDtoItemsItem = {
+  productId: string;
+  productName: string;
+  productSlug: string;
+  productImage: string;
+  price: number;
+  inStock: boolean;
+  addedAt: string;
+};
+
+export interface WishlistDto {
+  id: string;
+  items: WishlistDtoItemsItem[];
+  itemCount: number;
+}
+
+export interface WishlistItemInput {
+  /** @minLength 1 */
+  productId: string;
+}
+
+export interface MoveWishlistItemInput {
+  /** @minLength 1 */
+  productId: string;
+  /**
+   * @minimum 1
+   * @maximum 99
+   */
+  quantity?: number;
+}
+
+export type MoveWishlistToCartResponseWishlistItemsItem = {
+  productId: string;
+  productName: string;
+  productSlug: string;
+  productImage: string;
+  price: number;
+  inStock: boolean;
+  addedAt: string;
+};
+
+export type MoveWishlistToCartResponseWishlist = {
+  id: string;
+  items: MoveWishlistToCartResponseWishlistItemsItem[];
+  itemCount: number;
+};
+
+export type MoveWishlistToCartResponseCartItemsItem = {
+  id: string;
+  productId: string;
+  quantity: number;
+  productName: string;
+  productSlug: string;
+  productImage: string;
+  price: number;
+  lineTotal: number;
+};
+
+export type MoveWishlistToCartResponseCart = {
+  id: string;
+  items: MoveWishlistToCartResponseCartItemsItem[];
+  itemCount: number;
+  subtotal: number;
+  guestSessionId?: string;
+};
+
+export interface MoveWishlistToCartResponse {
+  wishlist: MoveWishlistToCartResponseWishlist;
+  cart: MoveWishlistToCartResponseCart;
+}
+
 export type OrderDtoStatus =
   (typeof OrderDtoStatus)[keyof typeof OrderDtoStatus];
 
@@ -2645,6 +2716,125 @@ export type MergeCart200 = {
   itemCount: number;
   subtotal: number;
   guestSessionId?: string;
+};
+
+export type GetWishlist200ItemsItem = {
+  productId: string;
+  productName: string;
+  productSlug: string;
+  productImage: string;
+  price: number;
+  inStock: boolean;
+  addedAt: string;
+};
+
+export type GetWishlist200 = {
+  id: string;
+  items: GetWishlist200ItemsItem[];
+  itemCount: number;
+};
+
+export type ClearWishlist200ItemsItem = {
+  productId: string;
+  productName: string;
+  productSlug: string;
+  productImage: string;
+  price: number;
+  inStock: boolean;
+  addedAt: string;
+};
+
+export type ClearWishlist200 = {
+  id: string;
+  items: ClearWishlist200ItemsItem[];
+  itemCount: number;
+};
+
+export type AddWishlistItemBody = {
+  /** @minLength 1 */
+  productId: string;
+};
+
+export type AddWishlistItem201ItemsItem = {
+  productId: string;
+  productName: string;
+  productSlug: string;
+  productImage: string;
+  price: number;
+  inStock: boolean;
+  addedAt: string;
+};
+
+export type AddWishlistItem201 = {
+  id: string;
+  items: AddWishlistItem201ItemsItem[];
+  itemCount: number;
+};
+
+export type RemoveWishlistItem200ItemsItem = {
+  productId: string;
+  productName: string;
+  productSlug: string;
+  productImage: string;
+  price: number;
+  inStock: boolean;
+  addedAt: string;
+};
+
+export type RemoveWishlistItem200 = {
+  id: string;
+  items: RemoveWishlistItem200ItemsItem[];
+  itemCount: number;
+};
+
+export type MoveWishlistItemToCartBody = {
+  /** @minLength 1 */
+  productId: string;
+  /**
+   * @minimum 1
+   * @maximum 99
+   */
+  quantity?: number;
+};
+
+export type MoveWishlistItemToCart200WishlistItemsItem = {
+  productId: string;
+  productName: string;
+  productSlug: string;
+  productImage: string;
+  price: number;
+  inStock: boolean;
+  addedAt: string;
+};
+
+export type MoveWishlistItemToCart200Wishlist = {
+  id: string;
+  items: MoveWishlistItemToCart200WishlistItemsItem[];
+  itemCount: number;
+};
+
+export type MoveWishlistItemToCart200CartItemsItem = {
+  id: string;
+  productId: string;
+  quantity: number;
+  productName: string;
+  productSlug: string;
+  productImage: string;
+  price: number;
+  lineTotal: number;
+};
+
+export type MoveWishlistItemToCart200Cart = {
+  id: string;
+  items: MoveWishlistItemToCart200CartItemsItem[];
+  itemCount: number;
+  subtotal: number;
+  guestSessionId?: string;
+};
+
+export type MoveWishlistItemToCart200 = {
+  wishlist: MoveWishlistItemToCart200Wishlist;
+  cart: MoveWishlistItemToCart200Cart;
 };
 
 export type CreateOrderBodyShippingAddress = {

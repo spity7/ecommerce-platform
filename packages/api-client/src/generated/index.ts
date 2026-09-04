@@ -12,6 +12,7 @@ import { getOrders } from "./orders/orders";
 import { getProducts } from "./products/products";
 import { getUploads } from "./uploads/uploads";
 import { getUsers } from "./users/users";
+import { getWishlist } from "./wishlist/wishlist";
 
 export const getPlatformAPI = () => ({
   ...getAttributes(),
@@ -24,6 +25,7 @@ export const getPlatformAPI = () => ({
   ...getProducts(),
   ...getUploads(),
   ...getUsers(),
+  ...getWishlist(),
 });
 
 export const platformApi = getPlatformAPI();

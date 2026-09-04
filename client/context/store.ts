@@ -16,6 +16,11 @@ import {
   syncRemoveServerCartItem,
   syncUpdateServerCartItem,
 } from "@/lib/cart-sync";
+import {
+  isServerWishlistEnabled,
+  syncAddToServerWishlist,
+  syncRemoveFromServerWishlist,
+} from "@/lib/wishlist-sync";
 
 export type Product = ProductType;
 export type CartProduct = CartProductType;
@@ -179,6 +184,28 @@ export const useStore = create<StoreState>()(
       addToWishlist: (item) => {
         const { wishList } = get();
         const isAlreadyAdded = wishList.some((elm) => elm.id == item.id);
+
+        if (item.apiProductId && isServerWishlistEnabled()) {
+          if (isAlreadyAdded) {
+            void syncRemoveFromServerWishlist(item.apiProductId).then(
+              (serverWishlist) => {
+                if (serverWishlist) {
+                  set({ wishList: serverWishlist });
+                }
+              }
+            );
+          } else {
+            void syncAddToServerWishlist(item.apiProductId).then(
+              (serverWishlist) => {
+                if (serverWishlist) {
+                  set({ wishList: serverWishlist });
+                }
+              }
+            );
+          }
+          return;
+        }
+
         if (isAlreadyAdded) {
           set({ wishList: wishList.filter((elm) => elm.id != item.id) });
           return;
@@ -187,6 +214,20 @@ export const useStore = create<StoreState>()(
       },
 
       removeFromWishlist: (id) => {
+        const { wishList } = get();
+        const item = wishList.find((elm) => elm.id == id);
+
+        if (item?.apiProductId && isServerWishlistEnabled()) {
+          void syncRemoveFromServerWishlist(item.apiProductId).then(
+            (serverWishlist) => {
+              if (serverWishlist) {
+                set({ wishList: serverWishlist });
+              }
+            }
+          );
+          return;
+        }
+
         set((state) => ({
           wishList: state.wishList.filter((elm) => elm.id != id),
         }));

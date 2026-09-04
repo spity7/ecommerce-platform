@@ -103,9 +103,42 @@ export const paginatedOrdersSchema = z.object({
   limit: z.number().int(),
 });
 
+export const wishlistItemInputSchema = z.object({
+  productId: z.string().min(1),
+});
+
+export const moveWishlistItemSchema = z.object({
+  productId: z.string().min(1),
+  quantity: z.number().int().min(1).max(99).optional(),
+});
+
+export const wishlistItemDtoSchema = z.object({
+  productId: z.string(),
+  productName: z.string(),
+  productSlug: z.string(),
+  productImage: z.string(),
+  price: z.number(),
+  inStock: z.boolean(),
+  addedAt: z.string().datetime(),
+});
+
+export const wishlistDtoSchema = z.object({
+  id: z.string(),
+  items: z.array(wishlistItemDtoSchema),
+  itemCount: z.number().int(),
+});
+
+export const moveWishlistToCartResponseSchema = z.object({
+  wishlist: wishlistDtoSchema,
+  cart: cartDtoSchema,
+});
+
 export type CartItemInput = z.infer<typeof cartItemInputSchema>;
 export type CartDto = z.infer<typeof cartDtoSchema>;
 export type OrderDto = z.infer<typeof orderDtoSchema>;
+export type WishlistDto = z.infer<typeof wishlistDtoSchema>;
+export type WishlistItemInput = z.infer<typeof wishlistItemInputSchema>;
+export type MoveWishlistItemInput = z.infer<typeof moveWishlistItemSchema>;
 export type CreateOrderInput = z.infer<typeof createOrderSchema>;
 export type UpdateUserProfileInput = z.infer<typeof updateUserProfileSchema>;
 export type UserAddressDto = z.infer<typeof userAddressDtoSchema>;

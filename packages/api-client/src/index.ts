@@ -67,4 +67,9 @@ export {
   updateUserAddress,
   deleteUserAddress,
   setDefaultUserAddress,
+  fetchWishlist,
+  addWishlistItem,
+  removeWishlistItem,
+  clearWishlist,
+  moveWishlistItemToCart,
 } from "./commerce-api.js";

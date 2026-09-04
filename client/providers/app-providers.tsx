@@ -9,6 +9,8 @@ import { clearSessionAndRedirectToSignIn } from "@/lib/session";
 import { AuthSessionProvider } from "@/providers/auth-session-provider";
 import { CartSessionSync } from "@/providers/cart-session-sync";
 import { CartSyncErrorListener } from "@/providers/cart-sync-error-listener";
+import { WishlistSessionSync } from "@/providers/wishlist-session-sync";
+import { WishlistSyncErrorListener } from "@/providers/wishlist-sync-error-listener";
 
 type AppProvidersProps = {
   children: ReactNode;
@@ -34,6 +36,8 @@ export function AppProviders({ children }: AppProvidersProps) {
     <AuthSessionProvider>
       <CartSessionSync />
       <CartSyncErrorListener />
+      <WishlistSessionSync />
+      <WishlistSyncErrorListener />
       {children}
     </AuthSessionProvider>
   );
