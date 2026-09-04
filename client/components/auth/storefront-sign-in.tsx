@@ -7,6 +7,8 @@ import { useEffect, useState, type FormEvent } from "react";
 import { mergeGuestCart, setAccessToken, ApiError } from "@platform/api-client";
 import type { AuthResponse } from "@platform/shared";
 import { getOrCreateGuestCartId, clearGuestCartId } from "@/lib/guest-cart";
+import { completeStorefrontAuthRedirect } from "@/lib/complete-auth-redirect";
+import { buildSignUpPath } from "@/lib/auth-redirect";
 import { getSiteChromeBranding } from "@/lib/site-branding";
 import StorefrontGoogleSignIn from "./storefront-google-sign-in";
 
@@ -51,8 +53,7 @@ export function StorefrontSignInForm() {
         }
       }
 
-      window.dispatchEvent(new Event("auth:session-updated"));
-      router.push("/account-info");
+      await completeStorefrontAuthRedirect(router.push);
       router.refresh();
     } catch (err) {
       setError(
@@ -126,7 +127,7 @@ export function StorefrontSignInForm() {
       </button>
       <div className="rbt-login-system-switch rbt-link-hover">
         Don&apos;t have an account?{" "}
-        <Link className="rbt-switch-btn ml--4" href="/signup">
+        <Link className="rbt-switch-btn ml--4" href={buildSignUpPath()}>
           <span>Create an account</span>
         </Link>
       </div>

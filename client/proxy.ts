@@ -43,7 +43,12 @@ function redirectToSignIn(
   request: NextRequest,
   clearCookies = false
 ): NextResponse {
-  const response = NextResponse.redirect(new URL("/signin", request.url));
+  const returnTo = `${request.nextUrl.pathname}${request.nextUrl.search}`;
+  const signInUrl = new URL("/signin", request.url);
+  if (returnTo && returnTo !== "/signin" && returnTo !== "/signup") {
+    signInUrl.searchParams.set("returnTo", returnTo);
+  }
+  const response = NextResponse.redirect(signInUrl);
   if (clearCookies) {
     response.cookies.delete(ACCESS_TOKEN_COOKIE);
     response.cookies.delete(REFRESH_TOKEN_COOKIE);
@@ -87,6 +92,16 @@ export async function proxy(request: NextRequest) {
   }
 
   if (onAuthPage) {
+    const returnTo = request.nextUrl.searchParams.get("returnTo");
+    if (
+      returnTo &&
+      returnTo.startsWith("/") &&
+      !returnTo.startsWith("//") &&
+      returnTo !== "/signin" &&
+      returnTo !== "/signup"
+    ) {
+      return NextResponse.redirect(new URL(returnTo, request.url));
+    }
     return NextResponse.redirect(new URL("/account-info", request.url));
   }
 

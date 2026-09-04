@@ -90,7 +90,10 @@ export async function syncRemoveFromServerWishlist(
 export async function syncMoveWishlistItemToCart(
   apiProductId: string,
   quantity = 1
-): Promise<{ wishlist: Product[]; cart: ReturnType<typeof mapCartDtoToCartProducts> } | null> {
+): Promise<{
+  wishlist: Product[];
+  cart: ReturnType<typeof mapCartDtoToCartProducts>;
+} | null> {
   if (!isServerWishlistEnabled()) {
     return null;
   }
@@ -111,4 +114,27 @@ export function getWishlistProductPath(product: Product): string {
   return product.apiProductId
     ? `/product/${product.id}`
     : `/product-single-default/${product.id}`;
+}
+
+let mutationChain: Promise<unknown> = Promise.resolve();
+let pendingMutationCount = 0;
+
+export function getPendingWishlistMutationCount(): number {
+  return pendingMutationCount;
+}
+
+export function queueWishlistMutation(
+  operation: () => Promise<Product[] | null>
+): Promise<Product[] | null> {
+  pendingMutationCount++;
+
+  const result = mutationChain.then(operation);
+  mutationChain = result.then(
+    () => undefined,
+    () => undefined
+  );
+
+  return result.finally(() => {
+    pendingMutationCount--;
+  });
 }

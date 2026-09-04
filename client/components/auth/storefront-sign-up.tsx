@@ -8,6 +8,8 @@ import { mergeGuestCart, setAccessToken, ApiError } from "@platform/api-client";
 import type { AuthResponse } from "@platform/shared";
 import { getPhoneValidationError } from "@platform/shared";
 import { getOrCreateGuestCartId, clearGuestCartId } from "@/lib/guest-cart";
+import { completeStorefrontAuthRedirect } from "@/lib/complete-auth-redirect";
+import { buildSignInPath } from "@/lib/auth-redirect";
 import { getSiteChromeBranding } from "@/lib/site-branding";
 import { getStorefrontDefaultPhoneCountry } from "@/lib/phone";
 import StorefrontPhoneInput from "@/components/forms/phone-input";
@@ -71,8 +73,7 @@ export function StorefrontSignUpForm() {
         }
       }
 
-      window.dispatchEvent(new Event("auth:session-updated"));
-      router.push("/account-info?verify=1");
+      await completeStorefrontAuthRedirect(router.push, { signupVerify: true });
       router.refresh();
     } catch (err) {
       setError(
@@ -117,16 +118,16 @@ export function StorefrontSignUpForm() {
       </div>
       <div className="mt--16">
         <StorefrontPhoneInput
-        id="signup_phone"
-        label="Phone"
-        value={phone}
-        onChange={(nextValue) => {
-          setPhone(nextValue);
-          setPhoneError(getPhoneValidationError(nextValue));
-        }}
-        defaultCountry={defaultPhoneCountry}
-        error={phoneError}
-        hint="Optional. Used for delivery updates."
+          id="signup_phone"
+          label="Phone"
+          value={phone}
+          onChange={(nextValue) => {
+            setPhone(nextValue);
+            setPhoneError(getPhoneValidationError(nextValue));
+          }}
+          defaultCountry={defaultPhoneCountry}
+          error={phoneError}
+          hint="Optional. Used for delivery updates."
         />
       </div>
       <div className="rbt-input-field-grp mt--16">
@@ -170,7 +171,7 @@ export function StorefrontSignUpForm() {
       </button>
       <div className="rbt-login-system-switch rbt-link-hover">
         Already have an account?{" "}
-        <Link className="rbt-switch-btn ml--4" href="/signin">
+        <Link className="rbt-switch-btn ml--4" href={buildSignInPath()}>
           <span>Sign in</span>
         </Link>
       </div>

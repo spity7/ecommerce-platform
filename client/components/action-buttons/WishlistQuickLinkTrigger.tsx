@@ -1,8 +1,8 @@
 "use client";
 
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
-import { useContextElement } from "@/context/Context";
 import type { Product } from "@/types";
+import { useWishlistAction } from "@/hooks/useWishlistAction";
 
 interface WishlistQuickLinkTriggerProps {
   product: Product;
@@ -13,7 +13,7 @@ export default function WishlistQuickLinkTrigger({
   product,
   parentClass = "rbt-quick-link",
 }: WishlistQuickLinkTriggerProps) {
-  const { addToWishlist, isAddedtoWishlist } = useContextElement();
+  const { toggleWishlist, isAddedtoWishlist } = useWishlistAction();
 
   const isWishlisted = isAddedtoWishlist(product.id);
 
@@ -22,7 +22,7 @@ export default function WishlistQuickLinkTrigger({
       <button
         type="button"
         className={parentClass}
-        onClick={() => addToWishlist(product)}
+        onClick={() => toggleWishlist(product)}
       >
         <i className="fa-sharp fa-regular fa-heart" />
         Remove wishlist
@@ -34,7 +34,7 @@ export default function WishlistQuickLinkTrigger({
     <ModalTriggerButton
       openModalName="wishlistModal"
       className={parentClass}
-      onClick={() => addToWishlist(product)}
+      onClick={() => toggleWishlist(product)}
     >
       <i className="fa-sharp fa-regular fa-heart" />
       Add To Wishlist

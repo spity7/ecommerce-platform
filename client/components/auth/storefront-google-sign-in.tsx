@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ApiError, mergeGuestCart, setAccessToken } from "@platform/api-client";
 import type { AuthResponse } from "@platform/shared";
 import { clearGuestCartId, getOrCreateGuestCartId } from "@/lib/guest-cart";
+import { completeStorefrontAuthRedirect } from "@/lib/complete-auth-redirect";
 
 export default function StorefrontGoogleSignIn() {
   const router = useRouter();
@@ -46,8 +47,7 @@ export default function StorefrontGoogleSignIn() {
         }
       }
 
-      window.dispatchEvent(new Event("auth:session-updated"));
-      router.push("/account-info");
+      await completeStorefrontAuthRedirect(router.push);
       router.refresh();
     } catch (err) {
       setError(

@@ -6,6 +6,7 @@ import {
   isServerWishlistEnabled,
   loadServerWishlist,
 } from "@/lib/wishlist-sync";
+import { applyPendingWishlistAfterAuth } from "@/lib/pending-wishlist";
 import { useStore } from "@/context/store";
 import { useAuthSession } from "@/providers/auth-session-provider";
 
@@ -32,7 +33,10 @@ export function WishlistSessionSync() {
       return;
     }
 
-    void loadServerWishlist().then(applyServerWishlistToStore);
+    void (async () => {
+      await applyPendingWishlistAfterAuth();
+      void loadServerWishlist().then(applyServerWishlistToStore);
+    })();
   }, [user, loading]);
 
   useEffect(() => {
@@ -47,7 +51,10 @@ export function WishlistSessionSync() {
         return;
       }
 
-      void loadServerWishlist().then(applyServerWishlistToStore);
+      void (async () => {
+        await applyPendingWishlistAfterAuth();
+        void loadServerWishlist().then(applyServerWishlistToStore);
+      })();
     }
 
     window.addEventListener("auth:session-updated", onSessionUpdated);

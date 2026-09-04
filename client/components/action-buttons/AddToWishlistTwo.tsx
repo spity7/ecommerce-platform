@@ -1,8 +1,8 @@
 "use client";
 
-import { useContextElement, useUiElement } from "@/context/Context";
 import type { Product } from "@/types";
 import Tooltip from "@/components/common/ui/Tooltip";
+import { useWishlistAction } from "@/hooks/useWishlistAction";
 
 interface AddToWishlistProps {
   product: Product;
@@ -15,8 +15,7 @@ export default function AddToWishlistTwo({
   tooltipDirection = "left",
   parentClass = "rbt-wishlist-btn rbt-round-btn bg-light-one rbt-top-right--position tooltips",
 }: AddToWishlistProps) {
-  const { addToWishlist, isAddedtoWishlist } = useContextElement();
-  const { showToaster } = useUiElement();
+  const { toggleWishlist, isAddedtoWishlist } = useWishlistAction();
 
   const isWishlisted = isAddedtoWishlist(product.id);
 
@@ -27,12 +26,7 @@ export default function AddToWishlistTwo({
 
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    if (!product.id) return;
-    addToWishlist(product);
-    const message = isWishlisted
-      ? "Removed from Wishlist"
-      : "Added to Wishlist";
-    showToaster(message);
+    toggleWishlist(product);
   };
 
   return (

@@ -1,5 +1,5 @@
 import { clearLegacyAuthCookies } from "@/lib/auth";
-import { storefrontPath } from "@/lib/paths";
+import { redirectToSignIn } from "@/lib/auth-redirect";
 import { setAccessToken } from "@platform/api-client";
 
 /** Clears local session state and cookies without revoking server refresh tokens. */
@@ -26,6 +26,6 @@ export async function clearSession(): Promise<void> {
 export async function clearSessionAndRedirectToSignIn(): Promise<void> {
   await clearLocalSession();
   if (typeof window !== "undefined") {
-    window.location.href = storefrontPath("/signin");
+    redirectToSignIn();
   }
 }

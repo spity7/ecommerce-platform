@@ -9,6 +9,7 @@ import type {
   Product as ProductType,
   CartProduct as CartProductType,
 } from "@/types";
+import { getAccessToken } from "@platform/api-client";
 import {
   isServerCartEnabled,
   syncAddToServerCart,
@@ -18,9 +19,13 @@ import {
 } from "@/lib/cart-sync";
 import {
   isServerWishlistEnabled,
+  queueWishlistMutation,
+  getPendingWishlistMutationCount,
   syncAddToServerWishlist,
   syncRemoveFromServerWishlist,
 } from "@/lib/wishlist-sync";
+import { redirectToSignIn } from "@/lib/auth-redirect";
+import { stashPendingWishlistProduct } from "@/lib/pending-wishlist";
 
 export type Product = ProductType;
 export type CartProduct = CartProductType;
@@ -47,7 +52,7 @@ interface StoreState {
   removeFromCart: (id: ProductId) => void;
   updateQuantity: (id: ProductId, qty: number) => void;
   quantityInCart: (id: ProductId) => number;
-  addToWishlist: (item: Product) => void;
+  addToWishlist: (item: Product) => "ok" | "auth_required";
   removeFromWishlist: (id: ProductId) => void;
   addToCompareItem: (item: Product) => void;
   removeFromCompareItem: (id: ProductId) => void;
@@ -65,6 +70,62 @@ const EMPTY_QUICK_VIEW_PRODUCT: Product = {
   price: 0,
   imgSrc: "",
 };
+
+type StoreSetState = (
+  partial: Partial<StoreState> | ((state: StoreState) => Partial<StoreState>)
+) => void;
+
+function applyServerWishlistWhenIdle(
+  set: StoreSetState,
+  serverWishlist: Product[]
+): void {
+  if (getPendingWishlistMutationCount() === 0) {
+    set({ wishList: serverWishlist });
+  }
+}
+
+function rollbackWishlistAdd(set: StoreSetState, item: Product): void {
+  set((state) => ({
+    wishList: state.wishList.filter((elm) => elm.id != item.id),
+  }));
+}
+
+function rollbackWishlistRemove(set: StoreSetState, item: Product): void {
+  set((state) => ({
+    wishList: state.wishList.some((elm) => elm.id == item.id)
+      ? state.wishList
+      : [...state.wishList, item],
+  }));
+}
+
+function queueServerWishlistMutation(
+  set: StoreSetState,
+  item: Product,
+  removing: boolean
+): void {
+  const apiProductId = item.apiProductId;
+  if (!apiProductId) {
+    return;
+  }
+
+  void queueWishlistMutation(() =>
+    removing
+      ? syncRemoveFromServerWishlist(apiProductId)
+      : syncAddToServerWishlist(apiProductId)
+  ).then((serverWishlist) => {
+    if (serverWishlist) {
+      applyServerWishlistWhenIdle(set, serverWishlist);
+      return;
+    }
+
+    if (removing) {
+      rollbackWishlistRemove(set, item);
+      return;
+    }
+
+    rollbackWishlistAdd(set, item);
+  });
+}
 
 export const useStore = create<StoreState>()(
   persist(
@@ -186,31 +247,30 @@ export const useStore = create<StoreState>()(
         const isAlreadyAdded = wishList.some((elm) => elm.id == item.id);
 
         if (item.apiProductId && isServerWishlistEnabled()) {
-          if (isAlreadyAdded) {
-            void syncRemoveFromServerWishlist(item.apiProductId).then(
-              (serverWishlist) => {
-                if (serverWishlist) {
-                  set({ wishList: serverWishlist });
-                }
-              }
-            );
-          } else {
-            void syncAddToServerWishlist(item.apiProductId).then(
-              (serverWishlist) => {
-                if (serverWishlist) {
-                  set({ wishList: serverWishlist });
-                }
-              }
-            );
+          if (!getAccessToken()) {
+            stashPendingWishlistProduct(item);
+            redirectToSignIn();
+            return "auth_required";
           }
-          return;
+
+          if (isAlreadyAdded) {
+            set({
+              wishList: wishList.filter((elm) => elm.id != item.id),
+            });
+            queueServerWishlistMutation(set, item, true);
+          } else {
+            set({ wishList: [...wishList, item] });
+            queueServerWishlistMutation(set, item, false);
+          }
+          return "ok";
         }
 
         if (isAlreadyAdded) {
           set({ wishList: wishList.filter((elm) => elm.id != item.id) });
-          return;
+          return "ok";
         }
         set({ wishList: [...wishList, item] });
+        return "ok";
       },
 
       removeFromWishlist: (id) => {
@@ -218,13 +278,15 @@ export const useStore = create<StoreState>()(
         const item = wishList.find((elm) => elm.id == id);
 
         if (item?.apiProductId && isServerWishlistEnabled()) {
-          void syncRemoveFromServerWishlist(item.apiProductId).then(
-            (serverWishlist) => {
-              if (serverWishlist) {
-                set({ wishList: serverWishlist });
-              }
-            }
-          );
+          if (!getAccessToken()) {
+            redirectToSignIn();
+            return;
+          }
+
+          set((state) => ({
+            wishList: state.wishList.filter((elm) => elm.id != id),
+          }));
+          queueServerWishlistMutation(set, item, true);
           return;
         }
 

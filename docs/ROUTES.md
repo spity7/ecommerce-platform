@@ -49,8 +49,8 @@ Base URL: `http://localhost:5000` (override with `API_URL`).
 | POST   | `/api/cart/merge`                            | cart       | Merge guest cart on login (Bearer)                                                                                                                  |
 | GET    | `/api/wishlist`                              | wishlist   | Current wishlist (Bearer)                                                                                                                           |
 | POST   | `/api/wishlist/items`                        | wishlist   | Add product `{ productId }`                                                                                                                         |
-| DELETE | `/api/wishlist/items/:productId`             | wishlist   | Remove product                                                                                                                                    |
-| DELETE | `/api/wishlist`                              | wishlist   | Clear wishlist                                                                                                                                    |
+| DELETE | `/api/wishlist/items/:productId`             | wishlist   | Remove product                                                                                                                                      |
+| DELETE | `/api/wishlist`                              | wishlist   | Clear wishlist                                                                                                                                      |
 | POST   | `/api/wishlist/move-to-cart`                 | wishlist   | Move item to cart `{ productId, quantity? }`                                                                                                        |
 | POST   | `/api/orders`                                | orders     | Place order from cart (Bearer; verified email for customers)                                                                                        |
 | GET    | `/api/orders`                                | orders     | List orders (user; admin sees all)                                                                                                                  |
@@ -144,7 +144,7 @@ Dev URL: `http://localhost:3000`.
 
 **API integration today:** Home `Products1`, `/shop`, and `/product/[slug]` fetch published products from the API with static fallback. Demo routes under `(shop)/` and `(product-single)/` remain for theme previews.
 
-**Client state:** Zustand cart/wishlist/compare in `client/context/` (browser persisted). Server cart API available when `features.customerAuth` is enabled; guest carts use `X-Guest-Cart-Id` and merge on login. Server wishlist sync when `features.customerAuth` and `features.wishlist` are enabled (auth required; loads on login, `/my-wishlist` page).
+**Client state:** Zustand cart/wishlist/compare in `client/context/` (browser persisted). Server cart API available when `features.customerAuth` is enabled; guest carts use `X-Guest-Cart-Id` and merge on login. Server wishlist sync when `features.customerAuth` and `features.wishlist` are enabled (auth required; unauthenticated API-product wishlist clicks redirect to `/signin?returnTo=…` and apply after login).
 
 ### Customer auth (when `features.customerAuth`)
 
