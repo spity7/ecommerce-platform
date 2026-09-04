@@ -43,19 +43,37 @@ export async function getOrCreateUserCart(userId: string) {
   return cart;
 }
 
+async function assertPublishedProductStock(
+  productId: string,
+  quantity: number,
+  productName?: string
+) {
+  const product = await Product.findById(productId);
+  if (!product || product.status !== "published") {
+    throw new AppError(
+      404,
+      productName ? `${productName} is unavailable` : "Product not found"
+    );
+  }
+
+  if (product.stock < quantity) {
+    throw new AppError(
+      400,
+      productName
+        ? `Insufficient stock for ${productName}`
+        : "Insufficient stock"
+    );
+  }
+
+  return product;
+}
+
 export async function addProductToCart(
   cart: Awaited<ReturnType<typeof resolveCart>>,
   productId: string,
   quantity: number
 ) {
-  const product = await Product.findById(productId);
-  if (!product || product.status !== "published") {
-    throw new AppError(404, "Product not found");
-  }
-
-  if (product.stock < quantity) {
-    throw new AppError(400, "Insufficient stock");
-  }
+  const product = await assertPublishedProductStock(productId, quantity);
 
   const existing = cart.items.find(
     (item) => item.productId.toString() === productId
@@ -63,9 +81,7 @@ export async function addProductToCart(
 
   if (existing) {
     const nextQty = existing.quantity + quantity;
-    if (product.stock < nextQty) {
-      throw new AppError(400, "Insufficient stock");
-    }
+    await assertPublishedProductStock(productId, nextQty, product.name);
     existing.quantity = nextQty;
   } else {
     cart.items.push({
@@ -78,6 +94,27 @@ export async function addProductToCart(
     });
   }
 
+  await cart.save();
+  return toCartDto(cart);
+}
+
+export async function updateCartItemQuantity(
+  cart: Awaited<ReturnType<typeof resolveCart>>,
+  itemId: string,
+  quantity: number
+) {
+  const item = cart.items.find((entry) => entry._id.toString() === itemId);
+  if (!item) {
+    throw new AppError(404, "Cart item not found");
+  }
+
+  await assertPublishedProductStock(
+    item.productId.toString(),
+    quantity,
+    item.productName
+  );
+
+  item.quantity = quantity;
   await cart.save();
   return toCartDto(cart);
 }
@@ -95,11 +132,20 @@ export async function mergeGuestCartIntoUser(
 
   if (guestCart.items.length > 0) {
     for (const guestItem of guestCart.items) {
+      const productId = guestItem.productId.toString();
       const existing = userCart.items.find(
-        (item) => item.productId.toString() === guestItem.productId.toString()
+        (item) => item.productId.toString() === productId
       );
+      const nextQty = (existing?.quantity ?? 0) + guestItem.quantity;
+
+      await assertPublishedProductStock(
+        productId,
+        nextQty,
+        guestItem.productName
+      );
+
       if (existing) {
-        existing.quantity += guestItem.quantity;
+        existing.quantity = nextQty;
       } else {
         userCart.items.push(guestItem);
       }

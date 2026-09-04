@@ -13,6 +13,7 @@ import {
   mapOrderDtoToApiOrderRow,
   type ApiOrderRow,
 } from "@/lib/mappers/orders";
+import { pathBuilders } from "@/config/routes";
 
 const statusClass: Record<ApiOrderRow["status"], string> = {
   completed: "bg-success-50 text-success-700",
@@ -173,7 +174,7 @@ export function ApiOrdersPanel() {
     <EntityTable
       columns={columns}
       deleteMessage="Orders cannot be deleted from the admin UI yet."
-      editHref={routes.editOrder}
+      editHref={(order) => pathBuilders.orderDetail(order.apiId)}
       filterOptions={[
         { label: "All", match: () => true, value: "all" },
         {

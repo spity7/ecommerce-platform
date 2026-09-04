@@ -49,6 +49,7 @@ export const pathBuilders = {
   editBrand: (id: string) => `/brands/${id}/edit`,
   editCategory: (id: string) => `/categories/${id}/edit`,
   editProduct: (id: string) => `/products/${id}/edit`,
+  orderDetail: (id: string) => `/orders/${id}`,
 } as const;
 
 export type RouteKey = keyof typeof routes;

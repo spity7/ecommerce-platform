@@ -42,10 +42,17 @@ export default function AccountPasswordSection() {
   const settingInitialPassword = Boolean(user && !user.passwordSetByUser);
   const requiresGoogleConfirmation =
     settingInitialPassword && user?.oauthProvider === "google";
+  const passwordsReady =
+    newPassword.length > 0 &&
+    confirmPassword.length > 0 &&
+    strength.label === "Strong" &&
+    newPassword === confirmPassword;
+  const canSavePassword = settingInitialPassword
+    ? passwordsReady
+    : passwordsReady && currentPassword.length > 0;
 
   const passwordDirty =
-    editing &&
-    Boolean(currentPassword || newPassword || confirmPassword);
+    editing && Boolean(currentPassword || newPassword || confirmPassword);
 
   useEffect(() => {
     reportState({ busy: submitting, dirty: passwordDirty });
@@ -96,6 +103,11 @@ export default function AccountPasswordSection() {
       return;
     }
 
+    if (requiresGoogleConfirmation && !input.idToken) {
+      setError("Confirm with Google to save your password.");
+      return;
+    }
+
     setError(null);
     setPendingInput(input);
     setConfirmOpen(true);
@@ -103,6 +115,16 @@ export default function AccountPasswordSection() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (requiresGoogleConfirmation) {
+      if (passwordError) {
+        setError(passwordError);
+      } else {
+        setError("Confirm with Google to save your password.");
+      }
+      return;
+    }
+
     requestPasswordSave({
       currentPassword: settingInitialPassword ? undefined : currentPassword,
       newPassword,
@@ -233,20 +255,50 @@ export default function AccountPasswordSection() {
                 autoComplete="new-password"
               />
             </div>
+            {passwordError ? (
+              <p className="rbt-text-color-danger mt--12 mb--0 b3">
+                {passwordError}
+              </p>
+            ) : null}
             {requiresGoogleConfirmation ? (
-              <div className="mt--16">
-                <GoogleLogin
-                  onSuccess={handleGoogleSetPassword}
-                  onError={() => setError("Google confirmation failed.")}
-                  text="continue_with"
-                />
-              </div>
+              <>
+                <p className="b3 mt--16 mb--0">
+                  Confirm with Google to verify your identity, then we&apos;ll
+                  save your password.
+                </p>
+                <div className="d-flex flex-wrap gap-2 align-items-center mt--16">
+                  {canSavePassword && !submitting ? (
+                    <GoogleLogin
+                      onSuccess={handleGoogleSetPassword}
+                      onError={() => setError("Google confirmation failed.")}
+                      text="continue_with"
+                    />
+                  ) : (
+                    <button
+                      type="button"
+                      className="rbt-btn rbt-btn-sm"
+                      disabled
+                      title="Enter matching strong passwords first"
+                    >
+                      Confirm with Google & save
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    className="rbt-btn rbt-btn-sm rbt-btn-secondary"
+                    disabled={submitting}
+                    onClick={resetForm}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </>
             ) : (
               <div className="d-flex gap-2 mt--24">
                 <button
                   type="submit"
                   className="rbt-btn rbt-btn-sm"
-                  disabled={submitting || strength.label !== "Strong"}
+                  disabled={submitting || !canSavePassword}
                 >
                   {submitting ? "Saving…" : "Save password"}
                 </button>
@@ -262,16 +314,6 @@ export default function AccountPasswordSection() {
             )}
             {error ? (
               <p className="rbt-text-color-danger mt--12 mb--0 b3">{error}</p>
-            ) : null}
-            {requiresGoogleConfirmation ? (
-              <button
-                type="button"
-                className="rbt-btn rbt-btn-sm rbt-btn-secondary mt--16"
-                disabled={submitting}
-                onClick={resetForm}
-              >
-                Cancel
-              </button>
             ) : null}
           </form>
         )}
@@ -290,7 +332,9 @@ export default function AccountPasswordSection() {
         onConfirm={confirmPasswordChange}
         open={confirmOpen}
         title={
-          settingInitialPassword ? "Set your password?" : "Change your password?"
+          settingInitialPassword
+            ? "Set your password?"
+            : "Change your password?"
         }
         titleId="change-password-confirm-title"
       />

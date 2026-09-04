@@ -15,6 +15,7 @@ import {
   addProductToCart,
   mergeGuestCartIntoUser,
   resolveCart,
+  updateCartItemQuantity,
 } from "../services/cart.service.js";
 import { toCartDto } from "../services/commerce.serializers.js";
 
@@ -50,15 +51,9 @@ cartRouter.patch(
   asyncHandler(async (req: AuthenticatedRequest, res) => {
     const { quantity } = updateCartItemSchema.parse(req.body);
     const cart = await resolveCart(req);
-    const item = cart.items.find(
-      (entry) => entry._id.toString() === req.params.itemId
-    );
-    if (!item) {
-      throw new AppError(404, "Cart item not found");
-    }
-    item.quantity = quantity;
-    await cart.save();
-    res.json(toCartDto(cart));
+    const itemId = String(req.params.itemId);
+    const dto = await updateCartItemQuantity(cart, itemId, quantity);
+    res.json(dto);
   })
 );
 
@@ -67,8 +62,9 @@ cartRouter.delete(
   optionalAuth,
   asyncHandler(async (req: AuthenticatedRequest, res) => {
     const cart = await resolveCart(req);
+    const itemId = String(req.params.itemId);
     const index = cart.items.findIndex(
-      (entry) => entry._id.toString() === req.params.itemId
+      (entry) => entry._id.toString() === itemId
     );
     if (index === -1) {
       throw new AppError(404, "Cart item not found");

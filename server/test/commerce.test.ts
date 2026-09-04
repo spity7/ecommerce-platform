@@ -14,6 +14,7 @@ import {
   verifyCustomerEmail,
 } from "./helpers.js";
 import { Cart } from "../src/models/Cart.js";
+import { Product } from "../src/models/Product.js";
 
 describe("commerce API", () => {
   const app = createTestApp();
@@ -255,5 +256,75 @@ describe("commerce API", () => {
       .set(authHeader(customer.body.accessToken))
       .send({ status: "processing" })
       .expect(403);
+  });
+
+  it("rejects cart quantity above available stock", async () => {
+    const product = await seedPublishedProduct();
+    product.stock = 2;
+    await product.save();
+    const { body } = await registerCustomer(app);
+
+    const addResponse = await request(app)
+      .post("/api/cart/items")
+      .set(authHeader(body.accessToken))
+      .send({ productId: product._id.toString(), quantity: 1 })
+      .expect(201);
+
+    const itemId = addResponse.body.items[0].id;
+
+    await request(app)
+      .patch(`/api/cart/items/${itemId}`)
+      .set(authHeader(body.accessToken))
+      .send({ quantity: 5 })
+      .expect(400);
+  });
+
+  it("rejects order placement for unverified customers", async () => {
+    const product = await seedPublishedProduct();
+    const { body } = await registerCustomer(app);
+
+    await request(app)
+      .post("/api/cart/items")
+      .set(authHeader(body.accessToken))
+      .send({ productId: product._id.toString(), quantity: 1 })
+      .expect(201);
+
+    await request(app)
+      .post("/api/orders")
+      .set(authHeader(body.accessToken))
+      .send({})
+      .expect(403);
+  });
+
+  it("restores stock when an order is cancelled", async () => {
+    const product = await seedPublishedProduct();
+    product.stock = 5;
+    await product.save();
+
+    const customer = await registerCustomer(app);
+    await verifyCustomerEmail(app, customer.body.accessToken);
+
+    await request(app)
+      .post("/api/cart/items")
+      .set(authHeader(customer.body.accessToken))
+      .send({ productId: product._id.toString(), quantity: 2 })
+      .expect(201);
+
+    const orderResponse = await request(app)
+      .post("/api/orders")
+      .set(authHeader(customer.body.accessToken))
+      .send({})
+      .expect(201);
+
+    const admin = await registerAdmin(app);
+
+    await request(app)
+      .patch(`/api/orders/${orderResponse.body.id}`)
+      .set(authHeader(admin.body.accessToken))
+      .send({ status: "cancelled" })
+      .expect(200);
+
+    const updatedProduct = await Product.findById(product._id);
+    assert.equal(updatedProduct?.stock, 5);
   });
 });

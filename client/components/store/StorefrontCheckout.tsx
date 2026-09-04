@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import {
   ApiError,
   createOrderFromCart,
@@ -11,7 +11,13 @@ import {
 } from "@platform/api-client";
 import { getPhoneValidationError } from "@platform/shared";
 import { useContextElement } from "@/context/Context";
+import { validateCartForCheckout } from "@/lib/cart-checkout";
 import { getCheckoutPath, getCheckoutThankYouPath } from "@/lib/checkout";
+import {
+  fetchServerCartDto,
+  loadServerCart,
+  syncClearServerCart,
+} from "@/lib/cart-sync";
 import { formatCurrency } from "@/lib/price";
 import {
   getStorefrontDefaultPhoneCountry,
@@ -20,7 +26,6 @@ import {
 import { getStorefrontSiteConfig } from "@/lib/site";
 import StorefrontPhoneInput from "@/components/forms/phone-input";
 import { useAuthSession } from "@/providers/auth-session-provider";
-import { syncClearServerCart } from "@/lib/cart-sync";
 
 export default function StorefrontCheckout() {
   const router = useRouter();
@@ -36,6 +41,29 @@ export default function StorefrontCheckout() {
   const defaultPhoneCountry = getStorefrontDefaultPhoneCountry();
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [cartReady, setCartReady] = useState(false);
+  const orderInFlightRef = useRef(false);
+
+  useEffect(() => {
+    if (!user || !site.features.customerAuth) {
+      return;
+    }
+
+    let cancelled = false;
+
+    void loadServerCart().then((serverCart) => {
+      if (!cancelled && serverCart) {
+        setCartProducts(serverCart);
+      }
+      if (!cancelled) {
+        setCartReady(true);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user, site.features.customerAuth, setCartProducts]);
 
   useEffect(() => {
     if (!user) return;
@@ -83,7 +111,7 @@ export default function StorefrontCheckout() {
     );
   }
 
-  if (loading) {
+  if (loading || !cartReady) {
     return <p className="mb--0">Loading…</p>;
   }
 
@@ -113,6 +141,11 @@ export default function StorefrontCheckout() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (orderInFlightRef.current) {
+      return;
+    }
+
     setError(null);
     setPhoneError(null);
 
@@ -122,9 +155,25 @@ export default function StorefrontCheckout() {
       return;
     }
 
+    orderInFlightRef.current = true;
     setSubmitting(true);
 
     try {
+      const serverCartDto = await fetchServerCartDto();
+      if (!serverCartDto) {
+        setError("Could not verify your cart. Please try again.");
+        return;
+      }
+
+      const validation = validateCartForCheckout(cartProducts, serverCartDto);
+      if (!validation.ok) {
+        if (validation.serverCart) {
+          setCartProducts(validation.serverCart);
+        }
+        setError(validation.message);
+        return;
+      }
+
       const order = await createOrderFromCart({
         name,
         line1,
@@ -145,6 +194,7 @@ export default function StorefrontCheckout() {
           : "Could not place your order. Please try again."
       );
     } finally {
+      orderInFlightRef.current = false;
       setSubmitting(false);
     }
   }

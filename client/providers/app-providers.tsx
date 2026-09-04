@@ -8,6 +8,7 @@ import { tryRefreshSession } from "@/lib/refresh-session";
 import { clearSessionAndRedirectToSignIn } from "@/lib/session";
 import { AuthSessionProvider } from "@/providers/auth-session-provider";
 import { CartSessionSync } from "@/providers/cart-session-sync";
+import { CartSyncErrorListener } from "@/providers/cart-sync-error-listener";
 
 type AppProvidersProps = {
   children: ReactNode;
@@ -32,6 +33,7 @@ export function AppProviders({ children }: AppProvidersProps) {
   const session = (
     <AuthSessionProvider>
       <CartSessionSync />
+      <CartSyncErrorListener />
       {children}
     </AuthSessionProvider>
   );

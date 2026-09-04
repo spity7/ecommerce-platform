@@ -11,15 +11,16 @@ import {
   type AuthenticatedRequest,
 } from "../middleware/auth.js";
 import { Order } from "../models/Order.js";
-import { Product } from "../models/Product.js";
-import { User } from "../models/User.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { getOrCreateUserCart } from "../services/cart.service.js";
 import { toOrderDto } from "../services/commerce.serializers.js";
 import {
   getOrderCustomer,
   getOrderUserId,
 } from "../services/order-customer.js";
+import {
+  placeOrderFromCart,
+  restoreOrderStock,
+} from "../services/order.service.js";
 
 export const ordersRouter = Router();
 
@@ -28,63 +29,13 @@ ordersRouter.post(
   requireAuth,
   asyncHandler(async (req: AuthenticatedRequest, res) => {
     const payload = createOrderSchema.parse(req.body);
-    const cart = await getOrCreateUserCart(req.auth!.userId);
-
-    if (cart.items.length === 0) {
-      throw new AppError(400, "Cart is empty");
-    }
-
-    const user = await User.findById(req.auth!.userId);
-    if (!user || user.deletedAt) {
-      throw new AppError(404, "User not found");
-    }
-
-    if (req.auth!.role !== "admin" && !user.emailVerified) {
-      throw new AppError(403, "Verify your email before placing an order");
-    }
-
-    for (const item of cart.items) {
-      const product = await Product.findById(item.productId);
-      if (!product || product.status !== "published") {
-        throw new AppError(400, `Product ${item.productName} is unavailable`);
-      }
-      if (product.stock < item.quantity) {
-        throw new AppError(400, `Insufficient stock for ${item.productName}`);
-      }
-    }
-
-    const items = cart.items.map((item) => ({
-      productId: item.productId,
-      quantity: item.quantity,
-      productName: item.productName,
-      productSlug: item.productSlug,
-      productImage: item.productImage,
-      price: item.price,
-    }));
-
-    const subtotal = items.reduce(
-      (sum, item) => sum + item.quantity * item.price,
-      0
+    const { order, user } = await placeOrderFromCart(
+      {
+        userId: req.auth!.userId,
+        role: req.auth!.role,
+      },
+      payload
     );
-
-    const order = await Order.create({
-      userId: req.auth!.userId,
-      status: "pending",
-      items,
-      subtotal,
-      total: subtotal,
-      shippingAddress: payload.shippingAddress,
-    });
-
-    for (const item of cart.items) {
-      await Product.updateOne(
-        { _id: item.productId },
-        { $inc: { stock: -item.quantity } }
-      );
-    }
-
-    cart.set("items", []);
-    await cart.save();
 
     res
       .status(201)
@@ -155,7 +106,17 @@ ordersRouter.patch(
       throw new AppError(404, "Order not found");
     }
 
+    const previousStatus = order.status;
     order.status = payload.status;
+
+    if (
+      payload.status === "cancelled" &&
+      previousStatus !== "cancelled" &&
+      previousStatus !== "delivered"
+    ) {
+      await restoreOrderStock(order.items);
+    }
+
     await order.save();
     await order.populate("userId", "name email");
     res.json(toOrderDto(order, getOrderCustomer(order)));

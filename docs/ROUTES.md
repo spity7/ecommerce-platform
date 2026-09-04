@@ -1,6 +1,6 @@
 # Routes reference
 
-HTTP API routes, admin pages, and storefront routing. **Last reviewed:** 2026-09-03.
+HTTP API routes, admin pages, and storefront routing. **Last reviewed:** 2026-09-04.
 
 ## Server API (`@platform/server`)
 
@@ -109,6 +109,7 @@ Proxies to `@platform/server` and sets httpOnly cookies on the admin origin (`:3
 | `/attributes/new`, `/attributes/[id]/edit`                                       | **Yes**        | Create/update via API             |
 | `/products/demo/edit`, `/categories/demo/edit`, …                                | No             | Legacy demo routes (optional)     |
 | `/orders`                                                                        | **Yes**        | List + status updates from API    |
+| `/orders/[id]`                                                                   | **Yes**        | Order detail + status update      |
 | `/customers`, `/users/new`                                                       | No             | Demo data                         |
 | `/coupons`, `/coupons/new`, `/coupons/demo/edit`                                 | No             | Demo data                         |
 | `/roles`, `/roles/new`                                                           | No             | Demo data — not wired to API RBAC |
@@ -128,12 +129,12 @@ Dev URL: `http://localhost:3000`.
 
 ### Production entry
 
-| Path              | Notes                                                                                       |
-| ----------------- | ------------------------------------------------------------------------------------------- |
-| `/`               | Renders site `homeLayout` via `HomeLayoutRenderer` (Beauty Station → `cosmetic-beauty-two`) |
-| `/shop`           | Published products from API with static fallback (`ShopDefault`)                            |
-| `/product/[slug]` | Product detail from API by slug with static fallback                                        |
-| `/checkout`       | Production checkout (shipping form + place order) when `features.customerAuth`              |
+| Path                          | Notes                                                                                                     |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `/`                           | Renders site `homeLayout` via `HomeLayoutRenderer` (Beauty Station → `cosmetic-beauty-two`)               |
+| `/shop`                       | Published products from API with static fallback (`ShopDefault`)                                          |
+| `/product/[slug]`             | Product detail from API by slug with static fallback                                                      |
+| `/checkout`                   | Production checkout (shipping form + place order) when `features.customerAuth`                            |
 | `/checkout-thankyou?orderId=` | Order confirmation from `GET /api/orders/:id` when `features.customerAuth` and `orderId` query is present |
 
 **API integration today:** Home `Products1`, `/shop`, and `/product/[slug]` fetch published products from the API with static fallback. Demo routes under `(shop)/` and `(product-single)/` remain for theme previews.

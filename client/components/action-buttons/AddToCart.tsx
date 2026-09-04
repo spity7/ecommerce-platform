@@ -13,17 +13,23 @@ export default function AddToCart({
   parentClass = "rbt-btn rbt-btn-sm has-left-icon rbt-cart-sidenav-activation",
   product,
 }: AddToCartProps) {
-  const { addProductToCart, isAddedToCartProducts } = useContextElement();
+  const { addProductToCart, isAddedToCartProducts, quantityInCart } =
+    useContextElement();
 
   const isAdded = isAddedToCartProducts(product.id);
+  const canIncrement = Boolean(product.apiProductId);
 
-  if (isAdded) {
+  if (isAdded && !canIncrement) {
     return (
       <button type="button" className={parentClass}>
         <i className="fa-regular fa-cart-shopping mr--4" /> Already Added
       </button>
     );
   }
+
+  const label = isAdded
+    ? `Add another (${quantityInCart(product.id)} in cart)`
+    : "Add To Cart";
 
   return (
     <ModalTriggerButton
@@ -33,7 +39,7 @@ export default function AddToCart({
         addProductToCart(product);
       }}
     >
-      <i className="fa-regular fa-cart-shopping mr--4" /> Add To Cart
+      <i className="fa-regular fa-cart-shopping mr--4" /> {label}
     </ModalTriggerButton>
   );
 }

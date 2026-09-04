@@ -1,6 +1,7 @@
 import type { CartDto } from "@platform/shared";
 import {
   addCartItem,
+  ApiError,
   clearCart,
   fetchCart,
   removeCartItem,
@@ -8,6 +9,7 @@ import {
 } from "@platform/api-client";
 import type { CartProduct } from "@/types/product";
 import { getStorefrontSiteConfig } from "@/lib/site";
+import { notifyCartSyncError } from "@/lib/cart-sync-notify";
 
 const FALLBACK_IMAGE =
   "/assets/images/product-img/beauty-product/beauty-product-st-05.webp";
@@ -28,6 +30,18 @@ export function mapCartDtoToCartProducts(cart: CartDto): CartProduct[] {
   }));
 }
 
+function getCartSyncErrorMessage(error: unknown): string {
+  if (error instanceof ApiError) {
+    return error.message;
+  }
+
+  return "Could not update your cart. Please try again.";
+}
+
+function reportCartSyncError(error: unknown): void {
+  notifyCartSyncError(getCartSyncErrorMessage(error));
+}
+
 export async function loadServerCart(): Promise<CartProduct[] | null> {
   if (!isServerCartEnabled()) {
     return null;
@@ -36,6 +50,18 @@ export async function loadServerCart(): Promise<CartProduct[] | null> {
   try {
     const cart = await fetchCart();
     return mapCartDtoToCartProducts(cart);
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchServerCartDto(): Promise<CartDto | null> {
+  if (!isServerCartEnabled()) {
+    return null;
+  }
+
+  try {
+    return await fetchCart();
   } catch {
     return null;
   }
@@ -52,7 +78,8 @@ export async function syncAddToServerCart(
   try {
     const cart = await addCartItem(apiProductId, quantity);
     return mapCartDtoToCartProducts(cart);
-  } catch {
+  } catch (error) {
+    reportCartSyncError(error);
     return null;
   }
 }
@@ -68,7 +95,8 @@ export async function syncUpdateServerCartItem(
   try {
     const cart = await updateCartItem(serverCartItemId, quantity);
     return mapCartDtoToCartProducts(cart);
-  } catch {
+  } catch (error) {
+    reportCartSyncError(error);
     return null;
   }
 }
@@ -83,7 +111,8 @@ export async function syncRemoveServerCartItem(
   try {
     const cart = await removeCartItem(serverCartItemId);
     return mapCartDtoToCartProducts(cart);
-  } catch {
+  } catch (error) {
+    reportCartSyncError(error);
     return null;
   }
 }
@@ -96,7 +125,8 @@ export async function syncClearServerCart(): Promise<CartProduct[] | null> {
   try {
     const cart = await clearCart();
     return mapCartDtoToCartProducts(cart);
-  } catch {
+  } catch (error) {
+    reportCartSyncError(error);
     return null;
   }
 }
