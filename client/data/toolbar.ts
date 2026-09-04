@@ -13,7 +13,7 @@ export const toolbarItems = [
     id: "wishlist",
     label: "Wishlist",
     icon: "fa-regular fa-heart",
-    modalTarget: ModalName.wishlistModal,
+    href: "/my-wishlist",
     hasCount: true,
   },
   {

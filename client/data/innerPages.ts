@@ -208,7 +208,7 @@ export const INNER_PAGES: InnerPageItem[] = [
   },
   {
     type: "others",
-    href: "/wishlist",
+    href: "/my-wishlist",
     title: "Wishlist",
     image: {
       src: "/assets/images/splash/inner-pages/other-pages-07.webp",

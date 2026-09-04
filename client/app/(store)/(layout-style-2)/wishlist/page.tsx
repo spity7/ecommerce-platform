@@ -1,18 +1,6 @@
-import Wishlist from "@/components/store/Wishlist";
-import Breadcrumb from "@/components/common/other-components/Breadcrumb";
+import { redirect } from "next/navigation";
+import { WISHLIST_PAGE_PATH } from "@/lib/wishlist-paths";
 
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Wishlist | Beauty Station | Cosmetics & Skincare",
-  description:
-    "Discover premium cosmetics and skincare products at Beauty Station.",
-};
-export default function page() {
-  return (
-    <>
-      <Breadcrumb title="Wishlist" subtitle="Products" />
-      <Wishlist />
-    </>
-  );
+export default function WishlistRedirectPage() {
+  redirect(WISHLIST_PAGE_PATH);
 }

@@ -115,7 +115,7 @@ export default function Header17({ sticky = false }) {
                     <Tooltip content="Wishlist" placement="bottom">
                       <Link
                         className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg"
-                        href={`/wishlist`}
+                        href="/my-wishlist"
                       >
                         <i className="fa-regular fa-heart" />
                         <div className="access-box-count">

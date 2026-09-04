@@ -578,7 +578,7 @@ export const featureMenuColumns: import("@/types").MenuSection[] = [
   {
     title: "Extra Features",
     items: [
-      { href: "/wishlist", label: "Wishlist" },
+      { href: "/my-wishlist", label: "Wishlist" },
       { href: "/checkout-delivery-step-one", label: "Checkout Page" },
       { href: "/checkout-delivery-step-two", label: "Checkout Delivery Info" },
       { href: "/checkout-payment", label: "Checkout Payment" },
@@ -703,7 +703,7 @@ export const innerPageMenuColumns: import("@/types").MenuSection[] = [
         badge: "New",
         badgeColor: "yellow",
       },
-      { href: "/wishlist", label: "Wishlist Page" },
+      { href: "/my-wishlist", label: "Wishlist Page" },
       { href: "/checkout-delivery-step-one", label: "Checkout Page" },
       { href: "/checkout-delivery-step-two", label: "Checkout Delivery Info" },
       { href: "/checkout-payment", label: "Checkout Payment" },

@@ -65,6 +65,11 @@ export default function Toolbar() {
                       href={item.href}
                     >
                       <i className={item.icon} />
+                      {item.id === "wishlist" && (
+                        <div className="access-box-count">
+                          <WishlistLength />
+                        </div>
+                      )}
                       <span className="rbt-toolbar-label"> {item.label}</span>
                     </Link>
                   ) : (

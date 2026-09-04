@@ -140,7 +140,7 @@ export default function Header8({ sticky = false }) {
                   <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-2 rbt-wishlist d-none d-lg-flex">
                     <Link
                       className="rbt-round-btn has-rbt-md-fsize"
-                      href={`/wishlist`}
+                      href="/my-wishlist"
                     >
                       <i className="fa-regular fa-heart" />
                       <div className="access-box-count">
