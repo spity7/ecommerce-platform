@@ -12,6 +12,7 @@ import {
 } from "react";
 import { setAccessToken, getAccessToken } from "@platform/api-client";
 import { isAuthPublicPath } from "@/lib/auth-public-paths";
+import { setAuthSessionSnapshot } from "@/lib/auth-session-state";
 import { tryRefreshSession } from "@/lib/refresh-session";
 
 type AuthSessionContextValue = {
@@ -81,14 +82,18 @@ export function AuthSessionProvider({ children }: AuthSessionProviderProps) {
 
     setUser(sessionUser);
     setLoading(false);
+    setAuthSessionSnapshot({ user: sessionUser, loading: false });
   }, []);
 
   useEffect(() => {
     if (isAuthPublicPath(pathname)) {
       setUser(null);
       setLoading(false);
+      setAuthSessionSnapshot({ user: null, loading: false });
       return;
     }
+
+    setAuthSessionSnapshot({ user: null, loading: true });
 
     void refreshUser();
 

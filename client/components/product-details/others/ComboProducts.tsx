@@ -2,6 +2,7 @@
 import { Product } from "@/types";
 import Image from "next/image";
 import { useContextElement } from "@/context/Context";
+import { useWishlistAction } from "@/hooks/useWishlistAction";
 import { comboProducts } from "@/data/products/others";
 import { useState } from "react";
 import DropdownSelect from "@/components/common/select/DropdownSelect";
@@ -20,7 +21,7 @@ export default function ComboProducts({ products = comboProducts }) {
   ];
   const totalPrice = selected.reduce((acc, item) => acc + item.price, 0);
   const { addProductToCart, isAddedToCartProducts } = useContextElement();
-  const { addToWishlist, isAddedtoWishlist } = useContextElement();
+  const { toggleWishlist, isAddedtoWishlist } = useWishlistAction();
 
   return (
     <div className="rbt-combo-prd-content-section">
@@ -79,7 +80,7 @@ export default function ComboProducts({ products = comboProducts }) {
                 className="rbt-btn rbt-btn-md rbt-btn-border"
                 onClick={() =>
                   selected.forEach((product) => {
-                    addToWishlist(product);
+                    toggleWishlist(product);
                   })
                 }
               >

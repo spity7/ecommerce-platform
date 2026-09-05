@@ -7,7 +7,7 @@ import {
   isServerWishlistEnabled,
   mapWishlistDtoToProducts,
 } from "@/lib/wishlist-sync";
-import { useStore } from "@/context/store";
+import { applyServerWishlistToStoreWhenIdle } from "@/context/store";
 import Wishlist from "./Wishlist";
 
 export default function WishlistPanel() {
@@ -29,9 +29,9 @@ export default function WishlistPanel() {
           return;
         }
 
-        useStore.setState({
-          wishList: mapWishlistDtoToProducts(wishlist),
-        });
+        applyServerWishlistToStoreWhenIdle(
+          mapWishlistDtoToProducts(wishlist)
+        );
       })
       .catch(() => {
         if (!cancelled) {

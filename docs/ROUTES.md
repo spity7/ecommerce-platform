@@ -146,7 +146,7 @@ Dev URL: `http://localhost:3000`.
 
 **Wishlist:** Canonical full page is `/my-wishlist` (account layout, API sync). Header heart icons open the wishlist modal (quick preview); modal links to the full page. Legacy `/wishlist` redirects to `/my-wishlist`. Wishlist and cart are independent — adding to cart does not remove favorites.
 
-**Client state:** Zustand cart/wishlist/compare in `client/context/` (browser persisted). Server cart API available when `features.customerAuth` is enabled; guest carts use `X-Guest-Cart-Id` and merge on login. Server wishlist sync when `features.customerAuth` and `features.wishlist` are enabled (auth required; unauthenticated API-product wishlist clicks redirect to `/signin?returnTo=…` and apply after login).
+**Client state:** Zustand cart/wishlist/compare in `client/context/`. Cart and compare persist in localStorage; when server wishlist is enabled (`features.customerAuth` + `features.wishlist`), wishlist is **not** persisted locally — server is source of truth after login. Server cart API when `features.customerAuth` is enabled; guest carts use `X-Guest-Cart-Id` and merge on login. Guest API-product wishlist clicks stash pending items (queue), redirect to `/signin?returnTo=…`, and apply all after login. Optimistic heart toggles use a mutation queue; `/my-wishlist` fetch respects pending mutations.
 
 ### Customer auth (when `features.customerAuth`)
 

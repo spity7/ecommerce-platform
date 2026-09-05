@@ -12,6 +12,7 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "test": "node --import tsx --test test/*.test.ts",
     "rebrand": "tsx ../scripts/rebrand-client.ts"
   },
   "dependencies": {

@@ -11,6 +11,12 @@ import type {
 } from "@/types";
 import { getAccessToken } from "@platform/api-client";
 import {
+  getAuthSessionSnapshot,
+  isWishlistAuthenticated,
+  waitForAuthSessionReady,
+} from "@/lib/auth-session-state";
+import { tryRefreshSession } from "@/lib/refresh-session";
+import {
   isServerCartEnabled,
   syncAddToServerCart,
   syncClearServerCart,
@@ -24,7 +30,7 @@ import {
   syncAddToServerWishlist,
   syncRemoveFromServerWishlist,
 } from "@/lib/wishlist-sync";
-import { redirectToSignIn } from "@/lib/auth-redirect";
+import { getCurrentReturnPath, redirectToSignIn } from "@/lib/auth-redirect";
 import { stashPendingWishlistProduct } from "@/lib/pending-wishlist";
 
 export type Product = ProductType;
@@ -84,6 +90,28 @@ function applyServerWishlistWhenIdle(
   }
 }
 
+export function applyServerWishlistToStoreWhenIdle(
+  serverWishlist: Product[]
+): void {
+  if (getPendingWishlistMutationCount() === 0) {
+    useStore.setState({ wishList: serverWishlist });
+  }
+}
+
+async function ensureWishlistApiAuth(): Promise<boolean> {
+  await waitForAuthSessionReady();
+
+  if (!isWishlistAuthenticated()) {
+    return false;
+  }
+
+  if (!getAccessToken()) {
+    await tryRefreshSession();
+  }
+
+  return Boolean(getAccessToken());
+}
+
 function rollbackWishlistAdd(set: StoreSetState, item: Product): void {
   set((state) => ({
     wishList: state.wishList.filter((elm) => elm.id != item.id),
@@ -108,11 +136,16 @@ function queueServerWishlistMutation(
     return;
   }
 
-  void queueWishlistMutation(() =>
-    removing
+  void queueWishlistMutation(async () => {
+    const authed = await ensureWishlistApiAuth();
+    if (!authed) {
+      return null;
+    }
+
+    return removing
       ? syncRemoveFromServerWishlist(apiProductId)
-      : syncAddToServerWishlist(apiProductId)
-  ).then((serverWishlist) => {
+      : syncAddToServerWishlist(apiProductId);
+  }).then((serverWishlist) => {
     if (serverWishlist) {
       applyServerWishlistWhenIdle(set, serverWishlist);
       return;
@@ -247,7 +280,9 @@ export const useStore = create<StoreState>()(
         const isAlreadyAdded = wishList.some((elm) => elm.id == item.id);
 
         if (item.apiProductId && isServerWishlistEnabled()) {
-          if (!getAccessToken()) {
+          const { loading } = getAuthSessionSnapshot();
+
+          if (!loading && !isWishlistAuthenticated()) {
             stashPendingWishlistProduct(item);
             redirectToSignIn();
             return "auth_required";
@@ -278,8 +313,10 @@ export const useStore = create<StoreState>()(
         const item = wishList.find((elm) => elm.id == id);
 
         if (item?.apiProductId && isServerWishlistEnabled()) {
-          if (!getAccessToken()) {
-            redirectToSignIn();
+          const { loading } = getAuthSessionSnapshot();
+
+          if (!loading && !isWishlistAuthenticated()) {
+            redirectToSignIn(getCurrentReturnPath());
             return;
           }
 
@@ -315,10 +352,9 @@ export const useStore = create<StoreState>()(
       name: "beauty-station-store",
       partialize: (state) => ({
         cartProducts: state.cartProducts,
-        wishList: state.wishList,
         compareItem: state.compareItem,
-        // Kept for persist typing / older saved blobs; always reconciled in `getItem`.
         totalPrice: state.totalPrice,
+        wishList: isServerWishlistEnabled() ? [] : state.wishList,
       }),
       storage: {
         getItem: (
@@ -349,9 +385,13 @@ export const useStore = create<StoreState>()(
                 ? (parsed.state.cartProducts as CartProduct[])
                 : [];
               parsed.state.cartProducts = cart;
-              parsed.state.wishList = normalizeStoredProductList(
-                parsed.state.wishList
-              );
+              if (isServerWishlistEnabled()) {
+                parsed.state.wishList = [];
+              } else {
+                parsed.state.wishList = normalizeStoredProductList(
+                  parsed.state.wishList
+                );
+              }
               parsed.state.compareItem = normalizeStoredProductList(
                 parsed.state.compareItem
               );
@@ -373,9 +413,21 @@ export const useStore = create<StoreState>()(
             totalPrice: number;
           }>
         ) => {
-          if (typeof window !== "undefined") {
-            window.localStorage.setItem(name, JSON.stringify(value));
+          if (typeof window === "undefined") {
+            return;
           }
+
+          const nextValue = isServerWishlistEnabled()
+            ? {
+                ...value,
+                state: {
+                  ...value.state,
+                  wishList: [],
+                },
+              }
+            : value;
+
+          window.localStorage.setItem(name, JSON.stringify(nextValue));
         },
         removeItem: (name) => {
           if (typeof window !== "undefined") {
