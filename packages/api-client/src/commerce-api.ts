@@ -155,9 +155,6 @@ export async function clearWishlist() {
   return platformApi.clearWishlist();
 }
 
-export async function moveWishlistItemToCart(
-  productId: string,
-  quantity = 1
-) {
+export async function moveWishlistItemToCart(productId: string, quantity = 1) {
   return platformApi.moveWishlistItemToCart({ productId, quantity });
 }

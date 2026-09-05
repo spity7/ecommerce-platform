@@ -9,6 +9,7 @@ import type {
   CreateProduct201,
   CreateProductBody,
   GetProduct200,
+  GetProductBySlug200,
   ListProduct200,
   ListProductParams,
   UpdateProduct200,
@@ -68,12 +69,22 @@ export const getProducts = () => {
       method: "DELETE",
     });
   };
+  /**
+   * @summary Get product by URL slug
+   */
+  const getProductBySlug = (slug: string) => {
+    return customInstance<GetProductBySlug200>({
+      url: `/api/products/slug/${slug}`,
+      method: "GET",
+    });
+  };
   return {
     listProduct,
     createProduct,
     getProduct,
     updateProduct,
     deleteProduct,
+    getProductBySlug,
   };
 };
 export type ListProductResult = NonNullable<
@@ -90,4 +101,7 @@ export type UpdateProductResult = NonNullable<
 >;
 export type DeleteProductResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getProducts>["deleteProduct"]>>
+>;
+export type GetProductBySlugResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getProducts>["getProductBySlug"]>>
 >;

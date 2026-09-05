@@ -70,6 +70,10 @@ const idParamSchema = z.object({
   id: z.string().openapi({ description: "Resource ID" }),
 });
 
+const productSlugParamSchema = z.object({
+  slug: z.string().openapi({ description: "Product URL slug" }),
+});
+
 const itemIdParamSchema = z.object({
   itemId: z.string().openapi({ description: "Cart item ID" }),
 });
@@ -294,6 +298,25 @@ registerCrudPaths({
   createSchema: createProductSchema,
   updateSchema: updateProductSchema,
   resourceName: "Product",
+});
+
+openApiRegistry.registerPath({
+  method: "get",
+  path: "/api/products/slug/{slug}",
+  tags: ["Products"],
+  operationId: "getProductBySlug",
+  summary: "Get product by URL slug",
+  request: { params: productSlugParamSchema },
+  responses: {
+    200: {
+      description: "Product found",
+      content: { "application/json": { schema: productDtoSchema } },
+    },
+    404: {
+      description: "Not found",
+      content: { "application/json": { schema: errorResponseSchema } },
+    },
+  },
 });
 
 registerCrudPaths({

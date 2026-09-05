@@ -1473,6 +1473,47 @@ export type DeleteProduct404 = {
   error: string;
 };
 
+export type GetProductBySlug200Status =
+  (typeof GetProductBySlug200Status)[keyof typeof GetProductBySlug200Status];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetProductBySlug200Status = {
+  draft: "draft",
+  published: "published",
+  archived: "archived",
+} as const;
+
+export type GetProductBySlug200Attributes = {
+  [key: string]: string | string[];
+};
+
+export type GetProductBySlug200Metadata = { [key: string]: unknown | null };
+
+export type GetProductBySlug200 = {
+  id: string;
+  name: string;
+  slug: string;
+  sku: string;
+  description: string;
+  price: number;
+  compareAtPrice?: number;
+  stock: number;
+  status: GetProductBySlug200Status;
+  categoryId?: string;
+  categoryName?: string;
+  brandId?: string;
+  brandName?: string;
+  images: string[];
+  attributes: GetProductBySlug200Attributes;
+  metadata: GetProductBySlug200Metadata;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type GetProductBySlug404 = {
+  error: string;
+};
+
 export type ListCategoryParams = {
   /**
    * @minimum 1

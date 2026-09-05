@@ -56,6 +56,21 @@ describe("catalog API", () => {
     assert.equal(response.body.name, product.name);
   });
 
+  it("returns a single product by slug", async () => {
+    const product = await seedPublishedProduct();
+
+    const response = await request(app)
+      .get(`/api/products/slug/${product.slug}`)
+      .expect(200);
+
+    assert.equal(response.body.id, product._id.toString());
+    assert.equal(response.body.slug, product.slug);
+  });
+
+  it("returns 404 for unknown product slug", async () => {
+    await request(app).get("/api/products/slug/does-not-exist").expect(404);
+  });
+
   it("forbids customers from creating products", async () => {
     const { body } = await registerCustomer(app);
 
@@ -157,5 +172,56 @@ describe("catalog API", () => {
       .expect(200);
 
     assert.ok(response.body.total >= 1);
+  });
+
+  it("blocks category delete when products reference it", async () => {
+    const { body } = await registerAdmin(app);
+
+    const categoryResponse = await request(app)
+      .post("/api/categories")
+      .set(authHeader(body.accessToken))
+      .send({ name: `Blocked Category ${Date.now()}`, status: "published" })
+      .expect(201);
+
+    const categoryId = categoryResponse.body.id;
+
+    await request(app)
+      .post("/api/products")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: "Category Linked Product",
+        sku: `CAT-LINK-${Date.now()}`,
+        price: 12,
+        stock: 3,
+        status: "published",
+        categoryId,
+      })
+      .expect(201);
+
+    const deleteResponse = await request(app)
+      .delete(`/api/categories/${categoryId}`)
+      .set(authHeader(body.accessToken))
+      .expect(409);
+
+    assert.match(deleteResponse.body.error, /still reference it/);
+  });
+
+  it("allows category delete when no products reference it", async () => {
+    const { body } = await registerAdmin(app);
+
+    const categoryResponse = await request(app)
+      .post("/api/categories")
+      .set(authHeader(body.accessToken))
+      .send({ name: `Empty Category ${Date.now()}`, status: "published" })
+      .expect(201);
+
+    const categoryId = categoryResponse.body.id;
+
+    await request(app)
+      .delete(`/api/categories/${categoryId}`)
+      .set(authHeader(body.accessToken))
+      .expect(204);
+
+    await request(app).get(`/api/categories/${categoryId}`).expect(404);
   });
 });

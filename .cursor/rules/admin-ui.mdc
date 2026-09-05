@@ -15,14 +15,13 @@ Folder: `admin/`. Dev port **3001**.
 ## Site & API
 
 - Site: `getAdminSiteConfig()` in `lib/site.ts`.
-- Catalog **list** pages (products, categories, brands, attributes) fetch from `@platform/api-client` in Server Components.
-- Map DTOs in `lib/mappers/`. Other dashboard pages are template/demo data — do not assume API submit works.
+- **API-connected:** catalog list + CRUD (`ProductCatalogForm` in `components/catalog/catalog-forms.tsx`), orders list/detail (`ApiOrdersPanel`).
+- Map DTOs in `lib/mappers/`. Other dashboard pages (dashboard home, customers, coupons, reviews, settings, reports, media, roles) are template/demo data — do not assume API submit works.
 
 ## Navigation
 
 - Routes: `config/routes.ts`
-- Sidebar: `config/navigation.ts`
-- Feature flags in site config are **not** yet used to hide nav items.
+- Sidebar: `config/navigation.ts` → filtered by `filterNavigationByFeatures()` in `lib/navigation-filter.ts` using `SiteConfig.features` (e.g. hide coupons when `features.coupons` is false).
 
 ## Styling
 
@@ -31,7 +30,7 @@ Folder: `admin/`. Dev port **3001**.
 
 ## Auth
 
-**Not implemented.** `app/(auth)/signin` is a demo — no middleware, no session. Do not add route guards without a real auth backend.
+JWT sign-in via `/api/auth/login` BFF (httpOnly cookies). Protected by `admin/proxy.ts`: validates access token via `GET /api/auth/me` and requires `role: admin`. Non-admin users are rejected at sign-in. Logout calls `POST /api/auth/logout`.
 
 ## Optional basePath
 

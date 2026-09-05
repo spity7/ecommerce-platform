@@ -16,6 +16,17 @@ import { slugify } from "../utils/strings.js";
 export const productsRouter = Router();
 
 productsRouter.get(
+  "/slug/:slug",
+  asyncHandler(async (req, res) => {
+    const product = await Product.findOne({ slug: req.params.slug });
+    if (!product) {
+      throw new AppError(404, "Product not found");
+    }
+    res.json(toProductDto(product));
+  })
+);
+
+productsRouter.get(
   "/",
   asyncHandler(async (req, res) => {
     const query = listQuerySchema.parse(req.query);

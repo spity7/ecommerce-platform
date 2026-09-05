@@ -2,7 +2,7 @@
 
 Multipurpose ecommerce monorepo: one codebase, many site deployments.
 
-**Last reviewed:** 2026-08-24. See [AI-INDEX.md](AI-INDEX.md) for the full doc map and tree.
+**Last reviewed:** 2026-09-05. See [AI-INDEX.md](AI-INDEX.md) for the full doc map and tree.
 
 ## Layout
 
@@ -34,13 +34,13 @@ ecommerce-platform/
 
 ## Integration maturity
 
-The platform skeleton is real (shared contract, multi-site config, catalog API). UI is largely a purchased theme with early API wiring:
+The platform skeleton is real (shared contract, multi-site config, catalog + commerce API). UI is largely a purchased theme with production routes wired for Beauty Station:
 
 | Layer  | API-connected                                                                                        | Template / static                                                |
 | ------ | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| Server | Catalog CRUD + auth + cart/orders/wishlist + uploads + user addresses                                | No payment gateway                                               |
-| Admin  | Catalog lists + CRUD forms + sign-in                                                                 | ~35 other dashboard pages; nav filtered by `SiteConfig.features` |
-| Client | Home layout + `/shop` + `/product/[slug]` + customer auth + checkout + wishlist (`/my-wishlist`)     | 300+ demo routes; demo catalog items stay local-only in cart     |
+| Server | Catalog CRUD + auth + cart/orders/wishlist + uploads + user addresses; slug lookup; category delete blocked when products reference it | No payment gateway; coupons/reviews/blog APIs                    |
+| Admin  | Catalog CRUD + sign-in + orders list/detail; nav filtered by `SiteConfig.features`                   | Dashboard, customers, coupons, reviews, settings, reports (~30 demo pages) |
+| Client | Home layout + `/shop` + `/product/[slug]` (slug API) + customer auth + checkout + wishlist (`/my-wishlist`) | 300+ demo routes; demo catalog items stay local-only in cart     |
 
 **Auth:** JWT on catalog mutations and uploads. Admin and storefront use **httpOnly cookies** (via each app’s `/api/auth/*` routes) for refresh/access tokens; short-lived access tokens are also held in memory for API calls. Logout, password change, and account deletion revoke refresh tokens (`refreshTokenVersion`). Password reset and **email verification on register** email magic links via SMTP when `SMTP_HOST` is set; without SMTP, dev returns/logs link tokens. **Customers must verify email before `POST /api/orders`.** Storefront Google sign-in (`POST /api/auth/social`) verifies ID tokens when `GOOGLE_CLIENT_ID` is set and can import Google profile photos. OAuth-only users confirm delete/set-password with a Google `idToken`. Customer account deletion is a soft delete with a 14-day reactivation window on login. Auth routes are rate-limited. Production rejects default JWT secrets.
 
@@ -208,8 +208,8 @@ Requires MongoDB on `127.0.0.1:27017` (default DB `ecommerce-platform-test`). Ov
 
 See [ROUTES.md](ROUTES.md) for the full table. Summary:
 
-- `GET/POST /api/products`, `GET/PATCH/DELETE /api/products/:id`
-- `GET/POST /api/categories`, `GET/PATCH/DELETE /api/categories/:id`
+- `GET/POST /api/products`, `GET /api/products/slug/:slug`, `GET/PATCH/DELETE /api/products/:id`
+- `GET/POST /api/categories`, `GET/PATCH/DELETE /api/categories/:id` (delete returns **409** when products still reference the category)
 - `GET/POST /api/brands`, `GET/PATCH/DELETE /api/brands/:id`
 - `GET/POST /api/attributes`, `GET/PATCH/DELETE /api/attributes/:id`
 - `POST /api/uploads`
@@ -256,11 +256,11 @@ Site-specific modules are defined in site config (`features.*`). Admin navigatio
 - **New modules:** add optional server routes + admin pages; gate with `features` when nav filtering exists
 - **One-off custom logic:** prefer minimal hooks in site config or a future `sites/{id}/extensions/` folder (not scaffolded yet)
 - **Client rebrand:** `npm run rebrand -w @platform/storefront` (`scripts/rebrand-client.ts`)
-- **API roadmap:** [client/backend_features_analysis.md](../client/backend_features_analysis.md) — planned endpoints; catalog CRUD is live, most other sections are not
+- **API roadmap:** [client/backend_features_analysis.md](../client/backend_features_analysis.md) — full ecommerce roadmap; catalog + auth + cart/orders/wishlist/users are live; payments, coupons, reviews, and content APIs remain planned
 
 ## Deploy notes
 
-- **Node version:** repo root `engines` require **Node 20.x**. `client/Dockerfile` currently uses Node **24.13.0** — align before production Docker deploys.
+- **Node version:** repo root `engines` and `client/Dockerfile` use **Node 20.x**.
 - **Site registry:** `docs/site-registry.json` must stay in sync with `packages/site-config/src/sites/*.ts` (especially `features` and URLs).
 
 ## AI documentation

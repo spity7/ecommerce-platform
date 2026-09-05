@@ -1,4 +1,5 @@
 import { platformApi } from "./generated/index.js";
+import { ApiError } from "./mutator.js";
 import type {
   ListAttributeParams,
   ListBrandParams,
@@ -53,11 +54,14 @@ export async function fetchPublishedProducts(limit = 8) {
 }
 
 export async function fetchProductBySlug(slug: string) {
-  const response = await fetchProducts({
-    status: "published",
-    limit: 100,
-  });
-  return response.data.find((product) => product.slug === slug) ?? null;
+  try {
+    return await platformApi.getProductBySlug(slug);
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) {
+      return null;
+    }
+    throw error;
+  }
 }
 
 export async function fetchProductById(id: string) {

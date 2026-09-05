@@ -7,6 +7,7 @@ import {
 import { AppError } from "../middleware/errorHandler.js";
 import { requireAuth, requireAdmin } from "../middleware/auth.js";
 import { Category } from "../models/Category.js";
+import { Product } from "../models/Product.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { isUniqueKeyError, toCategoryDto } from "../utils/serializers.js";
 import { slugify } from "../utils/strings.js";
@@ -99,10 +100,22 @@ categoriesRouter.delete(
   requireAuth,
   requireAdmin,
   asyncHandler(async (req, res) => {
-    const category = await Category.findByIdAndDelete(req.params.id);
+    const category = await Category.findById(req.params.id);
     if (!category) {
       throw new AppError(404, "Category not found");
     }
+
+    const referencingProducts = await Product.countDocuments({
+      categoryId: category._id,
+    });
+    if (referencingProducts > 0) {
+      throw new AppError(
+        409,
+        `Cannot delete category: ${referencingProducts} product(s) still reference it`
+      );
+    }
+
+    await category.deleteOne();
     res.status(204).send();
   })
 );

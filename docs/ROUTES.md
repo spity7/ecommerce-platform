@@ -1,6 +1,6 @@
 # Routes reference
 
-HTTP API routes, admin pages, and storefront routing. **Last reviewed:** 2026-09-04.
+HTTP API routes, admin pages, and storefront routing. **Last reviewed:** 2026-09-05.
 
 ## Server API (`@platform/server`)
 
@@ -10,6 +10,7 @@ Base URL: `http://localhost:5000` (override with `API_URL`).
 | ------ | -------------------------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | GET    | `/api/health`                                | health     | Liveness                                                                                                                                            |
 | GET    | `/api/products`                              | products   | Paginated list (`listProduct`)                                                                                                                      |
+| GET    | `/api/products/slug/:slug`                     | products   | Get by URL slug (public)                                                                                                                            |
 | POST   | `/api/products`                              | products   | Create                                                                                                                                              |
 | GET    | `/api/products/:id`                          | products   | Get by ID                                                                                                                                           |
 | PATCH  | `/api/products/:id`                          | products   | Update                                                                                                                                              |
@@ -18,7 +19,7 @@ Base URL: `http://localhost:5000` (override with `API_URL`).
 | POST   | `/api/categories`                            | categories | Create                                                                                                                                              |
 | GET    | `/api/categories/:id`                        | categories | Get by ID                                                                                                                                           |
 | PATCH  | `/api/categories/:id`                        | categories | Update                                                                                                                                              |
-| DELETE | `/api/categories/:id`                        | categories | Delete                                                                                                                                              |
+| DELETE | `/api/categories/:id`                        | categories | Delete (409 if products still reference the category)                                                                                               |
 | GET    | `/api/brands`                                | brands     | Paginated list                                                                                                                                      |
 | POST   | `/api/brands`                                | brands     | Create                                                                                                                                              |
 | GET    | `/api/brands/:id`                            | brands     | Get by ID                                                                                                                                           |
