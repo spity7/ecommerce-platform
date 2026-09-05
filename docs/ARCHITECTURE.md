@@ -36,11 +36,11 @@ ecommerce-platform/
 
 The platform skeleton is real (shared contract, multi-site config, catalog API). UI is largely a purchased theme with early API wiring:
 
-| Layer  | API-connected                                                        | Template / static                                                |
-| ------ | -------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| Server | Catalog CRUD + auth + cart/orders + uploads + user addresses         | No payment gateway, wishlist API                                 |
-| Admin  | Catalog lists + CRUD forms + sign-in                                 | ~35 other dashboard pages; nav filtered by `SiteConfig.features` |
-| Client | Home layout + `/shop` + `/product/[slug]` + customer auth + checkout | 300+ demo routes; demo catalog items stay local-only in cart     |
+| Layer  | API-connected                                                                                        | Template / static                                                |
+| ------ | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Server | Catalog CRUD + auth + cart/orders/wishlist + uploads + user addresses                                | No payment gateway                                               |
+| Admin  | Catalog lists + CRUD forms + sign-in                                                                 | ~35 other dashboard pages; nav filtered by `SiteConfig.features` |
+| Client | Home layout + `/shop` + `/product/[slug]` + customer auth + checkout + wishlist (`/my-wishlist`)     | 300+ demo routes; demo catalog items stay local-only in cart     |
 
 **Auth:** JWT on catalog mutations and uploads. Admin and storefront use **httpOnly cookies** (via each app’s `/api/auth/*` routes) for refresh/access tokens; short-lived access tokens are also held in memory for API calls. Logout, password change, and account deletion revoke refresh tokens (`refreshTokenVersion`). Password reset and **email verification on register** email magic links via SMTP when `SMTP_HOST` is set; without SMTP, dev returns/logs link tokens. **Customers must verify email before `POST /api/orders`.** Storefront Google sign-in (`POST /api/auth/social`) verifies ID tokens when `GOOGLE_CLIENT_ID` is set and can import Google profile photos. OAuth-only users confirm delete/set-password with a Google `idToken`. Customer account deletion is a soft delete with a 14-day reactivation window on login. Auth routes are rate-limited. Production rejects default JWT secrets.
 
@@ -233,7 +233,7 @@ Site-specific modules are defined in site config (`features.*`). Admin navigatio
 - Large theme demo: 80+ home layouts, many shop/product variants under `client/app/`.
 - `HomeLayoutRenderer` maps each `HomeLayoutId` to a dedicated layout under `client/components/site/home-layouts/`.
 - Production chrome on `/shop` and `/product/[slug]` uses `SiteConfig.branding` + `contact` in `Header13` / `Footer7`.
-- Cart, wishlist, compare: Zustand + browser persistence only (`client/context/`).
+- Cart, wishlist, compare: Zustand in `client/context/store.ts`. Cart and compare persist in localStorage; when `features.customerAuth` + `features.wishlist` are enabled, wishlist syncs to `/api/wishlist` (server is source of truth; not persisted locally). See [ROUTES.md](ROUTES.md) § storefront wishlist notes.
 - Tab-driven product sections: follow `client/.cursor/rules/product-tab-filtering-pattern.mdc`.
 
 ## Admin notes

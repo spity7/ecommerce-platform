@@ -8,7 +8,7 @@ Part of the monorepo — run commands from **repo root** unless noted. Platform 
 
 - Next.js 16 (App Router), React 19, TypeScript
 - Bootstrap 5 + Sass, Swiper, GSAP, Lightgallery
-- Zustand (cart, wishlist, compare — browser persistence)
+- Zustand (cart, wishlist, compare — cart/compare persist locally; server wishlist when `features.wishlist`)
 - `@platform/site-config` for multi-site theming and home layout
 
 ## Prerequisites

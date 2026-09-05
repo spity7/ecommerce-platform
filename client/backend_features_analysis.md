@@ -1,6 +1,6 @@
 # Backend API Feature Breakdown — Beauty Station
 
-> **Status (2026-09-04):** **Roadmap / planning doc** — not all endpoints below exist. **Implemented today:** catalog CRUD (mutations require admin JWT), auth with refresh revocation + rate limits + password reset + email verification (sent on register) + Google social sign-in (profile photo import), user profile (`GET /api/users/me`) + avatar URL + soft-delete account (password or Google `idToken`), OAuth set-password flow, saved addresses, cart, wishlist (auth-only; storefront sync when `features.wishlist`), orders (place requires verified email for customers), `/api/uploads`, `/api/health`. Storefront: customer auth via httpOnly BFF cookies, Google sign-in when `NEXT_PUBLIC_GOOGLE_CLIENT_ID` is set, API cart sync, API wishlist sync on `/my-wishlist`, `/checkout` with default-address pre-fill, order confirmation at `/checkout-thankyou?orderId=`, order detail at `/my-order-history/[orderId]`, `/account-info` profile/avatar/email verification/password/addresses/delete, `/forgot-password` when `features.customerAuth` is enabled.
+> **Status (2026-09-05):** **Roadmap / planning doc** — not all endpoints below exist. **Implemented today:** catalog CRUD (mutations require admin JWT), auth with refresh revocation + rate limits + password reset + email verification (sent on register) + Google social sign-in (profile photo import), user profile (`GET /api/users/me`) + avatar URL + soft-delete account (password or Google `idToken`), OAuth set-password flow, saved addresses, cart, **wishlist** (auth-only API + storefront sync when `features.wishlist`; optimistic UI + mutation queue; guest pending queue in sessionStorage; `/my-wishlist` canonical page; header modal preview; cart/wishlist independent), orders (place requires verified email for customers), `/api/uploads`, `/api/health`. Storefront: customer auth via httpOnly BFF cookies, Google sign-in when `NEXT_PUBLIC_GOOGLE_CLIENT_ID` is set, API cart sync, `/checkout` with default-address pre-fill, order confirmation at `/checkout-thankyou?orderId=`, order detail at `/my-order-history/[orderId]`, `/account-info` profile/avatar/email verification/password/addresses/delete, `/forgot-password` when `features.customerAuth` is enabled. Client wishlist unit tests: `npm run test -w @platform/storefront`.
 
 > **Stack context:** Next.js App Router storefront + Express API monorepo. Static mock data remains in `client/data/` for theme demos.
 
@@ -119,13 +119,13 @@
 
 ---
 
-## 6. Wishlist
+## 6. Wishlist _(implemented)_
 
-- `GET /api/wishlist` — Get user wishlist
-- `POST /api/wishlist/items` — Add product `{ productId }`
-- `DELETE /api/wishlist/items/:productId` — Remove product
-- `DELETE /api/wishlist` — Clear wishlist
-- `POST /api/wishlist/move-to-cart` — Move item to cart `{ productId }`
+- `GET /api/wishlist` — Get user wishlist _(implemented)_
+- `POST /api/wishlist/items` — Add product `{ productId }` _(implemented)_
+- `DELETE /api/wishlist/items/:productId` — Remove product _(implemented)_
+- `DELETE /api/wishlist` — Clear wishlist _(implemented)_
+- `POST /api/wishlist/move-to-cart` — Move item to cart `{ productId }` _(implemented on server; storefront uses add-to-cart only — wishlist and cart stay independent)_
 
 ---
 
