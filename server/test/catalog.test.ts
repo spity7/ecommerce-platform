@@ -105,6 +105,19 @@ describe("catalog API", () => {
     assert.equal(createResponse.body.name, "Admin Created Serum");
     assert.equal(createResponse.body.sku, sku);
 
+    const autoSkuResponse = await request(app)
+      .post("/api/products")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: "Auto Sku Product",
+        price: 10,
+        stock: 1,
+      })
+      .expect(201);
+
+    assert.ok(autoSkuResponse.body.sku);
+    assert.match(autoSkuResponse.body.sku, /^AUTOSKUPRO-/);
+
     const productId = createResponse.body.id;
 
     const patchResponse = await request(app)

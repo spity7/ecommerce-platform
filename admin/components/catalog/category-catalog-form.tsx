@@ -5,7 +5,6 @@ import { useState } from "react";
 import {
   CatalogFormActions,
   CatalogFormError,
-  CatalogFormLayout,
   ControlledField,
   ControlledSelect,
   inferThumbnailImageSource,
@@ -100,57 +99,53 @@ export function CategoryCatalogForm({
 
   return (
     <form onSubmit={handleSubmit}>
-      <CatalogFormLayout
-        aside={
-          <>
-            <ThumbnailUploadCard
-              alt={name || "Category thumbnail"}
-              imageSource={imageSource}
-              imageUrl={image}
-              loading={uploadingImage}
-              onClear={handleClearImage}
-              onImageUrlChange={handleImageUrlChange}
-              onUpload={handleImageUpload}
-            />
-            <FormCard
-              title="Status"
-              titleEnd={
-                <StatusDot active={status === "published"} variant={status} />
-              }
-            >
-              <ControlledSelect
-                hideLabel
-                label="Status"
-                onChange={(value) => setStatus(value as CategoryDto["status"])}
-                options={[
-                  { label: "Draft", value: "draft" },
-                  { label: "Published", value: "published" },
-                ]}
-                value={status}
-              />
-            </FormCard>
-            {mode === "edit" && initial ? (
-              <ProductCountCard
-                count={initial.productCount}
-                productsHref={routes.products}
-              />
-            ) : null}
-          </>
-        }
-      >
+      <div className="grid min-w-0 max-w-full items-start gap-4 md:grid-cols-2 lg:grid-cols-3">
         <FormCard title="General">
-          <div className="space-y-4">
-            <ControlledField
-              help="A category name is required and should be unique."
-              label="Category name"
-              onChange={setName}
-              placeholder="Category name"
-              required
-              value={name}
-            />
-          </div>
+          <ControlledField
+            help="A category name is required and should be unique."
+            label="Category name"
+            onChange={setName}
+            placeholder="Category name"
+            required
+            value={name}
+          />
         </FormCard>
-      </CatalogFormLayout>
+        <FormCard
+          title="Status"
+          titleEnd={
+            <StatusDot active={status === "published"} variant={status} />
+          }
+        >
+          <ControlledSelect
+            help="Draft categories are hidden from published storefront views."
+            hideLabel
+            label="Status"
+            onChange={(value) => setStatus(value as CategoryDto["status"])}
+            options={[
+              { label: "Draft", value: "draft" },
+              { label: "Published", value: "published" },
+            ]}
+            value={status}
+          />
+        </FormCard>
+        <ThumbnailUploadCard
+          alt={name || "Category thumbnail"}
+          imageSource={imageSource}
+          imageUrl={image}
+          loading={uploadingImage}
+          onClear={handleClearImage}
+          onImageUrlChange={handleImageUrlChange}
+          onUpload={handleImageUpload}
+        />
+      </div>
+      {mode === "edit" && initial ? (
+        <div className="mt-4">
+          <ProductCountCard
+            count={initial.productCount}
+            productsHref={routes.products}
+          />
+        </div>
+      ) : null}
       <CatalogFormError message={formState.error} />
       <CatalogFormActions
         cancelHref={routes.categories}

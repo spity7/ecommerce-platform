@@ -155,7 +155,7 @@ export interface CreateProductInput {
    * @minLength 1
    * @maxLength 100
    */
-  sku: string;
+  sku?: string;
   /** @maxLength 5000 */
   description?: string;
   /** @minimum 0 */
@@ -1259,7 +1259,7 @@ export type CreateProductBody = {
    * @minLength 1
    * @maxLength 100
    */
-  sku: string;
+  sku?: string;
   /** @maxLength 5000 */
   description?: string;
   /** @minimum 0 */

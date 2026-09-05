@@ -181,6 +181,58 @@ export function ControlledSelect({
   );
 }
 
+type ControlledTextareaProps = {
+  help?: string;
+  label: string;
+  minRows?: number;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  value: string;
+};
+
+export function ReadOnlyField({
+  help,
+  label,
+  value,
+}: {
+  help?: string;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="block">
+      <span className="text-[13px] font-semibold text-ink-700">{label}</span>
+      <p className="mt-1.5 flex h-10 items-center rounded-base border border-surface-line bg-surface-muted px-3 text-[14px] text-ink-600">
+        {value}
+      </p>
+      {help ? <p className="mt-1 text-[12px] text-ink-400">{help}</p> : null}
+    </div>
+  );
+}
+
+export function ControlledTextarea({
+  help,
+  label,
+  minRows = 4,
+  onChange,
+  placeholder,
+  value,
+}: ControlledTextareaProps) {
+  return (
+    <label className="block">
+      <span className="text-[13px] font-semibold text-ink-700">{label}</span>
+      <textarea
+        className="mt-1.5 w-full rounded-base border border-surface-line bg-surface-body px-3 py-2 text-[14px] placeholder:text-ink-400 focus:border-brand-600"
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+        rows={minRows}
+        value={value}
+      />
+      {help ? <p className="mt-1 text-[12px] text-ink-400">{help}</p> : null}
+    </label>
+  );
+}
+
 export function ThumbnailUploadCard({
   alt,
   imageSource = "none",
@@ -404,7 +456,7 @@ export function CatalogFormLayout({
   children: ReactNode;
 }) {
   return (
-    <div className="grid min-w-0 max-w-full gap-4 xl:grid-cols-[280px_minmax(0,1fr)]">
+    <div className="grid min-w-0 max-w-full items-start gap-4 xl:grid-cols-[280px_minmax(0,1fr)]">
       <aside className="min-w-0 space-y-4 xl:order-1">{aside}</aside>
       <div className="min-w-0 space-y-4 xl:order-2">{children}</div>
     </div>
@@ -434,10 +486,120 @@ export function createAttributeValueRows(
 
 export type ProductFormAttribute = {
   displayType: "Dropdown" | "Swatch" | "Text";
+  inactive?: boolean;
   name: string;
   slug: string;
   values: string[];
 };
+
+export function toProductFormAttribute(attribute: {
+  displayType: ProductFormAttribute["displayType"];
+  name: string;
+  slug: string;
+  values: string[];
+}): ProductFormAttribute {
+  return {
+    displayType: attribute.displayType,
+    name: attribute.name,
+    slug: attribute.slug,
+    values: attribute.values,
+  };
+}
+
+export function assignedProductAttributeSlugs(
+  attributes: Record<string, string | string[]> | undefined
+): string[] {
+  if (!attributes) {
+    return [];
+  }
+
+  return Object.entries(attributes)
+    .filter(([, value]) => {
+      if (Array.isArray(value)) {
+        return value.some((item) => String(item).trim().length > 0);
+      }
+      return String(value).trim().length > 0;
+    })
+    .map(([slug]) => slug);
+}
+
+export function mergeProductFormAttributes(
+  activeAttributes: ProductFormAttribute[],
+  catalogAttributes: ProductFormAttribute[],
+  assignedSlugs: string[]
+): ProductFormAttribute[] {
+  const activeSlugs = new Set(
+    activeAttributes.map((attribute) => attribute.slug)
+  );
+  const merged = new Map(
+    activeAttributes.map((attribute) => [attribute.slug, attribute])
+  );
+
+  for (const slug of assignedSlugs) {
+    if (merged.has(slug)) {
+      continue;
+    }
+    const definition = catalogAttributes.find(
+      (attribute) => attribute.slug === slug
+    );
+    if (definition) {
+      merged.set(slug, { ...definition, inactive: true });
+    }
+  }
+
+  return Array.from(merged.values());
+}
+
+export function ProductImageList({
+  images,
+  onRemove,
+}: {
+  images: string[];
+  onRemove: (image: string) => void;
+}) {
+  if (images.length === 0) {
+    return null;
+  }
+
+  return (
+    <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+      {images.map((image) => {
+        const fileName = image.split("/").pop() ?? "image";
+        const isRemote = image.startsWith("http");
+
+        return (
+          <li
+            className="group relative overflow-hidden rounded-base border border-surface-line bg-surface-body"
+            key={image}
+          >
+            {isRemote || image.startsWith("/") ? (
+              <Image
+                alt={fileName}
+                className="aspect-square w-full object-cover"
+                height={96}
+                src={image}
+                unoptimized={isRemote}
+                width={96}
+              />
+            ) : (
+              <div className="grid aspect-square place-items-center bg-surface-muted text-[12px] text-ink-400">
+                {fileName}
+              </div>
+            )}
+            <button
+              aria-label={`Remove ${fileName}`}
+              className="absolute right-1.5 top-1.5 grid h-7 w-7 place-items-center rounded-full bg-surface-card/95 text-ink-500 opacity-0 shadow-card transition-opacity group-hover:opacity-100 hover:text-danger-500"
+              onClick={() => onRemove(image)}
+              type="button"
+            >
+              <Icon className="h-3.5 w-3.5" name="x" />
+            </button>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
 
 export function ProductAttributesFields({
   attributes,
@@ -454,13 +616,17 @@ export function ProductAttributesFields({
 
   return (
     <FormCard title="Attributes">
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4">
         {attributes.map((attribute) => {
           const currentValue = values[attribute.slug] ?? "";
+          const inactiveHelp = attribute.inactive
+            ? "Inactive attribute — value is preserved on this product."
+            : undefined;
 
           if (attribute.displayType === "Text") {
             return (
               <ControlledField
+                help={inactiveHelp}
                 key={attribute.slug}
                 label={attribute.name}
                 onChange={(value) =>
@@ -475,9 +641,10 @@ export function ProductAttributesFields({
           return (
             <ControlledSelect
               help={
-                attribute.displayType === "Swatch"
+                inactiveHelp ??
+                (attribute.displayType === "Swatch"
                   ? "Choose a predefined swatch value."
-                  : undefined
+                  : undefined)
               }
               key={attribute.slug}
               label={attribute.name}

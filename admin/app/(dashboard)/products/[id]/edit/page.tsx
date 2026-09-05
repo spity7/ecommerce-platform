@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProductCatalogForm } from "@/components/catalog/catalog-forms";
+import {
+  assignedProductAttributeSlugs,
+  mergeProductFormAttributes,
+  toProductFormAttribute,
+} from "@/components/catalog/catalog-form-primitives";
 import { PageHeader } from "@/components/layout/page-header";
 import {
   fetchAttributes,
@@ -30,23 +35,28 @@ export default async function EditProductPage({
     notFound();
   }
 
-  const [categoriesRes, brandsRes, attributesRes] = await Promise.all([
-    fetchCategories({ limit: 100 }),
-    fetchBrands({ limit: 100 }),
-    fetchAttributes({ limit: 100, status: "active" }),
-  ]);
+  const [categoriesRes, brandsRes, activeAttributesRes, catalogAttributesRes] =
+    await Promise.all([
+      fetchCategories({ limit: 100 }),
+      fetchBrands({ limit: 100 }),
+      fetchAttributes({ limit: 100, status: "active" }),
+      fetchAttributes({ limit: 100 }),
+    ]);
 
   const categories = categoriesRes.data.map((c) => ({
     id: c.id,
     name: c.name,
   }));
   const brands = brandsRes.data.map((b) => ({ id: b.id, name: b.name }));
-  const attributes = attributesRes.data.map((attribute) => ({
-    slug: attribute.slug,
-    name: attribute.name,
-    displayType: attribute.displayType,
-    values: attribute.values,
-  }));
+  const activeAttributes = activeAttributesRes.data.map(toProductFormAttribute);
+  const catalogAttributes = catalogAttributesRes.data.map(
+    toProductFormAttribute
+  );
+  const attributes = mergeProductFormAttributes(
+    activeAttributes,
+    catalogAttributes,
+    assignedProductAttributeSlugs(product.attributes)
+  );
 
   return (
     <>

@@ -118,6 +118,44 @@ export function BrandCatalogForm({ initial, mode }: BrandCatalogFormProps) {
                 value={status}
               />
             </FormCard>
+            {mode === "edit" && initial ? (
+              <ProductCountCard
+                count={initial.productCount}
+                productsHref={routes.products}
+              />
+            ) : null}
+          </>
+        }
+      >
+        <div className="grid items-start gap-4 md:grid-cols-2">
+          <FormCard title="General">
+            <div className="space-y-4">
+              <ControlledField
+                label="Brand name"
+                onChange={setName}
+                placeholder="Brand name"
+                required
+                value={name}
+              />
+              <div className="grid gap-4 md:grid-cols-2">
+                <ControlledField
+                  help="Shown in brand tiles (max 4 characters)."
+                  label="Initials"
+                  maxLength={4}
+                  onChange={setInitials}
+                  placeholder="e.g. BS"
+                  value={initials}
+                />
+                <ControlledSelect
+                  label="Tile style"
+                  onChange={setTileClass}
+                  options={TILE_CLASS_OPTIONS}
+                  value={tileClass}
+                />
+              </div>
+            </div>
+          </FormCard>
+          <div className="grid items-start gap-4 sm:grid-cols-2 md:grid-cols-1">
             <FormCard title="Storefront placement">
               <ControlledSelect
                 help="Controls how prominently the brand appears in admin merchandising."
@@ -141,40 +179,8 @@ export function BrandCatalogForm({ initial, mode }: BrandCatalogFormProps) {
                 value={website}
               />
             </FormCard>
-            {mode === "edit" && initial ? (
-              <ProductCountCard
-                count={initial.productCount}
-                productsHref={routes.products}
-              />
-            ) : null}
-          </>
-        }
-      >
-        <FormCard title="General">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <ControlledField
-              label="Brand name"
-              onChange={setName}
-              placeholder="Brand name"
-              required
-              value={name}
-            />
-            <ControlledField
-              help="Shown in brand tiles (max 4 characters)."
-              label="Initials"
-              maxLength={4}
-              onChange={setInitials}
-              placeholder="e.g. BS"
-              value={initials}
-            />
-            <ControlledSelect
-              label="Tile style"
-              onChange={setTileClass}
-              options={TILE_CLASS_OPTIONS}
-              value={tileClass}
-            />
           </div>
-        </FormCard>
+        </div>
       </CatalogFormLayout>
       <CatalogFormError message={formState.error} />
       <CatalogFormActions

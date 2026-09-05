@@ -19,7 +19,7 @@ import {
 } from "../utils/catalog-relations.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { isUniqueKeyError, toProductDto } from "../utils/serializers.js";
-import { slugify } from "../utils/strings.js";
+import { generateSku, slugify } from "../utils/strings.js";
 
 export const productsRouter = Router();
 
@@ -86,6 +86,7 @@ productsRouter.post(
     const payload = createProductSchema.parse(req.body);
     const slug = slugify(payload.name);
     const attributes = await validateProductAttributes(payload.attributes);
+    const sku = payload.sku?.trim() || generateSku(payload.name);
 
     const category = payload.categoryId
       ? await requireCategory(payload.categoryId)
@@ -96,6 +97,7 @@ productsRouter.post(
       const product = await Product.create({
         ...payload,
         slug,
+        sku,
         attributes,
         categoryName: category?.name ?? "",
         brandName: brand?.name ?? "",

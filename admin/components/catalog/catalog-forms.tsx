@@ -1,20 +1,24 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FormCard } from "@/components/forms/admin-form-primitives";
 import {
+  CatalogFormActions,
+  CatalogFormError,
+  CatalogFormLayout,
+  ControlledField,
+  ControlledSelect,
+  ControlledTextarea,
   ProductAttributesFields,
+  ProductImageList,
+  ReadOnlyField,
+  StatusDot,
+  uploadCatalogImage,
   type ProductFormAttribute,
 } from "@/components/catalog/catalog-form-primitives";
-import { Icon } from "@/components/layout/icon";
+import { FormCard } from "@/components/forms/admin-form-primitives";
 import { routes } from "@/config/routes";
-import {
-  createProductApi,
-  platformInstance,
-  updateProductApi,
-} from "@platform/api-client";
+import { createProductApi, updateProductApi } from "@platform/api-client";
 import type { ProductDto } from "@platform/shared";
 
 export { AttributeCatalogForm } from "./attribute-catalog-form";
@@ -25,44 +29,6 @@ type FormState = {
   error: string | null;
   loading: boolean;
 };
-
-function FormActions({
-  cancelHref,
-  loading,
-}: {
-  cancelHref: string;
-  loading: boolean;
-}) {
-  return (
-    <div className="mt-6 flex items-center justify-end gap-3 border-t border-surface-line pt-5">
-      <Link
-        className="inline-flex h-10 items-center gap-2 rounded-base border border-surface-line px-5 text-[14px] font-semibold text-ink-700 hover:bg-surface-muted"
-        href={cancelHref}
-      >
-        Cancel
-      </Link>
-      <button
-        className="inline-flex h-10 items-center gap-2 rounded-base bg-brand-600 px-5 text-[14px] font-semibold text-white hover:bg-brand-700 disabled:opacity-60"
-        disabled={loading}
-        type="submit"
-      >
-        <Icon className="h-4 w-4" name="save" />
-        {loading ? "Saving…" : "Save"}
-      </button>
-    </div>
-  );
-}
-
-async function uploadImage(file: File): Promise<string> {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("folder", "products");
-  const result = await platformInstance.post<{ publicUrl: string }>(
-    "/api/uploads",
-    formData
-  );
-  return result.data.publicUrl;
-}
 
 type ProductCatalogFormProps = {
   attributes: ProductFormAttribute[];
@@ -100,7 +66,6 @@ export function ProductCatalogForm({
 }: ProductCatalogFormProps) {
   const router = useRouter();
   const [name, setName] = useState(initial?.name ?? "");
-  const [sku, setSku] = useState(initial?.sku ?? "");
   const [price, setPrice] = useState(String(initial?.price ?? ""));
   const [compareAtPrice, setCompareAtPrice] = useState(
     initial?.compareAtPrice != null ? String(initial.compareAtPrice) : ""
@@ -113,6 +78,7 @@ export function ProductCatalogForm({
   const [categoryId, setCategoryId] = useState(initial?.categoryId ?? "");
   const [brandId, setBrandId] = useState(initial?.brandId ?? "");
   const [images, setImages] = useState(initial?.images ?? []);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [attributeValues, setAttributeValues] = useState(() =>
     initialAttributeValues(attributes, initial)
   );
@@ -131,7 +97,6 @@ export function ProductCatalogForm({
 
     const payload = {
       name,
-      sku,
       price: Number(price),
       compareAtPrice: compareAtPrice ? Number(compareAtPrice) : undefined,
       stock: Number(stock),
@@ -161,161 +126,183 @@ export function ProductCatalogForm({
   }
 
   return (
-    <form className="max-w-3xl space-y-4" onSubmit={handleSubmit}>
-      <FormCard title="Product details">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <label className="block">
-            <span className="text-[14px] font-semibold text-ink-700">Name</span>
-            <input
-              className="mt-2 h-11 w-full rounded-base border border-surface-line bg-surface-body px-4 text-[14px]"
-              onChange={(e) => setName(e.target.value)}
-              required
-              value={name}
-            />
-          </label>
-          <label className="block">
-            <span className="text-[14px] font-semibold text-ink-700">SKU</span>
-            <input
-              className="mt-2 h-11 w-full rounded-base border border-surface-line bg-surface-body px-4 text-[14px]"
-              onChange={(e) => setSku(e.target.value)}
-              required
-              value={sku}
-            />
-          </label>
-          <label className="block">
-            <span className="text-[14px] font-semibold text-ink-700">
-              Price
-            </span>
-            <input
-              className="mt-2 h-11 w-full rounded-base border border-surface-line bg-surface-body px-4 text-[14px]"
-              onChange={(e) => setPrice(e.target.value)}
-              required
-              type="number"
-              value={price}
-            />
-          </label>
-          <label className="block">
-            <span className="text-[14px] font-semibold text-ink-700">
-              Compare at price
-            </span>
-            <input
-              className="mt-2 h-11 w-full rounded-base border border-surface-line bg-surface-body px-4 text-[14px]"
-              onChange={(e) => setCompareAtPrice(e.target.value)}
-              type="number"
-              value={compareAtPrice}
-            />
-          </label>
-          <label className="block">
-            <span className="text-[14px] font-semibold text-ink-700">
-              Stock
-            </span>
-            <input
-              className="mt-2 h-11 w-full rounded-base border border-surface-line bg-surface-body px-4 text-[14px]"
-              onChange={(e) => setStock(e.target.value)}
-              required
-              type="number"
-              value={stock}
-            />
-          </label>
-          <label className="block">
-            <span className="text-[14px] font-semibold text-ink-700">
-              Status
-            </span>
-            <select
-              className="mt-2 h-11 w-full rounded-base border border-surface-line bg-surface-body px-4 text-[14px]"
-              onChange={(e) =>
-                setStatus(e.target.value as ProductDto["status"])
+    <form onSubmit={handleSubmit}>
+      <CatalogFormLayout
+        aside={
+          <>
+            <FormCard
+              title="Status"
+              titleEnd={
+                <StatusDot active={status === "published"} variant={status} />
               }
-              value={status}
             >
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
-              <option value="archived">Archived</option>
-            </select>
-          </label>
-          <label className="block">
-            <span className="text-[14px] font-semibold text-ink-700">
-              Category
-            </span>
-            <select
-              className="mt-2 h-11 w-full rounded-base border border-surface-line bg-surface-body px-4 text-[14px]"
-              onChange={(e) => setCategoryId(e.target.value)}
-              value={categoryId}
-            >
-              <option value="">None</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="block">
-            <span className="text-[14px] font-semibold text-ink-700">
-              Brand
-            </span>
-            <select
-              className="mt-2 h-11 w-full rounded-base border border-surface-line bg-surface-body px-4 text-[14px]"
-              onChange={(e) => setBrandId(e.target.value)}
-              value={brandId}
-            >
-              <option value="">None</option>
-              {brands.map((b) => (
-                <option key={b.id} value={b.id}>
-                  {b.name}
-                </option>
-              ))}
-            </select>
-          </label>
+              <ControlledSelect
+                help="Draft products are hidden from published storefront views."
+                hideLabel
+                label="Status"
+                onChange={(value) => setStatus(value as ProductDto["status"])}
+                options={[
+                  { label: "Draft", value: "draft" },
+                  { label: "Published", value: "published" },
+                  { label: "Archived", value: "archived" },
+                ]}
+                value={status}
+              />
+            </FormCard>
+            <ProductAttributesFields
+              attributes={attributes}
+              onChange={setAttributeValues}
+              values={attributeValues}
+            />
+          </>
+        }
+      >
+        <FormCard title="General">
+          <ControlledField
+            label="Product name"
+            onChange={setName}
+            placeholder="Product name"
+            required
+            value={name}
+          />
+          {mode === "edit" && initial ? (
+            <div className="mt-4">
+              <ReadOnlyField
+                help="Generated on create and used for inventory tracking."
+                label="SKU"
+                value={initial.sku}
+              />
+            </div>
+          ) : (
+            <p className="mt-2 text-[12px] text-ink-400">
+              SKU will be generated automatically when you save.
+            </p>
+          )}
+        </FormCard>
+        <div className="grid gap-4 md:grid-cols-2">
+          <FormCard title="Pricing & inventory">
+            <div className="grid gap-4 sm:grid-cols-3">
+              <ControlledField
+                label="Price"
+                onChange={setPrice}
+                placeholder="0.00"
+                required
+                type="number"
+                value={price}
+              />
+              <ControlledField
+                help="Optional strikethrough price."
+                label="Compare at price"
+                onChange={setCompareAtPrice}
+                placeholder="0.00"
+                type="number"
+                value={compareAtPrice}
+              />
+              <ControlledField
+                label="Stock"
+                onChange={setStock}
+                placeholder="0"
+                required
+                type="number"
+                value={stock}
+              />
+            </div>
+          </FormCard>
+          <FormCard title="Merchandising">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <ControlledSelect
+                label="Category"
+                onChange={setCategoryId}
+                options={[
+                  { label: "None", value: "" },
+                  ...categories.map((category) => ({
+                    label: category.name,
+                    value: category.id,
+                  })),
+                ]}
+                value={categoryId}
+              />
+              <ControlledSelect
+                label="Brand"
+                onChange={setBrandId}
+                options={[
+                  { label: "None", value: "" },
+                  ...brands.map((brand) => ({
+                    label: brand.name,
+                    value: brand.id,
+                  })),
+                ]}
+                value={brandId}
+              />
+            </div>
+          </FormCard>
         </div>
-        <label className="mt-4 block">
-          <span className="text-[14px] font-semibold text-ink-700">
-            Description
-          </span>
-          <textarea
-            className="mt-2 min-h-[100px] w-full rounded-base border border-surface-line bg-surface-body px-4 py-3 text-[14px]"
-            onChange={(e) => setDescription(e.target.value)}
-            value={description}
-          />
-        </label>
-        <label className="mt-4 block">
-          <span className="text-[14px] font-semibold text-ink-700">
-            Upload image
-          </span>
-          <input
-            accept="image/*"
-            className="mt-2 block text-[14px]"
-            onChange={async (e) => {
-              const file = e.target.files?.[0];
-              if (!file) return;
-              try {
-                const url = await uploadImage(file);
-                setImages((prev) => [...prev, url]);
-              } catch {
-                setFormState((s) => ({
-                  ...s,
-                  error: "Image upload failed",
-                }));
-              }
-            }}
-            type="file"
-          />
-        </label>
-        {images.length > 0 ? (
-          <p className="mt-2 text-[13px] text-ink-500">
-            {images.length} image(s) attached
-          </p>
-        ) : null}
-      </FormCard>
-      <ProductAttributesFields
-        attributes={attributes}
-        onChange={setAttributeValues}
-        values={attributeValues}
+        <div className="grid gap-4 md:grid-cols-2">
+          <FormCard title="Media">
+            <label className="block">
+              <span className="text-[13px] font-semibold text-ink-700">
+                Product images
+              </span>
+              <input
+                accept=".png,.jpg,.jpeg,.webp"
+                className="mt-1.5 block w-full text-[13px] text-ink-600 file:mr-3 file:rounded-base file:border-0 file:bg-brand-50 file:px-3 file:py-2 file:text-[13px] file:font-semibold file:text-brand-600 hover:file:bg-brand-100"
+                disabled={uploadingImage}
+                onChange={async (event) => {
+                  const file = event.target.files?.[0];
+                  if (!file) return;
+                  setUploadingImage(true);
+                  setFormState((current) => ({ ...current, error: null }));
+                  try {
+                    const url = await uploadCatalogImage(file, "products");
+                    setImages((previous) => [...previous, url]);
+                  } catch {
+                    setFormState((current) => ({
+                      ...current,
+                      error: "Image upload failed",
+                    }));
+                  } finally {
+                    setUploadingImage(false);
+                    event.target.value = "";
+                  }
+                }}
+                type="file"
+              />
+            </label>
+            <p className="mt-2 text-[12px] text-ink-400">
+              {uploadingImage
+                ? "Uploading…"
+                : images.length > 0
+                  ? `${images.length} image${images.length === 1 ? "" : "s"} attached. Upload more or save to persist.`
+                  : "Upload PNG, JPG, or WebP images."}
+            </p>
+            {images.length > 0 ? (
+              <ProductImageList
+                images={images}
+                onRemove={(image) =>
+                  setImages((previous) =>
+                    previous.filter((item) => item !== image)
+                  )
+                }
+              />
+            ) : null}
+          </FormCard>
+          <FormCard title="Description">
+            <ControlledTextarea
+              help="Shown on the product detail page."
+              label="Product description"
+              minRows={5}
+              onChange={setDescription}
+              placeholder="Describe the product…"
+              value={description}
+            />
+          </FormCard>
+        </div>
+      </CatalogFormLayout>
+      <CatalogFormError message={formState.error} />
+      <CatalogFormActions
+        cancelHref={routes.products}
+        loading={formState.loading}
       />
-      {formState.error ? (
-        <p className="text-[14px] text-danger-600">{formState.error}</p>
-      ) : null}
-      <FormActions cancelHref={routes.products} loading={formState.loading} />
     </form>
   );
 }

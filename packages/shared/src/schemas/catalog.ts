@@ -11,7 +11,7 @@ import {
 export const createProductSchema = z.object({
   name: z.string().min(1).max(200),
   slug: z.string().min(1).max(200).optional(),
-  sku: z.string().min(1).max(100),
+  sku: z.string().min(1).max(100).optional(),
   description: z.string().max(5000).optional().default(""),
   price: z.number().min(0),
   compareAtPrice: z.number().min(0).optional(),
