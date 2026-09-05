@@ -13,7 +13,7 @@ Part of the monorepo — run commands from **repo root** unless noted. Platform 
 ## Prerequisites
 
 - Node.js **20.x**
-- MongoDB seeded (`npm run seed` from root) for catalog list pages
+- MongoDB seeded (`npm run seed` from root) for catalog list and CRUD pages
 
 ## Development
 
@@ -60,9 +60,9 @@ proxy.ts                  Route gate via /api/auth/me (admin role)
 
 ## API integration
 
-**Connected today:** catalog list pages only — products, categories, brands, attributes (Server Components + `@platform/api-client`).
+**Connected today:** catalog list + CRUD (products, categories, brands, attributes) via `components/catalog/*-catalog-form.tsx` and `ProductCatalogForm` (includes active-attribute picker); orders list/detail (`ApiOrdersPanel`). Slugs are server-generated — not editable in admin forms.
 
-**Template only:** orders, customers, coupons, settings, reports, and most other nav items use demo data. See [docs/ROUTES.md](../docs/ROUTES.md).
+**Template only:** dashboard home, customers, coupons, settings, reports, and most other nav items use demo data. See [docs/ROUTES.md](../docs/ROUTES.md).
 
 ## Auth
 

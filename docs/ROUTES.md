@@ -10,26 +10,26 @@ Base URL: `http://localhost:5000` (override with `API_URL`).
 | ------ | -------------------------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
 | GET    | `/api/health`                                | health     | Liveness                                                                                                                                            |
 | GET    | `/api/products`                              | products   | Paginated list (`listProduct`)                                                                                                                      |
-| GET    | `/api/products/slug/:slug`                     | products   | Get by URL slug (public)                                                                                                                            |
-| POST   | `/api/products`                              | products   | Create                                                                                                                                              |
+| GET    | `/api/products/slug/:slug`                   | products   | Get by URL slug (public)                                                                                                                            |
+| POST   | `/api/products`                              | products   | Create (validates category/brand IDs; attribute keys/values; slug auto-derived from name)                                                           |
 | GET    | `/api/products/:id`                          | products   | Get by ID                                                                                                                                           |
-| PATCH  | `/api/products/:id`                          | products   | Update                                                                                                                                              |
+| PATCH  | `/api/products/:id`                          | products   | Update (validates FKs/attributes; maintains usage counts; slug auto-derived when name changes)                                                      |
 | DELETE | `/api/products/:id`                          | products   | Delete                                                                                                                                              |
 | GET    | `/api/categories`                            | categories | Paginated list                                                                                                                                      |
-| POST   | `/api/categories`                            | categories | Create                                                                                                                                              |
+| POST   | `/api/categories`                            | categories | Create (slug auto-derived from name; client slug ignored)                                                                                           |
 | GET    | `/api/categories/:id`                        | categories | Get by ID                                                                                                                                           |
-| PATCH  | `/api/categories/:id`                        | categories | Update                                                                                                                                              |
+| PATCH  | `/api/categories/:id`                        | categories | Update (renaming propagates `categoryName` on linked products; slug auto-derived from name)                                                         |
 | DELETE | `/api/categories/:id`                        | categories | Delete (409 if products still reference the category)                                                                                               |
 | GET    | `/api/brands`                                | brands     | Paginated list                                                                                                                                      |
-| POST   | `/api/brands`                                | brands     | Create                                                                                                                                              |
+| POST   | `/api/brands`                                | brands     | Create (slug auto-derived from name; client slug ignored)                                                                                           |
 | GET    | `/api/brands/:id`                            | brands     | Get by ID                                                                                                                                           |
-| PATCH  | `/api/brands/:id`                            | brands     | Update                                                                                                                                              |
-| DELETE | `/api/brands/:id`                            | brands     | Delete                                                                                                                                              |
+| PATCH  | `/api/brands/:id`                            | brands     | Update (renaming propagates `brandName` on linked products; slug auto-derived from name)                                                            |
+| DELETE | `/api/brands/:id`                            | brands     | Delete (409 if products still reference the brand)                                                                                                  |
 | GET    | `/api/attributes`                            | attributes | Paginated list                                                                                                                                      |
-| POST   | `/api/attributes`                            | attributes | Create                                                                                                                                              |
+| POST   | `/api/attributes`                            | attributes | Create (slug auto-derived from name; client slug ignored)                                                                                           |
 | GET    | `/api/attributes/:id`                        | attributes | Get by ID                                                                                                                                           |
-| PATCH  | `/api/attributes/:id`                        | attributes | Update                                                                                                                                              |
-| DELETE | `/api/attributes/:id`                        | attributes | Delete                                                                                                                                              |
+| PATCH  | `/api/attributes/:id`                        | attributes | Update (renaming re-slugs and migrates product attribute keys)                                                                                      |
+| DELETE | `/api/attributes/:id`                        | attributes | Delete (409 if products still reference the attribute)                                                                                              |
 | POST   | `/api/uploads`                               | uploads    | Multipart upload → GCS (503 if GCS not configured; images above 800 KB compressed to 400–800 KB WebP)                                               |
 | POST   | `/api/auth/login`                            | auth       | Login (public, rate-limited)                                                                                                                        |
 | POST   | `/api/auth/register`                         | auth       | Register customer (public, rate-limited)                                                                                                            |
@@ -102,28 +102,28 @@ Proxies to `@platform/server` and sets httpOnly cookies on the admin origin (`:3
 
 ### Dashboard (template + catalog API)
 
-| Path                                                                             | API-connected? | Notes                             |
-| -------------------------------------------------------------------------------- | -------------- | --------------------------------- |
-| `/`                                                                              | No             | Dashboard home (demo charts)      |
-| `/products`                                                                      | **Yes**        | List + delete from API            |
-| `/products/new`, `/products/[id]/edit`                                           | **Yes**        | Create/update via API             |
-| `/categories`                                                                    | **Yes**        | List + delete from API            |
-| `/categories/new`, `/categories/[id]/edit`                                       | **Yes**        | Create/update via API             |
-| `/brands`                                                                        | **Yes**        | List + delete from API            |
-| `/brands/new`, `/brands/[id]/edit`                                               | **Yes**        | Create/update via API             |
-| `/attributes`                                                                    | **Yes**        | List + delete from API            |
-| `/attributes/new`, `/attributes/[id]/edit`                                       | **Yes**        | Create/update via API             |
-| `/products/demo/edit`, `/categories/demo/edit`, …                                | No             | Legacy demo routes (optional)     |
-| `/orders`                                                                        | **Yes**        | List + status updates from API    |
-| `/orders/[id]`                                                                   | **Yes**        | Order detail + status update      |
-| `/customers`, `/users/new`                                                       | No             | Demo data                         |
-| `/coupons`, `/coupons/new`, `/coupons/demo/edit`                                 | No             | Demo data                         |
-| `/roles`, `/roles/new`                                                           | No             | Demo data — not wired to API RBAC |
-| `/reports`, `/tax`, `/media`, `/history`                                         | No             | Demo data                         |
-| `/product-reviews`, `/support-tickets`, `/notifications`                         | No             | Demo data                         |
-| `/integrations`, `/upgrade`, `/update-app`, `/list-page`                         | No             | Template pages                    |
-| `/settings`, `/settings/shipping`, `/settings/payments`, `/settings/permissions` | No             | Demo data                         |
-| `/localization/currency-rates`, `/localization/translation`                      | No             | Demo data                         |
+| Path                                                                             | API-connected? | Notes                                            |
+| -------------------------------------------------------------------------------- | -------------- | ------------------------------------------------ |
+| `/`                                                                              | No             | Dashboard home (demo charts)                     |
+| `/products`                                                                      | **Yes**        | List + delete from API                           |
+| `/products/new`, `/products/[id]/edit`                                           | **Yes**        | Create/update via API (active attributes picker) |
+| `/categories`                                                                    | **Yes**        | List + delete from API                           |
+| `/categories/new`, `/categories/[id]/edit`                                       | **Yes**        | Create/update via API (thumbnail upload or URL)  |
+| `/brands`                                                                        | **Yes**        | List + delete from API                           |
+| `/brands/new`, `/brands/[id]/edit`                                               | **Yes**        | Create/update via API                            |
+| `/attributes`                                                                    | **Yes**        | List + delete from API                           |
+| `/attributes/new`, `/attributes/[id]/edit`                                       | **Yes**        | Create/update via API                            |
+| `/products/demo/edit`, `/categories/demo/edit`, …                                | No             | Legacy demo routes (optional)                    |
+| `/orders`                                                                        | **Yes**        | List + status updates from API                   |
+| `/orders/[id]`                                                                   | **Yes**        | Order detail + status update                     |
+| `/customers`, `/users/new`                                                       | No             | Demo data                                        |
+| `/coupons`, `/coupons/new`, `/coupons/demo/edit`                                 | No             | Demo data                                        |
+| `/roles`, `/roles/new`                                                           | No             | Demo data — not wired to API RBAC                |
+| `/reports`, `/tax`, `/media`, `/history`                                         | No             | Demo data                                        |
+| `/product-reviews`, `/support-tickets`, `/notifications`                         | No             | Demo data                                        |
+| `/integrations`, `/upgrade`, `/update-app`, `/list-page`                         | No             | Template pages                                   |
+| `/settings`, `/settings/shipping`, `/settings/payments`, `/settings/permissions` | No             | Demo data                                        |
+| `/localization/currency-rates`, `/localization/translation`                      | No             | Demo data                                        |
 
 Navigation source: `admin/config/navigation.ts` + `admin/config/routes.ts`. Optional nav items are hidden when matching `SiteConfig.features` is `false` (e.g. `coupons`, `reviews`).
 

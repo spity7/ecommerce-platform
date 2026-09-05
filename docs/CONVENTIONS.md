@@ -65,15 +65,15 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) § API contract and `.cursor/rules/api-co
 
 ## Server (`@platform/server`)
 
-| Pattern      | Location                                                                                                 |
-| ------------ | -------------------------------------------------------------------------------------------------------- |
-| Routes       | `server/src/routes/*.routes.ts`                                                                          |
-| Models       | Mongoose in `server/src/models/`                                                                         |
-| Errors       | `AppError` + `middleware/errorHandler.ts`                                                                |
-| Async routes | `asyncHandler` wrapper                                                                                   |
-| OpenAPI      | `server/src/openapi/registry.ts`                                                                         |
-| Seed         | `npm run seed` → `server/src/scripts/seed.ts`; `npm run seed:admin` → `server/src/scripts/seed-admin.ts` |
-| Format       | Prettier                                                                                                 |
+| Pattern      | Location                                                                                                                                                                 |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Routes       | `server/src/routes/*.routes.ts`                                                                                                                                          |
+| Models       | Mongoose in `server/src/models/`                                                                                                                                         |
+| Errors       | `AppError` + `middleware/errorHandler.ts`                                                                                                                                |
+| Async routes | `asyncHandler` wrapper                                                                                                                                                   |
+| OpenAPI      | `server/src/openapi/registry.ts`                                                                                                                                         |
+| Seed         | `npm run seed` → `server/src/scripts/seed.ts` (site dataset + `productCount` on categories/brands/attributes); `npm run seed:admin` → `server/src/scripts/seed-admin.ts` |
+| Format       | Prettier                                                                                                                                                                 |
 
 ## Admin (`@platform/admin`)
 
@@ -90,6 +90,8 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) § API contract and `.cursor/rules/api-co
 | Phone inputs | `components/forms/phone-input.tsx` — country selector with E.164 value; default country from `SiteConfig.defaultPhoneCountry`                                                                                                                                                                                                                                                                           |
 
 Catalog list pages fetch from API in Server Components; show inline error banner with seed hint on failure.
+
+Production catalog CRUD forms: `admin/components/catalog/*-catalog-form.tsx` (re-exported from `catalog-forms.tsx`); shared controls in `catalog-form-primitives.tsx`. Slugs are never edited in the UI — the API derives them from names. Category thumbnails support GCS upload or external URL (mutually exclusive modes with clear).
 
 ## Storefront (`@platform/storefront`)
 

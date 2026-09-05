@@ -6,9 +6,17 @@ import {
 } from "@platform/shared";
 import { AppError } from "../middleware/errorHandler.js";
 import { requireAuth, requireAdmin } from "../middleware/auth.js";
-import { Brand } from "../models/Brand.js";
 import { Category } from "../models/Category.js";
+import { Brand } from "../models/Brand.js";
 import { Product } from "../models/Product.js";
+import {
+  adjustAttributeProductCounts,
+  diffAttributeSlugCounts,
+  extractAttributeSlugs,
+  requireBrand,
+  requireCategory,
+  validateProductAttributes,
+} from "../utils/catalog-relations.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { isUniqueKeyError, toProductDto } from "../utils/serializers.js";
 import { slugify } from "../utils/strings.js";
@@ -76,19 +84,19 @@ productsRouter.post(
   requireAdmin,
   asyncHandler(async (req, res) => {
     const payload = createProductSchema.parse(req.body);
-    const slug = payload.slug ?? slugify(payload.name);
+    const slug = slugify(payload.name);
+    const attributes = await validateProductAttributes(payload.attributes);
 
     const category = payload.categoryId
-      ? await Category.findById(payload.categoryId)
+      ? await requireCategory(payload.categoryId)
       : null;
-    const brand = payload.brandId
-      ? await Brand.findById(payload.brandId)
-      : null;
+    const brand = payload.brandId ? await requireBrand(payload.brandId) : null;
 
     try {
       const product = await Product.create({
         ...payload,
         slug,
+        attributes,
         categoryName: category?.name ?? "",
         brandName: brand?.name ?? "",
       });
@@ -105,6 +113,15 @@ productsRouter.post(
           { $inc: { productCount: 1 } }
         );
       }
+
+      await adjustAttributeProductCounts(
+        Object.fromEntries(
+          extractAttributeSlugs(attributes).map((attributeSlug) => [
+            attributeSlug,
+            1,
+          ])
+        )
+      );
 
       res.status(201).json(toProductDto(product));
     } catch (error) {
@@ -129,35 +146,55 @@ productsRouter.patch(
 
     const previousCategoryId = product.categoryId?.toString();
     const previousBrandId = product.brandId?.toString();
+    const previousAttributeSlugs = extractAttributeSlugs(
+      product.attributes as Record<string, string | string[]>
+    );
 
-    if (payload.name && !payload.slug) {
-      payload.slug = slugify(payload.name);
+    if (payload.name) {
+      product.name = payload.name;
+      product.slug = slugify(payload.name);
     }
 
     if (payload.categoryId !== undefined) {
-      const category = payload.categoryId
-        ? await Category.findById(payload.categoryId)
-        : null;
-      product.categoryId = category?._id;
-      product.categoryName = category?.name ?? "";
+      if (payload.categoryId) {
+        const category = await requireCategory(payload.categoryId);
+        product.categoryId = category._id;
+        product.categoryName = category.name;
+      } else {
+        product.categoryId = undefined;
+        product.categoryName = "";
+      }
     }
 
     if (payload.brandId !== undefined) {
-      const brand = payload.brandId
-        ? await Brand.findById(payload.brandId)
-        : null;
-      product.brandId = brand?._id;
-      product.brandName = brand?.name ?? "";
+      if (payload.brandId) {
+        const brand = await requireBrand(payload.brandId);
+        product.brandId = brand._id;
+        product.brandName = brand.name;
+      } else {
+        product.brandId = undefined;
+        product.brandName = "";
+      }
+    }
+
+    if (payload.attributes !== undefined) {
+      product.attributes = await validateProductAttributes(payload.attributes);
     }
 
     const assignable = { ...payload };
+    delete assignable.name;
+    delete assignable.slug;
     delete assignable.categoryId;
     delete assignable.brandId;
+    delete assignable.attributes;
     Object.assign(product, assignable);
     await product.save();
 
     const nextCategoryId = product.categoryId?.toString();
     const nextBrandId = product.brandId?.toString();
+    const nextAttributeSlugs = extractAttributeSlugs(
+      product.attributes as Record<string, string | string[]>
+    );
 
     if (previousCategoryId !== nextCategoryId) {
       if (previousCategoryId) {
@@ -189,6 +226,10 @@ productsRouter.patch(
       }
     }
 
+    await adjustAttributeProductCounts(
+      diffAttributeSlugCounts(previousAttributeSlugs, nextAttributeSlugs)
+    );
+
     res.json(toProductDto(product));
   })
 );
@@ -215,6 +256,14 @@ productsRouter.delete(
         { $inc: { productCount: -1 } }
       );
     }
+
+    await adjustAttributeProductCounts(
+      Object.fromEntries(
+        extractAttributeSlugs(
+          product.attributes as Record<string, string | string[]>
+        ).map((attributeSlug) => [attributeSlug, -1])
+      )
+    );
 
     res.status(204).send();
   })

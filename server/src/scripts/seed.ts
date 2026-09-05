@@ -6,6 +6,7 @@ import { Brand } from "../models/Brand.js";
 import { Category } from "../models/Category.js";
 import { Product } from "../models/Product.js";
 import { getSeedDataForSite } from "./seed-data/index.js";
+import { extractAttributeSlugs } from "../utils/catalog-relations.js";
 
 async function seed() {
   const seedData = getSeedDataForSite(env.SITE_ID, env.site.homeLayout);
@@ -52,6 +53,19 @@ async function seed() {
       { $set: { productCount: Math.ceil(products.length / 2) } }
     );
   }
+
+  const attributeUsage = new Map<string, number>();
+  for (const product of products) {
+    for (const slug of extractAttributeSlugs(product.attributes ?? {})) {
+      attributeUsage.set(slug, (attributeUsage.get(slug) ?? 0) + 1);
+    }
+  }
+
+  await Promise.all(
+    [...attributeUsage.entries()].map(([slug, productCount]) =>
+      Attribute.updateOne({ slug }, { $set: { productCount } })
+    )
+  );
 
   console.log(
     `${env.site.name} seed completed (${seedData.label} dataset for ${env.SITE_ID}).`

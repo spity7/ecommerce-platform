@@ -7,6 +7,8 @@ import {
 import { AppError } from "../middleware/errorHandler.js";
 import { requireAuth, requireAdmin } from "../middleware/auth.js";
 import { Brand } from "../models/Brand.js";
+import { Product } from "../models/Product.js";
+import { syncProductBrandNames } from "../utils/catalog-relations.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { isUniqueKeyError, toBrandDto } from "../utils/serializers.js";
 import { getInitials, slugify } from "../utils/strings.js";
@@ -59,11 +61,19 @@ brandsRouter.post(
   requireAdmin,
   asyncHandler(async (req, res) => {
     const payload = createBrandSchema.parse(req.body);
-    const slug = payload.slug ?? slugify(payload.name);
+    const slug = slugify(payload.name);
     const initials = payload.initials ?? getInitials(payload.name);
 
     try {
-      const brand = await Brand.create({ ...payload, slug, initials });
+      const brand = await Brand.create({
+        name: payload.name,
+        website: payload.website,
+        initials,
+        tileClass: payload.tileClass,
+        visibility: payload.visibility,
+        status: payload.status,
+        slug,
+      });
       res.status(201).json(toBrandDto(brand));
     } catch (error) {
       if (isUniqueKeyError(error)) {
@@ -85,15 +95,37 @@ brandsRouter.patch(
       throw new AppError(404, "Brand not found");
     }
 
-    if (payload.name && !payload.slug) {
-      payload.slug = slugify(payload.name);
+    const previousName = brand.name;
+
+    if (payload.name) {
+      brand.name = payload.name;
+      brand.slug = slugify(payload.name);
+      if (!payload.initials) {
+        brand.initials = getInitials(payload.name);
+      }
     }
-    if (payload.name && !payload.initials) {
-      payload.initials = getInitials(payload.name);
+    if (payload.website !== undefined) {
+      brand.website = payload.website;
+    }
+    if (payload.initials !== undefined) {
+      brand.initials = payload.initials;
+    }
+    if (payload.tileClass !== undefined) {
+      brand.tileClass = payload.tileClass;
+    }
+    if (payload.visibility !== undefined) {
+      brand.visibility = payload.visibility;
+    }
+    if (payload.status !== undefined) {
+      brand.status = payload.status;
     }
 
-    Object.assign(brand, payload);
     await brand.save();
+
+    if (payload.name && payload.name !== previousName) {
+      await syncProductBrandNames(brand._id, brand.name);
+    }
+
     res.json(toBrandDto(brand));
   })
 );
@@ -103,10 +135,22 @@ brandsRouter.delete(
   requireAuth,
   requireAdmin,
   asyncHandler(async (req, res) => {
-    const brand = await Brand.findByIdAndDelete(req.params.id);
+    const brand = await Brand.findById(req.params.id);
     if (!brand) {
       throw new AppError(404, "Brand not found");
     }
+
+    const referencingProducts = await Product.countDocuments({
+      brandId: brand._id,
+    });
+    if (referencingProducts > 0) {
+      throw new AppError(
+        409,
+        `Cannot delete brand: ${referencingProducts} product(s) still reference it`
+      );
+    }
+
+    await brand.deleteOne();
     res.status(204).send();
   })
 );

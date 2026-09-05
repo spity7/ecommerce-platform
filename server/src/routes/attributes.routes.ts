@@ -7,6 +7,8 @@ import {
 import { AppError } from "../middleware/errorHandler.js";
 import { requireAuth, requireAdmin } from "../middleware/auth.js";
 import { Attribute } from "../models/Attribute.js";
+import { Product } from "../models/Product.js";
+import { countProductsUsingAttributeSlug } from "../utils/catalog-relations.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { isUniqueKeyError, toAttributeDto } from "../utils/serializers.js";
 import { slugify } from "../utils/strings.js";
@@ -59,10 +61,17 @@ attributesRouter.post(
   requireAdmin,
   asyncHandler(async (req, res) => {
     const payload = createAttributeSchema.parse(req.body);
-    const slug = payload.slug ?? slugify(payload.name);
+    const slug = slugify(payload.name);
 
     try {
-      const attribute = await Attribute.create({ ...payload, slug });
+      const attribute = await Attribute.create({
+        name: payload.name,
+        displayType: payload.displayType,
+        description: payload.description,
+        status: payload.status,
+        values: payload.values,
+        slug,
+      });
       res.status(201).json(toAttributeDto(attribute));
     } catch (error) {
       if (isUniqueKeyError(error)) {
@@ -84,12 +93,38 @@ attributesRouter.patch(
       throw new AppError(404, "Attribute not found");
     }
 
-    if (payload.name && !payload.slug) {
-      payload.slug = slugify(payload.name);
+    const previousSlug = attribute.slug;
+
+    if (payload.name) {
+      attribute.name = payload.name;
+      attribute.slug = slugify(payload.name);
+    }
+    if (payload.displayType !== undefined) {
+      attribute.displayType = payload.displayType;
+    }
+    if (payload.description !== undefined) {
+      attribute.description = payload.description;
+    }
+    if (payload.status !== undefined) {
+      attribute.status = payload.status;
+    }
+    if (payload.values !== undefined) {
+      attribute.values = payload.values;
     }
 
-    Object.assign(attribute, payload);
     await attribute.save();
+
+    if (payload.name && previousSlug !== attribute.slug) {
+      await Product.updateMany(
+        { [`attributes.${previousSlug}`]: { $exists: true } },
+        {
+          $rename: {
+            [`attributes.${previousSlug}`]: `attributes.${attribute.slug}`,
+          },
+        }
+      );
+    }
+
     res.json(toAttributeDto(attribute));
   })
 );
@@ -99,10 +134,22 @@ attributesRouter.delete(
   requireAuth,
   requireAdmin,
   asyncHandler(async (req, res) => {
-    const attribute = await Attribute.findByIdAndDelete(req.params.id);
+    const attribute = await Attribute.findById(req.params.id);
     if (!attribute) {
       throw new AppError(404, "Attribute not found");
     }
+
+    const referencingProducts = await countProductsUsingAttributeSlug(
+      attribute.slug
+    );
+    if (referencingProducts > 0) {
+      throw new AppError(
+        409,
+        `Cannot delete attribute: ${referencingProducts} product(s) still reference it`
+      );
+    }
+
+    await attribute.deleteOne();
     res.status(204).send();
   })
 );

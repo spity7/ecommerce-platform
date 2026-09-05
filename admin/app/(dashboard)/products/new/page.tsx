@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { ProductCatalogForm } from "@/components/catalog/catalog-forms";
 import { PageHeader } from "@/components/layout/page-header";
-import { fetchBrands, fetchCategories } from "@platform/api-client";
+import {
+  fetchAttributes,
+  fetchBrands,
+  fetchCategories,
+} from "@platform/api-client";
 import { getAdminSiteConfig } from "@/lib/site";
 
 const site = getAdminSiteConfig();
@@ -11,9 +15,10 @@ export const metadata: Metadata = {
 };
 
 export default async function AddProductPage() {
-  const [categoriesRes, brandsRes] = await Promise.all([
+  const [categoriesRes, brandsRes, attributesRes] = await Promise.all([
     fetchCategories({ limit: 100 }),
     fetchBrands({ limit: 100 }),
+    fetchAttributes({ limit: 100, status: "active" }),
   ]);
 
   const categories = categoriesRes.data.map((c) => ({
@@ -21,6 +26,12 @@ export default async function AddProductPage() {
     name: c.name,
   }));
   const brands = brandsRes.data.map((b) => ({ id: b.id, name: b.name }));
+  const attributes = attributesRes.data.map((attribute) => ({
+    slug: attribute.slug,
+    name: attribute.name,
+    displayType: attribute.displayType,
+    values: attribute.values,
+  }));
 
   return (
     <>
@@ -29,7 +40,12 @@ export default async function AddProductPage() {
         eyebrow="Catalog"
         title="Add Product"
       />
-      <ProductCatalogForm brands={brands} categories={categories} mode="add" />
+      <ProductCatalogForm
+        attributes={attributes}
+        brands={brands}
+        categories={categories}
+        mode="add"
+      />
     </>
   );
 }

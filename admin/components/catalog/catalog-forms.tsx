@@ -4,6 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FormCard } from "@/components/forms/admin-form-primitives";
+import {
+  ProductAttributesFields,
+  type ProductFormAttribute,
+} from "@/components/catalog/catalog-form-primitives";
 import { Icon } from "@/components/layout/icon";
 import { routes } from "@/config/routes";
 import {
@@ -61,13 +65,34 @@ async function uploadImage(file: File): Promise<string> {
 }
 
 type ProductCatalogFormProps = {
+  attributes: ProductFormAttribute[];
   categories: Array<{ id: string; name: string }>;
   brands: Array<{ id: string; name: string }>;
   initial?: ProductDto;
   mode: "add" | "edit";
 };
 
+function initialAttributeValues(
+  attributes: ProductFormAttribute[],
+  initial?: ProductDto
+): Record<string, string> {
+  const source = initial?.attributes ?? {};
+  return Object.fromEntries(
+    attributes.map((attribute) => {
+      const raw = source[attribute.slug];
+      const value =
+        typeof raw === "string"
+          ? raw
+          : Array.isArray(raw)
+            ? (raw[0] ?? "")
+            : "";
+      return [attribute.slug, value];
+    })
+  );
+}
+
 export function ProductCatalogForm({
+  attributes,
   categories,
   brands,
   initial,
@@ -88,6 +113,9 @@ export function ProductCatalogForm({
   const [categoryId, setCategoryId] = useState(initial?.categoryId ?? "");
   const [brandId, setBrandId] = useState(initial?.brandId ?? "");
   const [images, setImages] = useState(initial?.images ?? []);
+  const [attributeValues, setAttributeValues] = useState(() =>
+    initialAttributeValues(attributes, initial)
+  );
   const [formState, setFormState] = useState<FormState>({
     error: null,
     loading: false,
@@ -96,6 +124,10 @@ export function ProductCatalogForm({
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     setFormState({ error: null, loading: true });
+
+    const attributesPayload = Object.fromEntries(
+      Object.entries(attributeValues).filter(([, value]) => value.trim())
+    );
 
     const payload = {
       name,
@@ -108,6 +140,7 @@ export function ProductCatalogForm({
       categoryId: categoryId || undefined,
       brandId: brandId || undefined,
       images,
+      attributes: attributesPayload,
     };
 
     try {
@@ -274,6 +307,11 @@ export function ProductCatalogForm({
           </p>
         ) : null}
       </FormCard>
+      <ProductAttributesFields
+        attributes={attributes}
+        onChange={setAttributeValues}
+        values={attributeValues}
+      />
       {formState.error ? (
         <p className="text-[14px] text-danger-600">{formState.error}</p>
       ) : null}

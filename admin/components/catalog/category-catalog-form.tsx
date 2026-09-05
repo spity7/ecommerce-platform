@@ -8,9 +8,11 @@ import {
   CatalogFormLayout,
   ControlledField,
   ControlledSelect,
+  inferThumbnailImageSource,
   ProductCountCard,
   StatusDot,
   ThumbnailUploadCard,
+  type ThumbnailImageSource,
   uploadCatalogImage,
 } from "@/components/catalog/catalog-form-primitives";
 import { FormCard } from "@/components/forms/admin-form-primitives";
@@ -34,8 +36,10 @@ export function CategoryCatalogForm({
 }: CategoryCatalogFormProps) {
   const router = useRouter();
   const [name, setName] = useState(initial?.name ?? "");
-  const [slug, setSlug] = useState(initial?.slug ?? "");
   const [image, setImage] = useState(initial?.image ?? "");
+  const [imageSource, setImageSource] = useState<ThumbnailImageSource>(() =>
+    inferThumbnailImageSource(initial?.image ?? "")
+  );
   const [status, setStatus] = useState<CategoryDto["status"]>(
     initial?.status ?? "draft"
   );
@@ -51,6 +55,7 @@ export function CategoryCatalogForm({
     try {
       const url = await uploadCatalogImage(file, "categories");
       setImage(url);
+      setImageSource("upload");
     } catch (error) {
       setFormState((current) => ({
         ...current,
@@ -61,11 +66,21 @@ export function CategoryCatalogForm({
     }
   }
 
+  function handleImageUrlChange(url: string) {
+    setImage(url);
+    setImageSource(url.trim() ? "url" : "none");
+  }
+
+  function handleClearImage() {
+    setImage("");
+    setImageSource("none");
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setFormState({ error: null, loading: true });
 
-    const payload = { name, slug: slug || undefined, image, status };
+    const payload = { name, image, status };
 
     try {
       if (mode === "add") {
@@ -90,9 +105,11 @@ export function CategoryCatalogForm({
           <>
             <ThumbnailUploadCard
               alt={name || "Category thumbnail"}
+              imageSource={imageSource}
               imageUrl={image}
               loading={uploadingImage}
-              onImageUrlChange={setImage}
+              onClear={handleClearImage}
+              onImageUrlChange={handleImageUrlChange}
               onUpload={handleImageUpload}
             />
             <FormCard
@@ -131,15 +148,6 @@ export function CategoryCatalogForm({
               required
               value={name}
             />
-            {mode === "edit" ? (
-              <ControlledField
-                help="URL path for this category. Auto-generated from the name when created."
-                label="Slug"
-                onChange={setSlug}
-                placeholder="category-slug"
-                value={slug}
-              />
-            ) : null}
           </div>
         </FormCard>
       </CatalogFormLayout>

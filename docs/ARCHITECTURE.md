@@ -36,11 +36,11 @@ ecommerce-platform/
 
 The platform skeleton is real (shared contract, multi-site config, catalog + commerce API). UI is largely a purchased theme with production routes wired for Beauty Station:
 
-| Layer  | API-connected                                                                                        | Template / static                                                |
-| ------ | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| Server | Catalog CRUD + auth + cart/orders/wishlist + uploads + user addresses; slug lookup; category delete blocked when products reference it | No payment gateway; coupons/reviews/blog APIs                    |
-| Admin  | Catalog CRUD + sign-in + orders list/detail; nav filtered by `SiteConfig.features`                   | Dashboard, customers, coupons, reviews, settings, reports (~30 demo pages) |
-| Client | Home layout + `/shop` + `/product/[slug]` (slug API) + customer auth + checkout + wishlist (`/my-wishlist`) | 300+ demo routes; demo catalog items stay local-only in cart     |
+| Layer  | API-connected                                                                                                                                                                        | Template / static                                                          |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| Server | Catalog CRUD + auth + cart/orders/wishlist + uploads + user addresses; slug lookup; referential delete guards (category/brand/attribute); rename propagation; attribute usage counts | No payment gateway; coupons/reviews/blog APIs                              |
+| Admin  | Catalog CRUD + sign-in + orders list/detail; rich catalog forms; product attribute picker; nav filtered by `SiteConfig.features`                                                     | Dashboard, customers, coupons, reviews, settings, reports (~30 demo pages) |
+| Client | Home layout + `/shop` + `/product/[slug]` (slug API) + customer auth + checkout + wishlist (`/my-wishlist`)                                                                          | 300+ demo routes; demo catalog items stay local-only in cart               |
 
 **Auth:** JWT on catalog mutations and uploads. Admin and storefront use **httpOnly cookies** (via each app’s `/api/auth/*` routes) for refresh/access tokens; short-lived access tokens are also held in memory for API calls. Logout, password change, and account deletion revoke refresh tokens (`refreshTokenVersion`). Password reset and **email verification on register** email magic links via SMTP when `SMTP_HOST` is set; without SMTP, dev returns/logs link tokens. **Customers must verify email before `POST /api/orders`.** Storefront Google sign-in (`POST /api/auth/social`) verifies ID tokens when `GOOGLE_CLIENT_ID` is set and can import Google profile photos. OAuth-only users confirm delete/set-password with a Google `idToken`. Customer account deletion is a soft delete with a 14-day reactivation window on login. Auth routes are rate-limited. Production rejects default JWT secrets.
 
@@ -208,10 +208,10 @@ Requires MongoDB on `127.0.0.1:27017` (default DB `ecommerce-platform-test`). Ov
 
 See [ROUTES.md](ROUTES.md) for the full table. Summary:
 
-- `GET/POST /api/products`, `GET /api/products/slug/:slug`, `GET/PATCH/DELETE /api/products/:id`
-- `GET/POST /api/categories`, `GET/PATCH/DELETE /api/categories/:id` (delete returns **409** when products still reference the category)
-- `GET/POST /api/brands`, `GET/PATCH/DELETE /api/brands/:id`
-- `GET/POST /api/attributes`, `GET/PATCH/DELETE /api/attributes/:id`
+- `GET/POST /api/products`, `GET /api/products/slug/:slug`, `GET/PATCH/DELETE /api/products/:id` (PATCH validates category/brand FKs and attribute keys/values; maintains `productCount` on category/brand/attribute)
+- `GET/POST /api/categories`, `GET/PATCH/DELETE /api/categories/:id` (delete **409** when products reference it; rename propagates `categoryName`; slug server-derived from name)
+- `GET/POST /api/brands`, `GET/PATCH/DELETE /api/brands/:id` (delete **409** when products reference it; rename propagates `brandName`; slug server-derived)
+- `GET/POST /api/attributes`, `GET/PATCH/DELETE /api/attributes/:id` (delete **409** when products use attribute slug; rename re-slugs and migrates product keys; `productCount` maintained on product CRUD)
 - `POST /api/uploads`
 - `GET /api/health`
 
@@ -221,7 +221,7 @@ Catalog **GET** routes are public. Catalog **POST/PATCH/DELETE** and **uploads**
 
 - **MongoDB** via Mongoose 9 — one database per site (`MONGODB_URI`)
 - Models: `Product`, `Category`, `Brand`, `Attribute` in `server/src/models/`
-- Seed: `npm run seed` → `server/src/scripts/seed.ts` (dataset from `SITE_ID` + `homeLayout`: beauty, sport, or general)
+- Seed: `npm run seed` → `server/src/scripts/seed.ts` (dataset from `SITE_ID` + `homeLayout`: beauty, sport, or general). Sets `productCount` on categories, brands, and attributes from seeded product links.
 - Optional media: Google Cloud Storage (`POST /api/uploads` returns 503 if not configured). Image uploads above **800 KB** are automatically re-encoded to WebP between **400 KB and 800 KB** before storage (applies to all GCS uploads, including profile photos).
 
 ## Feature flags
@@ -240,7 +240,7 @@ Site-specific modules are defined in site config (`features.*`). Admin navigatio
 
 - Tailwind 4 + Biome lint + Prettier.
 - Optional `basePath` from `NEXT_PUBLIC_BASE_URL` in `admin/next.config.ts`.
-- Catalog list + CRUD pages use `@platform/api-client`. Nav items with `feature` keys respect `SiteConfig.features`.
+- Catalog list + CRUD pages use `@platform/api-client`. Production forms in `components/catalog/*-catalog-form.tsx` (shared UI in `catalog-form-primitives.tsx`); slugs are server-generated. Product form includes active-attribute picker. Nav items with `feature` keys respect `SiteConfig.features`.
 
 ## Tooling
 

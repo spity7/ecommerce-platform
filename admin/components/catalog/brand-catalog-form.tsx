@@ -38,7 +38,6 @@ type BrandCatalogFormProps = {
 export function BrandCatalogForm({ initial, mode }: BrandCatalogFormProps) {
   const router = useRouter();
   const [name, setName] = useState(initial?.name ?? "");
-  const [slug, setSlug] = useState(initial?.slug ?? "");
   const [website, setWebsite] = useState(initial?.website ?? "");
   const [initials, setInitials] = useState(initial?.initials ?? "");
   const [tileClass, setTileClass] = useState(
@@ -68,7 +67,6 @@ export function BrandCatalogForm({ initial, mode }: BrandCatalogFormProps) {
 
     const payload = {
       name,
-      slug: slug || undefined,
       website,
       status,
       visibility,
@@ -161,15 +159,6 @@ export function BrandCatalogForm({ initial, mode }: BrandCatalogFormProps) {
               required
               value={name}
             />
-            {mode === "edit" ? (
-              <ControlledField
-                help="URL path for this brand. Auto-generated from the name when created."
-                label="Slug"
-                onChange={setSlug}
-                placeholder="brand-slug"
-                value={slug}
-              />
-            ) : null}
             <ControlledField
               help="Shown in brand tiles (max 4 characters)."
               label="Initials"

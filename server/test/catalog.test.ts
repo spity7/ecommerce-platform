@@ -224,4 +224,176 @@ describe("catalog API", () => {
 
     await request(app).get(`/api/categories/${categoryId}`).expect(404);
   });
+
+  it("blocks brand delete when products reference it", async () => {
+    const { body } = await registerAdmin(app);
+
+    const brandResponse = await request(app)
+      .post("/api/brands")
+      .set(authHeader(body.accessToken))
+      .send({ name: `Blocked Brand ${Date.now()}`, status: "published" })
+      .expect(201);
+
+    const brandId = brandResponse.body.id;
+
+    await request(app)
+      .post("/api/products")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: "Brand Linked Product",
+        sku: `BRAND-LINK-${Date.now()}`,
+        price: 12,
+        stock: 3,
+        status: "published",
+        brandId,
+      })
+      .expect(201);
+
+    const deleteResponse = await request(app)
+      .delete(`/api/brands/${brandId}`)
+      .set(authHeader(body.accessToken))
+      .expect(409);
+
+    assert.match(deleteResponse.body.error, /still reference it/);
+  });
+
+  it("propagates category rename to linked products", async () => {
+    const { body } = await registerAdmin(app);
+    const suffix = Date.now();
+
+    const categoryResponse = await request(app)
+      .post("/api/categories")
+      .set(authHeader(body.accessToken))
+      .send({ name: `Original Category ${suffix}`, status: "published" })
+      .expect(201);
+
+    const categoryId = categoryResponse.body.id;
+
+    const productResponse = await request(app)
+      .post("/api/products")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: "Rename Category Product",
+        sku: `RENAME-CAT-${suffix}`,
+        price: 10,
+        stock: 1,
+        status: "published",
+        categoryId,
+      })
+      .expect(201);
+
+    const renamed = `Renamed Category ${suffix}`;
+    await request(app)
+      .patch(`/api/categories/${categoryId}`)
+      .set(authHeader(body.accessToken))
+      .send({ name: renamed })
+      .expect(200);
+
+    const product = await request(app)
+      .get(`/api/products/${productResponse.body.id}`)
+      .expect(200);
+
+    assert.equal(product.body.categoryName, renamed);
+  });
+
+  it("returns 404 when product references missing category", async () => {
+    const { body } = await registerAdmin(app);
+
+    await request(app)
+      .post("/api/products")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: "Missing Category Product",
+        sku: `MISSING-CAT-${Date.now()}`,
+        price: 10,
+        stock: 1,
+        categoryId: "507f1f77bcf86cd799439011",
+      })
+      .expect(404);
+  });
+
+  it("tracks attribute usage counts on products", async () => {
+    const { body } = await registerAdmin(app);
+    const suffix = Date.now();
+
+    const attributeResponse = await request(app)
+      .post("/api/attributes")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: `Finish ${suffix}`,
+        displayType: "Dropdown",
+        status: "active",
+        values: ["Matte", "Gloss"],
+      })
+      .expect(201);
+
+    const attributeSlug = attributeResponse.body.slug;
+    assert.equal(attributeResponse.body.productCount, 0);
+
+    const productResponse = await request(app)
+      .post("/api/products")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: "Attribute Count Product",
+        sku: `ATTR-COUNT-${suffix}`,
+        price: 15,
+        stock: 2,
+        status: "published",
+        attributes: { [attributeSlug]: "Matte" },
+      })
+      .expect(201);
+
+    const attribute = await request(app)
+      .get(`/api/attributes/${attributeResponse.body.id}`)
+      .expect(200);
+
+    assert.equal(attribute.body.productCount, 1);
+
+    await request(app)
+      .delete(`/api/products/${productResponse.body.id}`)
+      .set(authHeader(body.accessToken))
+      .expect(204);
+
+    const attributeAfterDelete = await request(app)
+      .get(`/api/attributes/${attributeResponse.body.id}`)
+      .expect(200);
+
+    assert.equal(attributeAfterDelete.body.productCount, 0);
+  });
+
+  it("blocks attribute delete when products reference it", async () => {
+    const { body } = await registerAdmin(app);
+    const suffix = Date.now();
+
+    const attributeResponse = await request(app)
+      .post("/api/attributes")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: `Blocked Attribute ${suffix}`,
+        displayType: "Dropdown",
+        status: "active",
+        values: ["Small", "Large"],
+      })
+      .expect(201);
+
+    await request(app)
+      .post("/api/products")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: "Attribute Linked Product",
+        sku: `ATTR-LINK-${suffix}`,
+        price: 12,
+        stock: 3,
+        status: "published",
+        attributes: { [attributeResponse.body.slug]: "Small" },
+      })
+      .expect(201);
+
+    const deleteResponse = await request(app)
+      .delete(`/api/attributes/${attributeResponse.body.id}`)
+      .set(authHeader(body.accessToken))
+      .expect(409);
+
+    assert.match(deleteResponse.body.error, /still reference it/);
+  });
 });

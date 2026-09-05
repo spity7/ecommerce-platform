@@ -32,7 +32,7 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the full picture.
 npm install
 npm run build:packages
 npm run dev:server
-npm run seed
+npm run seed          # Categories, brands, attributes, products (+ productCount)
 npm run seed:admin   # Create or promote first admin (server/.env ADMIN_*)
 npm run dev:admin
 npm run dev:client

@@ -10,6 +10,20 @@ import { cn } from "@/utils/cn";
 
 const PLACEHOLDER_IMAGE = "/assets/products/oat-biscuit.svg";
 
+export type ThumbnailImageSource = "none" | "upload" | "url";
+
+export function inferThumbnailImageSource(
+  imageUrl: string
+): ThumbnailImageSource {
+  if (!imageUrl.trim()) {
+    return "none";
+  }
+  if (imageUrl.includes("storage.googleapis.com")) {
+    return "upload";
+  }
+  return "url";
+}
+
 export async function uploadCatalogImage(
   file: File,
   folder: "categories" | "brands" | "products"
@@ -169,21 +183,27 @@ export function ControlledSelect({
 
 export function ThumbnailUploadCard({
   alt,
+  imageSource = "none",
   imageUrl,
   loading,
+  onClear,
   onImageUrlChange,
   onUpload,
   title = "Thumbnail",
 }: {
   alt: string;
+  imageSource?: ThumbnailImageSource;
   imageUrl: string;
   loading?: boolean;
+  onClear?: () => void;
   onImageUrlChange?: (url: string) => void;
   onUpload: (file: File) => Promise<void>;
   title?: string;
 }) {
   const preview = imageUrl || PLACEHOLDER_IMAGE;
   const isRemote = preview.startsWith("http");
+  const hasImage = imageSource !== "none" && Boolean(imageUrl);
+  const urlFieldLocked = imageSource === "upload";
 
   return (
     <FormCard title={title}>
@@ -221,20 +241,42 @@ export function ThumbnailUploadCard({
           />
         </label>
         <p className="mt-4 text-[12px] text-ink-400">
-          {loading ? "Uploading…" : "Upload a square image. PNG, JPG, or WebP."}
+          {loading
+            ? "Uploading…"
+            : urlFieldLocked
+              ? "Uploaded to storage. Clear the image to paste an external URL."
+              : hasImage
+                ? "Upload a new file or edit the URL below."
+                : "Upload a square image or paste a URL below. PNG, JPG, or WebP."}
         </p>
         {onImageUrlChange ? (
           <label className="mt-4 block w-full text-left">
             <span className="text-[12px] font-semibold text-ink-600">
-              Or paste image URL
+              {urlFieldLocked ? "Hosted image URL" : "Or paste image URL"}
             </span>
             <input
-              className="mt-1.5 h-9 w-full rounded-base border border-surface-line bg-surface-body px-3 text-[13px] placeholder:text-ink-400 focus:border-brand-600"
+              className={cn(
+                "mt-1.5 h-9 w-full rounded-base border border-surface-line bg-surface-body px-3 text-[13px] placeholder:text-ink-400 focus:border-brand-600",
+                urlFieldLocked &&
+                  "cursor-not-allowed bg-surface-muted text-ink-500"
+              )}
+              disabled={loading || urlFieldLocked}
               onChange={(event) => onImageUrlChange(event.target.value)}
               placeholder="https://…"
+              readOnly={urlFieldLocked}
               value={imageUrl}
             />
           </label>
+        ) : null}
+        {hasImage && onClear ? (
+          <button
+            className="mt-4 inline-flex h-9 items-center gap-2 rounded-base border border-surface-line px-4 text-[13px] font-semibold text-ink-700 hover:bg-surface-muted"
+            onClick={onClear}
+            type="button"
+          >
+            <Icon className="h-3.5 w-3.5" name="x" />
+            Clear image
+          </button>
         ) : null}
       </div>
     </FormCard>
@@ -388,4 +430,72 @@ export function createAttributeValueRows(
     id: `value-${index}-${value}`,
     value,
   }));
+}
+
+export type ProductFormAttribute = {
+  displayType: "Dropdown" | "Swatch" | "Text";
+  name: string;
+  slug: string;
+  values: string[];
+};
+
+export function ProductAttributesFields({
+  attributes,
+  onChange,
+  values,
+}: {
+  attributes: ProductFormAttribute[];
+  onChange: (values: Record<string, string>) => void;
+  values: Record<string, string>;
+}) {
+  if (attributes.length === 0) {
+    return null;
+  }
+
+  return (
+    <FormCard title="Attributes">
+      <div className="grid gap-4 sm:grid-cols-2">
+        {attributes.map((attribute) => {
+          const currentValue = values[attribute.slug] ?? "";
+
+          if (attribute.displayType === "Text") {
+            return (
+              <ControlledField
+                key={attribute.slug}
+                label={attribute.name}
+                onChange={(value) =>
+                  onChange({ ...values, [attribute.slug]: value })
+                }
+                placeholder={`Enter ${attribute.name.toLowerCase()}`}
+                value={currentValue}
+              />
+            );
+          }
+
+          return (
+            <ControlledSelect
+              help={
+                attribute.displayType === "Swatch"
+                  ? "Choose a predefined swatch value."
+                  : undefined
+              }
+              key={attribute.slug}
+              label={attribute.name}
+              onChange={(value) =>
+                onChange({ ...values, [attribute.slug]: value })
+              }
+              options={[
+                { label: "None", value: "" },
+                ...attribute.values.map((value) => ({
+                  label: value,
+                  value,
+                })),
+              ]}
+              value={currentValue}
+            />
+          );
+        })}
+      </div>
+    </FormCard>
+  );
 }

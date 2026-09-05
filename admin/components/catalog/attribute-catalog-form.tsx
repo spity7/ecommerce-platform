@@ -33,7 +33,6 @@ export function AttributeCatalogForm({
 }: AttributeCatalogFormProps) {
   const router = useRouter();
   const [name, setName] = useState(initial?.name ?? "");
-  const [slug, setSlug] = useState(initial?.slug ?? "");
   const [displayType, setDisplayType] = useState<AttributeDto["displayType"]>(
     initial?.displayType ?? "Dropdown"
   );
@@ -57,7 +56,6 @@ export function AttributeCatalogForm({
 
     const payload = {
       name,
-      slug: slug || undefined,
       displayType,
       description,
       status,
@@ -96,15 +94,6 @@ export function AttributeCatalogForm({
               required
               value={name}
             />
-            {mode === "edit" ? (
-              <ControlledField
-                help="URL path for this attribute. Auto-generated from the name when created."
-                label="Slug"
-                onChange={setSlug}
-                placeholder="color"
-                value={slug}
-              />
-            ) : null}
             <ControlledSelect
               help="How values should be displayed in admin forms."
               label="Display type"

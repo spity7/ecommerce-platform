@@ -8,6 +8,7 @@ import { AppError } from "../middleware/errorHandler.js";
 import { requireAuth, requireAdmin } from "../middleware/auth.js";
 import { Category } from "../models/Category.js";
 import { Product } from "../models/Product.js";
+import { syncProductCategoryNames } from "../utils/catalog-relations.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { isUniqueKeyError, toCategoryDto } from "../utils/serializers.js";
 import { slugify } from "../utils/strings.js";
@@ -60,10 +61,15 @@ categoriesRouter.post(
   requireAdmin,
   asyncHandler(async (req, res) => {
     const payload = createCategorySchema.parse(req.body);
-    const slug = payload.slug ?? slugify(payload.name);
+    const slug = slugify(payload.name);
 
     try {
-      const category = await Category.create({ ...payload, slug });
+      const category = await Category.create({
+        name: payload.name,
+        image: payload.image,
+        status: payload.status,
+        slug,
+      });
       res.status(201).json(toCategoryDto(category));
     } catch (error) {
       if (isUniqueKeyError(error)) {
@@ -85,12 +91,25 @@ categoriesRouter.patch(
       throw new AppError(404, "Category not found");
     }
 
-    if (payload.name && !payload.slug) {
-      payload.slug = slugify(payload.name);
+    const previousName = category.name;
+
+    if (payload.name) {
+      category.name = payload.name;
+      category.slug = slugify(payload.name);
+    }
+    if (payload.image !== undefined) {
+      category.image = payload.image;
+    }
+    if (payload.status !== undefined) {
+      category.status = payload.status;
     }
 
-    Object.assign(category, payload);
     await category.save();
+
+    if (payload.name && payload.name !== previousName) {
+      await syncProductCategoryNames(category._id, category.name);
+    }
+
     res.json(toCategoryDto(category));
   })
 );
