@@ -28,6 +28,7 @@ const productSchema = new Schema(
     metadata: { type: Schema.Types.Mixed, default: {} },
     averageRating: { type: Number, default: 0, min: 0, max: 5 },
     reviewCount: { type: Number, default: 0, min: 0 },
+    unitsSold: { type: Number, default: 0, min: 0 },
   },
   { timestamps: true }
 );

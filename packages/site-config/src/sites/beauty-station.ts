@@ -26,6 +26,14 @@ export const beautyStationConfig = {
     wishlist: true,
     customerAuth: true,
   },
+  merchandising: {
+    newProductDays: 30,
+    lowStockThreshold: 5,
+    topRatedMinRating: 4.5,
+    topRatedMinReviews: 10,
+    maxImageBadges: 2,
+    bestSellerMinUnitsSold: 5,
+  },
   defaultPhoneCountry: "LB",
   contact: {
     email: "hello@beautystation.com",

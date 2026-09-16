@@ -42,9 +42,9 @@ ecommerce-platform/
 | -------------------------------------------------------------------------------- | --------------------------------------------------------- | ------------- |
 | [ARCHITECTURE.md](ARCHITECTURE.md)                                               | Monorepo layout, multi-site, OpenAPI/Orval, CI, new sites | 2026-09-16    |
 | [ROUTES.md](ROUTES.md)                                                           | HTTP API + admin/storefront route inventory               | 2026-09-16    |
-| [CONVENTIONS.md](CONVENTIONS.md)                                                 | Naming, UI stacks, patterns per workspace                 | 2026-09-11    |
+| [CONVENTIONS.md](CONVENTIONS.md)                                                 | Naming, UI stacks, patterns per workspace                 | 2026-09-17    |
 | [../admin/README.md](../admin/README.md)                                         | Admin workspace scope + API integration                   | 2026-09-05    |
-| [site-registry.json](site-registry.json)                                         | Deployed sites metadata (DB, GCS, URLs, features)         | 2026-09-15    |
+| [site-registry.json](site-registry.json)                                         | Deployed sites metadata (DB, GCS, URLs, features)         | 2026-09-16    |
 | [../AGENTS.md](../AGENTS.md)                                                     | Cross-tool agent entry                                    | 2026-08-24    |
 | [../CLAUDE.md](../CLAUDE.md)                                                     | Claude Code quick commands                                | 2026-08-22    |
 | [../GEMINI.md](../GEMINI.md)                                                     | Antigravity / Gemini overrides                            | 2026-08-20    |

@@ -1,4 +1,5 @@
 import { z } from "../zod.js";
+import { productMerchandisingSchema } from "./product-badges.js";
 import { PRODUCT_SORT_OPTIONS } from "../types/catalog.js";
 import {
   ATTRIBUTE_DISPLAY_TYPES,
@@ -25,6 +26,7 @@ export const createProductSchema = z.object({
     .record(z.string(), z.union([z.string(), z.array(z.string())]))
     .default({}),
   metadata: z.record(z.string(), z.unknown()).default({}),
+  merchandising: productMerchandisingSchema.optional(),
 });
 
 // PATCH bodies must not inherit create defaults — `.partial()` on defaulted fields
@@ -45,6 +47,7 @@ export const updateProductSchema = z.object({
     .record(z.string(), z.union([z.string(), z.array(z.string())]))
     .optional(),
   metadata: z.record(z.string(), z.unknown()).optional(),
+  merchandising: productMerchandisingSchema.optional(),
 });
 
 const categoryImageSchema = z

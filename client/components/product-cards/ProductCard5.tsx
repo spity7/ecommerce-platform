@@ -6,6 +6,7 @@ import { getProductReviewCount } from "@/lib/mappers/product";
 import { Product } from "@/types";
 import AddToQuickViewOne from "../action-buttons/AddToQuickViewOne";
 import AddToWishlistTwo from "../action-buttons/AddToWishlistTwo";
+import ProductCardImageBadges from "./ProductCardImageBadges";
 
 export default function ProductCard5({
   product,
@@ -70,15 +71,11 @@ export default function ProductCard5({
             />
           )}
         </Link>
-        {product.badge && (
-          <div
-            className={`${product.badge.bg} rbt-product-badge  rbt-badge-top-left--position`}
-          >
-            {" "}
-            {/* Adjusted class structure */}
-            {product.badge.text}
-          </div>
-        )}
+        <ProductCardImageBadges
+          badge={product.badge}
+          badges={product.badges}
+          layout="singleAbsolute"
+        />
         <div className="rbt-quick-btn-grp has-mixup-midlayer rbt-top-right--position hover-variation-one">
           <AddToWishlistTwo
             parentClass="rbt-wishlist-btn bg-light-one rbt-quick-btn tooltips"

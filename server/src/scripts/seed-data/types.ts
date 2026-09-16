@@ -37,6 +37,8 @@ export type SeedProduct = {
   categorySlug?: string;
   brandSlug?: string;
   attributes?: Record<string, string>;
+  metadata?: Record<string, unknown>;
+  unitsSold?: number;
 };
 
 export type SiteSeedData = {

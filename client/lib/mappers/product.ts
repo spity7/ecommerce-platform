@@ -1,8 +1,15 @@
-import type { ProductDto } from "@platform/shared";
-import type { Product } from "@/types/product";
+import type { ProductCardBadgeDto, ProductDto } from "@platform/shared";
+import type { Product, ProductBadge } from "@/types/product";
 
 const DEFAULT_PRODUCT_IMAGE =
   "/assets/images/product-img/beauty-product/beauty-product-st-05.webp";
+
+function mapBadgeDtoToStorefront(badge: ProductCardBadgeDto): ProductBadge {
+  return {
+    text: badge.text,
+    bg: badge.bg,
+  };
+}
 
 export function getProductReviewCount(
   product: Pick<Product, "reviewCount" | "ratingCount">
@@ -15,6 +22,7 @@ export function mapProductDtoToStorefront(product: ProductDto): Product {
     product.images.length > 0 ? product.images : [DEFAULT_PRODUCT_IMAGE];
   const reviewCount = product.reviewCount ?? 0;
   const averageRating = product.averageRating ?? 0;
+  const storefrontBadges = (product.badges ?? []).map(mapBadgeDtoToStorefront);
 
   return {
     id: product.slug,
@@ -38,6 +46,8 @@ export function mapProductDtoToStorefront(product: ProductDto): Product {
     rating: reviewCount > 0 ? averageRating : undefined,
     ratingCount: reviewCount,
     reviewCount,
+    badge: storefrontBadges[0] ?? null,
+    badges: storefrontBadges.length > 0 ? storefrontBadges : undefined,
   };
 }
 

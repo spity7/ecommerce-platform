@@ -13,6 +13,8 @@ export type HomeLayoutId =
   | "sport"
   | "general";
 
+import type { SiteMerchandisingConfig } from "./product-badges.js";
+
 export type SiteFeatures = {
   attributes: boolean;
   brands: boolean;
@@ -54,4 +56,5 @@ export type SiteConfig = {
     title: string;
     description: string;
   };
+  merchandising?: SiteMerchandisingConfig;
 };

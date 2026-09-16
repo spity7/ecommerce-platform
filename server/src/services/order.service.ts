@@ -37,7 +37,7 @@ async function decrementStockWithRollback(
           status: "published",
           stock: { $gte: item.quantity },
         },
-        { $inc: { stock: -item.quantity } }
+        { $inc: { stock: -item.quantity, unitsSold: item.quantity } }
       );
 
       if (result.modifiedCount === 0) {
@@ -53,7 +53,7 @@ async function decrementStockWithRollback(
     for (const entry of decremented) {
       await Product.updateOne(
         { _id: entry.productId },
-        { $inc: { stock: entry.quantity } }
+        { $inc: { stock: entry.quantity, unitsSold: -entry.quantity } }
       );
     }
     throw error;
@@ -66,7 +66,7 @@ export async function restoreOrderStock(
   for (const item of items) {
     await Product.updateOne(
       { _id: item.productId },
-      { $inc: { stock: item.quantity } }
+      { $inc: { stock: item.quantity, unitsSold: -item.quantity } }
     );
   }
 }

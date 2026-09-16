@@ -633,6 +633,23 @@ Card Area
     color: var(--color-green);
     border: 1px solid var(--color-green);
   }
+  &.rbt-product-badge-bg-info {
+    background: var(--color-primary);
+  }
+  &.rbt-product-badge-bg-warning {
+    background: var(--color-warning);
+  }
+  &.rbt-product-badge-bg-success {
+    background: var(--color-success);
+  }
+  &.rbt-product-badge-bg-red {
+    background: var(--color-danger);
+  }
+  &.rbt-product-badge-bg-light-red {
+    background: #fde8e8;
+    color: var(--color-danger);
+    border: 1px solid var(--color-danger);
+  }
   &.border-rounded {
     border-radius: 30px;
   }

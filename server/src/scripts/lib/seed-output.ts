@@ -31,10 +31,14 @@ export function printSeedSummary(input: {
   );
   console.log(`  Commerce:   carts, orders, wishlists, and reviews cleared`);
   if (input.reviewCount !== undefined && input.reviewCount > 0) {
-    console.log(`  Reviews:    ${input.reviewCount} sample review(s) seeded`);
+    console.log(
+      `  Reviews:    ${input.reviewCount} seeded (incl. Top rated demos on peptide eye cream + rosewater toner)`
+    );
   }
   if (input.removedCustomers > 0) {
-    console.log(`  Customers:  removed ${input.removedCustomers} stale account(s)`);
+    console.log(
+      `  Customers:  removed ${input.removedCustomers} stale account(s)`
+    );
   }
   console.log("");
   console.log("  Sign-in accounts");
@@ -49,13 +53,20 @@ export function printSeedSummary(input: {
     console.log("  Customer:   skipped (SEED_DEMO_CUSTOMER=false)");
   }
   console.log("");
-  console.log("  Images use storefront /assets paths — no GCS upload required.");
+  console.log(
+    "  Images use storefront /assets paths — no GCS upload required."
+  );
+  console.log(
+    "  Badges:     seed includes manual + auto (sale, new, sold out, low stock, best seller) demos."
+  );
   if (
     input.credentialHints.adminUsesDefaultPassword ||
     input.credentialHints.demoUsesDefaultPassword
   ) {
     console.log("");
-    console.log("  Dev defaults in use. Set ADMIN_* and DEMO_CUSTOMER_* in server/.env for production.");
+    console.log(
+      "  Dev defaults in use. Set ADMIN_* and DEMO_CUSTOMER_* in server/.env for production."
+    );
   }
   console.log(divider);
   console.log("");

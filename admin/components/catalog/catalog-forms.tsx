@@ -44,8 +44,13 @@ import {
 } from "@/lib/product-form-options";
 import { useToast } from "@/providers/toast-provider";
 import { useCatalogFormLeaveGuard } from "@/components/catalog/use-catalog-form-leave-guard";
+import { ProductMerchandisingFields } from "@/components/catalog/product-merchandising-fields";
 import { createProductApi, updateProductApi } from "@platform/api-client";
-import type { ProductDto } from "@platform/shared";
+import {
+  parseProductMerchandising,
+  type ProductDto,
+  type ProductMerchandising,
+} from "@platform/shared";
 
 export { AttributeCatalogForm } from "./attribute-catalog-form";
 export { BrandCatalogForm } from "./brand-catalog-form";
@@ -213,6 +218,10 @@ export function ProductCatalogForm({
   const [attributeValues, setAttributeValues] = useState(() =>
     initialAttributeValues(attributes, initial)
   );
+  const [merchandising, setMerchandising] = useState<ProductMerchandising>(() =>
+    initial?.merchandising ??
+      parseProductMerchandising(initial?.metadata ?? {})
+  );
   const [formState, setFormState] = useState<FormState>({
     error: null,
     loading: false,
@@ -309,6 +318,7 @@ export function ProductCatalogForm({
         brandId: brandId || undefined,
         images: savedImages,
         attributes: attributesPayload,
+        merchandising,
       };
 
       let productId: string;
@@ -412,6 +422,13 @@ export function ProductCatalogForm({
               onChange={setAttributeValues}
               values={attributeValues}
             />
+            <FormCard title="Storefront badges">
+              <ProductMerchandisingFields
+                disabled={disabled}
+                merchandising={merchandising}
+                onChange={setMerchandising}
+              />
+            </FormCard>
           </>
         }
       >

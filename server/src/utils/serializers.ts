@@ -11,6 +11,10 @@ import type { AttributeDocument } from "../models/Attribute.js";
 import type { BrandDocument } from "../models/Brand.js";
 import type { CategoryDocument } from "../models/Category.js";
 import type { ProductDocument } from "../models/Product.js";
+import {
+  getMerchandisingFromDocument,
+  resolveBadgesForProductDocument,
+} from "../services/product-merchandising.js";
 import type { UserAddressSubdocument, UserDocument } from "../models/User.js";
 
 function toIsoString(value: Date | string | undefined): string {
@@ -42,6 +46,9 @@ export function toProductDto(doc: ProductDocument): ProductDto {
     metadata: doc.metadata ?? {},
     averageRating: doc.averageRating ?? 0,
     reviewCount: doc.reviewCount ?? 0,
+    badges: resolveBadgesForProductDocument(doc),
+    merchandising: getMerchandisingFromDocument(doc),
+    unitsSold: doc.unitsSold ?? 0,
     createdAt: toIsoString(doc.createdAt),
     updatedAt: toIsoString(doc.updatedAt),
   };

@@ -18,6 +18,7 @@ import ProductOptionsPanel4 from "../productOptionsPanels/ProductOptionsPanel4";
 import Tooltip from "@/components/common/ui/Tooltip";
 import { Product } from "@/types";
 import { formatCurrency } from "@/lib/price";
+import ProductCardImageBadges from "@/components/product-cards/ProductCardImageBadges";
 
 export default function DetailsCosmetic({ product }: { product: Product }) {
   const categoryLabel = product.category?.[0];
@@ -40,7 +41,13 @@ export default function DetailsCosmetic({ product }: { product: Product }) {
           <div className="col-xl-8 col-lg-12 mt--24">
             <div className="row row--24 justify-content-center mt_dec--24">
               <div className="col-xl-12 mt--24">
-                <div className="rbt-single-product-media-area rbt-single-product-media-area-dflt">
+                <div className="rbt-single-product-media-area rbt-single-product-media-area-dflt position-relative">
+                  <ProductCardImageBadges
+                    badge={product.badge}
+                    badges={product.badges}
+                    layout="singleAbsolute"
+                    rounded
+                  />
                   <Slider3 alt={product.title} images={product.images} />
                 </div>
               </div>

@@ -26,6 +26,10 @@ import {
   validateProductAttributes,
 } from "../utils/catalog-relations.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import {
+  resolveMetadataForProductWrite,
+  stripMerchandisingFromAssignPayload,
+} from "../services/product-merchandising.js";
 import { isUniqueKeyError, toProductDto } from "../utils/serializers.js";
 import { generateSku, slugify } from "../utils/strings.js";
 import {
@@ -168,9 +172,13 @@ productsRouter.post(
       brandId: payload.brandId,
     });
 
+    const metadata = resolveMetadataForProductWrite(undefined, payload);
+    const createBody = stripMerchandisingFromAssignPayload(payload);
+
     try {
       const product = await Product.create({
-        ...payload,
+        ...createBody,
+        metadata: metadata ?? {},
         slug,
         sku,
         attributes,
@@ -276,12 +284,21 @@ productsRouter.patch(
       brandId: publishBrandId,
     });
 
-    const assignable = { ...payload };
+    const metadataUpdate = resolveMetadataForProductWrite(
+      (product.metadata as Record<string, unknown>) ?? {},
+      payload
+    );
+    if (metadataUpdate !== undefined) {
+      product.metadata = metadataUpdate;
+    }
+
+    const assignable = stripMerchandisingFromAssignPayload({ ...payload });
     delete assignable.name;
     delete assignable.slug;
     delete assignable.categoryId;
     delete assignable.brandId;
     delete assignable.attributes;
+    delete assignable.metadata;
     Object.assign(product, assignable);
     await product.save();
 

@@ -13,6 +13,7 @@ import AddToCompareThree from "../action-buttons/AddToCompareThree";
 import AddToWishlist from "../action-buttons/AddToWishlistOne";
 import AddToQuickViewOne from "../action-buttons/AddToQuickViewOne";
 import ModalTriggerButton from "../action-buttons/ModalTriggerButton";
+import ProductCardImageBadges from "./ProductCardImageBadges";
 
 export default function ProductCard9({
   product,
@@ -64,18 +65,12 @@ export default function ProductCard9({
                 />
               )}
             </Link>
-            {product.badges && product.badges.length > 0 && (
-              <div className="rbt-badge-wrapper rbt-content-top-left">
-                {product.badges.map((badge, index) => (
-                  <div
-                    key={index}
-                    className={`rbt-product-badge ${badge.bg} border-rounded`}
-                  >
-                    {badge.text}
-                  </div>
-                ))}
-              </div>
-            )}
+            <ProductCardImageBadges
+              badge={product.badge}
+              badges={product.badges}
+              layout="stack"
+              rounded
+            />
             {product.watchingTooltip && (
               <Tooltip
                 content={`👁️ ${product.watchingTooltip} People Are Watching This Item`}

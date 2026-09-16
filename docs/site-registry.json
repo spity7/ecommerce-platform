@@ -23,6 +23,14 @@
       "wishlist": true,
       "customerAuth": true
     },
+    "merchandising": {
+      "newProductDays": 30,
+      "lowStockThreshold": 5,
+      "topRatedMinRating": 4.5,
+      "topRatedMinReviews": 10,
+      "maxImageBadges": 2,
+      "bestSellerMinUnitsSold": 5
+    },
     "deploySha": null,
     "notes": "Primary cosmetics & skincare site. Features must match packages/site-config/src/sites/beauty-station.ts."
   }

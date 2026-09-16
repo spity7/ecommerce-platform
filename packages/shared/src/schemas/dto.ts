@@ -1,5 +1,9 @@
 import { z } from "../zod.js";
 import {
+  productCardBadgeDtoSchema,
+  productMerchandisingSchema,
+} from "./product-badges.js";
+import {
   ATTRIBUTE_DISPLAY_TYPES,
   ATTRIBUTE_STATUSES,
   BRAND_STATUSES,
@@ -27,6 +31,9 @@ export const productDtoSchema = z.object({
   metadata: z.record(z.string(), z.unknown()),
   averageRating: z.number().min(0).max(5).optional(),
   reviewCount: z.number().int().min(0).optional(),
+  badges: z.array(productCardBadgeDtoSchema).max(2),
+  merchandising: productMerchandisingSchema.optional(),
+  unitsSold: z.number().int().min(0).optional(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 });
