@@ -47,6 +47,9 @@ export type ApiOrderRow = Order & {
   apiId: string;
   apiStatus: OrderStatus;
   customerEmail?: string;
+  customerAvatarUrl?: string;
+  /** Numeric total from API (USD) for sorting and filters. */
+  totalAmount: number;
 };
 
 export function mapOrderDtoToApiOrderRow(order: OrderDto): ApiOrderRow {
@@ -56,5 +59,7 @@ export function mapOrderDtoToApiOrderRow(order: OrderDto): ApiOrderRow {
     apiId: order.id,
     apiStatus: order.status,
     customerEmail: order.customerEmail,
+    customerAvatarUrl: order.customerAvatarUrl,
+    totalAmount: order.total,
   };
 }

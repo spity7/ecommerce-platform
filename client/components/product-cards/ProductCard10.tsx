@@ -7,6 +7,7 @@ import Countdown from "../common/ui/Countdown";
 import Facts from "../common/other-components/Facts";
 import Tooltip from "@/components/common/ui/Tooltip";
 
+import { getProductReviewCount } from "@/lib/mappers/product";
 import { Product } from "@/types";
 import AddToCart from "../action-buttons/AddToCart";
 import AddToCompareOne from "../action-buttons/AddToCompareOne";
@@ -23,6 +24,11 @@ export default function ProductCard10({
   animationOrder?: number;
 }) {
   const detailsPageLink = `${detailsPageUrl}/${product.id}`;
+  const reviewCount = getProductReviewCount(product);
+  const displayRating = Math.min(
+    5,
+    Math.max(0, Math.round(product.rating ?? 0))
+  );
   const [selectedVariant, setSelectedVariant] = useSyncedState(
     product.imgSrc,
     product.id
@@ -172,18 +178,18 @@ export default function ProductCard10({
           <h6 className="rbt-card-title">
             <Link href={detailsPageLink}>{product.title}</Link>
           </h6>
-          {(product.reviewCount ?? 0) > 0 ? (
+          {reviewCount > 0 ? (
             <div className="rbt-card-rating">
               <ul className="rbt-rating-icon-list">
                 {Array.from({ length: 5 }, (_, index) => (
                   <li key={index}>
                     <i
-                      className={`fa-solid fa-star${index < (product.rating ?? 0) ? " rbt-rated-icon" : ""}`}
+                      className={`fa-solid fa-star${index < displayRating ? " rbt-rated-icon" : ""}`}
                     />
                   </li>
                 ))}
               </ul>
-              <p className="rating-digit">({product.reviewCount})</p>
+              <p className="rating-digit">({reviewCount})</p>
               {product.extraInfo && product.extraInfo.length > 0 && <Facts />}
             </div>
           ) : null}

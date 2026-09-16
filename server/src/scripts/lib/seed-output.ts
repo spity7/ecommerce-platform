@@ -9,6 +9,7 @@ export function printSeedSummary(input: {
   admin: SeedUserResult;
   demoCustomer: SeedUserResult | null;
   removedCustomers: number;
+  reviewCount?: number;
   credentialHints: {
     adminUsesDefaultPassword: boolean;
     demoUsesDefaultPassword: boolean;
@@ -28,7 +29,10 @@ export function printSeedSummary(input: {
   console.log(
     `  Products:   ${input.catalog.publishedProducts} published, ${input.catalog.products - input.catalog.publishedProducts} draft (${input.catalog.products} total)`
   );
-  console.log(`  Commerce:   carts, orders, and wishlists cleared`);
+  console.log(`  Commerce:   carts, orders, wishlists, and reviews cleared`);
+  if (input.reviewCount !== undefined && input.reviewCount > 0) {
+    console.log(`  Reviews:    ${input.reviewCount} sample review(s) seeded`);
+  }
   if (input.removedCustomers > 0) {
     console.log(`  Customers:  removed ${input.removedCustomers} stale account(s)`);
   }

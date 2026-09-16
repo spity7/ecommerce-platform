@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { UserProfileAvatar } from "@/components/ui/user-profile-avatar";
 import { useEffect, useRef, useState } from "react";
 import { routes } from "@/config/routes";
 import { siteConfig } from "@/config/site";
@@ -153,6 +154,7 @@ export function UserProfileDropdown({ variant }: UserProfileDropdownProps) {
   const { user, loading } = useAuthSession();
   const displayName = user?.name ?? (loading ? "Loading…" : "Admin");
   const displayEmail = user?.email ?? "";
+  const avatarUrl = user?.avatarUrl;
   const menuLabel = `${displayName} Admin - open account menu`;
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -195,12 +197,10 @@ export function UserProfileDropdown({ variant }: UserProfileDropdownProps) {
           onClick={() => setOpen((current) => !current)}
           type="button"
         >
-          <Image
+          <UserProfileAvatar
             alt={displayName}
-            className="h-9 w-9 shrink-0 rounded-full object-cover"
-            height={36}
-            src={`${baseURL}assets/avatars/admin-avatar.svg`}
-            width={36}
+            avatarUrl={avatarUrl}
+            size={36}
           />
           <span className="user-text min-w-0 flex-1">
             <span className="block truncate text-[14px] font-semibold text-ink-900">
@@ -216,6 +216,7 @@ export function UserProfileDropdown({ variant }: UserProfileDropdownProps) {
           />
         </button>
         <UserMenu
+          avatarUrl={avatarUrl}
           displayEmail={displayEmail}
           displayName={displayName}
           id={menuId}
@@ -237,12 +238,11 @@ export function UserProfileDropdown({ variant }: UserProfileDropdownProps) {
         onClick={() => setOpen((current) => !current)}
         type="button"
       >
-        <Image
+        <UserProfileAvatar
           alt={displayName}
-          className="h-10 w-10 rounded-full border border-surface-line object-cover"
-          height={40}
-          src={`${baseURL}assets/avatars/admin-avatar.svg`}
-          width={40}
+          avatarUrl={avatarUrl}
+          className="border border-surface-line"
+          size={40}
         />
         <span className="hidden text-left lg:block">
           <span className="block text-[15px] font-semibold leading-tight text-ink-900">
@@ -254,6 +254,7 @@ export function UserProfileDropdown({ variant }: UserProfileDropdownProps) {
         </span>
       </button>
       <UserMenu
+        avatarUrl={avatarUrl}
         displayEmail={displayEmail}
         displayName={displayName}
         id={menuId}
@@ -265,6 +266,7 @@ export function UserProfileDropdown({ variant }: UserProfileDropdownProps) {
 }
 
 type UserMenuProps = {
+  avatarUrl?: string;
   displayEmail: string;
   displayName: string;
   id: string;
@@ -273,6 +275,7 @@ type UserMenuProps = {
 };
 
 function UserMenu({
+  avatarUrl,
   displayEmail,
   displayName,
   id,
@@ -295,13 +298,7 @@ function UserMenu({
       role="menu"
     >
       <div className="flex items-center gap-3 border-b border-surface-line px-2 pb-3 pt-2">
-        <Image
-          alt={displayName}
-          className="h-9 w-9 rounded-full object-cover"
-          height={36}
-          src={`${baseURL}assets/avatars/admin-avatar.svg`}
-          width={36}
-        />
+        <UserProfileAvatar alt={displayName} avatarUrl={avatarUrl} size={36} />
         <span className="min-w-0 flex-1">
           <span className="block truncate text-[14px] font-semibold text-ink-900">
             {displayName}

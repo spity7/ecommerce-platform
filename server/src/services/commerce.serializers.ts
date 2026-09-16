@@ -41,7 +41,7 @@ export function toCartDto(doc: CartDocument): CartDto {
 
 export function toOrderDto(
   doc: OrderDocument,
-  customer?: { name: string; email: string }
+  customer?: { name: string; email: string; avatarUrl?: string }
 ): OrderDto {
   const items = doc.items.map((item) => ({
     productId: item.productId.toString(),
@@ -59,6 +59,7 @@ export function toOrderDto(
     userId: doc.userId.toString(),
     customerName: customer?.name,
     customerEmail: customer?.email,
+    customerAvatarUrl: customer?.avatarUrl,
     status: doc.status,
     items,
     itemCount,

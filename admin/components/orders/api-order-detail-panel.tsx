@@ -8,16 +8,10 @@ import { useBusyActionGuard } from "@platform/react-busy";
 import type { OrderDto, OrderStatus } from "@platform/shared";
 import { Breadcrumb } from "@/components/layout/breadcrumb";
 import { Icon } from "@/components/layout/icon";
-import { StatusBadge } from "@/components/ui/status-badge";
+import { OrderStatusConfirmDialog } from "@/components/orders/order-status-confirm-dialog";
+import { OrderStatusSelect } from "@/components/orders/order-status-select";
+import { UserProfileAvatar } from "@/components/ui/user-profile-avatar";
 import { routes } from "@/config/routes";
-
-const API_STATUSES: OrderStatus[] = [
-  "pending",
-  "processing",
-  "shipped",
-  "delivered",
-  "cancelled",
-];
 
 function formatMoney(amount: number): string {
   return new Intl.NumberFormat("en-US", {
@@ -33,24 +27,6 @@ function formatDateTime(value: string): string {
   }).format(new Date(value));
 }
 
-function capitalize(value: string): string {
-  return value.charAt(0).toUpperCase() + value.slice(1);
-}
-
-function statusClass(status: OrderStatus): string {
-  switch (status) {
-    case "delivered":
-      return "bg-success-50 text-success-700";
-    case "cancelled":
-      return "bg-error-50 text-error-700";
-    case "shipped":
-    case "processing":
-      return "bg-warning-50 text-warning-700";
-    default:
-      return "bg-surface-muted text-ink-700";
-  }
-}
-
 type ApiOrderDetailPanelProps = {
   orderId: string;
 };
@@ -61,6 +37,7 @@ export function ApiOrderDetailPanel({ orderId }: ApiOrderDetailPanelProps) {
   const [error, setError] = useState<string | null>(null);
   const [statusError, setStatusError] = useState<string | null>(null);
   const [updatingStatus, setUpdatingStatus] = useState(false);
+  const [pendingStatus, setPendingStatus] = useState<OrderStatus | null>(null);
   const { disabled } = useBusyActionGuard({ active: updatingStatus });
 
   const loadOrder = useCallback(async () => {
@@ -81,15 +58,23 @@ export function ApiOrderDetailPanel({ orderId }: ApiOrderDetailPanelProps) {
     void loadOrder();
   }, [loadOrder]);
 
-  async function handleStatusChange(status: OrderStatus) {
-    if (!order || updatingStatus) {
+  function requestStatusChange(status: OrderStatus) {
+    if (!order || status === order.status || updatingStatus) {
+      return;
+    }
+    setPendingStatus(status);
+  }
+
+  async function confirmStatusChange() {
+    if (!order || !pendingStatus || updatingStatus) {
       return;
     }
 
     setStatusError(null);
     setUpdatingStatus(true);
     try {
-      await platformApi.updateOrder(order.id, { status });
+      await platformApi.updateOrder(order.id, { status: pendingStatus });
+      setPendingStatus(null);
       await loadOrder();
     } catch (err) {
       setStatusError(
@@ -160,25 +145,14 @@ export function ApiOrderDetailPanel({ orderId }: ApiOrderDetailPanelProps) {
           <h2 className="mb-4 text-[18px] font-semibold text-ink-900">
             Order status
           </h2>
-          <StatusBadge
-            className={statusClass(order.status)}
-            label={capitalize(order.status)}
-          />
-          <select
-            aria-busy={updatingStatus}
-            className="mt-4 w-full rounded-base border border-ink-200 px-3 py-2 text-[14px] disabled:cursor-not-allowed disabled:opacity-60"
-            disabled={disabled}
+          <OrderStatusSelect
+            ariaLabel="Update order status"
+            className="w-full"
+            disabled={disabled || pendingStatus !== null}
+            onValueChange={requestStatusChange}
+            size="default"
             value={order.status}
-            onChange={(event) =>
-              void handleStatusChange(event.target.value as OrderStatus)
-            }
-          >
-            {API_STATUSES.map((status) => (
-              <option key={status} value={status}>
-                {capitalize(status)}
-              </option>
-            ))}
-          </select>
+          />
           {statusError ? (
             <p className="mt-3 text-[13px] text-error-600">{statusError}</p>
           ) : null}
@@ -193,11 +167,15 @@ export function ApiOrderDetailPanel({ orderId }: ApiOrderDetailPanelProps) {
           <h2 className="mb-4 text-[18px] font-semibold text-ink-900">
             Customer
           </h2>
+          <div className="mb-4 flex items-center gap-3">
+            <UserProfileAvatar
+              alt={customerLabel}
+              avatarUrl={order.customerAvatarUrl}
+              size={48}
+            />
+            <p className="font-semibold text-ink-900">{customerLabel}</p>
+          </div>
           <dl className="space-y-3 text-[14px]">
-            <div>
-              <dt className="text-ink-500">Name</dt>
-              <dd className="font-medium text-ink-900">{customerLabel}</dd>
-            </div>
             {order.customerEmail ? (
               <div>
                 <dt className="text-ink-500">Email</dt>
@@ -288,6 +266,16 @@ export function ApiOrderDetailPanel({ orderId }: ApiOrderDetailPanelProps) {
           </table>
         </div>
       </section>
+      <OrderStatusConfirmDialog
+        customerLabel={customerLabel}
+        loading={updatingStatus}
+        nextStatus={pendingStatus}
+        onClose={() => setPendingStatus(null)}
+        onConfirm={() => void confirmStatusChange()}
+        open={pendingStatus !== null}
+        orderLabel={`#${order.id.slice(-8).toUpperCase()}`}
+        previousStatus={order.status}
+      />
     </>
   );
 }

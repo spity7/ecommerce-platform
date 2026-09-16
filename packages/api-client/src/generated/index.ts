@@ -11,6 +11,7 @@ import { getCategories } from "./categories/categories";
 import { getHealth } from "./health/health";
 import { getOrders } from "./orders/orders";
 import { getProducts } from "./products/products";
+import { getReviews } from "./reviews/reviews";
 import { getUploads } from "./uploads/uploads";
 import { getUsers } from "./users/users";
 import { getWishlist } from "./wishlist/wishlist";
@@ -25,6 +26,7 @@ export const getPlatformAPI = () => ({
   ...getHealth(),
   ...getOrders(),
   ...getProducts(),
+  ...getReviews(),
   ...getUploads(),
   ...getUsers(),
   ...getWishlist(),

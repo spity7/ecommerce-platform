@@ -78,3 +78,15 @@ export {
 } from "./commerce-api.js";
 
 export { fetchAdminUsers, updateAdminUserStatus } from "./admin-api.js";
+
+export {
+  fetchProductReviews,
+  fetchProductReviewSummary,
+  submitProductReview,
+  fetchMyReviews,
+  updateReview,
+  deleteReview,
+  fetchAdminReviews,
+  moderateReview,
+  deleteAdminReview,
+} from "./reviews-api.js";

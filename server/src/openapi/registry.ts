@@ -59,6 +59,14 @@ import {
   adminUserListItemSchema,
   paginatedAdminUsersSchema,
   updateAdminUserStatusSchema,
+  createReviewSchema,
+  updateReviewSchema,
+  reviewDtoSchema,
+  paginatedReviewsSchema,
+  productReviewListQuerySchema,
+  adminReviewListQuerySchema,
+  adminReviewModerationSchema,
+  productReviewSummarySchema,
 } from "@platform/shared";
 import { z } from "@platform/shared/zod";
 
@@ -90,6 +98,10 @@ const addressIdParamSchema = z.object({
 
 const productIdParamSchema = z.object({
   productId: z.string().openapi({ description: "Product ID" }),
+});
+
+const reviewIdParamSchema = z.object({
+  id: z.string().openapi({ description: "Review ID" }),
 });
 
 openApiRegistry.register("ProductDto", productDtoSchema);
@@ -148,6 +160,17 @@ openApiRegistry.register(
   "ValidationErrorResponse",
   validationErrorResponseSchema
 );
+openApiRegistry.register("CreateReviewInput", createReviewSchema);
+openApiRegistry.register("UpdateReviewInput", updateReviewSchema);
+openApiRegistry.register("ReviewDto", reviewDtoSchema);
+openApiRegistry.register("PaginatedReviews", paginatedReviewsSchema);
+openApiRegistry.register("ProductReviewListQuery", productReviewListQuerySchema);
+openApiRegistry.register("AdminReviewListQuery", adminReviewListQuerySchema);
+openApiRegistry.register(
+  "AdminReviewModerationInput",
+  adminReviewModerationSchema
+);
+openApiRegistry.register("ProductReviewSummary", productReviewSummarySchema);
 
 function registerCrudPaths(options: {
   tag: string;
@@ -765,6 +788,148 @@ openApiRegistry.registerPath({
       },
     },
   },
+});
+
+openApiRegistry.registerPath({
+  method: "get",
+  path: "/api/products/{productId}/reviews",
+  tags: ["Reviews"],
+  operationId: "listProductReviews",
+  summary: "List approved product reviews",
+  request: { params: productIdParamSchema, query: productReviewListQuerySchema },
+  responses: {
+    200: {
+      description: "Paginated reviews",
+      content: { "application/json": { schema: paginatedReviewsSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "get",
+  path: "/api/products/{productId}/reviews/summary",
+  tags: ["Reviews"],
+  operationId: "getProductReviewSummary",
+  summary: "Product review summary",
+  request: { params: productIdParamSchema },
+  responses: {
+    200: {
+      description: "Review summary",
+      content: { "application/json": { schema: productReviewSummarySchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "post",
+  path: "/api/products/{productId}/reviews",
+  tags: ["Reviews"],
+  operationId: "submitProductReview",
+  summary: "Submit or update a product review",
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: productIdParamSchema,
+    body: { content: { "application/json": { schema: createReviewSchema } } },
+  },
+  responses: {
+    201: {
+      description: "Review submitted",
+      content: { "application/json": { schema: reviewDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "get",
+  path: "/api/reviews/me",
+  tags: ["Reviews"],
+  operationId: "listMyReviews",
+  summary: "List current customer reviews",
+  security: [{ bearerAuth: [] }],
+  responses: {
+    200: {
+      description: "Customer reviews",
+      content: { "application/json": { schema: paginatedReviewsSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "patch",
+  path: "/api/reviews/{id}",
+  tags: ["Reviews"],
+  operationId: "updateReview",
+  summary: "Update own review",
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: reviewIdParamSchema,
+    body: { content: { "application/json": { schema: updateReviewSchema } } },
+  },
+  responses: {
+    200: {
+      description: "Updated review",
+      content: { "application/json": { schema: reviewDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "delete",
+  path: "/api/reviews/{id}",
+  tags: ["Reviews"],
+  operationId: "deleteReview",
+  summary: "Delete own review",
+  security: [{ bearerAuth: [] }],
+  request: { params: reviewIdParamSchema },
+  responses: { 204: { description: "Review deleted" } },
+});
+
+openApiRegistry.registerPath({
+  method: "get",
+  path: "/api/admin/reviews",
+  tags: ["Admin"],
+  operationId: "listAdminReviews",
+  summary: "List reviews for moderation",
+  security: [{ bearerAuth: [] }],
+  request: { query: adminReviewListQuerySchema },
+  responses: {
+    200: {
+      description: "Paginated reviews",
+      content: { "application/json": { schema: paginatedReviewsSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "patch",
+  path: "/api/admin/reviews/{id}",
+  tags: ["Admin"],
+  operationId: "moderateReview",
+  summary: "Approve or reject a review",
+  security: [{ bearerAuth: [] }],
+  request: {
+    params: reviewIdParamSchema,
+    body: {
+      content: { "application/json": { schema: adminReviewModerationSchema } },
+    },
+  },
+  responses: {
+    200: {
+      description: "Moderated review",
+      content: { "application/json": { schema: reviewDtoSchema } },
+    },
+  },
+});
+
+openApiRegistry.registerPath({
+  method: "delete",
+  path: "/api/admin/reviews/{id}",
+  tags: ["Admin"],
+  operationId: "deleteAdminReview",
+  summary: "Delete a review",
+  security: [{ bearerAuth: [] }],
+  request: { params: reviewIdParamSchema },
+  responses: { 204: { description: "Review deleted" } },
 });
 
 openApiRegistry.registerPath({

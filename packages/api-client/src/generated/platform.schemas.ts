@@ -36,6 +36,13 @@ export interface ProductDto {
   images: string[];
   attributes: ProductDtoAttributes;
   metadata: ProductDtoMetadata;
+  /**
+   * @minimum 0
+   * @maximum 5
+   */
+  averageRating?: number;
+  /** @minimum 0 */
+  reviewCount?: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -506,6 +513,13 @@ export type PaginatedProductsDataItem = {
   images: string[];
   attributes: PaginatedProductsDataItemAttributes;
   metadata: PaginatedProductsDataItemMetadata;
+  /**
+   * @minimum 0
+   * @maximum 5
+   */
+  averageRating?: number;
+  /** @minimum 0 */
+  reviewCount?: number;
   createdAt: string;
   updatedAt: string;
 };
@@ -926,6 +940,7 @@ export interface OrderDto {
   userId: string;
   customerName?: string;
   customerEmail?: string;
+  customerAvatarUrl?: string;
   status: OrderDtoStatus;
   items: OrderDtoItemsItem[];
   itemCount: number;
@@ -988,6 +1003,7 @@ export type PaginatedOrdersDataItem = {
   userId: string;
   customerName?: string;
   customerEmail?: string;
+  customerAvatarUrl?: string;
   status: PaginatedOrdersDataItemStatus;
   items: PaginatedOrdersDataItemItemsItem[];
   itemCount: number;
@@ -1211,6 +1227,187 @@ export interface ValidationErrorResponse {
   details: ValidationErrorResponseDetails;
 }
 
+export interface CreateReviewInput {
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating: number;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  title: string;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  body: string;
+}
+
+export interface UpdateReviewInput {
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating?: number;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  title?: string;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  body?: string;
+}
+
+export type ReviewDtoStatus =
+  (typeof ReviewDtoStatus)[keyof typeof ReviewDtoStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ReviewDtoStatus = {
+  pending: "pending",
+  approved: "approved",
+  rejected: "rejected",
+} as const;
+
+export interface ReviewDto {
+  id: string;
+  productId: string;
+  productName: string;
+  productSlug: string;
+  userId: string;
+  authorName: string;
+  authorAvatarUrl?: string;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating: number;
+  title: string;
+  body: string;
+  status: ReviewDtoStatus;
+  verifiedPurchase: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type PaginatedReviewsDataItemStatus =
+  (typeof PaginatedReviewsDataItemStatus)[keyof typeof PaginatedReviewsDataItemStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PaginatedReviewsDataItemStatus = {
+  pending: "pending",
+  approved: "approved",
+  rejected: "rejected",
+} as const;
+
+export type PaginatedReviewsDataItem = {
+  id: string;
+  productId: string;
+  productName: string;
+  productSlug: string;
+  userId: string;
+  authorName: string;
+  authorAvatarUrl?: string;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating: number;
+  title: string;
+  body: string;
+  status: PaginatedReviewsDataItemStatus;
+  verifiedPurchase: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export interface PaginatedReviews {
+  data: PaginatedReviewsDataItem[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export interface ProductReviewListQuery {
+  /** @minimum 1 */
+  page?: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  minRating?: number;
+}
+
+export type AdminReviewListQueryStatus =
+  (typeof AdminReviewListQueryStatus)[keyof typeof AdminReviewListQueryStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const AdminReviewListQueryStatus = {
+  pending: "pending",
+  approved: "approved",
+  rejected: "rejected",
+} as const;
+
+export interface AdminReviewListQuery {
+  /** @minimum 1 */
+  page?: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  minRating?: number;
+  status?: AdminReviewListQueryStatus;
+  search?: string;
+}
+
+export type AdminReviewModerationInputStatus =
+  (typeof AdminReviewModerationInputStatus)[keyof typeof AdminReviewModerationInputStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const AdminReviewModerationInputStatus = {
+  approved: "approved",
+  rejected: "rejected",
+} as const;
+
+export interface AdminReviewModerationInput {
+  status: AdminReviewModerationInputStatus;
+}
+
+export type ProductReviewSummaryRatingBreakdownItem = {
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  star: number;
+  /** @minimum 0 */
+  count: number;
+};
+
+export interface ProductReviewSummary {
+  /**
+   * @minimum 0
+   * @maximum 5
+   */
+  averageRating: number;
+  /** @minimum 0 */
+  reviewCount: number;
+  ratingBreakdown: ProductReviewSummaryRatingBreakdownItem[];
+}
+
 export type ListProductParams = {
   /**
    * @minimum 1
@@ -1283,6 +1480,13 @@ export type ListProduct200DataItem = {
   images: string[];
   attributes: ListProduct200DataItemAttributes;
   metadata: ListProduct200DataItemMetadata;
+  /**
+   * @minimum 0
+   * @maximum 5
+   */
+  averageRating?: number;
+  /** @minimum 0 */
+  reviewCount?: number;
   createdAt: string;
   updatedAt: string;
 };
@@ -1371,6 +1575,13 @@ export type CreateProduct201 = {
   images: string[];
   attributes: CreateProduct201Attributes;
   metadata: CreateProduct201Metadata;
+  /**
+   * @minimum 0
+   * @maximum 5
+   */
+  averageRating?: number;
+  /** @minimum 0 */
+  reviewCount?: number;
   createdAt: string;
   updatedAt: string;
 };
@@ -1421,6 +1632,13 @@ export type GetProduct200 = {
   images: string[];
   attributes: GetProduct200Attributes;
   metadata: GetProduct200Metadata;
+  /**
+   * @minimum 0
+   * @maximum 5
+   */
+  averageRating?: number;
+  /** @minimum 0 */
+  reviewCount?: number;
   createdAt: string;
   updatedAt: string;
 };
@@ -1506,6 +1724,13 @@ export type UpdateProduct200 = {
   images: string[];
   attributes: UpdateProduct200Attributes;
   metadata: UpdateProduct200Metadata;
+  /**
+   * @minimum 0
+   * @maximum 5
+   */
+  averageRating?: number;
+  /** @minimum 0 */
+  reviewCount?: number;
   createdAt: string;
   updatedAt: string;
 };
@@ -1570,6 +1795,13 @@ export type GetProductBySlug200 = {
   images: string[];
   attributes: GetProductBySlug200Attributes;
   metadata: GetProductBySlug200Metadata;
+  /**
+   * @minimum 0
+   * @maximum 5
+   */
+  averageRating?: number;
+  /** @minimum 0 */
+  reviewCount?: number;
   createdAt: string;
   updatedAt: string;
 };
@@ -2944,6 +3176,329 @@ export type MoveWishlistItemToCart200 = {
   cart: MoveWishlistItemToCart200Cart;
 };
 
+export type ListProductReviewsParams = {
+  /**
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  minRating?: number;
+};
+
+export type ListProductReviews200DataItemStatus =
+  (typeof ListProductReviews200DataItemStatus)[keyof typeof ListProductReviews200DataItemStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ListProductReviews200DataItemStatus = {
+  pending: "pending",
+  approved: "approved",
+  rejected: "rejected",
+} as const;
+
+export type ListProductReviews200DataItem = {
+  id: string;
+  productId: string;
+  productName: string;
+  productSlug: string;
+  userId: string;
+  authorName: string;
+  authorAvatarUrl?: string;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating: number;
+  title: string;
+  body: string;
+  status: ListProductReviews200DataItemStatus;
+  verifiedPurchase: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ListProductReviews200 = {
+  data: ListProductReviews200DataItem[];
+  total: number;
+  page: number;
+  limit: number;
+};
+
+export type SubmitProductReviewBody = {
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating: number;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  title: string;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  body: string;
+};
+
+export type SubmitProductReview201Status =
+  (typeof SubmitProductReview201Status)[keyof typeof SubmitProductReview201Status];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const SubmitProductReview201Status = {
+  pending: "pending",
+  approved: "approved",
+  rejected: "rejected",
+} as const;
+
+export type SubmitProductReview201 = {
+  id: string;
+  productId: string;
+  productName: string;
+  productSlug: string;
+  userId: string;
+  authorName: string;
+  authorAvatarUrl?: string;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating: number;
+  title: string;
+  body: string;
+  status: SubmitProductReview201Status;
+  verifiedPurchase: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type GetProductReviewSummary200RatingBreakdownItem = {
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  star: number;
+  /** @minimum 0 */
+  count: number;
+};
+
+export type GetProductReviewSummary200 = {
+  /**
+   * @minimum 0
+   * @maximum 5
+   */
+  averageRating: number;
+  /** @minimum 0 */
+  reviewCount: number;
+  ratingBreakdown: GetProductReviewSummary200RatingBreakdownItem[];
+};
+
+export type ListMyReviews200DataItemStatus =
+  (typeof ListMyReviews200DataItemStatus)[keyof typeof ListMyReviews200DataItemStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ListMyReviews200DataItemStatus = {
+  pending: "pending",
+  approved: "approved",
+  rejected: "rejected",
+} as const;
+
+export type ListMyReviews200DataItem = {
+  id: string;
+  productId: string;
+  productName: string;
+  productSlug: string;
+  userId: string;
+  authorName: string;
+  authorAvatarUrl?: string;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating: number;
+  title: string;
+  body: string;
+  status: ListMyReviews200DataItemStatus;
+  verifiedPurchase: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ListMyReviews200 = {
+  data: ListMyReviews200DataItem[];
+  total: number;
+  page: number;
+  limit: number;
+};
+
+export type UpdateReviewBody = {
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating?: number;
+  /**
+   * @minLength 1
+   * @maxLength 120
+   */
+  title?: string;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  body?: string;
+};
+
+export type UpdateReview200Status =
+  (typeof UpdateReview200Status)[keyof typeof UpdateReview200Status];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UpdateReview200Status = {
+  pending: "pending",
+  approved: "approved",
+  rejected: "rejected",
+} as const;
+
+export type UpdateReview200 = {
+  id: string;
+  productId: string;
+  productName: string;
+  productSlug: string;
+  userId: string;
+  authorName: string;
+  authorAvatarUrl?: string;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating: number;
+  title: string;
+  body: string;
+  status: UpdateReview200Status;
+  verifiedPurchase: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ListAdminReviewsParams = {
+  /**
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  minRating?: number;
+  status?: ListAdminReviewsStatus;
+  search?: string;
+};
+
+export type ListAdminReviewsStatus =
+  (typeof ListAdminReviewsStatus)[keyof typeof ListAdminReviewsStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ListAdminReviewsStatus = {
+  pending: "pending",
+  approved: "approved",
+  rejected: "rejected",
+} as const;
+
+export type ListAdminReviews200DataItemStatus =
+  (typeof ListAdminReviews200DataItemStatus)[keyof typeof ListAdminReviews200DataItemStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ListAdminReviews200DataItemStatus = {
+  pending: "pending",
+  approved: "approved",
+  rejected: "rejected",
+} as const;
+
+export type ListAdminReviews200DataItem = {
+  id: string;
+  productId: string;
+  productName: string;
+  productSlug: string;
+  userId: string;
+  authorName: string;
+  authorAvatarUrl?: string;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating: number;
+  title: string;
+  body: string;
+  status: ListAdminReviews200DataItemStatus;
+  verifiedPurchase: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ListAdminReviews200 = {
+  data: ListAdminReviews200DataItem[];
+  total: number;
+  page: number;
+  limit: number;
+};
+
+export type ModerateReviewBodyStatus =
+  (typeof ModerateReviewBodyStatus)[keyof typeof ModerateReviewBodyStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ModerateReviewBodyStatus = {
+  approved: "approved",
+  rejected: "rejected",
+} as const;
+
+export type ModerateReviewBody = {
+  status: ModerateReviewBodyStatus;
+};
+
+export type ModerateReview200Status =
+  (typeof ModerateReview200Status)[keyof typeof ModerateReview200Status];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ModerateReview200Status = {
+  pending: "pending",
+  approved: "approved",
+  rejected: "rejected",
+} as const;
+
+export type ModerateReview200 = {
+  id: string;
+  productId: string;
+  productName: string;
+  productSlug: string;
+  userId: string;
+  authorName: string;
+  authorAvatarUrl?: string;
+  /**
+   * @minimum 1
+   * @maximum 5
+   */
+  rating: number;
+  title: string;
+  body: string;
+  status: ModerateReview200Status;
+  verifiedPurchase: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type CreateOrderBodyShippingAddress = {
   /**
    * @minLength 1
@@ -3025,6 +3580,7 @@ export type CreateOrder201 = {
   userId: string;
   customerName?: string;
   customerEmail?: string;
+  customerAvatarUrl?: string;
   status: CreateOrder201Status;
   items: CreateOrder201ItemsItem[];
   itemCount: number;
@@ -3087,6 +3643,7 @@ export type ListOrders200DataItem = {
   userId: string;
   customerName?: string;
   customerEmail?: string;
+  customerAvatarUrl?: string;
   status: ListOrders200DataItemStatus;
   items: ListOrders200DataItemItemsItem[];
   itemCount: number;
@@ -3156,6 +3713,7 @@ export type GetOrder200 = {
   userId: string;
   customerName?: string;
   customerEmail?: string;
+  customerAvatarUrl?: string;
   status: GetOrder200Status;
   items: GetOrder200ItemsItem[];
   itemCount: number;
@@ -3234,6 +3792,7 @@ export type UpdateOrder200 = {
   userId: string;
   customerName?: string;
   customerEmail?: string;
+  customerAvatarUrl?: string;
   status: UpdateOrder200Status;
   items: UpdateOrder200ItemsItem[];
   itemCount: number;
@@ -3296,6 +3855,7 @@ export type CancelOrder200 = {
   userId: string;
   customerName?: string;
   customerEmail?: string;
+  customerAvatarUrl?: string;
   status: CancelOrder200Status;
   items: CancelOrder200ItemsItem[];
   itemCount: number;

@@ -17,6 +17,7 @@ import { cartRouter } from "./cart.routes.js";
 import { ordersRouter } from "./orders.routes.js";
 import { usersRouter } from "./users.routes.js";
 import { wishlistRouter } from "./wishlist.routes.js";
+import { reviewsRouter } from "./reviews.routes.js";
 
 const ALLOWED_UPLOAD_FOLDERS = new Set(["categories", "brands", "products"]);
 const ALLOWED_UPLOAD_MIME_TYPES = new Set([
@@ -42,6 +43,7 @@ apiRouter.use("/cart", cartRouter);
 apiRouter.use("/orders", ordersRouter);
 apiRouter.use("/users", usersRouter);
 apiRouter.use("/wishlist", wishlistRouter);
+apiRouter.use("/reviews", reviewsRouter);
 apiRouter.use("/admin", adminRouter);
 
 apiRouter.post(

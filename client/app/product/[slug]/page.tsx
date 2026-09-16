@@ -6,7 +6,13 @@ import SimillerProducts4 from "@/components/product-details/others/SimillerProdu
 import { StorefrontChrome } from "@/components/site/StorefrontChrome";
 import { mapProductDtoToStorefront } from "@/lib/mappers/product";
 import { getStorefrontSiteConfig } from "@/lib/site";
-import { fetchProductBySlug } from "@platform/api-client";
+import {
+  fetchProductBySlug,
+  fetchProductReviewSummary,
+  fetchProductReviews,
+} from "@platform/api-client";
+import { isServerReviewsEnabled } from "@/lib/reviews-feature";
+import { mapReviewDtoToStorefront } from "@/lib/mappers/reviews";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -85,12 +91,52 @@ export default async function ProductPage({ params }: PageProps) {
   }
 
   const product = result.product;
+  const reviewsEnabled = isServerReviewsEnabled();
+  let reviewProps: {
+    averageRating?: number;
+    reviewCount?: number;
+    ratingBreakdown?: { star: number; count: number }[];
+    reviews?: ReturnType<typeof mapReviewDtoToStorefront>[];
+    useApiReviews?: boolean;
+    productId?: string;
+  } = {};
+
+  if (reviewsEnabled && product.apiProductId) {
+    try {
+      const [reviewList, summary] = await Promise.all([
+        fetchProductReviews(product.apiProductId, { limit: 20, page: 1 }),
+        fetchProductReviewSummary(product.apiProductId),
+      ]);
+      reviewProps = {
+        productId: product.apiProductId,
+        averageRating: summary.averageRating,
+        reviewCount: summary.reviewCount,
+        ratingBreakdown: summary.ratingBreakdown,
+        reviews: reviewList.data.map(mapReviewDtoToStorefront),
+        useApiReviews: true,
+      };
+    } catch {
+      reviewProps = {
+        productId: product.apiProductId,
+        useApiReviews: true,
+        reviews: [],
+        averageRating: product.rating ?? 0,
+        reviewCount: product.reviewCount ?? product.ratingCount ?? 0,
+        ratingBreakdown: [],
+      };
+    }
+  }
 
   return (
     <StorefrontChrome>
       <BreadCrumb product={product} />
       <DetailsCosmetic product={product} />
-      <Description4 description={product.description} />
+      <Description4
+        description={product.description}
+        productName={product.title}
+        reviewsEnabled={reviewsEnabled}
+        {...reviewProps}
+      />
       <SimillerProducts4 />
       <BottomStickyProduct />
     </StorefrontChrome>

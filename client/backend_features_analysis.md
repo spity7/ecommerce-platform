@@ -1,6 +1,6 @@
 # Backend API Feature Breakdown — Beauty Station
 
-> **Status (2026-09-11):** **Roadmap / planning doc** — not all endpoints below exist. **Implemented today:** catalog CRUD + product list filters (`search`, `sort`, `minPrice`, `maxPrice`; anonymous catalog GET rate-limited), auth with refresh revocation + rate limits + password reset + email verification (sent on register) + Google social sign-in (profile photo import), user profile (`GET /api/users/me`) + avatar URL + soft-delete account (password or Google `idToken`), OAuth set-password flow, saved addresses, cart, **wishlist** (auth-only API + storefront sync when `features.wishlist`), orders (place requires verified email; customer cancel before shipped), **admin users** (`GET /api/admin/users`, `PATCH /api/admin/users/:id/status`), `/api/uploads`, `/api/health`. **Admin:** catalog CRUD + orders + **customers list (API)**. Storefront: `/shop` URL-driven API filters/search, header search → `/shop?search=`, customer auth, checkout, order history/detail with cancel, account pages. Client wishlist unit tests: `npm run test -w @platform/storefront`.
+> **Status (2026-09-15):** **Roadmap / planning doc** — not all endpoints below exist. **Implemented today:** catalog CRUD + product list filters (`search`, `sort`, `minPrice`, `maxPrice`; anonymous catalog GET rate-limited), auth with refresh revocation + rate limits + password reset + email verification (sent on register) + Google social sign-in (profile photo import), user profile (`GET /api/users/me`) + avatar URL + soft-delete account (password or Google `idToken`), OAuth set-password flow, saved addresses, cart, **wishlist** (auth-only API + storefront sync when `features.wishlist`), orders (place requires verified email; customer cancel before shipped), **product reviews** (pending moderation, admin approve/reject, PDP + `/my-reviews` when `features.reviews`), **admin users** (`GET /api/admin/users`, `PATCH /api/admin/users/:id/status`), `/api/uploads`, `/api/health`. **Admin:** catalog CRUD + orders + **customers list (API)** + **review moderation**. Storefront: `/shop` URL-driven API filters/search, header search → `/shop?search=`, customer auth, checkout, order history/detail with cancel, account pages. Client wishlist unit tests: `npm run test -w @platform/storefront`.
 
 > **Stack context:** Next.js App Router storefront + Express API monorepo. Static mock data remains in `client/data/` for theme demos.
 
@@ -200,13 +200,17 @@
 
 ## 10. Reviews & Ratings
 
-- `GET /api/products/:id/reviews` — List reviews (paginated, filterable by rating)
-- `POST /api/products/:id/reviews` — Submit review `{ rating, title, body, images[] }`
-- `PATCH /api/reviews/:id` — Edit own review
-- `DELETE /api/reviews/:id` — Delete own review
-- `POST /api/reviews/:id/helpful` — Mark review as helpful
-- `GET /api/admin/reviews` — All reviews with moderation status _(admin)_
-- `PATCH /api/admin/reviews/:id/approve` — Approve/reject review _(admin)_
+- `GET /api/products/:productId/reviews` — List **approved** reviews (paginated, `minRating`) _(implemented)_
+- `GET /api/products/:productId/reviews/summary` — Average, count, star breakdown _(implemented)_
+- `POST /api/products/:productId/reviews` — Submit/update review `{ rating, title, body }` → pending _(implemented; verified email)_
+- `GET /api/reviews/me` — Customer’s reviews _(implemented)_
+- `PATCH /api/reviews/:id` — Edit own review → pending _(implemented)_
+- `DELETE /api/reviews/:id` — Delete own review _(implemented)_
+- `GET /api/admin/reviews` — Moderation list _(admin; implemented)_
+- `PATCH /api/admin/reviews/:id` — Approve/reject `{ status }` _(admin; implemented)_
+- `DELETE /api/admin/reviews/:id` — Delete review _(admin; implemented)_
+- `POST /api/reviews/:id/helpful` — Mark review as helpful _(planned)_
+- Review images on submit _(planned)_
 
 ---
 

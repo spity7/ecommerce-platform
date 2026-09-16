@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { UserProfileAvatar } from "@/components/common/UserProfileAvatar";
 import {
   useEffect,
   useMemo,
@@ -206,23 +206,20 @@ export default function AccountAvatarSection() {
         <div className="d-flex justify-content-between align-items-start gap-3">
           <div>
             <h6 className="mb--12 pt--4">Profile photo</h6>
-            {displayUrl ? (
-              <Image
-                src={displayUrl}
+            <div
+              className="rounded-circle overflow-hidden"
+              style={{ height: 72, width: 72 }}
+            >
+              <UserProfileAvatar
                 alt={user.name}
-                width={72}
-                height={72}
-                className="rounded-circle object-fit-cover"
-                unoptimized
+                avatarUrl={displayUrl}
+                failedPhotoFallbackClassName="d-flex align-items-center justify-content-center rbt-bg-color-brand-50 h-100 w-100"
+                imageClassName="h-100 w-100 object-fit-cover"
+                missingPhotoFallbackClassName="d-flex align-items-center justify-content-center bg-light h-100 w-100"
+                missingPhotoIconClassName="fa-regular fa-user text-muted"
+                size={72}
               />
-            ) : (
-              <div
-                className="d-flex align-items-center justify-content-center rounded-circle bg-light"
-                style={{ width: 72, height: 72 }}
-              >
-                <i className="fa-regular fa-user b1 text-muted" aria-hidden />
-              </div>
-            )}
+            </div>
           </div>
           {!editing ? (
             <button

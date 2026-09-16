@@ -14,6 +14,7 @@ import {
   seedAdminUser,
   seedDemoCustomerUser,
 } from "./lib/seed-users.js";
+import { seedSampleReviews } from "./lib/seed-reviews.js";
 
 async function seed() {
   const seedData = getSeedDataForSite(env.SITE_ID, env.site.homeLayout);
@@ -27,6 +28,9 @@ async function seed() {
   const catalog = await seedCatalog(seedData);
   const admin = await seedAdminUser();
   const demoCustomer = await seedDemoCustomerUser();
+  const reviewCount = demoCustomer
+    ? await seedSampleReviews(demoCustomer.email)
+    : 0;
 
   printSeedSummary({
     siteName: env.site.name,
@@ -36,6 +40,7 @@ async function seed() {
     admin,
     demoCustomer,
     removedCustomers,
+    reviewCount,
     credentialHints: getDefaultCredentialHints(),
   });
 

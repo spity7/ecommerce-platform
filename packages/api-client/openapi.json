@@ -92,6 +92,15 @@
               "nullable": true
             }
           },
+          "averageRating": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 5
+          },
+          "reviewCount": {
+            "type": "integer",
+            "minimum": 0
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time"
@@ -762,6 +771,15 @@
                   "additionalProperties": {
                     "nullable": true
                   }
+                },
+                "averageRating": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 5
+                },
+                "reviewCount": {
+                  "type": "integer",
+                  "minimum": 0
                 },
                 "createdAt": {
                   "type": "string",
@@ -1540,6 +1558,10 @@
             "type": "string",
             "format": "email"
           },
+          "customerAvatarUrl": {
+            "type": "string",
+            "format": "uri"
+          },
           "status": {
             "type": "string",
             "enum": [
@@ -1668,6 +1690,10 @@
                 "customerEmail": {
                   "type": "string",
                   "format": "email"
+                },
+                "customerAvatarUrl": {
+                  "type": "string",
+                  "format": "uri"
                 },
                 "status": {
                   "type": "string",
@@ -2101,6 +2127,293 @@
           }
         },
         "required": ["error", "details"]
+      },
+      "CreateReviewInput": {
+        "type": "object",
+        "properties": {
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          }
+        },
+        "required": ["rating", "title", "body"]
+      },
+      "UpdateReviewInput": {
+        "type": "object",
+        "properties": {
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          }
+        }
+      },
+      "ReviewDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "string"
+          },
+          "productName": {
+            "type": "string"
+          },
+          "productSlug": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "authorName": {
+            "type": "string"
+          },
+          "authorAvatarUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "title": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "approved", "rejected"]
+          },
+          "verifiedPurchase": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "productId",
+          "productName",
+          "productSlug",
+          "userId",
+          "authorName",
+          "rating",
+          "title",
+          "body",
+          "status",
+          "verifiedPurchase",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "PaginatedReviews": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "productId": {
+                  "type": "string"
+                },
+                "productName": {
+                  "type": "string"
+                },
+                "productSlug": {
+                  "type": "string"
+                },
+                "userId": {
+                  "type": "string"
+                },
+                "authorName": {
+                  "type": "string"
+                },
+                "authorAvatarUrl": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "rating": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "title": {
+                  "type": "string"
+                },
+                "body": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": ["pending", "approved", "rejected"]
+                },
+                "verifiedPurchase": {
+                  "type": "boolean"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "id",
+                "productId",
+                "productName",
+                "productSlug",
+                "userId",
+                "authorName",
+                "rating",
+                "title",
+                "body",
+                "status",
+                "verifiedPurchase",
+                "createdAt",
+                "updatedAt"
+              ]
+            }
+          },
+          "total": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "required": ["data", "total", "page", "limit"]
+      },
+      "ProductReviewListQuery": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 1
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 20
+          },
+          "minRating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          }
+        }
+      },
+      "AdminReviewListQuery": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 1
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 20
+          },
+          "minRating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "approved", "rejected"]
+          },
+          "search": {
+            "type": "string"
+          }
+        }
+      },
+      "AdminReviewModerationInput": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["approved", "rejected"]
+          }
+        },
+        "required": ["status"]
+      },
+      "ProductReviewSummary": {
+        "type": "object",
+        "properties": {
+          "averageRating": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 5
+          },
+          "reviewCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "ratingBreakdown": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "star": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": ["star", "count"]
+            }
+          }
+        },
+        "required": ["averageRating", "reviewCount", "ratingBreakdown"]
       }
     },
     "parameters": {}
@@ -2281,6 +2594,15 @@
                             "additionalProperties": {
                               "nullable": true
                             }
+                          },
+                          "averageRating": {
+                            "type": "number",
+                            "minimum": 0,
+                            "maximum": 5
+                          },
+                          "reviewCount": {
+                            "type": "integer",
+                            "minimum": 0
                           },
                           "createdAt": {
                             "type": "string",
@@ -2497,6 +2819,15 @@
                         "nullable": true
                       }
                     },
+                    "averageRating": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 5
+                    },
+                    "reviewCount": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time"
@@ -2677,6 +3008,15 @@
                       "additionalProperties": {
                         "nullable": true
                       }
+                    },
+                    "averageRating": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 5
+                    },
+                    "reviewCount": {
+                      "type": "integer",
+                      "minimum": 0
                     },
                     "createdAt": {
                       "type": "string",
@@ -2900,6 +3240,15 @@
                       "additionalProperties": {
                         "nullable": true
                       }
+                    },
+                    "averageRating": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 5
+                    },
+                    "reviewCount": {
+                      "type": "integer",
+                      "minimum": 0
                     },
                     "createdAt": {
                       "type": "string",
@@ -3156,6 +3505,15 @@
                       "additionalProperties": {
                         "nullable": true
                       }
+                    },
+                    "averageRating": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 5
+                    },
+                    "reviewCount": {
+                      "type": "integer",
+                      "minimum": 0
                     },
                     "createdAt": {
                       "type": "string",
@@ -7063,6 +7421,904 @@
         }
       }
     },
+    "/api/products/{productId}/reviews": {
+      "get": {
+        "tags": ["Reviews"],
+        "operationId": "listProductReviews",
+        "summary": "List approved product reviews",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "Product ID"
+            },
+            "required": true,
+            "description": "Product ID",
+            "name": "productId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "required": false,
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "required": false,
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "required": false,
+            "name": "minRating",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated reviews",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "productId": {
+                            "type": "string"
+                          },
+                          "productName": {
+                            "type": "string"
+                          },
+                          "productSlug": {
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "authorName": {
+                            "type": "string"
+                          },
+                          "authorAvatarUrl": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "rating": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 5
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "body": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": ["pending", "approved", "rejected"]
+                          },
+                          "verifiedPurchase": {
+                            "type": "boolean"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "productId",
+                          "productName",
+                          "productSlug",
+                          "userId",
+                          "authorName",
+                          "rating",
+                          "title",
+                          "body",
+                          "status",
+                          "verifiedPurchase",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "limit": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": ["data", "total", "page", "limit"]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Reviews"],
+        "operationId": "submitProductReview",
+        "summary": "Submit or update a product review",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "Product ID"
+            },
+            "required": true,
+            "description": "Product ID",
+            "name": "productId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "body": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2000
+                  }
+                },
+                "required": ["rating", "title", "body"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Review submitted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "productId": {
+                      "type": "string"
+                    },
+                    "productName": {
+                      "type": "string"
+                    },
+                    "productSlug": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "authorName": {
+                      "type": "string"
+                    },
+                    "authorAvatarUrl": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "rating": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "body": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": ["pending", "approved", "rejected"]
+                    },
+                    "verifiedPurchase": {
+                      "type": "boolean"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "productId",
+                    "productName",
+                    "productSlug",
+                    "userId",
+                    "authorName",
+                    "rating",
+                    "title",
+                    "body",
+                    "status",
+                    "verifiedPurchase",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/products/{productId}/reviews/summary": {
+      "get": {
+        "tags": ["Reviews"],
+        "operationId": "getProductReviewSummary",
+        "summary": "Product review summary",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "Product ID"
+            },
+            "required": true,
+            "description": "Product ID",
+            "name": "productId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review summary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "averageRating": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 5
+                    },
+                    "reviewCount": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "ratingBreakdown": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "star": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 5
+                          },
+                          "count": {
+                            "type": "integer",
+                            "minimum": 0
+                          }
+                        },
+                        "required": ["star", "count"]
+                      }
+                    }
+                  },
+                  "required": [
+                    "averageRating",
+                    "reviewCount",
+                    "ratingBreakdown"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reviews/me": {
+      "get": {
+        "tags": ["Reviews"],
+        "operationId": "listMyReviews",
+        "summary": "List current customer reviews",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Customer reviews",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "productId": {
+                            "type": "string"
+                          },
+                          "productName": {
+                            "type": "string"
+                          },
+                          "productSlug": {
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "authorName": {
+                            "type": "string"
+                          },
+                          "authorAvatarUrl": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "rating": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 5
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "body": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": ["pending", "approved", "rejected"]
+                          },
+                          "verifiedPurchase": {
+                            "type": "boolean"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "productId",
+                          "productName",
+                          "productSlug",
+                          "userId",
+                          "authorName",
+                          "rating",
+                          "title",
+                          "body",
+                          "status",
+                          "verifiedPurchase",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "limit": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": ["data", "total", "page", "limit"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reviews/{id}": {
+      "patch": {
+        "tags": ["Reviews"],
+        "operationId": "updateReview",
+        "summary": "Update own review",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "Review ID"
+            },
+            "required": true,
+            "description": "Review ID",
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 5
+                  },
+                  "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "body": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 2000
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated review",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "productId": {
+                      "type": "string"
+                    },
+                    "productName": {
+                      "type": "string"
+                    },
+                    "productSlug": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "authorName": {
+                      "type": "string"
+                    },
+                    "authorAvatarUrl": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "rating": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "body": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": ["pending", "approved", "rejected"]
+                    },
+                    "verifiedPurchase": {
+                      "type": "boolean"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "productId",
+                    "productName",
+                    "productSlug",
+                    "userId",
+                    "authorName",
+                    "rating",
+                    "title",
+                    "body",
+                    "status",
+                    "verifiedPurchase",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Reviews"],
+        "operationId": "deleteReview",
+        "summary": "Delete own review",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "Review ID"
+            },
+            "required": true,
+            "description": "Review ID",
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Review deleted"
+          }
+        }
+      }
+    },
+    "/api/admin/reviews": {
+      "get": {
+        "tags": ["Admin"],
+        "operationId": "listAdminReviews",
+        "summary": "List reviews for moderation",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "required": false,
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "required": false,
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 5
+            },
+            "required": false,
+            "name": "minRating",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": ["pending", "approved", "rejected"]
+            },
+            "required": false,
+            "name": "status",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "search",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated reviews",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "productId": {
+                            "type": "string"
+                          },
+                          "productName": {
+                            "type": "string"
+                          },
+                          "productSlug": {
+                            "type": "string"
+                          },
+                          "userId": {
+                            "type": "string"
+                          },
+                          "authorName": {
+                            "type": "string"
+                          },
+                          "authorAvatarUrl": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "rating": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 5
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "body": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": ["pending", "approved", "rejected"]
+                          },
+                          "verifiedPurchase": {
+                            "type": "boolean"
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updatedAt": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "productId",
+                          "productName",
+                          "productSlug",
+                          "userId",
+                          "authorName",
+                          "rating",
+                          "title",
+                          "body",
+                          "status",
+                          "verifiedPurchase",
+                          "createdAt",
+                          "updatedAt"
+                        ]
+                      }
+                    },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "limit": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": ["data", "total", "page", "limit"]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/admin/reviews/{id}": {
+      "patch": {
+        "tags": ["Admin"],
+        "operationId": "moderateReview",
+        "summary": "Approve or reject a review",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "Review ID"
+            },
+            "required": true,
+            "description": "Review ID",
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": ["approved", "rejected"]
+                  }
+                },
+                "required": ["status"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Moderated review",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "productId": {
+                      "type": "string"
+                    },
+                    "productName": {
+                      "type": "string"
+                    },
+                    "productSlug": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "authorName": {
+                      "type": "string"
+                    },
+                    "authorAvatarUrl": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "rating": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 5
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "body": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": ["pending", "approved", "rejected"]
+                    },
+                    "verifiedPurchase": {
+                      "type": "boolean"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "productId",
+                    "productName",
+                    "productSlug",
+                    "userId",
+                    "authorName",
+                    "rating",
+                    "title",
+                    "body",
+                    "status",
+                    "verifiedPurchase",
+                    "createdAt",
+                    "updatedAt"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Admin"],
+        "operationId": "deleteAdminReview",
+        "summary": "Delete a review",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "Review ID"
+            },
+            "required": true,
+            "description": "Review ID",
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Review deleted"
+          }
+        }
+      }
+    },
     "/api/orders": {
       "post": {
         "tags": ["Orders"],
@@ -7134,6 +8390,10 @@
                     "customerEmail": {
                       "type": "string",
                       "format": "email"
+                    },
+                    "customerAvatarUrl": {
+                      "type": "string",
+                      "format": "uri"
                     },
                     "status": {
                       "type": "string",
@@ -7282,6 +8542,10 @@
                           "customerEmail": {
                             "type": "string",
                             "format": "email"
+                          },
+                          "customerAvatarUrl": {
+                            "type": "string",
+                            "format": "uri"
                           },
                           "status": {
                             "type": "string",
@@ -7452,6 +8716,10 @@
                     "customerEmail": {
                       "type": "string",
                       "format": "email"
+                    },
+                    "customerAvatarUrl": {
+                      "type": "string",
+                      "format": "uri"
                     },
                     "status": {
                       "type": "string",
@@ -7630,6 +8898,10 @@
                       "type": "string",
                       "format": "email"
                     },
+                    "customerAvatarUrl": {
+                      "type": "string",
+                      "format": "uri"
+                    },
                     "status": {
                       "type": "string",
                       "enum": [
@@ -7786,6 +9058,10 @@
                     "customerEmail": {
                       "type": "string",
                       "format": "email"
+                    },
+                    "customerAvatarUrl": {
+                      "type": "string",
+                      "format": "uri"
                     },
                     "status": {
                       "type": "string",

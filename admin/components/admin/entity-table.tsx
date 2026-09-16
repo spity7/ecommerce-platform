@@ -16,11 +16,19 @@ import { cn } from "@/utils/cn";
 import { useCrudBusyLock } from "@/providers/crud-busy-provider";
 
 export type EntityColumn<T> = {
+  cellClassName?: string;
+  colWidth?: string;
+  headClassName?: string;
+  headerTruncate?: boolean;
   hideable?: boolean;
   key: string;
   label: string;
   render: (row: T) => React.ReactNode;
   sortValue?: (row: T) => number | string;
+};
+
+export type EntityTableRowActionHelpers = {
+  requestDelete: (id: string) => void;
 };
 
 type FilterOption<T> = {
@@ -40,18 +48,40 @@ type FilterGroup<T> = {
 type EntityTableProps<T extends { id: string }> = {
   columns: EntityColumn<T>[];
   deleteMessage?: string;
+  editActionAriaLabel?: string | ((row: T) => string);
+  editActionIcon?: string;
   editHref: string | ((row: T) => string);
   enableColumnToggle?: boolean;
   filterGroups?: FilterGroup<T>[];
   filterOptions?: FilterOption<T>[];
+  filterOptionsAriaLabel?: string;
+  /** When set, status-style `filterOptions` render before `filterGroups` (e.g. orders toolbar). */
+  filterOptionsFirst?: boolean;
+  renderFilterSelect?: (props: {
+    defaultValue: string;
+    onValueChange: (value: string) => void;
+    value: string;
+  }) => React.ReactNode;
   getRowLabel?: (row: T) => string;
   items: T[];
   onDelete?: (ids: string[]) => Promise<void>;
+  renderRowActions?: (
+    row: T,
+    helpers: EntityTableRowActionHelpers
+  ) => React.ReactNode;
   resolvePreflightDeleteError?: (ids: string[]) => string | null;
+  rowActionsColWidth?: string;
+  rowActionsHeaderLabel?: string;
+  compactMobileToolbar?: boolean;
+  deleteButtonClassName?: string;
+  filtersClassName?: string;
+  searchFieldClassName?: string;
   searchLabel: string;
   searchPlaceholder: string;
   searchText: (row: T) => string;
   singularName: string;
+  tableClassName?: string;
+  toolbarClassName?: string;
   viewHref?: string | ((row: T) => string);
   viewLinkedProductCount?: (row: T) => number;
 };
@@ -61,21 +91,74 @@ type SortState = {
   key: string;
 };
 
+const TABLE_CELL_X = "px-4";
+const TABLE_CHECKBOX_X = "px-3";
+
+function SortableColumnHeader({
+  align = "left",
+  label,
+  onSort,
+  truncateLabel = true,
+}: {
+  align?: "left" | "right";
+  label: string;
+  onSort: () => void;
+  truncateLabel?: boolean;
+}) {
+  return (
+    <button
+      className={cn(
+        "group inline-flex max-w-full items-center gap-1 border-0 bg-transparent p-0 font-semibold uppercase hover:text-ink-700",
+        align === "right" && "ml-auto"
+      )}
+      onClick={onSort}
+      type="button"
+    >
+      <span
+        className={cn(
+          "min-w-0 leading-tight",
+          truncateLabel ? "truncate" : "whitespace-nowrap"
+        )}
+      >
+        {label}
+      </span>
+      <Icon
+        className="h-3.5 w-3.5 shrink-0 text-ink-300 group-hover:text-ink-500"
+        name="chevrons-up-down"
+      />
+    </button>
+  );
+}
+
 export function EntityTable<T extends { id: string }>({
   columns,
   deleteMessage,
+  editActionAriaLabel,
+  editActionIcon = "pencil",
   editHref,
   enableColumnToggle = false,
   filterGroups,
   filterOptions,
+  filterOptionsAriaLabel = "Filter list",
+  filterOptionsFirst = false,
+  renderFilterSelect,
   getRowLabel,
   items,
   onDelete,
+  renderRowActions,
   resolvePreflightDeleteError,
+  rowActionsColWidth = "88px",
+  rowActionsHeaderLabel = "Action",
+  compactMobileToolbar = false,
+  deleteButtonClassName,
+  filtersClassName,
+  searchFieldClassName,
   searchLabel,
   searchPlaceholder,
   searchText,
   singularName,
+  tableClassName,
+  toolbarClassName,
   viewHref,
   viewLinkedProductCount,
 }: EntityTableProps<T>) {
@@ -110,6 +193,27 @@ export function EntityTable<T extends { id: string }>({
   useEffect(() => {
     setRows(items);
   }, [items]);
+
+  useEffect(() => {
+    setGroupFilters((current) => {
+      let changed = false;
+      const next = { ...current };
+
+      for (const group of filterGroups ?? []) {
+        const validValues = new Set(
+          group.options.map((option) => option.value)
+        );
+        const selected = next[group.key] ?? group.defaultValue;
+
+        if (!validValues.has(selected)) {
+          next[group.key] = group.defaultValue;
+          changed = true;
+        }
+      }
+
+      return changed ? next : current;
+    });
+  }, [filterGroups]);
 
   const filteredRows = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -202,6 +306,15 @@ export function EntityTable<T extends { id: string }>({
     setConfirmOpen(true);
   }
 
+  function requestRowDelete(id: string) {
+    setSelected(new Set([id]));
+    openDeleteConfirm();
+  }
+
+  const rowActionHelpers: EntityTableRowActionHelpers = {
+    requestDelete: requestRowDelete,
+  };
+
   function closeDeleteConfirm() {
     setDeleteError(null);
     setConfirmOpen(false);
@@ -246,6 +359,16 @@ export function EntityTable<T extends { id: string }>({
     return typeof editHref === "function" ? editHref(row) : editHref;
   }
 
+  function resolveEditAriaLabel(row: T): string {
+    if (typeof editActionAriaLabel === "function") {
+      return editActionAriaLabel(row);
+    }
+    if (editActionAriaLabel) {
+      return editActionAriaLabel;
+    }
+    return `Edit ${singularName}`;
+  }
+
   function resolveViewHref(row: T): string | null {
     if (!viewHref) {
       return null;
@@ -287,105 +410,217 @@ export function EntityTable<T extends { id: string }>({
     .filter((row) => selected.has(row.id))
     .map((row) => getRowLabel?.(row) ?? row.id);
 
+  const deleteToolbarButton = (
+    visibilityClassName: string,
+    { compactLabel = false }: { compactLabel?: boolean } = {}
+  ) => (
+    <button
+      aria-label={`Delete ${selected.size} selected ${singularName}${selected.size === 1 ? "" : "s"}`}
+      className={cn(
+        "h-11 shrink-0 items-center justify-center gap-2 rounded-base bg-danger-500 px-4 text-[14px] font-semibold text-white transition-colors hover:bg-danger-600 disabled:cursor-not-allowed disabled:opacity-50",
+        visibilityClassName,
+        deleteButtonClassName
+      )}
+      disabled={selected.size === 0 || deleting}
+      onClick={openDeleteConfirm}
+      type="button"
+    >
+      <Icon className="h-4 w-4 shrink-0" name="trash-2" />
+      {compactLabel ? (
+        <span className="tabular-nums">({selected.size})</span>
+      ) : (
+        <>
+          Delete (<span>{selected.size}</span>)
+        </>
+      )}
+    </button>
+  );
+
+  const groupFilterControls = filterGroups?.map((group) => (
+    <ListFilterSelect
+      ariaLabel={group.ariaLabel}
+      className={group.className ?? "w-[180px]"}
+      defaultValue={group.defaultValue}
+      key={group.key}
+      onValueChange={(value) => setGroupFilter(group.key, value)}
+      options={group.options}
+      size="lg"
+      value={groupFilters[group.key] ?? group.defaultValue}
+    />
+  ));
+
+  const primaryFilterControl = filterOptions ? (
+    renderFilterSelect ? (
+      renderFilterSelect({
+        defaultValue: defaultFilterValue,
+        onValueChange: setFilter,
+        value: filter,
+      })
+    ) : (
+      <ListFilterSelect
+        ariaLabel={filterOptionsAriaLabel}
+        className="w-[180px]"
+        defaultValue={defaultFilterValue}
+        onValueChange={setFilter}
+        options={filterOptions}
+        size="lg"
+        value={filter}
+      />
+    )
+  ) : null;
+
+  const filterControls = (
+    <>
+      {filterOptionsFirst ? (
+        <>
+          {primaryFilterControl}
+          {groupFilterControls}
+        </>
+      ) : (
+        <>
+          {groupFilterControls}
+          {primaryFilterControl}
+        </>
+      )}
+      <ListClearFiltersButton
+        active={hasActiveFilters}
+        onClear={clearAllFilters}
+      />
+      {enableColumnToggle && hideableColumns.length ? (
+        <div className="relative">
+          <button
+            aria-expanded={columnsOpen}
+            aria-haspopup="true"
+            className="inline-flex h-11 items-center gap-2 rounded-base border border-surface-line bg-surface-card px-4 text-[14px] font-semibold text-ink-700 transition-colors hover:bg-surface-muted"
+            onClick={() => setColumnsOpen((current) => !current)}
+            type="button"
+          >
+            <Icon className="h-4 w-4" name="sliders-horizontal" />
+            Columns
+          </button>
+          {columnsOpen ? (
+            <div className="absolute right-0 z-20 mt-2 w-48 rounded-base border border-surface-line bg-surface-card p-2 shadow-card">
+              <p className="px-2 py-1 text-[12px] font-semibold uppercase text-ink-400">
+                Toggle columns
+              </p>
+              {hideableColumns.map((column) => (
+                <label
+                  className="flex items-center gap-2 rounded px-2 py-1.5 text-[14px] text-ink-700 hover:bg-surface-muted"
+                  key={column.key}
+                >
+                  <input
+                    aria-label={`Toggle ${column.label} column`}
+                    checked={visibleColumns.has(column.key)}
+                    onChange={(event) => {
+                      setVisibleColumns((current) => {
+                        const next = new Set(current);
+                        if (event.target.checked) {
+                          next.add(column.key);
+                        } else {
+                          next.delete(column.key);
+                        }
+                        return next;
+                      });
+                    }}
+                    type="checkbox"
+                  />{" "}
+                  {column.label}
+                </label>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+    </>
+  );
+
   return (
     <section className="rounded-card border border-surface-line bg-surface-card p-6 shadow-card">
       <CrudBusyShield active={deleting}>
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-3">
-            <ListSearchField
-              label={searchLabel}
-              onChange={setQuery}
-              placeholder={searchPlaceholder}
-              value={query}
-            />
-            {filterGroups?.map((group) => (
-              <ListFilterSelect
-                ariaLabel={group.ariaLabel}
-                className={group.className ?? "w-[180px]"}
-                defaultValue={group.defaultValue}
-                key={group.key}
-                onValueChange={(value) => setGroupFilter(group.key, value)}
-                options={group.options}
-                size="lg"
-                value={groupFilters[group.key] ?? group.defaultValue}
-              />
-            ))}
-            {filterOptions ? (
-              <ListFilterSelect
-                className="w-[180px]"
-                defaultValue={defaultFilterValue}
-                onValueChange={setFilter}
-                options={filterOptions}
-                size="lg"
-                value={filter}
-              />
-            ) : null}
-            <ListClearFiltersButton
-              active={hasActiveFilters}
-              onClear={clearAllFilters}
-            />
-            {enableColumnToggle && hideableColumns.length ? (
-              <div className="relative">
-                <button
-                  aria-expanded={columnsOpen}
-                  aria-haspopup="true"
-                  className="inline-flex h-11 items-center gap-2 rounded-base border border-surface-line bg-surface-card px-4 text-[14px] font-semibold text-ink-700 transition-colors hover:bg-surface-muted"
-                  onClick={() => setColumnsOpen((current) => !current)}
-                  type="button"
-                >
-                  <Icon className="h-4 w-4" name="sliders-horizontal" />
-                  Columns
-                </button>
-                {columnsOpen ? (
-                  <div className="absolute right-0 z-20 mt-2 w-48 rounded-base border border-surface-line bg-surface-card p-2 shadow-card">
-                    <p className="px-2 py-1 text-[12px] font-semibold uppercase text-ink-400">
-                      Toggle columns
-                    </p>
-                    {hideableColumns.map((column) => (
-                      <label
-                        className="flex items-center gap-2 rounded px-2 py-1.5 text-[14px] text-ink-700 hover:bg-surface-muted"
-                        key={column.key}
-                      >
-                        <input
-                          aria-label={`Toggle ${column.label} column`}
-                          checked={visibleColumns.has(column.key)}
-                          onChange={(event) => {
-                            setVisibleColumns((current) => {
-                              const next = new Set(current);
-                              if (event.target.checked) {
-                                next.add(column.key);
-                              } else {
-                                next.delete(column.key);
-                              }
-                              return next;
-                            });
-                          }}
-                          type="checkbox"
-                        />{" "}
-                        {column.label}
-                      </label>
-                    ))}
-                  </div>
-                ) : null}
-              </div>
-            ) : null}
-          </div>
-          <button
-            className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-base bg-danger-500 px-4 text-[14px] font-semibold text-white transition-colors hover:bg-danger-600 disabled:cursor-not-allowed disabled:opacity-50"
-            disabled={selected.size === 0 || deleting}
-            onClick={openDeleteConfirm}
-            type="button"
+        {compactMobileToolbar ? (
+          <div
+            className={cn(
+              "mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between",
+              toolbarClassName
+            )}
           >
-            <Icon className="h-4 w-4" name="trash-2" />
-            Delete (<span>{selected.size}</span>)
-          </button>
-        </div>
+            <div className="flex min-w-0 flex-1 flex-col gap-3 md:flex-row md:flex-wrap md:items-center md:gap-3">
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+                <ListSearchField
+                  className={cn("min-w-0", searchFieldClassName)}
+                  label={searchLabel}
+                  onChange={setQuery}
+                  placeholder={searchPlaceholder}
+                  value={query}
+                />
+                {deleteToolbarButton("flex max-md:px-3 md:hidden", {
+                  compactLabel: true,
+                })}
+              </div>
+              <div
+                className={cn(
+                  "grid min-w-0 grid-cols-2 gap-3 md:flex md:flex-wrap md:items-center md:gap-3",
+                  filtersClassName
+                )}
+              >
+                {filterControls}
+              </div>
+            </div>
+            {deleteToolbarButton("hidden md:flex")}
+          </div>
+        ) : (
+          <div
+            className={cn(
+              "mb-5 flex flex-wrap items-center justify-between gap-3",
+              toolbarClassName
+            )}
+          >
+            <div
+              className={cn(
+                "flex flex-wrap items-center gap-3",
+                filtersClassName
+              )}
+            >
+              <ListSearchField
+                className={searchFieldClassName}
+                label={searchLabel}
+                onChange={setQuery}
+                placeholder={searchPlaceholder}
+                value={query}
+              />
+              {filterControls}
+            </div>
+            {deleteToolbarButton("flex")}
+          </div>
+        )}
 
         <div className="dashboard-scrollbar overflow-x-auto">
-          <table className="w-full min-w-[820px] text-left">
+          <table
+            className={cn(
+              "w-full min-w-[960px] table-fixed text-left",
+              tableClassName
+            )}
+          >
+            <colgroup>
+              <col style={{ width: "40px" }} />
+              {columns.map((column) => {
+                if (isColumnHidden(column)) {
+                  return null;
+                }
+                return (
+                  <col
+                    key={column.key}
+                    style={
+                      column.colWidth ? { width: column.colWidth } : undefined
+                    }
+                  />
+                );
+              })}
+              <col style={{ width: rowActionsColWidth }} />
+            </colgroup>
             <thead>
               <tr className="border-b border-surface-line text-[13px] uppercase text-ink-400">
-                <th className="w-10 pb-3 pr-3">
+                <th className={cn(TABLE_CHECKBOX_X, "pb-3 align-bottom")}>
                   <input
                     aria-label="Select all"
                     checked={allVisibleSelected}
@@ -399,30 +634,48 @@ export function EntityTable<T extends { id: string }>({
                   return (
                     <th
                       className={cn(
-                        "pb-3 pr-4 font-semibold",
+                        TABLE_CELL_X,
+                        "pb-3 align-bottom font-semibold",
+                        column.headClassName,
                         hidden ? "hidden" : ""
                       )}
                       key={column.key}
                     >
                       {column.sortValue ? (
-                        <button
-                          className="inline-flex items-center gap-1 uppercase hover:text-ink-700"
-                          onClick={() => toggleSort(column.key)}
-                          type="button"
+                        <SortableColumnHeader
+                          align={
+                            column.headClassName?.includes("text-right")
+                              ? "right"
+                              : "left"
+                          }
+                          label={column.label}
+                          onSort={() => toggleSort(column.key)}
+                          truncateLabel={column.headerTruncate !== false}
+                        />
+                      ) : (
+                        <span
+                          className={cn(
+                            "block",
+                            column.headerTruncate !== false && "truncate",
+                            column.headClassName?.includes("text-right")
+                              ? "text-right"
+                              : "text-left"
+                          )}
                         >
                           {column.label}
-                          <Icon
-                            className="h-3.5 w-3.5"
-                            name="chevrons-up-down"
-                          />
-                        </button>
-                      ) : (
-                        column.label
+                        </span>
                       )}
                     </th>
                   );
                 })}
-                <th className="pb-3 text-right font-semibold">Action</th>
+                <th
+                  className={cn(
+                    TABLE_CELL_X,
+                    "pb-3 text-right align-bottom font-semibold"
+                  )}
+                >
+                  {rowActionsHeaderLabel}
+                </th>
               </tr>
             </thead>
             <tbody className="text-[14px]">
@@ -431,7 +684,7 @@ export function EntityTable<T extends { id: string }>({
                   className="border-b border-surface-line hover:bg-surface-body/70"
                   key={row.id}
                 >
-                  <td className="py-4 pr-3">
+                  <td className={cn(TABLE_CHECKBOX_X, "py-4 align-top")}>
                     <input
                       aria-label={`Select ${row.id}`}
                       checked={selected.has(row.id)}
@@ -448,7 +701,9 @@ export function EntityTable<T extends { id: string }>({
                     return (
                       <td
                         className={cn(
-                          "py-4 pr-4 text-ink-700",
+                          TABLE_CELL_X,
+                          "py-4 align-top text-ink-700",
+                          column.cellClassName,
                           hidden ? "hidden" : ""
                         )}
                         key={column.key}
@@ -457,46 +712,47 @@ export function EntityTable<T extends { id: string }>({
                       </td>
                     );
                   })}
-                  <td className="py-4 text-right">
-                    <div className="inline-flex items-center gap-1">
-                      {resolveViewHref(row) ? (
-                        <LinkedProductsViewAction
-                          count={viewLinkedProductCount?.(row) ?? 0}
-                          disabled={deleting}
-                          href={resolveViewHref(row)!}
-                        />
-                      ) : null}
-                      {deleting ? (
+                  <td className={cn(TABLE_CELL_X, "py-4 text-right align-top")}>
+                    {renderRowActions ? (
+                      renderRowActions(row, rowActionHelpers)
+                    ) : (
+                      <div className="inline-flex items-center gap-1">
+                        {resolveViewHref(row) ? (
+                          <LinkedProductsViewAction
+                            count={viewLinkedProductCount?.(row) ?? 0}
+                            disabled={deleting}
+                            href={resolveViewHref(row)!}
+                          />
+                        ) : null}
+                        {deleting ? (
+                          <button
+                            aria-label={resolveEditAriaLabel(row)}
+                            className="icon-button disabled:cursor-not-allowed disabled:opacity-60"
+                            disabled
+                            type="button"
+                          >
+                            <Icon className="h-4 w-4" name={editActionIcon} />
+                          </button>
+                        ) : (
+                          <Link
+                            aria-label={resolveEditAriaLabel(row)}
+                            className="icon-button hover:bg-brand-50 hover:text-brand-600"
+                            href={resolveEditHref(row)}
+                          >
+                            <Icon className="h-4 w-4" name={editActionIcon} />
+                          </Link>
+                        )}
                         <button
-                          aria-label={`Edit ${singularName}`}
-                          className="icon-button disabled:cursor-not-allowed disabled:opacity-60"
-                          disabled
+                          aria-label={`Delete ${singularName}`}
+                          className="icon-button hover:bg-danger-50 hover:text-danger-500 disabled:cursor-not-allowed disabled:opacity-60"
+                          disabled={deleting}
+                          onClick={() => requestRowDelete(row.id)}
                           type="button"
                         >
-                          <Icon className="h-4 w-4" name="pencil" />
+                          <Icon className="h-4 w-4" name="trash-2" />
                         </button>
-                      ) : (
-                        <Link
-                          aria-label={`Edit ${singularName}`}
-                          className="icon-button hover:bg-brand-50 hover:text-brand-600"
-                          href={resolveEditHref(row)}
-                        >
-                          <Icon className="h-4 w-4" name="pencil" />
-                        </Link>
-                      )}
-                      <button
-                        aria-label={`Delete ${singularName}`}
-                        className="icon-button hover:bg-danger-50 hover:text-danger-500 disabled:cursor-not-allowed disabled:opacity-60"
-                        disabled={deleting}
-                        onClick={() => {
-                          setSelected(new Set([row.id]));
-                          openDeleteConfirm();
-                        }}
-                        type="button"
-                      >
-                        <Icon className="h-4 w-4" name="trash-2" />
-                      </button>
-                    </div>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -516,18 +772,20 @@ export function EntityTable<T extends { id: string }>({
           </p>
           <div className="flex items-center gap-2">
             <button
-              className="inline-flex h-9 items-center rounded-base border border-surface-line px-3 text-[13px] font-semibold text-ink-700 transition-colors hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label="Previous page"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-base border border-surface-line text-ink-700 transition-colors hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
               disabled
               type="button"
             >
-              Previous
+              <Icon className="h-4 w-4" name="chevron-left" />
             </button>
             <button
-              className="inline-flex h-9 items-center rounded-base border border-surface-line px-3 text-[13px] font-semibold text-ink-700 transition-colors hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label="Next page"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-base border border-surface-line text-ink-700 transition-colors hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
               disabled
               type="button"
             >
-              Next
+              <Icon className="h-4 w-4" name="chevron-right" />
             </button>
           </div>
         </div>

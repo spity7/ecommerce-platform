@@ -40,6 +40,8 @@ export function toProductDto(doc: ProductDocument): ProductDto {
     images: doc.images,
     attributes: doc.attributes ?? {},
     metadata: doc.metadata ?? {},
+    averageRating: doc.averageRating ?? 0,
+    reviewCount: doc.reviewCount ?? 0,
     createdAt: toIsoString(doc.createdAt),
     updatedAt: toIsoString(doc.updatedAt),
   };

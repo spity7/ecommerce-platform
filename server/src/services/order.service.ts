@@ -4,6 +4,8 @@ import { Order } from "../models/Order.js";
 import { Product } from "../models/Product.js";
 import { User } from "../models/User.js";
 import { getOrCreateUserCart } from "./cart.service.js";
+import { syncVerifiedPurchaseForOrder } from "./review.service.js";
+import type { OrderStatus } from "@platform/shared";
 
 type PlaceOrderContext = {
   userId: string;
@@ -11,6 +13,16 @@ type PlaceOrderContext = {
 };
 
 const CUSTOMER_CANCELLABLE_STATUSES = new Set(["pending", "processing"]);
+
+function shouldRefreshVerifiedPurchaseOnStatusChange(
+  previousStatus: OrderStatus,
+  nextStatus: OrderStatus
+): boolean {
+  if (previousStatus === nextStatus) {
+    return false;
+  }
+  return nextStatus === "cancelled" || previousStatus === "cancelled";
+}
 
 async function decrementStockWithRollback(
   items: Array<{ productId: unknown; quantity: number; productName: string }>
@@ -124,13 +136,12 @@ export async function placeOrderFromCart(
     throw error;
   }
 
+  await syncVerifiedPurchaseForOrder(order);
+
   return { order, user };
 }
 
-export async function cancelOrderForCustomer(
-  orderId: string,
-  userId: string
-) {
+export async function cancelOrderForCustomer(orderId: string, userId: string) {
   const order = await Order.findById(orderId);
   if (!order) {
     throw new AppError(404, "Order not found");
@@ -153,6 +164,37 @@ export async function cancelOrderForCustomer(
 
   if (previousStatus !== "cancelled") {
     await restoreOrderStock(order.items);
+  }
+
+  await syncVerifiedPurchaseForOrder(order);
+
+  return order;
+}
+
+export async function updateOrderStatusByAdmin(
+  orderId: string,
+  status: OrderStatus
+) {
+  const order = await Order.findById(orderId);
+  if (!order) {
+    throw new AppError(404, "Order not found");
+  }
+
+  const previousStatus = order.status;
+  order.status = status;
+
+  if (
+    status === "cancelled" &&
+    previousStatus !== "cancelled" &&
+    previousStatus !== "delivered"
+  ) {
+    await restoreOrderStock(order.items);
+  }
+
+  await order.save();
+
+  if (shouldRefreshVerifiedPurchaseOnStatusChange(previousStatus, status)) {
+    await syncVerifiedPurchaseForOrder(order);
   }
 
   return order;

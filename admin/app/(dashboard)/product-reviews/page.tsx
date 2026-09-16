@@ -1,14 +1,18 @@
-import { ProductReviewListTable } from "@/components/admin/operation-list-pages";
-import { PageHeader } from "@/components/layout/page-header";
-import { productReviews } from "@/data/admin/operations";
+"use client";
 
-const stats = [
-  ["Average rating", "4.7/5", "text-warning-600"],
-  ["Pending reviews", "26", "text-ink-900"],
-  ["Approved this month", "184", "text-success-600"],
-] as const;
+import { useState } from "react";
+import { ApiReviewsPanel } from "@/components/reviews/api-reviews-panel";
+import { ProductReviewsStatsSkeleton } from "@/components/reviews/product-reviews-skeleton";
+import { PageHeader } from "@/components/layout/page-header";
 
 export default function ProductReviewsPage() {
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    averageRating: 0,
+    pending: 0,
+    approved: 0,
+  });
+
   return (
     <>
       <PageHeader
@@ -16,20 +20,33 @@ export default function ProductReviewsPage() {
         eyebrow="Moderation"
         title="Product Reviews"
       />
-      <section className="mb-6 grid gap-4 md:grid-cols-3">
-        {stats.map(([label, value, className]) => (
-          <article
-            className="rounded-card border border-surface-line bg-surface-card p-5 shadow-card"
-            key={label}
-          >
-            <p className="text-[13px] text-ink-500">{label}</p>
-            <h2 className={`mt-1 text-[24px] font-semibold ${className}`}>
-              {value}
+      {loading ? (
+        <ProductReviewsStatsSkeleton />
+      ) : (
+        <section className="mb-6 grid gap-4 md:grid-cols-3">
+          <article className="rounded-card border border-surface-line bg-surface-card p-5 shadow-card">
+            <p className="text-[13px] text-ink-500">
+              Average rating (approved)
+            </p>
+            <h2 className="mt-1 text-[24px] font-semibold text-warning-600">
+              {stats.approved > 0 ? `${stats.averageRating}/5` : "—"}
             </h2>
           </article>
-        ))}
-      </section>
-      <ProductReviewListTable reviews={productReviews} />
+          <article className="rounded-card border border-surface-line bg-surface-card p-5 shadow-card">
+            <p className="text-[13px] text-ink-500">Pending reviews</p>
+            <h2 className="mt-1 text-[24px] font-semibold text-ink-900">
+              {stats.pending}
+            </h2>
+          </article>
+          <article className="rounded-card border border-surface-line bg-surface-card p-5 shadow-card">
+            <p className="text-[13px] text-ink-500">Approved (loaded)</p>
+            <h2 className="mt-1 text-[24px] font-semibold text-success-600">
+              {stats.approved}
+            </h2>
+          </article>
+        </section>
+      )}
+      <ApiReviewsPanel onLoadingChange={setLoading} onStatsChange={setStats} />
     </>
   );
 }

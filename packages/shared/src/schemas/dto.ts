@@ -25,6 +25,8 @@ export const productDtoSchema = z.object({
   images: z.array(z.string()),
   attributes: z.record(z.string(), z.union([z.string(), z.array(z.string())])),
   metadata: z.record(z.string(), z.unknown()),
+  averageRating: z.number().min(0).max(5).optional(),
+  reviewCount: z.number().int().min(0).optional(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 });

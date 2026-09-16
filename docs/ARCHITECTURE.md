@@ -2,7 +2,7 @@
 
 Multipurpose ecommerce monorepo: one codebase, many site deployments.
 
-**Last reviewed:** 2026-09-06. See [AI-INDEX.md](AI-INDEX.md) for the full doc map and tree.
+**Last reviewed:** 2026-09-16. See [AI-INDEX.md](AI-INDEX.md) for the full doc map and tree.
 
 ## Layout
 
@@ -37,11 +37,11 @@ ecommerce-platform/
 
 The platform skeleton is real (shared contract, multi-site config, catalog + commerce API). UI is largely a purchased theme with production routes wired for Beauty Station:
 
-| Layer  | API-connected                                                                                                                                                                        | Template / static                                                          |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
-| Server | Catalog CRUD + auth + cart/orders/wishlist + uploads + user addresses; slug lookup; referential delete guards (category/brand/attribute); rename propagation; attribute usage counts | No payment gateway; coupons/reviews/blog APIs                              |
-| Admin  | Catalog CRUD + sign-in + orders list/detail; rich catalog forms; product attribute picker; nav filtered by `SiteConfig.features`                                                     | Dashboard, customers, coupons, reviews, settings, reports (~30 demo pages) |
-| Client | Home layout + `/shop` + `/product/[slug]` (slug API) + customer auth + checkout + wishlist (`/my-wishlist`)                                                                          | 300+ demo routes; demo catalog items stay local-only in cart               |
+| Layer  | API-connected                                                                                                                                                                                                                                                                                                                                       | Template / static                                                 |
+| ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| Server | Catalog CRUD + auth + cart/orders/wishlist + **product reviews** (moderation, aggregates on Product, `verifiedPurchase` refreshed on order create/cancel and when admin moves an order to/from cancelled) + uploads + user addresses; slug lookup; referential delete guards (category/brand/attribute); rename propagation; attribute usage counts | No payment gateway; coupons/blog APIs                             |
+| Admin  | Catalog CRUD + sign-in + orders list/detail + **review moderation**; rich catalog forms; product attribute picker; nav filtered by `SiteConfig.features`                                                                                                                                                                                            | Dashboard, customers, coupons, settings, reports (~30 demo pages) |
+| Client | Home layout + `/shop` + `/product/[slug]` (slug API + reviews when enabled) + customer auth + checkout + wishlist (`/my-wishlist`) + `/my-reviews`                                                                                                                                                                                                  | 300+ demo routes; demo catalog items stay local-only in cart      |
 
 **Auth:** JWT on catalog mutations and uploads. Admin and storefront use **httpOnly cookies** (via each app’s `/api/auth/*` routes) for refresh/access tokens; short-lived access tokens are also held in memory for API calls. Logout, password change, and account deletion revoke refresh tokens (`refreshTokenVersion`). Password reset and **email verification on register** email magic links via SMTP when `SMTP_HOST` is set; without SMTP, dev returns/logs link tokens. **Customers must verify email before `POST /api/orders`.** Storefront Google sign-in (`POST /api/auth/social`) verifies ID tokens when `GOOGLE_CLIENT_ID` is set and can import Google profile photos. OAuth-only users confirm delete/set-password with a Google `idToken`. Customer account deletion is a soft delete with a 14-day reactivation window on login. Auth routes are rate-limited. Production rejects default JWT secrets.
 
@@ -264,7 +264,7 @@ Site-specific modules are defined in site config (`features.*`). Admin navigatio
 - **New modules:** add optional server routes + admin pages; gate with `features` when nav filtering exists
 - **One-off custom logic:** prefer minimal hooks in site config or a future `sites/{id}/extensions/` folder (not scaffolded yet)
 - **Client rebrand:** `npm run rebrand -w @platform/storefront` (`scripts/rebrand-client.ts`)
-- **API roadmap:** [client/backend_features_analysis.md](../client/backend_features_analysis.md) — full ecommerce roadmap; catalog + auth + cart/orders/wishlist/users are live; payments, coupons, reviews, and content APIs remain planned
+- **API roadmap:** [client/backend_features_analysis.md](../client/backend_features_analysis.md) — full ecommerce roadmap; catalog + auth + cart/orders/wishlist/reviews/users are live; payments, coupons, and content APIs remain planned
 
 ## Deploy notes
 

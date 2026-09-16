@@ -6,8 +6,12 @@
  * OpenAPI spec version: 1.0.0
  */
 import type {
+  ListAdminReviews200,
+  ListAdminReviewsParams,
   ListAdminUsers200,
   ListAdminUsersParams,
+  ModerateReview200,
+  ModerateReviewBody,
   UpdateAdminUserStatus200,
   UpdateAdminUserStatusBody,
 } from "../platform.schemas";
@@ -15,6 +19,39 @@ import type {
 import { customInstance } from "../../mutator";
 
 export const getAdmin = () => {
+  /**
+   * @summary List reviews for moderation
+   */
+  const listAdminReviews = (params?: ListAdminReviewsParams) => {
+    return customInstance<ListAdminReviews200>({
+      url: `/api/admin/reviews`,
+      method: "GET",
+      params,
+    });
+  };
+  /**
+   * @summary Approve or reject a review
+   */
+  const moderateReview = (
+    id: string,
+    moderateReviewBody: ModerateReviewBody
+  ) => {
+    return customInstance<ModerateReview200>({
+      url: `/api/admin/reviews/${id}`,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      data: moderateReviewBody,
+    });
+  };
+  /**
+   * @summary Delete a review
+   */
+  const deleteAdminReview = (id: string) => {
+    return customInstance<void>({
+      url: `/api/admin/reviews/${id}`,
+      method: "DELETE",
+    });
+  };
   /**
    * @summary List users (admin)
    */
@@ -39,8 +76,23 @@ export const getAdmin = () => {
       data: updateAdminUserStatusBody,
     });
   };
-  return { listAdminUsers, updateAdminUserStatus };
+  return {
+    listAdminReviews,
+    moderateReview,
+    deleteAdminReview,
+    listAdminUsers,
+    updateAdminUserStatus,
+  };
 };
+export type ListAdminReviewsResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getAdmin>["listAdminReviews"]>>
+>;
+export type ModerateReviewResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getAdmin>["moderateReview"]>>
+>;
+export type DeleteAdminReviewResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getAdmin>["deleteAdminReview"]>>
+>;
 export type ListAdminUsersResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getAdmin>["listAdminUsers"]>>
 >;

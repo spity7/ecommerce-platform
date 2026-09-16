@@ -31,6 +31,14 @@ npm run dev:webpack -w @platform/storefront
 
 Open [http://localhost:3000](http://localhost:3000).
 
+### Dev overlay stuck on “Compiling…”
+
+The bottom-left badge is normal while Turbopack/Webpack is building or while a slow server render runs (the home layout fetches live products from the API). If it **never** clears while you are idle:
+
+1. Stop the dev server, clear the Turbopack cache, and restart: `npm run dev:clean -w @platform/storefront`
+2. Avoid running `npm run build:packages` in another terminal while the storefront dev server is running — updating `packages/*/dist` forces a full client rebuild.
+3. If it still loops, use Webpack dev (narrower file watching in this monorepo): `npm run dev:webpack -w @platform/storefront`
+
 ## Environment
 
 Copy `client/.env.example` → `client/.env.local`:

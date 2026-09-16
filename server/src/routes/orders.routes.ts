@@ -20,7 +20,7 @@ import {
 import {
   cancelOrderForCustomer,
   placeOrderFromCart,
-  restoreOrderStock,
+  updateOrderStatusByAdmin,
 } from "../services/order.service.js";
 
 export const ordersRouter = Router();
@@ -38,9 +38,13 @@ ordersRouter.post(
       payload
     );
 
-    res
-      .status(201)
-      .json(toOrderDto(order, { name: user.name, email: user.email }));
+    res.status(201).json(
+      toOrderDto(order, {
+        name: user.name,
+        email: user.email,
+        avatarUrl: user.avatarUrl?.trim() || undefined,
+      })
+    );
   })
 );
 
@@ -59,7 +63,7 @@ ordersRouter.get(
 
     const [orders, total] = await Promise.all([
       Order.find(filter)
-        .populate("userId", "name email")
+        .populate("userId", "name email avatarUrl")
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit),
@@ -81,7 +85,7 @@ ordersRouter.get(
   asyncHandler(async (req: AuthenticatedRequest, res) => {
     const order = await Order.findById(req.params.id).populate(
       "userId",
-      "name email"
+      "name email avatarUrl"
     );
     if (!order) {
       throw new AppError(404, "Order not found");
@@ -106,7 +110,7 @@ ordersRouter.post(
     }
 
     const order = await cancelOrderForCustomer(orderId, req.auth!.userId);
-    await order.populate("userId", "name email");
+    await order.populate("userId", "name email avatarUrl");
     res.json(toOrderDto(order, getOrderCustomer(order)));
   })
 );
@@ -116,25 +120,14 @@ ordersRouter.patch(
   requireAuth,
   requireAdmin,
   asyncHandler(async (req: AuthenticatedRequest, res) => {
+    const orderId = req.params.id;
+    if (!orderId || Array.isArray(orderId)) {
+      throw new AppError(400, "Invalid order ID");
+    }
+
     const payload = updateOrderStatusSchema.parse(req.body);
-    const order = await Order.findById(req.params.id);
-    if (!order) {
-      throw new AppError(404, "Order not found");
-    }
-
-    const previousStatus = order.status;
-    order.status = payload.status;
-
-    if (
-      payload.status === "cancelled" &&
-      previousStatus !== "cancelled" &&
-      previousStatus !== "delivered"
-    ) {
-      await restoreOrderStock(order.items);
-    }
-
-    await order.save();
-    await order.populate("userId", "name email");
+    const order = await updateOrderStatusByAdmin(orderId, payload.status);
+    await order.populate("userId", "name email avatarUrl");
     res.json(toOrderDto(order, getOrderCustomer(order)));
   })
 );

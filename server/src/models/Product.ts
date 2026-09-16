@@ -26,6 +26,8 @@ const productSchema = new Schema(
     images: { type: [String], default: [] },
     attributes: { type: Schema.Types.Mixed, default: {} },
     metadata: { type: Schema.Types.Mixed, default: {} },
+    averageRating: { type: Number, default: 0, min: 0, max: 5 },
+    reviewCount: { type: Number, default: 0, min: 0 },
   },
   { timestamps: true }
 );

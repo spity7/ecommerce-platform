@@ -1,5 +1,7 @@
 import { Router } from "express";
 import {
+  adminReviewListQuerySchema,
+  adminReviewModerationSchema,
   adminUserListQuerySchema,
   updateAdminUserStatusSchema,
 } from "@platform/shared";
@@ -13,6 +15,11 @@ import { Order } from "../models/Order.js";
 import { User } from "../models/User.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { toIsoString } from "../utils/admin-user-serializers.js";
+import {
+  deleteReviewAdmin,
+  listAdminReviews,
+  moderateReview,
+} from "../services/review.service.js";
 
 export const adminRouter = Router();
 
@@ -115,5 +122,37 @@ adminRouter.patch(
       orderCount,
       createdAt: toIsoString(user.createdAt),
     });
+  })
+);
+
+adminRouter.get(
+  "/reviews",
+  requireAuth,
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const query = adminReviewListQuerySchema.parse(req.query);
+    const result = await listAdminReviews(query);
+    res.json(result);
+  })
+);
+
+adminRouter.patch(
+  "/reviews/:id",
+  requireAuth,
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const payload = adminReviewModerationSchema.parse(req.body);
+    const review = await moderateReview(String(req.params.id), payload.status);
+    res.json(review);
+  })
+);
+
+adminRouter.delete(
+  "/reviews/:id",
+  requireAuth,
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    await deleteReviewAdmin(String(req.params.id));
+    res.status(204).send();
   })
 );

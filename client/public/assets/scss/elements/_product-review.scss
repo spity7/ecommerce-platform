@@ -116,6 +116,50 @@
   white-space: nowrap;
 }
 
+.rbt-verified-purchase-badge {
+  flex-shrink: 0;
+  padding: 3px 10px;
+  border: 1px solid color-mix(in srgb, var(--color-green) 22%, transparent);
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--color-white) 65%, transparent)
+    inset;
+
+  svg {
+    flex-shrink: 0;
+  }
+
+  .rbt-verified-purchase-label {
+    font-size: var(--font-size-b4);
+    line-height: var(--line-height-b4);
+    font-weight: var(--f-semi-bold);
+    letter-spacing: 0.02em;
+    color: var(--color-gray-700);
+  }
+}
+
+.rbt-prd-single-reviews-list-area {
+  .rbt-review-comment-meta {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 8px;
+    row-gap: 6px;
+  }
+
+  .rbt-review-comment-author {
+    font-weight: var(--f-medium);
+    color: var(--color-heading);
+  }
+
+  .rbt-review-comment-separator {
+    color: var(--color-gray-400);
+    user-select: none;
+  }
+
+  .rbt-review-comment-date {
+    color: var(--color-gray-600);
+  }
+}
+
 .rbt-review-card-var-2 {
   .rbt-review-card-content {
     height: 100%;

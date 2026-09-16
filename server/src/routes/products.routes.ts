@@ -1,7 +1,9 @@
 import { Router } from "express";
 import {
   createProductSchema,
+  createReviewSchema,
   productListQuerySchema,
+  productReviewListQuerySchema,
   updateProductSchema,
 } from "@platform/shared";
 import { AppError } from "../middleware/errorHandler.js";
@@ -30,7 +32,17 @@ import {
   collectRemovedManagedCatalogImages,
   deleteManagedCatalogImagesIfPresent,
 } from "../services/managed-catalog-storage.js";
-import { catalogReadRateLimiter } from "../middleware/rateLimit.js";
+import {
+  catalogReadRateLimiter,
+  reviewWriteRateLimiter,
+} from "../middleware/rateLimit.js";
+import { Review } from "../models/Review.js";
+import {
+  createOrUpdateReview,
+  getReviewSummary,
+  listProductReviews,
+} from "../services/review.service.js";
+import { syncReviewProductSnapshots } from "../services/product-review-aggregates.service.js";
 import {
   buildProductListFilter,
   buildProductListSort,
@@ -79,6 +91,43 @@ productsRouter.get(
       page: query.page,
       limit: query.limit,
     });
+  })
+);
+
+productsRouter.get(
+  "/:productId/reviews/summary",
+  catalogReadRateLimiter,
+  asyncHandler(async (req, res) => {
+    const summary = await getReviewSummary(String(req.params.productId));
+    res.json(summary);
+  })
+);
+
+productsRouter.get(
+  "/:productId/reviews",
+  catalogReadRateLimiter,
+  asyncHandler(async (req, res) => {
+    const query = productReviewListQuerySchema.parse(req.query);
+    const result = await listProductReviews(
+      String(req.params.productId),
+      query
+    );
+    res.json(result);
+  })
+);
+
+productsRouter.post(
+  "/:productId/reviews",
+  requireAuth,
+  reviewWriteRateLimiter,
+  asyncHandler(async (req: AuthenticatedRequest, res) => {
+    const payload = createReviewSchema.parse(req.body);
+    const review = await createOrUpdateReview(
+      req.auth!.userId,
+      String(req.params.productId),
+      payload
+    );
+    res.status(201).json(review);
   })
 );
 
@@ -178,6 +227,8 @@ productsRouter.patch(
       product.attributes as Record<string, string | string[]>
     );
     const previousImages = [...product.images];
+    const previousName = product.name;
+    const previousSlug = product.slug;
 
     if (payload.name) {
       product.name = payload.name;
@@ -280,6 +331,17 @@ productsRouter.patch(
       );
     }
 
+    if (
+      previousName !== product.name ||
+      previousSlug !== product.slug
+    ) {
+      await syncReviewProductSnapshots(
+        product._id.toString(),
+        product.name,
+        product.slug
+      );
+    }
+
     res.json(toProductDto(product));
   })
 );
@@ -316,6 +378,7 @@ productsRouter.delete(
     );
 
     await deleteManagedCatalogImagesIfPresent(product.images);
+    await Review.deleteMany({ productId: product._id });
 
     res.status(204).send();
   })

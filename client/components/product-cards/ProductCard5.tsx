@@ -2,6 +2,7 @@ import OfferBadge from "@/components/common/ui/OfferBadge";
 import Image from "next/image";
 import Link from "next/link";
 import Tooltip from "@/components/common/ui/Tooltip";
+import { getProductReviewCount } from "@/lib/mappers/product";
 import { Product } from "@/types";
 import AddToQuickViewOne from "../action-buttons/AddToQuickViewOne";
 import AddToWishlistTwo from "../action-buttons/AddToWishlistTwo";
@@ -22,6 +23,12 @@ export default function ProductCard5({
   animationOrder?: number;
 }) {
   const detailsPageLink = `${detailsPageUrl}/${product.id}`;
+  const reviewCount = getProductReviewCount(product);
+  const displayRating =
+    reviewCount > 0
+      ? Math.min(5, Math.max(0, Math.round(product.rating ?? 0)))
+      : 0;
+
   const renderRatingStars = (rating: number) => {
     const stars = [];
     for (let i = 0; i < 5; i++) {
@@ -116,16 +123,17 @@ export default function ProductCard5({
         <h6 className="rbt-card-title">
           <Link href={detailsPageLink}>{product.title}</Link>
         </h6>
-        <div className="rbt-card-rating">
-          <ul className={`rbt-rating-icon-list ${starClass} `}>
-            {product.rating ? renderRatingStars(product.rating) : null}
-          </ul>
-          <p className="rating-digit">({product.reviewCount})</p>
-
-          <span className="icon">
-            <i className="fa-sharp fa-solid fa-truck-fast" />
-          </span>
-        </div>
+        {reviewCount > 0 ? (
+          <div className="rbt-card-rating">
+            <ul className={`rbt-rating-icon-list ${starClass}`.trim()}>
+              {renderRatingStars(displayRating)}
+            </ul>
+            <p className="rating-digit">({reviewCount})</p>
+            <span className="icon">
+              <i className="fa-sharp fa-solid fa-truck-fast" />
+            </span>
+          </div>
+        ) : null}
         <div className="pricing-part">
           {product.oldPrice && (
             <del className="price-text">${product.oldPrice.toFixed(2)}</del>

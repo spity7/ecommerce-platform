@@ -1,10 +1,11 @@
 "use client";
 
 import { type ReactNode } from "react";
+import { UserProfileAvatar } from "@/components/common/UserProfileAvatar";
 import { GiftIcon } from "../../svg-icons";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { canManageOwnReviews } from "@/lib/reviews-feature";
 import { getStorefrontSiteConfig } from "@/lib/site";
 import { clearSession } from "@/lib/session";
 import { useAuthSession } from "@/providers/auth-session-provider";
@@ -28,6 +29,7 @@ const primaryNavItems = [
     label: "Payment Methods",
   },
   {
+    customerReviewsOnly: true,
     href: "/my-reviews",
     iconClass: "fa-regular fa-star-sharp-half-stroke mr--4",
     label: "My reviews",
@@ -59,8 +61,6 @@ const customerServiceItems = [
     label: "Terms and conditions",
   },
 ];
-
-const DEFAULT_AVATAR = "/assets/images/dashboard/user-profile-01.webp";
 
 type SidebarNavLinkProps = {
   href: string;
@@ -116,19 +116,24 @@ export default function Sidebar() {
       : (user?.name ?? "Guest")
     : "Johnson Charle";
 
-  const avatarSrc =
-    customerAuth && user?.avatarUrl ? user.avatarUrl : DEFAULT_AVATAR;
+  const profileAvatarUrl = customerAuth ? user?.avatarUrl : undefined;
+
+  const visiblePrimaryNavItems = primaryNavItems.filter((item) => {
+    if ("customerReviewsOnly" in item && item.customerReviewsOnly) {
+      return canManageOwnReviews(user);
+    }
+    return true;
+  });
 
   return (
     <aside className="rbt-profile-sidebar sticky-top">
       <div className="rbt-user-profile">
         <figure className="rbt-user-profile-img">
-          <Image
-            alt="Profile Image"
-            src={avatarSrc}
-            width={96}
-            height={96}
-            unoptimized={Boolean(customerAuth && user?.avatarUrl)}
+          <UserProfileAvatar
+            alt={displayName}
+            avatarUrl={profileAvatarUrl}
+            imageClassName="h-100 w-100 object-fit-cover"
+            size={96}
           />
         </figure>
         <div className="pl--12">
@@ -150,7 +155,7 @@ export default function Sidebar() {
       <div className="rbt-sidebar-widgets">
         <div className="rbt-sidebar-single-widget">
           <nav className="rbt-sidebar-nav-list list-group">
-            {primaryNavItems.map((item) => (
+            {visiblePrimaryNavItems.map((item) => (
               <SidebarNavLink
                 key={item.label}
                 active={pathname === item.href}

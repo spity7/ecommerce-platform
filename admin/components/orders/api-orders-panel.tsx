@@ -1,51 +1,76 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { fetchOrders, platformApi } from "@platform/api-client";
 import type { OrderStatus } from "@platform/shared";
 import {
   type EntityColumn,
   EntityTable,
 } from "@/components/admin/entity-table";
-import { StatusBadge } from "@/components/ui/status-badge";
-import { routes } from "@/config/routes";
+import { OrderStatusConfirmDialog } from "@/components/orders/order-status-confirm-dialog";
+import { OrderStatusFilterSelect } from "@/components/orders/order-status-filter-select";
+import { OrderStatusSelect } from "@/components/orders/order-status-select";
+import { OrdersTableSkeleton } from "@/components/orders/orders-table-skeleton";
 import {
   mapOrderDtoToApiOrderRow,
   type ApiOrderRow,
 } from "@/lib/mappers/orders";
 import { pathBuilders } from "@/config/routes";
+import {
+  buildOrderTotalFilterGroup,
+  ORDER_STATUS_FILTER_OPTIONS,
+} from "@/lib/orders-list-filters";
 
-const statusClass: Record<ApiOrderRow["status"], string> = {
-  completed: "bg-success-50 text-success-700",
-  delivering: "bg-warning-50 text-warning-700",
-  failed: "bg-error-50 text-error-700",
-};
-
-const API_STATUSES: OrderStatus[] = [
-  "pending",
-  "processing",
-  "shipped",
-  "delivered",
-  "cancelled",
-];
-
-function capitalize(value: string): string {
-  return value.charAt(0).toUpperCase() + value.slice(1);
+function resolveCustomerColumnWidth(viewportWidth: number): string {
+  if (viewportWidth < 768) {
+    return "108px";
+  }
+  if (viewportWidth < 1024) {
+    return "200px";
+  }
+  return "240px";
 }
 
-function initials(value: string): string {
-  return value
-    .split(" ")
-    .map((part) => part.charAt(0))
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+function resolveStatusColumnWidth(viewportWidth: number): string {
+  return viewportWidth < 768 ? "128px" : "168px";
+}
+
+function useOrdersTableViewport(): {
+  customerColumnWidth: string;
+  isMobile: boolean;
+  statusColumnWidth: string;
+} {
+  const [customerColumnWidth, setCustomerColumnWidth] = useState("240px");
+  const [statusColumnWidth, setStatusColumnWidth] = useState("168px");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    function syncViewport() {
+      const width = window.innerWidth;
+      setCustomerColumnWidth(resolveCustomerColumnWidth(width));
+      setStatusColumnWidth(resolveStatusColumnWidth(width));
+      setIsMobile(width < 768);
+    }
+
+    syncViewport();
+    window.addEventListener("resize", syncViewport);
+    return () => window.removeEventListener("resize", syncViewport);
+  }, []);
+
+  return { customerColumnWidth, isMobile, statusColumnWidth };
 }
 
 export function ApiOrdersPanel() {
   const [orders, setOrders] = useState<ApiOrderRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [updatingOrderId, setUpdatingOrderId] = useState<string | null>(null);
+  const [statusConfirm, setStatusConfirm] = useState<{
+    nextStatus: OrderStatus;
+    order: ApiOrderRow;
+  } | null>(null);
+  const { customerColumnWidth, isMobile, statusColumnWidth } =
+    useOrdersTableViewport();
 
   const loadOrders = useCallback(async () => {
     setError(null);
@@ -67,99 +92,141 @@ export function ApiOrdersPanel() {
     void loadOrders();
   }, [loadOrders]);
 
-  async function handleStatusChange(order: ApiOrderRow, status: OrderStatus) {
+  function requestStatusChange(order: ApiOrderRow, status: OrderStatus) {
+    if (status === order.apiStatus) {
+      return;
+    }
+    setStatusConfirm({ nextStatus: status, order });
+  }
+
+  async function confirmStatusChange() {
+    if (!statusConfirm) {
+      return;
+    }
+
+    const { nextStatus, order } = statusConfirm;
+    setUpdatingOrderId(order.apiId);
+    setError(null);
     try {
-      await platformApi.updateOrder(order.apiId, { status });
+      await platformApi.updateOrder(order.apiId, { status: nextStatus });
+      setStatusConfirm(null);
       await loadOrders();
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Unable to update order status."
       );
+    } finally {
+      setUpdatingOrderId(null);
     }
   }
 
-  const columns: EntityColumn<ApiOrderRow>[] = [
-    {
+  const columns: EntityColumn<ApiOrderRow>[] = useMemo(() => {
+    const orderIdColumn: EntityColumn<ApiOrderRow> = {
+      cellClassName: "whitespace-nowrap",
+      colWidth: "108px",
+      headerTruncate: false,
       key: "order",
       label: "Order ID",
       render: (order) => (
         <span className="font-semibold text-brand-600">#{order.id}</span>
       ),
       sortValue: (order) => order.id,
-    },
-    {
-      hideable: true,
-      key: "customer",
-      label: "Customer",
-      render: (order) => (
-        <div className="flex items-center gap-3">
-          <span className="grid h-9 w-9 rounded-full bg-brand-50 text-[13px] font-semibold text-brand-600 place-items-center">
-            {initials(order.customer)}
-          </span>
-          <div>
-            <span className="font-semibold text-ink-900">{order.customer}</span>
-            {order.customerEmail ? (
-              <p className="text-[13px] text-ink-500">{order.customerEmail}</p>
+    };
+
+    return [
+      ...(isMobile ? [] : [orderIdColumn]),
+      {
+        cellClassName: "min-w-0",
+        colWidth: customerColumnWidth,
+        hideable: true,
+        key: "customer",
+        label: "Customer",
+        render: (order) => (
+          <div className="min-w-0">
+            <span className="block truncate font-semibold text-ink-900">
+              {order.customer}
+            </span>
+            {!isMobile && order.customerEmail ? (
+              <p className="truncate text-[13px] text-ink-500">
+                {order.customerEmail}
+              </p>
             ) : null}
           </div>
-        </div>
-      ),
-      sortValue: (order) => order.customer,
-    },
-    {
-      hideable: true,
-      key: "status",
-      label: "Status",
-      render: (order) => (
-        <div className="flex flex-col gap-2">
-          <StatusBadge
-            className={statusClass[order.status]}
-            label={capitalize(order.apiStatus)}
-          />
-          <select
-            className="rounded-base border border-ink-200 px-2 py-1 text-[13px]"
-            value={order.apiStatus}
-            onChange={(event) =>
-              handleStatusChange(order, event.target.value as OrderStatus)
+        ),
+        sortValue: (order) => order.customer,
+      },
+      {
+        cellClassName: "whitespace-nowrap",
+        colWidth: statusColumnWidth,
+        headerTruncate: false,
+        hideable: true,
+        key: "status",
+        label: "Status",
+        render: (order) => (
+          <OrderStatusSelect
+            ariaLabel={`Status for order ${order.id}`}
+            className="w-full min-w-0"
+            disabled={
+              updatingOrderId === order.apiId ||
+              statusConfirm?.order.apiId === order.apiId
             }
-          >
-            {API_STATUSES.map((status) => (
-              <option key={status} value={status}>
-                {capitalize(status)}
-              </option>
-            ))}
-          </select>
-        </div>
-      ),
-      sortValue: (order) => order.apiStatus,
-    },
-    {
-      hideable: true,
-      key: "total",
-      label: "Total",
-      render: (order) => (
-        <span className="font-semibold text-ink-900">{order.total}</span>
-      ),
-      sortValue: (order) => Number(order.total.replace(/[$,]/g, "")),
-    },
-    {
-      hideable: true,
-      key: "added",
-      label: "Date Added",
-      render: (order) => order.added,
-      sortValue: (order) => order.added,
-    },
-    {
-      hideable: true,
-      key: "modified",
-      label: "Date Modified",
-      render: (order) => order.modified,
-      sortValue: (order) => order.modified,
-    },
-  ];
+            onValueChange={(status) => requestStatusChange(order, status)}
+            value={order.apiStatus}
+          />
+        ),
+        sortValue: (order) => order.apiStatus,
+      },
+      {
+        cellClassName: "whitespace-nowrap tabular-nums",
+        colWidth: "100px",
+        headerTruncate: false,
+        hideable: true,
+        key: "total",
+        label: "Total",
+        render: (order) => (
+          <span className="font-semibold text-ink-900">{order.total}</span>
+        ),
+        sortValue: (order) => order.totalAmount,
+      },
+      {
+        cellClassName: "whitespace-nowrap",
+        colWidth: "148px",
+        headerTruncate: false,
+        hideable: true,
+        key: "added",
+        label: "Date Added",
+        render: (order) => order.added,
+        sortValue: (order) => order.added,
+      },
+      {
+        cellClassName: "whitespace-nowrap",
+        colWidth: "148px",
+        headerTruncate: false,
+        hideable: true,
+        key: "modified",
+        label: "Date Modified",
+        render: (order) => order.modified,
+        sortValue: (order) => order.modified,
+      },
+    ];
+  }, [
+    customerColumnWidth,
+    isMobile,
+    statusColumnWidth,
+    statusConfirm,
+    updatingOrderId,
+  ]);
+
+  const totalFilterGroup = useMemo(
+    () => ({
+      ...buildOrderTotalFilterGroup(orders),
+      className: "w-full sm:w-[200px]",
+    }),
+    [orders]
+  );
 
   if (loading) {
-    return <p className="text-[14px] text-ink-600">Loading orders…</p>;
+    return <OrdersTableSkeleton hideOrderColumn={isMobile} />;
   }
 
   if (error) {
@@ -171,41 +238,52 @@ export function ApiOrdersPanel() {
   }
 
   return (
-    <EntityTable
-      columns={columns}
-      deleteMessage="Orders cannot be deleted from the admin UI yet."
-      editHref={(order) => pathBuilders.orderDetail(order.apiId)}
-      enableColumnToggle
-      filterOptions={[
-        { label: "All", match: () => true, value: "all" },
-        {
-          label: "Pending",
-          match: (row) => row.apiStatus === "pending",
-          value: "pending",
-        },
-        {
-          label: "Processing",
-          match: (row) => row.apiStatus === "processing",
-          value: "processing",
-        },
-        {
-          label: "Delivered",
-          match: (row) => row.apiStatus === "delivered",
-          value: "delivered",
-        },
-        {
-          label: "Cancelled",
-          match: (row) => row.apiStatus === "cancelled",
-          value: "cancelled",
-        },
-      ]}
-      items={orders}
-      searchLabel="Search orders"
-      searchPlaceholder="Search order ID or customer"
-      searchText={(order) =>
-        `${order.id} ${order.customer} ${order.total} ${order.apiStatus}`
-      }
-      singularName="order"
-    />
+    <>
+      <EntityTable
+        columns={columns}
+        deleteMessage="Orders cannot be deleted from the admin UI yet."
+        editActionAriaLabel={(order) => `View order ${order.id}`}
+        editActionIcon="eye"
+        editHref={(order) => pathBuilders.orderDetail(order.apiId)}
+        filterGroups={[totalFilterGroup]}
+        filterOptions={[...ORDER_STATUS_FILTER_OPTIONS]}
+        filterOptionsFirst
+        items={orders}
+        compactMobileToolbar
+        deleteButtonClassName="max-md:w-auto md:ml-auto"
+        filtersClassName="w-full min-w-0 sm:w-auto"
+        renderFilterSelect={({ onValueChange, value }) => (
+          <OrderStatusFilterSelect
+            className="w-full sm:w-[180px]"
+            onValueChange={onValueChange}
+            value={value}
+          />
+        )}
+        searchFieldClassName="w-full sm:w-[340px] sm:max-w-full"
+        searchLabel="Search orders"
+        searchPlaceholder="Search order ID or customer"
+        searchText={(order) =>
+          `${order.id} ${order.customer} ${order.total} ${order.apiStatus}`
+        }
+        singularName="order"
+        tableClassName={
+          isMobile
+            ? "min-w-[620px] md:min-w-0 lg:min-w-[1040px]"
+            : "min-w-0 lg:min-w-[1040px]"
+        }
+      />
+      <OrderStatusConfirmDialog
+        customerLabel={statusConfirm?.order.customer}
+        loading={Boolean(
+          statusConfirm && updatingOrderId === statusConfirm.order.apiId
+        )}
+        nextStatus={statusConfirm?.nextStatus ?? null}
+        onClose={() => setStatusConfirm(null)}
+        onConfirm={() => void confirmStatusChange()}
+        open={statusConfirm !== null}
+        orderLabel={`#${statusConfirm?.order.id ?? ""}`}
+        previousStatus={statusConfirm?.order.apiStatus ?? null}
+      />
+    </>
   );
 }

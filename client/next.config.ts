@@ -9,6 +9,16 @@ const slimClientPolyfill = path.join(
   process.cwd(),
   "lib/next-client-polyfill-slim.js"
 );
+const isDev = process.env.NODE_ENV === "development";
+const monorepoRoot = path.join(process.cwd(), "..");
+
+/** Paths outside `client/` that should not trigger Webpack dev rebuilds. */
+const webpackDevWatchIgnored = [
+  path.join(monorepoRoot, "server"),
+  path.join(monorepoRoot, "admin"),
+  path.join(monorepoRoot, "packages"),
+  path.join(monorepoRoot, ".git"),
+];
 
 const nextConfig: NextConfig = {
   transpilePackages: ["@platform/shared", "@platform/site-config"],
@@ -18,7 +28,7 @@ const nextConfig: NextConfig = {
       "next/dist/build/polyfills/polyfill-module.js": slimClientPolyfill,
     },
   },
-  webpack: (config, { isServer, webpack }) => {
+  webpack: (config, { isServer, webpack, dev }) => {
     if (!isServer) {
       config.plugins.push(
         new webpack.NormalModuleReplacementPlugin(
@@ -27,11 +37,24 @@ const nextConfig: NextConfig = {
         )
       );
     }
+    if (dev) {
+      config.watchOptions = {
+        ...config.watchOptions,
+        ignored: [
+          ...(Array.isArray(config.watchOptions?.ignored)
+            ? config.watchOptions.ignored
+            : config.watchOptions?.ignored
+              ? [config.watchOptions.ignored]
+              : []),
+          ...webpackDevWatchIgnored,
+        ],
+      };
+    }
     return config;
   },
   experimental: {
-    // Inlines route CSS to reduce render-blocking linked stylesheets (PageSpeed: Render blocking requests).
-    inlineCss: true,
+    // inlineCss adds dev compile work; keep it for production builds only.
+    inlineCss: !isDev,
     // Optimize package imports for large icon/component libraries (reduces initial JS bundle).
     optimizePackageImports: ["swiper", "bootstrap", "lightgallery"],
   },
@@ -45,6 +68,11 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "storage.googleapis.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
         pathname: "/**",
       },
     ],

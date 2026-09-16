@@ -19,7 +19,7 @@ export function getOrderUserId(order: OrderDocument): string {
 
 export function getOrderCustomer(
   order: OrderDocument
-): { name: string; email: string } | undefined {
+): { name: string; email: string; avatarUrl?: string } | undefined {
   const populated = order.userId as unknown;
 
   if (
@@ -30,7 +30,12 @@ export function getOrderCustomer(
     "_id" in populated
   ) {
     const user = populated as UserDocument;
-    return { name: user.name, email: user.email };
+    const avatarUrl = user.avatarUrl?.trim();
+    return {
+      name: user.name,
+      email: user.email,
+      avatarUrl: avatarUrl || undefined,
+    };
   }
 
   return undefined;

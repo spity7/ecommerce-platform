@@ -86,6 +86,8 @@ export const orderDtoSchema = z.object({
   userId: z.string(),
   customerName: z.string().optional(),
   customerEmail: z.string().email().optional(),
+  /** Populated from `User.avatarUrl` when serializing; not persisted on Order. */
+  customerAvatarUrl: z.string().url().optional(),
   status: z.enum(ORDER_STATUSES),
   items: z.array(orderItemDtoSchema),
   itemCount: z.number().int(),

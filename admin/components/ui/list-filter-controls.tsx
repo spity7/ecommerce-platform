@@ -17,6 +17,7 @@ function ListFilterMarker() {
 }
 
 type ListSearchFieldProps = {
+  className?: string;
   label: string;
   onChange: (value: string) => void;
   placeholder: string;
@@ -24,6 +25,7 @@ type ListSearchFieldProps = {
 };
 
 export function ListSearchField({
+  className,
   label,
   onChange,
   placeholder,
@@ -32,7 +34,12 @@ export function ListSearchField({
   const isActive = value.trim().length > 0;
 
   return (
-    <label className="relative block w-[200px] max-w-full shrink-0">
+    <label
+      className={cn(
+        "relative block w-[200px] max-w-full shrink-0",
+        className
+      )}
+    >
       <span className="sr-only">{label}</span>
       <Icon
         className={cn(

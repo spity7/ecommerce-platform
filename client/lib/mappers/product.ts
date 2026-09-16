@@ -4,9 +4,17 @@ import type { Product } from "@/types/product";
 const DEFAULT_PRODUCT_IMAGE =
   "/assets/images/product-img/beauty-product/beauty-product-st-05.webp";
 
+export function getProductReviewCount(
+  product: Pick<Product, "reviewCount" | "ratingCount">
+): number {
+  return product.reviewCount ?? product.ratingCount ?? 0;
+}
+
 export function mapProductDtoToStorefront(product: ProductDto): Product {
   const images =
     product.images.length > 0 ? product.images : [DEFAULT_PRODUCT_IMAGE];
+  const reviewCount = product.reviewCount ?? 0;
+  const averageRating = product.averageRating ?? 0;
 
   return {
     id: product.slug,
@@ -27,7 +35,9 @@ export function mapProductDtoToStorefront(product: ProductDto): Product {
     inStock: product.stock > 0,
     availableQuantity: product.stock,
     isStockOut: product.stock <= 0,
-    ratingCount: 0,
+    rating: reviewCount > 0 ? averageRating : undefined,
+    ratingCount: reviewCount,
+    reviewCount,
   };
 }
 

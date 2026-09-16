@@ -5,6 +5,7 @@ import { Category } from "../../models/Category.js";
 import { Order } from "../../models/Order.js";
 import { Product } from "../../models/Product.js";
 import { Wishlist } from "../../models/Wishlist.js";
+import { Review } from "../../models/Review.js";
 import { extractAttributeSlugs } from "../../utils/catalog-relations.js";
 import type { SiteSeedData } from "../seed-data/types.js";
 
@@ -21,6 +22,7 @@ export async function clearCommerceData(): Promise<void> {
     Cart.deleteMany({}),
     Order.deleteMany({}),
     Wishlist.deleteMany({}),
+    Review.deleteMany({}),
   ]);
 }
 

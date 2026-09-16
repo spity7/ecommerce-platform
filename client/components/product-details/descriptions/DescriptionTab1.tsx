@@ -2,28 +2,38 @@
 
 import { GridMatrixIcon, WaveSquareIcon } from "../../svg-icons";
 import Image from "next/image";
-import AddReviewForm from "./AddReviewForm";
-import LightGallery from "lightgallery/react";
-import lgThumbnail from "lightgallery/plugins/thumbnail";
-import lgZoom from "lightgallery/plugins/zoom";
-import lgVideo from "lightgallery/plugins/video";
-import "@/lib/lightgallery-styles";
+import ProductReviewsPanel from "./ProductReviewsPanel";
 import {
-  REVIEW_MEDIA_ITEMS,
   PRODUCT_FEATURES,
   PRODUCT_SPECIFICATIONS,
   type ProductSpecification,
-  productReviews,
   productFaqs,
 } from "@/data/productDetails";
+import type { StorefrontReview } from "@/lib/mappers/reviews";
 import { useState } from "react";
 
 export default function DescriptionTab1({
   description,
   parentClass = "rbt-tab rbt-product-single-details-tab rbt-fshape-tab",
+  reviewsEnabled = true,
+  productId,
+  productName,
+  averageRating,
+  reviewCount,
+  ratingBreakdown,
+  reviews,
+  useApiReviews = false,
 }: {
   description?: string;
   parentClass?: string;
+  reviewsEnabled?: boolean;
+  productId?: string;
+  productName?: string;
+  averageRating?: number;
+  reviewCount?: number;
+  ratingBreakdown?: { star: number; count: number }[];
+  reviews?: StorefrontReview[];
+  useApiReviews?: boolean;
 }) {
   const [activeTab, setActiveTab] = useState<
     "description" | "specification" | "reviews" | "question"
@@ -72,23 +82,25 @@ export default function DescriptionTab1({
                 </span>
               </button>
             </li>
-            <li className="nav-item" role="presentation">
-              <button
-                type="button"
-                className={`nav-link${activeTab === "reviews" ? " active" : ""}`}
-                onClick={() => {
-                  setActiveTab("reviews");
-                }}
-              >
-                Reviews
-                <span className="rbt-fshape-portion rbt-fshape-left-portion">
-                  <GridMatrixIcon />
-                </span>
-                <span className="rbt-fshape-portion rbt-fshape-right-portion">
-                  <WaveSquareIcon />
-                </span>
-              </button>
-            </li>
+            {reviewsEnabled ? (
+              <li className="nav-item" role="presentation">
+                <button
+                  type="button"
+                  className={`nav-link${activeTab === "reviews" ? " active" : ""}`}
+                  onClick={() => {
+                    setActiveTab("reviews");
+                  }}
+                >
+                  Reviews
+                  <span className="rbt-fshape-portion rbt-fshape-left-portion">
+                    <GridMatrixIcon />
+                  </span>
+                  <span className="rbt-fshape-portion rbt-fshape-right-portion">
+                    <WaveSquareIcon />
+                  </span>
+                </button>
+              </li>
+            ) : null}
             <li className="nav-item" role="presentation">
               <button
                 type="button"
@@ -255,186 +267,17 @@ export default function DescriptionTab1({
               </div>
             </div>
           )}
-          {activeTab === "reviews" && (
-            <div className="tab-pane fade active show">
-              <div className="rbt-product-single-reviews-area">
-                <div className="rbt-review-statistics-section">
-                  <div className="row row--12 mt_dec--24">
-                    <div className="col-md-6 mt--24">
-                      <div className="rbt-avr-review">
-                        <span className="rbt-abr-review-number-text">4.33</span>
-                        <div className="rbt-abr-review-content">
-                          <ul className="rbt-rating-icon-list">
-                            <li>
-                              <i className="fa-solid fa-star rbt-rated-icon" />
-                            </li>
-                            <li>
-                              <i className="fa-solid fa-star rbt-rated-icon" />
-                            </li>
-                            <li>
-                              <i className="fa-solid fa-star rbt-rated-icon" />
-                            </li>
-                            <li>
-                              <i className="fa-solid fa-star" />
-                            </li>
-                            <li>
-                              <i className="fa-solid fa-star" />
-                            </li>
-                          </ul>
-                          <p className="rating-text b3 mt--8 rbt-text-color-gray-700">
-                            Based on 19 Review
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6 mt--24">
-                      <div className="rbt-rating-breakdown">
-                        {[
-                          { star: 5, val: 50, count: 6 },
-                          { star: 4, val: 25, count: 4 },
-                          { star: 3, val: 75, count: 6 },
-                          { star: 2, val: 75, count: 6 },
-                          { star: 1, val: 50, count: 9 },
-                        ].map((item) => (
-                          <div className="rbt-rating-item" key={item.star}>
-                            <span className="icon">
-                              <i className="fa-solid fa-star rbt-rated-icon" />
-                            </span>
-                            <span className="number-text">{item.star}</span>
-                            <div
-                              className="progress"
-                              role="progressbar"
-                              aria-label="Shipping-progress"
-                              aria-valuenow={item.val}
-                              aria-valuemin={0}
-                              aria-valuemax={100}
-                            >
-                              <div className={`progress-bar w-${item.val}`} />
-                            </div>
-                            <span className="number-text">{item.count}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="rbt-prd-single-reviews-list-area">
-                <ul className="rbt-comment-list">
-                  {productReviews.map((review) => (
-                    <li className="comment" key={review.id}>
-                      <div className="comment-body">
-                        <div className="single-comment">
-                          <div className="comment-img">
-                            <Image
-                              alt="Author Images"
-                              src={review.imgSrc}
-                              width={96}
-                              height={96}
-                            />
-                          </div>
-                          <div className="comment-inner">
-                            <ul className="rbt-rating-icon-list">
-                              {[...Array(5)].map((_, i) => (
-                                <li key={i}>
-                                  <i
-                                    className={`fa-solid fa-star${i < review.rating ? " rbt-rated-icon" : ""}`}
-                                  />
-                                </li>
-                              ))}
-                            </ul>
-                            <div className="comment-meta">
-                              <div className="time-spent">{review.date}</div>
-                            </div>
-                            <div className="comment-text">
-                              <p className="title">{review.title}</p>
-                              <p className="b1">{review.desc}</p>
-                              {review.hasMedia && (
-                                <LightGallery
-                                  plugins={[lgThumbnail, lgZoom, lgVideo]}
-                                  elementClassNames="rbt-review-gallery"
-                                  speed={400}
-                                  selector=".rbt-commented-img-list > li > a"
-                                  zoomFromOrigin={false}
-                                  autoplayVideoOnSlide
-                                >
-                                  <ul className="rbt-commented-img-list">
-                                    {REVIEW_MEDIA_ITEMS.map((item, index) =>
-                                      item.type === "image" ? (
-                                        <li key={item.id}>
-                                          <a
-                                            href={item.thumbSrc}
-                                            data-src={item.thumbSrc}
-                                            className={`rbt-commented-img${
-                                              index === 3
-                                                ? " has-more-link"
-                                                : ""
-                                            }`}
-                                            data-black-overlay={
-                                              index === 3 ? 7 : undefined
-                                            }
-                                            data-sub-html={item.alt}
-                                          >
-                                            <Image
-                                              alt={item.alt}
-                                              src={item.thumbSrc}
-                                              width={3024}
-                                              height={4032}
-                                            />
-                                            {index === 3 && (
-                                              <span className="text">
-                                                {" "}
-                                                +5 Images{" "}
-                                              </span>
-                                            )}
-                                          </a>
-                                        </li>
-                                      ) : (
-                                        <li key={item.id}>
-                                          <a
-                                            className="rbt-commented-img"
-                                            role="button"
-                                            tabIndex={0}
-                                            data-poster={item.thumbSrc}
-                                            data-video={JSON.stringify({
-                                              source: [
-                                                {
-                                                  src: item.src,
-                                                  type: "video/webm",
-                                                },
-                                              ],
-                                              attributes: {
-                                                controls: true,
-                                                playsInline: true,
-                                                preload: "metadata",
-                                              },
-                                            })}
-                                            data-sub-html={item.alt}
-                                          >
-                                            <Image
-                                              alt={item.alt}
-                                              src={item.thumbSrc}
-                                              width={3024}
-                                              height={4032}
-                                            />
-                                          </a>
-                                        </li>
-                                      )
-                                    )}
-                                  </ul>
-                                </LightGallery>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <AddReviewForm />
-            </div>
-          )}
+          {activeTab === "reviews" && reviewsEnabled ? (
+            <ProductReviewsPanel
+              averageRating={averageRating}
+              productId={productId}
+              productName={productName}
+              ratingBreakdown={ratingBreakdown}
+              reviewCount={reviewCount}
+              reviews={reviews}
+              useApiData={useApiReviews}
+            />
+          ) : null}
           {activeTab === "question" && (
             <div className="tab-pane fade active show">
               <div className="rbt-prd-single-faq-section">

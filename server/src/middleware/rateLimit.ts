@@ -29,3 +29,13 @@ export const catalogReadRateLimiter = rateLimit({
   message: { error: "Too many catalog requests. Please try again later." },
   skip: (req) => shouldSkipRateLimit() || hasBearerAuthorization(req),
 });
+
+/** Customer review create/update. */
+export const reviewWriteRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: process.env.SKIP_AUTH_RATE_LIMIT ? 10_000 : 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many review submissions. Please try again later." },
+  skip: shouldSkipRateLimit,
+});

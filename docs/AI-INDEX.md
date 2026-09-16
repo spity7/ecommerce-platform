@@ -40,17 +40,17 @@ ecommerce-platform/
 
 | Document                                                                         | Purpose                                                   | Last reviewed |
 | -------------------------------------------------------------------------------- | --------------------------------------------------------- | ------------- |
-| [ARCHITECTURE.md](ARCHITECTURE.md)                                               | Monorepo layout, multi-site, OpenAPI/Orval, CI, new sites | 2026-09-11    |
-| [ROUTES.md](ROUTES.md)                                                           | HTTP API + admin/storefront route inventory               | 2026-09-12    |
+| [ARCHITECTURE.md](ARCHITECTURE.md)                                               | Monorepo layout, multi-site, OpenAPI/Orval, CI, new sites | 2026-09-16    |
+| [ROUTES.md](ROUTES.md)                                                           | HTTP API + admin/storefront route inventory               | 2026-09-16    |
 | [CONVENTIONS.md](CONVENTIONS.md)                                                 | Naming, UI stacks, patterns per workspace                 | 2026-09-11    |
 | [../admin/README.md](../admin/README.md)                                         | Admin workspace scope + API integration                   | 2026-09-05    |
-| [site-registry.json](site-registry.json)                                         | Deployed sites metadata (DB, GCS, URLs, features)         | 2026-08-22    |
+| [site-registry.json](site-registry.json)                                         | Deployed sites metadata (DB, GCS, URLs, features)         | 2026-09-15    |
 | [../AGENTS.md](../AGENTS.md)                                                     | Cross-tool agent entry                                    | 2026-08-24    |
 | [../CLAUDE.md](../CLAUDE.md)                                                     | Claude Code quick commands                                | 2026-08-22    |
 | [../GEMINI.md](../GEMINI.md)                                                     | Antigravity / Gemini overrides                            | 2026-08-20    |
 | [../README.md](../README.md)                                                     | Human quick start                                         | 2026-08-28    |
 | [../.github/copilot-instructions.md](../.github/copilot-instructions.md)         | GitHub Copilot entry                                      | 2026-08-20    |
-| [../client/backend_features_analysis.md](../client/backend_features_analysis.md) | API roadmap / planned endpoints (partial)                 | 2026-09-11    |
+| [../client/backend_features_analysis.md](../client/backend_features_analysis.md) | API roadmap / planned endpoints (partial)                 | 2026-09-15    |
 
 ## Cursor rules
 

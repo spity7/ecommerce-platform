@@ -91,6 +91,14 @@ export async function proxy(request: NextRequest) {
     return redirectToSignIn(request, true);
   }
 
+  if (
+    session.status === "ok" &&
+    session.user.role === "admin" &&
+    (pathname === "/my-reviews" || pathname.startsWith("/my-reviews/"))
+  ) {
+    return NextResponse.redirect(new URL("/account-info", request.url));
+  }
+
   if (onAuthPage) {
     const returnTo = request.nextUrl.searchParams.get("returnTo");
     if (

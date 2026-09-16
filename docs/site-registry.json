@@ -10,7 +10,7 @@
     "database": "beauty-station",
     "gcsBucket": "beauty-station-media",
     "region": "us",
-    "defaultPhoneCountry": "US",
+    "defaultPhoneCountry": "LB",
     "features": {
       "attributes": true,
       "brands": true,
