@@ -11,7 +11,8 @@ import { useAccountInfoGuard } from "./AccountInfoGuard";
 export default function AccountDeleteSection() {
   const router = useRouter();
   const { user } = useAuthSession();
-  const { actionsDisabled, reportState } = useAccountInfoGuard("delete-account");
+  const { actionsDisabled, reportState } =
+    useAccountInfoGuard("delete-account");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);

@@ -35,10 +35,7 @@ export function ListSearchField({
 
   return (
     <label
-      className={cn(
-        "relative block w-[200px] max-w-full shrink-0",
-        className
-      )}
+      className={cn("relative block w-[200px] max-w-full shrink-0", className)}
     >
       <span className="sr-only">{label}</span>
       <Icon

@@ -37,11 +37,6 @@ export const PRODUCT_BADGE_REGISTRY: Record<
     style: "rbt-product-badge-bg-green",
     source: "auto",
   },
-  new_arrival: {
-    label: "New arrival",
-    style: "rbt-product-badge-bg-primary",
-    source: "auto",
-  },
   preorder: {
     label: "Pre-order",
     style: "rbt-product-badge-bg-primary",
@@ -67,6 +62,7 @@ export const PRODUCT_BADGE_REGISTRY: Record<
     style: "rbt-product-badge-bg-green",
     source: "manual",
   },
+  /** Also assigned automatically when `unitsSold` meets site threshold. */
   best_seller: {
     label: "Best seller",
     style: "rbt-product-badge-bg-secondary-gradient",
@@ -132,3 +128,18 @@ export const AUTO_PRODUCT_BADGE_KINDS = (
 )
   .filter(([, entry]) => entry.source === "auto")
   .map(([kind]) => kind);
+
+/** Auto rules merchants can suppress in admin (includes dual manual/auto kinds). */
+export const SUPPRESSIBLE_AUTO_BADGE_KINDS: ProductBadgeKind[] = [
+  ...AUTO_PRODUCT_BADGE_KINDS,
+  "best_seller",
+];
+
+/** Kinds that must not appear in `manualBadges` (auto-only). */
+export const AUTO_ONLY_MANUAL_BADGE_KINDS: ProductBadgeKind[] = [
+  "sale",
+  "new",
+  "sold_out",
+  "low_stock",
+  "top_rated",
+];

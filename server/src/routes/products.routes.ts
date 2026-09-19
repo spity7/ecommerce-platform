@@ -348,10 +348,7 @@ productsRouter.patch(
       );
     }
 
-    if (
-      previousName !== product.name ||
-      previousSlug !== product.slug
-    ) {
+    if (previousName !== product.name || previousSlug !== product.slug) {
       await syncReviewProductSnapshots(
         product._id.toString(),
         product.name,

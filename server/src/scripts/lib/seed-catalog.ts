@@ -53,8 +53,9 @@ export async function seedCatalog(
 
   const products = seedData.products.map((product) => {
     const category =
-      categoryBySlug.get(product.categorySlug ?? seedData.primaryCategorySlug) ??
-      fallbackCategory;
+      categoryBySlug.get(
+        product.categorySlug ?? seedData.primaryCategorySlug
+      ) ?? fallbackCategory;
     const brandSlug = product.brandSlug ?? seedData.primaryBrandSlug;
     const brand = brandBySlug.get(brandSlug);
 
@@ -110,7 +111,8 @@ export async function seedCatalog(
     brands: brands.length,
     attributes: seedData.attributes.length,
     products: products.length,
-    publishedProducts: products.filter((product) => product.status === "published")
-      .length,
+    publishedProducts: products.filter(
+      (product) => product.status === "published"
+    ).length,
   };
 }

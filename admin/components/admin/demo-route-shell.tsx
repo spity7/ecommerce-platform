@@ -19,7 +19,10 @@ export function DemoRouteShell({
     <>
       <DemoNotice description={description} />
       <p className="mb-6 text-[14px] text-ink-600">
-        <Link className="font-semibold text-brand-600 hover:text-brand-700" href={liveHref}>
+        <Link
+          className="font-semibold text-brand-600 hover:text-brand-700"
+          href={liveHref}
+        >
           {liveLabel}
         </Link>
       </p>

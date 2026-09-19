@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type FormEvent,
+} from "react";
 import {
   ApiError,
   createUserAddress,
@@ -55,12 +61,12 @@ function formatAddress(address: ListUserAddresses200Item): string {
 function hasAddressFormContent(form: AddressFormState): boolean {
   return Boolean(
     form.name.trim() ||
-      form.line1.trim() ||
-      form.line2.trim() ||
-      form.city.trim() ||
-      form.country.trim() ||
-      form.phone.trim() ||
-      form.isDefault
+    form.line1.trim() ||
+    form.line2.trim() ||
+    form.city.trim() ||
+    form.country.trim() ||
+    form.phone.trim() ||
+    form.isDefault
   );
 }
 

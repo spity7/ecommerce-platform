@@ -30,7 +30,6 @@ export const ProductDtoBadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -64,7 +63,6 @@ export const ProductDtoMerchandisingManualBadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -85,11 +83,6 @@ export type ProductDtoMerchandisingManualBadgesItem = {
   kind: ProductDtoMerchandisingManualBadgesItemKind;
   /**
    * @minLength 1
-   * @maxLength 24
-   */
-  label?: string;
-  /**
-   * @minLength 1
    * @maxLength 120
    * @pattern ^rbt-product-badge-
    */
@@ -107,7 +100,6 @@ export const ProductDtoMerchandisingSuppressAutoBadgesItem = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -124,11 +116,14 @@ export const ProductDtoMerchandisingSuppressAutoBadgesItem = {
   organic: "organic",
 } as const;
 
+/**
+ * @nullable
+ */
 export type ProductDtoMerchandising = {
   /** @maxItems 2 */
-  manualBadges?: ProductDtoMerchandisingManualBadgesItem[];
+  manualBadges: ProductDtoMerchandisingManualBadgesItem[];
   suppressAutoBadges?: ProductDtoMerchandisingSuppressAutoBadgesItem[];
-};
+} | null;
 
 export interface ProductDto {
   id: string;
@@ -156,6 +151,7 @@ export interface ProductDto {
   reviewCount?: number;
   /** @maxItems 2 */
   badges: ProductDtoBadgesItem[];
+  /** @nullable */
   merchandising?: ProductDtoMerchandising;
   /** @minimum 0 */
   unitsSold?: number;
@@ -274,7 +270,6 @@ export const CreateProductInputMerchandisingManualBadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -295,11 +290,6 @@ export type CreateProductInputMerchandisingManualBadgesItem = {
   kind: CreateProductInputMerchandisingManualBadgesItemKind;
   /**
    * @minLength 1
-   * @maxLength 24
-   */
-  label?: string;
-  /**
-   * @minLength 1
    * @maxLength 120
    * @pattern ^rbt-product-badge-
    */
@@ -317,7 +307,6 @@ export const CreateProductInputMerchandisingSuppressAutoBadgesItem = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -334,11 +323,14 @@ export const CreateProductInputMerchandisingSuppressAutoBadgesItem = {
   organic: "organic",
 } as const;
 
+/**
+ * @nullable
+ */
 export type CreateProductInputMerchandising = {
   /** @maxItems 2 */
-  manualBadges?: CreateProductInputMerchandisingManualBadgesItem[];
+  manualBadges: CreateProductInputMerchandisingManualBadgesItem[];
   suppressAutoBadges?: CreateProductInputMerchandisingSuppressAutoBadgesItem[];
-};
+} | null;
 
 export interface CreateProductInput {
   /**
@@ -370,6 +362,7 @@ export interface CreateProductInput {
   images?: string[];
   attributes?: CreateProductInputAttributes;
   metadata?: CreateProductInputMetadata;
+  /** @nullable */
   merchandising?: CreateProductInputMerchandising;
 }
 
@@ -398,7 +391,6 @@ export const UpdateProductInputMerchandisingManualBadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -419,11 +411,6 @@ export type UpdateProductInputMerchandisingManualBadgesItem = {
   kind: UpdateProductInputMerchandisingManualBadgesItemKind;
   /**
    * @minLength 1
-   * @maxLength 24
-   */
-  label?: string;
-  /**
-   * @minLength 1
    * @maxLength 120
    * @pattern ^rbt-product-badge-
    */
@@ -441,7 +428,6 @@ export const UpdateProductInputMerchandisingSuppressAutoBadgesItem = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -458,11 +444,14 @@ export const UpdateProductInputMerchandisingSuppressAutoBadgesItem = {
   organic: "organic",
 } as const;
 
+/**
+ * @nullable
+ */
 export type UpdateProductInputMerchandising = {
   /** @maxItems 2 */
-  manualBadges?: UpdateProductInputMerchandisingManualBadgesItem[];
+  manualBadges: UpdateProductInputMerchandisingManualBadgesItem[];
   suppressAutoBadges?: UpdateProductInputMerchandisingSuppressAutoBadgesItem[];
-};
+} | null;
 
 export interface UpdateProductInput {
   /**
@@ -494,6 +483,7 @@ export interface UpdateProductInput {
   images?: string[];
   attributes?: UpdateProductInputAttributes;
   metadata?: UpdateProductInputMetadata;
+  /** @nullable */
   merchandising?: UpdateProductInputMerchandising;
 }
 
@@ -779,7 +769,6 @@ export const PaginatedProductsDataItemBadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -813,7 +802,6 @@ export const PaginatedProductsDataItemMerchandisingManualBadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -834,11 +822,6 @@ export type PaginatedProductsDataItemMerchandisingManualBadgesItem = {
   kind: PaginatedProductsDataItemMerchandisingManualBadgesItemKind;
   /**
    * @minLength 1
-   * @maxLength 24
-   */
-  label?: string;
-  /**
-   * @minLength 1
    * @maxLength 120
    * @pattern ^rbt-product-badge-
    */
@@ -856,7 +839,6 @@ export const PaginatedProductsDataItemMerchandisingSuppressAutoBadgesItem = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -873,11 +855,14 @@ export const PaginatedProductsDataItemMerchandisingSuppressAutoBadgesItem = {
   organic: "organic",
 } as const;
 
+/**
+ * @nullable
+ */
 export type PaginatedProductsDataItemMerchandising = {
   /** @maxItems 2 */
-  manualBadges?: PaginatedProductsDataItemMerchandisingManualBadgesItem[];
+  manualBadges: PaginatedProductsDataItemMerchandisingManualBadgesItem[];
   suppressAutoBadges?: PaginatedProductsDataItemMerchandisingSuppressAutoBadgesItem[];
-};
+} | null;
 
 export type PaginatedProductsDataItem = {
   id: string;
@@ -905,6 +890,7 @@ export type PaginatedProductsDataItem = {
   reviewCount?: number;
   /** @maxItems 2 */
   badges: PaginatedProductsDataItemBadgesItem[];
+  /** @nullable */
   merchandising?: PaginatedProductsDataItemMerchandising;
   /** @minimum 0 */
   unitsSold?: number;
@@ -1862,7 +1848,6 @@ export const ListProduct200DataItemBadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -1896,7 +1881,6 @@ export const ListProduct200DataItemMerchandisingManualBadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -1917,11 +1901,6 @@ export type ListProduct200DataItemMerchandisingManualBadgesItem = {
   kind: ListProduct200DataItemMerchandisingManualBadgesItemKind;
   /**
    * @minLength 1
-   * @maxLength 24
-   */
-  label?: string;
-  /**
-   * @minLength 1
    * @maxLength 120
    * @pattern ^rbt-product-badge-
    */
@@ -1939,7 +1918,6 @@ export const ListProduct200DataItemMerchandisingSuppressAutoBadgesItem = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -1956,11 +1934,14 @@ export const ListProduct200DataItemMerchandisingSuppressAutoBadgesItem = {
   organic: "organic",
 } as const;
 
+/**
+ * @nullable
+ */
 export type ListProduct200DataItemMerchandising = {
   /** @maxItems 2 */
-  manualBadges?: ListProduct200DataItemMerchandisingManualBadgesItem[];
+  manualBadges: ListProduct200DataItemMerchandisingManualBadgesItem[];
   suppressAutoBadges?: ListProduct200DataItemMerchandisingSuppressAutoBadgesItem[];
-};
+} | null;
 
 export type ListProduct200DataItem = {
   id: string;
@@ -1988,6 +1969,7 @@ export type ListProduct200DataItem = {
   reviewCount?: number;
   /** @maxItems 2 */
   badges: ListProduct200DataItemBadgesItem[];
+  /** @nullable */
   merchandising?: ListProduct200DataItemMerchandising;
   /** @minimum 0 */
   unitsSold?: number;
@@ -2027,7 +2009,6 @@ export const CreateProductBodyMerchandisingManualBadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -2048,11 +2029,6 @@ export type CreateProductBodyMerchandisingManualBadgesItem = {
   kind: CreateProductBodyMerchandisingManualBadgesItemKind;
   /**
    * @minLength 1
-   * @maxLength 24
-   */
-  label?: string;
-  /**
-   * @minLength 1
    * @maxLength 120
    * @pattern ^rbt-product-badge-
    */
@@ -2070,7 +2046,6 @@ export const CreateProductBodyMerchandisingSuppressAutoBadgesItem = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -2087,11 +2062,14 @@ export const CreateProductBodyMerchandisingSuppressAutoBadgesItem = {
   organic: "organic",
 } as const;
 
+/**
+ * @nullable
+ */
 export type CreateProductBodyMerchandising = {
   /** @maxItems 2 */
-  manualBadges?: CreateProductBodyMerchandisingManualBadgesItem[];
+  manualBadges: CreateProductBodyMerchandisingManualBadgesItem[];
   suppressAutoBadges?: CreateProductBodyMerchandisingSuppressAutoBadgesItem[];
-};
+} | null;
 
 export type CreateProductBody = {
   /**
@@ -2123,6 +2101,7 @@ export type CreateProductBody = {
   images?: string[];
   attributes?: CreateProductBodyAttributes;
   metadata?: CreateProductBodyMetadata;
+  /** @nullable */
   merchandising?: CreateProductBodyMerchandising;
 };
 
@@ -2151,7 +2130,6 @@ export const CreateProduct201BadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -2185,7 +2163,6 @@ export const CreateProduct201MerchandisingManualBadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -2206,11 +2183,6 @@ export type CreateProduct201MerchandisingManualBadgesItem = {
   kind: CreateProduct201MerchandisingManualBadgesItemKind;
   /**
    * @minLength 1
-   * @maxLength 24
-   */
-  label?: string;
-  /**
-   * @minLength 1
    * @maxLength 120
    * @pattern ^rbt-product-badge-
    */
@@ -2228,7 +2200,6 @@ export const CreateProduct201MerchandisingSuppressAutoBadgesItem = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -2245,11 +2216,14 @@ export const CreateProduct201MerchandisingSuppressAutoBadgesItem = {
   organic: "organic",
 } as const;
 
+/**
+ * @nullable
+ */
 export type CreateProduct201Merchandising = {
   /** @maxItems 2 */
-  manualBadges?: CreateProduct201MerchandisingManualBadgesItem[];
+  manualBadges: CreateProduct201MerchandisingManualBadgesItem[];
   suppressAutoBadges?: CreateProduct201MerchandisingSuppressAutoBadgesItem[];
-};
+} | null;
 
 export type CreateProduct201 = {
   id: string;
@@ -2277,6 +2251,7 @@ export type CreateProduct201 = {
   reviewCount?: number;
   /** @maxItems 2 */
   badges: CreateProduct201BadgesItem[];
+  /** @nullable */
   merchandising?: CreateProduct201Merchandising;
   /** @minimum 0 */
   unitsSold?: number;
@@ -2324,7 +2299,6 @@ export const GetProduct200BadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -2358,7 +2332,6 @@ export const GetProduct200MerchandisingManualBadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -2379,11 +2352,6 @@ export type GetProduct200MerchandisingManualBadgesItem = {
   kind: GetProduct200MerchandisingManualBadgesItemKind;
   /**
    * @minLength 1
-   * @maxLength 24
-   */
-  label?: string;
-  /**
-   * @minLength 1
    * @maxLength 120
    * @pattern ^rbt-product-badge-
    */
@@ -2401,7 +2369,6 @@ export const GetProduct200MerchandisingSuppressAutoBadgesItem = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -2418,11 +2385,14 @@ export const GetProduct200MerchandisingSuppressAutoBadgesItem = {
   organic: "organic",
 } as const;
 
+/**
+ * @nullable
+ */
 export type GetProduct200Merchandising = {
   /** @maxItems 2 */
-  manualBadges?: GetProduct200MerchandisingManualBadgesItem[];
+  manualBadges: GetProduct200MerchandisingManualBadgesItem[];
   suppressAutoBadges?: GetProduct200MerchandisingSuppressAutoBadgesItem[];
-};
+} | null;
 
 export type GetProduct200 = {
   id: string;
@@ -2450,6 +2420,7 @@ export type GetProduct200 = {
   reviewCount?: number;
   /** @maxItems 2 */
   badges: GetProduct200BadgesItem[];
+  /** @nullable */
   merchandising?: GetProduct200Merchandising;
   /** @minimum 0 */
   unitsSold?: number;
@@ -2486,7 +2457,6 @@ export const UpdateProductBodyMerchandisingManualBadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -2507,11 +2477,6 @@ export type UpdateProductBodyMerchandisingManualBadgesItem = {
   kind: UpdateProductBodyMerchandisingManualBadgesItemKind;
   /**
    * @minLength 1
-   * @maxLength 24
-   */
-  label?: string;
-  /**
-   * @minLength 1
    * @maxLength 120
    * @pattern ^rbt-product-badge-
    */
@@ -2529,7 +2494,6 @@ export const UpdateProductBodyMerchandisingSuppressAutoBadgesItem = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -2546,11 +2510,14 @@ export const UpdateProductBodyMerchandisingSuppressAutoBadgesItem = {
   organic: "organic",
 } as const;
 
+/**
+ * @nullable
+ */
 export type UpdateProductBodyMerchandising = {
   /** @maxItems 2 */
-  manualBadges?: UpdateProductBodyMerchandisingManualBadgesItem[];
+  manualBadges: UpdateProductBodyMerchandisingManualBadgesItem[];
   suppressAutoBadges?: UpdateProductBodyMerchandisingSuppressAutoBadgesItem[];
-};
+} | null;
 
 export type UpdateProductBody = {
   /**
@@ -2582,6 +2549,7 @@ export type UpdateProductBody = {
   images?: string[];
   attributes?: UpdateProductBodyAttributes;
   metadata?: UpdateProductBodyMetadata;
+  /** @nullable */
   merchandising?: UpdateProductBodyMerchandising;
 };
 
@@ -2610,7 +2578,6 @@ export const UpdateProduct200BadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -2644,7 +2611,6 @@ export const UpdateProduct200MerchandisingManualBadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -2665,11 +2631,6 @@ export type UpdateProduct200MerchandisingManualBadgesItem = {
   kind: UpdateProduct200MerchandisingManualBadgesItemKind;
   /**
    * @minLength 1
-   * @maxLength 24
-   */
-  label?: string;
-  /**
-   * @minLength 1
    * @maxLength 120
    * @pattern ^rbt-product-badge-
    */
@@ -2687,7 +2648,6 @@ export const UpdateProduct200MerchandisingSuppressAutoBadgesItem = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -2704,11 +2664,14 @@ export const UpdateProduct200MerchandisingSuppressAutoBadgesItem = {
   organic: "organic",
 } as const;
 
+/**
+ * @nullable
+ */
 export type UpdateProduct200Merchandising = {
   /** @maxItems 2 */
-  manualBadges?: UpdateProduct200MerchandisingManualBadgesItem[];
+  manualBadges: UpdateProduct200MerchandisingManualBadgesItem[];
   suppressAutoBadges?: UpdateProduct200MerchandisingSuppressAutoBadgesItem[];
-};
+} | null;
 
 export type UpdateProduct200 = {
   id: string;
@@ -2736,6 +2699,7 @@ export type UpdateProduct200 = {
   reviewCount?: number;
   /** @maxItems 2 */
   badges: UpdateProduct200BadgesItem[];
+  /** @nullable */
   merchandising?: UpdateProduct200Merchandising;
   /** @minimum 0 */
   unitsSold?: number;
@@ -2797,7 +2761,6 @@ export const GetProductBySlug200BadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -2831,7 +2794,6 @@ export const GetProductBySlug200MerchandisingManualBadgesItemKind = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -2852,11 +2814,6 @@ export type GetProductBySlug200MerchandisingManualBadgesItem = {
   kind: GetProductBySlug200MerchandisingManualBadgesItemKind;
   /**
    * @minLength 1
-   * @maxLength 24
-   */
-  label?: string;
-  /**
-   * @minLength 1
    * @maxLength 120
    * @pattern ^rbt-product-badge-
    */
@@ -2874,7 +2831,6 @@ export const GetProductBySlug200MerchandisingSuppressAutoBadgesItem = {
   bundle: "bundle",
   free_gift: "free_gift",
   new: "new",
-  new_arrival: "new_arrival",
   preorder: "preorder",
   coming_soon: "coming_soon",
   sold_out: "sold_out",
@@ -2891,11 +2847,14 @@ export const GetProductBySlug200MerchandisingSuppressAutoBadgesItem = {
   organic: "organic",
 } as const;
 
+/**
+ * @nullable
+ */
 export type GetProductBySlug200Merchandising = {
   /** @maxItems 2 */
-  manualBadges?: GetProductBySlug200MerchandisingManualBadgesItem[];
+  manualBadges: GetProductBySlug200MerchandisingManualBadgesItem[];
   suppressAutoBadges?: GetProductBySlug200MerchandisingSuppressAutoBadgesItem[];
-};
+} | null;
 
 export type GetProductBySlug200 = {
   id: string;
@@ -2923,6 +2882,7 @@ export type GetProductBySlug200 = {
   reviewCount?: number;
   /** @maxItems 2 */
   badges: GetProductBySlug200BadgesItem[];
+  /** @nullable */
   merchandising?: GetProductBySlug200Merchandising;
   /** @minimum 0 */
   unitsSold?: number;

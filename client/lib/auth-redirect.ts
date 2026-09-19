@@ -31,12 +31,15 @@ export function getCurrentReturnPath(): string {
 export function getReturnToFromSearchParams(
   searchParams: URLSearchParams
 ): string {
-  return sanitizeReturnPath(searchParams.get(RETURN_TO_PARAM)) ??
-    DEFAULT_POST_AUTH_PATH;
+  return (
+    sanitizeReturnPath(searchParams.get(RETURN_TO_PARAM)) ??
+    DEFAULT_POST_AUTH_PATH
+  );
 }
 
 export function buildSignInPath(returnTo?: string): string {
-  const path = sanitizeReturnPath(returnTo) ?? sanitizeReturnPath(getCurrentReturnPath());
+  const path =
+    sanitizeReturnPath(returnTo) ?? sanitizeReturnPath(getCurrentReturnPath());
   if (!path) {
     return "/signin";
   }
@@ -47,7 +50,8 @@ export function buildSignInPath(returnTo?: string): string {
 }
 
 export function buildSignUpPath(returnTo?: string): string {
-  const path = sanitizeReturnPath(returnTo) ?? sanitizeReturnPath(getCurrentReturnPath());
+  const path =
+    sanitizeReturnPath(returnTo) ?? sanitizeReturnPath(getCurrentReturnPath());
   if (!path) {
     return "/signup";
   }

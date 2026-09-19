@@ -63,7 +63,9 @@ export function ForgotPasswordForm() {
           <p className="mt-4 text-[13px] text-ink-500">
             Dev reset link:{" "}
             {disabled ? (
-              <span className="font-semibold text-ink-400">Open reset page</span>
+              <span className="font-semibold text-ink-400">
+                Open reset page
+              </span>
             ) : (
               <Link className="font-semibold text-brand-600" href={devResetUrl}>
                 Open reset page

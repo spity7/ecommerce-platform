@@ -3,10 +3,7 @@ import {
   moveWishlistItemSchema,
   wishlistItemInputSchema,
 } from "@platform/shared";
-import {
-  requireAuth,
-  type AuthenticatedRequest,
-} from "../middleware/auth.js";
+import { requireAuth, type AuthenticatedRequest } from "../middleware/auth.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import {
   addProductToWishlist,

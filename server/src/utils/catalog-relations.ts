@@ -227,9 +227,11 @@ async function syncStoredProductCount(
   return live;
 }
 
-export async function syncCategoryProductCount(
-  category: { _id: Types.ObjectId; productCount: number; save: () => Promise<unknown> }
-): Promise<number> {
+export async function syncCategoryProductCount(category: {
+  _id: Types.ObjectId;
+  productCount: number;
+  save: () => Promise<unknown>;
+}): Promise<number> {
   const live = await countProductsForCategory(category._id);
   return syncStoredProductCount(category.productCount, live, async () => {
     category.productCount = live;
@@ -237,9 +239,11 @@ export async function syncCategoryProductCount(
   });
 }
 
-export async function syncBrandProductCount(
-  brand: { _id: Types.ObjectId; productCount: number; save: () => Promise<unknown> }
-): Promise<number> {
+export async function syncBrandProductCount(brand: {
+  _id: Types.ObjectId;
+  productCount: number;
+  save: () => Promise<unknown>;
+}): Promise<number> {
   const live = await countProductsForBrand(brand._id);
   return syncStoredProductCount(brand.productCount, live, async () => {
     brand.productCount = live;
@@ -247,13 +251,11 @@ export async function syncBrandProductCount(
   });
 }
 
-export async function syncAttributeProductCount(
-  attribute: {
-    productCount: number;
-    save: () => Promise<unknown>;
-    slug: string;
-  }
-): Promise<number> {
+export async function syncAttributeProductCount(attribute: {
+  productCount: number;
+  save: () => Promise<unknown>;
+  slug: string;
+}): Promise<number> {
   const live = await countProductsUsingAttributeSlug(attribute.slug);
   return syncStoredProductCount(attribute.productCount, live, async () => {
     attribute.productCount = live;

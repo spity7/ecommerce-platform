@@ -1,21 +1,19 @@
-import {
-  productMerchandisingSchema,
-  type ProductMerchandising,
-} from "../schemas/product-badges.js";
+import type { ProductMerchandising } from "../schemas/product-badge-fields.js";
 import type { ProductBadgeKind } from "../types/product-badges.js";
+import {
+  mergeMerchandisingPatch,
+  sanitizeProductMerchandising,
+} from "./sanitize.js";
 
 const MERCHANDISING_KEY = "merchandising";
+
+export { mergeMerchandisingPatch, sanitizeProductMerchandising } from "./sanitize.js";
 
 export function parseProductMerchandising(
   metadata: Record<string, unknown> | undefined | null
 ): ProductMerchandising {
   const raw = metadata?.[MERCHANDISING_KEY];
-  const parsed = productMerchandisingSchema.safeParse(raw);
-  if (parsed.success) {
-    return parsed.data;
-  }
-
-  return { manualBadges: [], suppressAutoBadges: undefined };
+  return sanitizeProductMerchandising(raw);
 }
 
 export function normalizeBadgeStyle(style: string): string {
@@ -33,7 +31,7 @@ export function mergeMerchandisingIntoMetadata(
   merchandising: ProductMerchandising
 ): Record<string, unknown> {
   const next = { ...(metadata ?? {}) };
-  next[MERCHANDISING_KEY] = merchandising;
+  next[MERCHANDISING_KEY] = sanitizeProductMerchandising(merchandising);
   delete next.cardBadge;
   return next;
 }
@@ -43,4 +41,45 @@ export function isAutoBadgeSuppressed(
   kind: ProductBadgeKind
 ): boolean {
   return merchandising.suppressAutoBadges?.includes(kind) ?? false;
+}
+
+export function resolveProductMetadataForWrite(
+  existing: Record<string, unknown> | undefined,
+  payload: {
+    metadata?: Record<string, unknown>;
+    merchandising?: ProductMerchandising;
+  }
+): Record<string, unknown> | undefined {
+  if (payload.metadata === undefined && payload.merchandising === undefined) {
+    return undefined;
+  }
+
+  const existingMerchandising = parseProductMerchandising(existing);
+  let metadata: Record<string, unknown>;
+
+  if (payload.metadata !== undefined) {
+    const { merchandising: merchandisingPatch, ...restMetadata } =
+      payload.metadata;
+    metadata = { ...(existing ?? {}), ...restMetadata };
+    if (merchandisingPatch !== undefined) {
+      metadata[MERCHANDISING_KEY] = mergeMerchandisingPatch(
+        existingMerchandising,
+        merchandisingPatch
+      );
+    }
+  } else {
+    metadata = { ...(existing ?? {}) };
+  }
+
+  if (payload.merchandising !== undefined) {
+    metadata = mergeMerchandisingIntoMetadata(metadata, payload.merchandising);
+  }
+
+  if (metadata[MERCHANDISING_KEY] !== undefined) {
+    metadata[MERCHANDISING_KEY] = sanitizeProductMerchandising(
+      metadata[MERCHANDISING_KEY]
+    );
+  }
+
+  return metadata;
 }

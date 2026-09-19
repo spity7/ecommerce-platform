@@ -1,7 +1,4 @@
-import {
-  sortApiValueToLabel,
-  type ShopCatalogQuery,
-} from "@/lib/shop-query";
+import { sortApiValueToLabel, type ShopCatalogQuery } from "@/lib/shop-query";
 import type { ShopCatalogFilters } from "@/types/shop-catalog";
 
 export type ShopActiveFilterChip = {

@@ -18,6 +18,7 @@ type AuthSessionContextValue = {
   user: UserDto | null;
   loading: boolean;
   refreshUser: () => Promise<void>;
+  clearSessionState: () => void;
 };
 
 const AuthSessionContext = createContext<AuthSessionContextValue | null>(null);
@@ -80,6 +81,12 @@ export function AuthSessionProvider({ children }: AuthSessionProviderProps) {
     setLoading(false);
   }, []);
 
+  const clearSessionState = useCallback(() => {
+    setAccessToken(null);
+    setUser(null);
+    setLoading(false);
+  }, []);
+
   useEffect(() => {
     if (isAuthPublicPath(pathname)) {
       setUser(null);
@@ -101,7 +108,9 @@ export function AuthSessionProvider({ children }: AuthSessionProviderProps) {
   }, [pathname, refreshUser]);
 
   return (
-    <AuthSessionContext.Provider value={{ user, loading, refreshUser }}>
+    <AuthSessionContext.Provider
+      value={{ user, loading, refreshUser, clearSessionState }}
+    >
       {children}
     </AuthSessionContext.Provider>
   );

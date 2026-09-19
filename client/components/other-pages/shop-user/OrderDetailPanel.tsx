@@ -131,7 +131,9 @@ export default function OrderDetailPanel({ orderId }: OrderDetailPanelProps) {
               {cancelling ? "Cancelling…" : "Cancel order"}
             </button>
             {cancelError ? (
-              <p className="rbt-text-color-danger mb--0 mt--12">{cancelError}</p>
+              <p className="rbt-text-color-danger mb--0 mt--12">
+                {cancelError}
+              </p>
             ) : null}
           </div>
         ) : null}
@@ -151,10 +153,7 @@ export default function OrderDetailPanel({ orderId }: OrderDetailPanelProps) {
           <div className="col-12 col-md-6 mt--24">
             <div className="rbt-transparent-table-one-wrapper rbt-has-bg-gray p--24 h-100">
               <h5 className="title mb--16">Shipping address</h5>
-              <p
-                className="mb--0 b3"
-                style={{ whiteSpace: "pre-line" }}
-              >
+              <p className="mb--0 b3" style={{ whiteSpace: "pre-line" }}>
                 {formatShippingAddress(order.shippingAddress)}
               </p>
               {order.shippingAddress.phone ? (

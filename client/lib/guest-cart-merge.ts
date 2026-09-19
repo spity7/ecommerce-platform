@@ -23,7 +23,10 @@ export async function mergeGuestCartIfNeeded(): Promise<boolean> {
       clearGuestCartId();
       return true;
     } catch (error) {
-      console.warn("Guest cart merge failed; will retry on next auth sync.", error);
+      console.warn(
+        "Guest cart merge failed; will retry on next auth sync.",
+        error
+      );
       return false;
     } finally {
       mergeInFlight = null;

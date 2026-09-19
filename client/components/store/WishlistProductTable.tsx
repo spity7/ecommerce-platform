@@ -8,8 +8,7 @@ import { useWishlistCartActions } from "@/hooks/useWishlistCartActions";
 import { getWishlistProductPath } from "@/lib/wishlist-sync";
 import type { Product } from "@/types";
 
-const FALLBACK_IMAGE =
-  "/assets/images/wishlist/wishlist-prd-1.webp";
+const FALLBACK_IMAGE = "/assets/images/wishlist/wishlist-prd-1.webp";
 
 type WishlistProductTableProps = {
   showStock?: boolean;
@@ -31,9 +30,7 @@ export default function WishlistProductTable({
   if (mounted && wishList.length === 0) {
     return (
       <div className={`${wrapperClassName} text-center py-5`}>
-        <p className="rbt-text-color-gray-600 mb--0">
-          Your wishlist is empty.
-        </p>
+        <p className="rbt-text-color-gray-600 mb--0">Your wishlist is empty.</p>
         <Link
           href={browseHref}
           className="rbt-btn rbt-btn-md rbt-btn-primary mt--16"

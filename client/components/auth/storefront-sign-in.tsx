@@ -108,7 +108,9 @@ export function StorefrontSignInForm() {
       </div>
       <p className="text-end mt--8 mb--0 b2">
         {disabled ? (
-          <span className="rbt-switch-btn pe-none opacity-50">Forgot password?</span>
+          <span className="rbt-switch-btn pe-none opacity-50">
+            Forgot password?
+          </span>
         ) : (
           <Link className="rbt-switch-btn" href="/forgot-password">
             Forgot password?

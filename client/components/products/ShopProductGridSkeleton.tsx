@@ -27,8 +27,7 @@ export default function ShopProductGridSkeleton({
         <div
           key={`shop-skeleton-${index}`}
           className={
-            columnClass +
-            (hasCardBorder ? " rbt-border mt--0" : " mt--24")
+            columnClass + (hasCardBorder ? " rbt-border mt--0" : " mt--24")
           }
           style={
             hasCardBorder

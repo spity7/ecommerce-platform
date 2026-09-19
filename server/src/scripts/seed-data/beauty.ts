@@ -367,12 +367,7 @@ export const beautySeedData: SiteSeedData = {
       images: [productImage("beauty-product-st-03.webp")],
       metadata: {
         merchandising: {
-          manualBadges: [
-            {
-              kind: "limited_offer",
-              label: "Flash deal",
-            },
-          ],
+          manualBadges: [{ kind: "limited_offer" }],
         },
       },
     },

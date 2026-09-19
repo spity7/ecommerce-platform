@@ -766,6 +766,152 @@ describe("catalog API", () => {
     assert.equal(product.body.brandName, renamed);
   });
 
+  it("sanitizes merchandising sent via metadata and deep-merges partial merchandising patches", async () => {
+    const { body } = await registerAdmin(app);
+    const suffix = Date.now();
+
+    const productResponse = await request(app)
+      .post("/api/products")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: `Metadata Merch ${suffix}`,
+        sku: `META-MERCH-${suffix}`,
+        price: 40,
+        stock: 8,
+        status: "published",
+        merchandising: {
+          manualBadges: [{ kind: "exclusive" }],
+          suppressAutoBadges: ["new"],
+        },
+      })
+      .expect(201);
+
+    const productId = productResponse.body.id;
+
+    await request(app)
+      .patch(`/api/products/${productId}`)
+      .set(authHeader(body.accessToken))
+      .send({
+        metadata: {
+          merchandising: {
+            manualBadges: [{ kind: "sale" }, { kind: "hot" }],
+            suppressAutoBadges: ["sale"],
+          },
+        },
+      })
+      .expect(200);
+
+    const afterInvalidManual = await request(app)
+      .get(`/api/products/${productId}`)
+      .expect(200);
+
+    assert.deepEqual(
+      afterInvalidManual.body.merchandising.manualBadges.map(
+        (badge: { kind: string }) => badge.kind
+      ),
+      ["hot"]
+    );
+    assert.deepEqual(afterInvalidManual.body.merchandising.suppressAutoBadges, [
+      "sale",
+    ]);
+
+    await request(app)
+      .patch(`/api/products/${productId}`)
+      .set(authHeader(body.accessToken))
+      .send({
+        metadata: {
+          merchandising: {
+            suppressAutoBadges: ["sale", "new"],
+          },
+        },
+      })
+      .expect(200);
+
+    const afterPartialSuppress = await request(app)
+      .get(`/api/products/${productId}`)
+      .expect(200);
+
+    assert.deepEqual(
+      afterPartialSuppress.body.merchandising.manualBadges.map(
+        (badge: { kind: string }) => badge.kind
+      ),
+      ["hot"]
+    );
+    assert.deepEqual(
+      afterPartialSuppress.body.merchandising.suppressAutoBadges,
+      ["sale", "new"]
+    );
+  });
+
+  it("returns resolved badges after merchandising patch and preserves metadata on partial patch", async () => {
+    const { body } = await registerAdmin(app);
+    const suffix = Date.now();
+
+    const productResponse = await request(app)
+      .post("/api/products")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: `Badge Product ${suffix}`,
+        sku: `BADGE-${suffix}`,
+        price: 49,
+        compareAtPrice: 79,
+        stock: 10,
+        status: "published",
+        metadata: { legacyNote: "keep-me" },
+      })
+      .expect(201);
+
+    const productId = productResponse.body.id;
+
+    await request(app)
+      .patch(`/api/products/${productId}`)
+      .set(authHeader(body.accessToken))
+      .send({
+        merchandising: {
+          manualBadges: [{ kind: "staff_pick" }],
+          suppressAutoBadges: ["sale"],
+        },
+      })
+      .expect(200);
+
+    const withBadges = await request(app)
+      .get(`/api/products/${productId}`)
+      .expect(200);
+
+    assert.equal(
+      withBadges.body.merchandising?.manualBadges?.[0]?.kind,
+      "staff_pick"
+    );
+    assert.ok(
+      withBadges.body.badges.some(
+        (badge: { kind: string; text: string }) =>
+          badge.kind === "staff_pick" && badge.text === "Staff pick"
+      )
+    );
+    assert.ok(
+      !withBadges.body.badges.some(
+        (badge: { kind: string }) => badge.kind === "sale"
+      )
+    );
+
+    await request(app)
+      .patch(`/api/products/${productId}`)
+      .set(authHeader(body.accessToken))
+      .send({ metadata: { seoTitle: "Badge SEO" } })
+      .expect(200);
+
+    const afterMetadataPatch = await request(app)
+      .get(`/api/products/${productId}`)
+      .expect(200);
+
+    assert.equal(afterMetadataPatch.body.metadata?.legacyNote, "keep-me");
+    assert.equal(afterMetadataPatch.body.metadata?.seoTitle, "Badge SEO");
+    assert.equal(
+      afterMetadataPatch.body.merchandising?.manualBadges?.[0]?.kind,
+      "staff_pick"
+    );
+  });
+
   it("keeps product slug when the name is updated", async () => {
     const { body } = await registerAdmin(app);
     const suffix = Date.now();

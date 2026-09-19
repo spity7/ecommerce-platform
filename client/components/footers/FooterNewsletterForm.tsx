@@ -73,7 +73,11 @@ export default function FooterNewsletterForm({
   };
 
   return (
-    <form aria-busy={isSubmitting} className={formClass} onSubmit={handleSubmit}>
+    <form
+      aria-busy={isSubmitting}
+      className={formClass}
+      onSubmit={handleSubmit}
+    >
       <input
         className={inputClass}
         disabled={disabled}

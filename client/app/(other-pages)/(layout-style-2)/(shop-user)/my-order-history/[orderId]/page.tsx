@@ -10,7 +10,9 @@ type PageProps = {
   params: Promise<{ orderId: string }>;
 };
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { orderId } = await params;
 
   return {

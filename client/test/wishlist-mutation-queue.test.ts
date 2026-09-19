@@ -3,10 +3,8 @@ import assert from "node:assert/strict";
 
 describe("wishlist mutation queue", () => {
   it("serializes mutations and tracks pending count", async () => {
-    const {
-      getPendingWishlistMutationCount,
-      queueWishlistMutation,
-    } = await import("../lib/wishlist-sync");
+    const { getPendingWishlistMutationCount, queueWishlistMutation } =
+      await import("../lib/wishlist-sync");
 
     assert.equal(getPendingWishlistMutationCount(), 0);
 

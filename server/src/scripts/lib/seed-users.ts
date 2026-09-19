@@ -37,8 +37,7 @@ function resolveDemoCustomerEmail(): string {
 
 function resolveDemoCustomerPassword(): string {
   return (
-    process.env.DEMO_CUSTOMER_PASSWORD?.trim() ||
-    DEFAULT_DEMO_CUSTOMER_PASSWORD
+    process.env.DEMO_CUSTOMER_PASSWORD?.trim() || DEFAULT_DEMO_CUSTOMER_PASSWORD
   );
 }
 
@@ -58,7 +57,9 @@ async function upsertPasswordUser(input: {
   role: "admin" | "customer";
 }): Promise<SeedUserResult> {
   if (input.password.length < 8) {
-    throw new Error(`Password for ${input.email} must be at least 8 characters.`);
+    throw new Error(
+      `Password for ${input.email} must be at least 8 characters.`
+    );
   }
 
   const passwordHash = await bcrypt.hash(input.password, 10);

@@ -1,12 +1,6 @@
 import { Router } from "express";
-import {
-  createReviewSchema,
-  updateReviewSchema,
-} from "@platform/shared";
-import {
-  requireAuth,
-  type AuthenticatedRequest,
-} from "../middleware/auth.js";
+import { createReviewSchema, updateReviewSchema } from "@platform/shared";
+import { requireAuth, type AuthenticatedRequest } from "../middleware/auth.js";
 import { reviewWriteRateLimiter } from "../middleware/rateLimit.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import {

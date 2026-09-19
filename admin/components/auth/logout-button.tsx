@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useBusyActionGuard } from "@platform/react-busy";
 import { routes } from "@/config/routes";
 import { clearSession } from "@/lib/session";
+import { useAuthSession } from "@/providers/auth-session-provider";
 import { Icon } from "@/components/layout/icon";
 import { cn } from "@/utils/cn";
 
@@ -14,6 +15,7 @@ type LogoutButtonProps = {
 
 export function LogoutButton({ className }: LogoutButtonProps) {
   const router = useRouter();
+  const { clearSessionState } = useAuthSession();
   const [loggingOut, setLoggingOut] = useState(false);
   const { disabled } = useBusyActionGuard({
     active: loggingOut,
@@ -24,6 +26,7 @@ export function LogoutButton({ className }: LogoutButtonProps) {
     setLoggingOut(true);
     try {
       await clearSession();
+      clearSessionState();
       router.push(routes.signIn);
       router.refresh();
     } finally {
@@ -45,9 +48,7 @@ export function LogoutButton({ className }: LogoutButtonProps) {
       type="button"
     >
       <Icon className="h-[18px] w-[18px] text-ink-500" name="log-out" />
-      <span className="nav-text">
-        {loggingOut ? "Signing out…" : "Logout"}
-      </span>
+      <span className="nav-text">{loggingOut ? "Signing out…" : "Logout"}</span>
     </button>
   );
 }

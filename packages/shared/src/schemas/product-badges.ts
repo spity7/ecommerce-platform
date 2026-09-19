@@ -1,31 +1,21 @@
 import { z } from "../zod.js";
-import { PRODUCT_BADGE_KINDS } from "../types/product-badges.js";
+import { sanitizeProductMerchandising } from "../product-badges/sanitize.js";
 
-export const productBadgeKindSchema = z.enum(PRODUCT_BADGE_KINDS);
+export {
+  manualProductBadgeSchema,
+  productBadgeKindSchema,
+  productBadgeStyleSchema,
+  productCardBadgeDtoSchema,
+  productMerchandisingShape,
+  type ManualProductBadge,
+  type ProductCardBadgeDto,
+  type ProductMerchandising,
+} from "./product-badge-fields.js";
 
-export const productBadgeStyleSchema = z
-  .string()
-  .min(1)
-  .max(120)
-  .regex(/^rbt-product-badge-/, "Expected a theme product badge class");
+import { productMerchandisingShape } from "./product-badge-fields.js";
 
-export const manualProductBadgeSchema = z.object({
-  kind: productBadgeKindSchema,
-  label: z.string().trim().min(1).max(24).optional(),
-  style: productBadgeStyleSchema.optional(),
-});
-
-export const productMerchandisingSchema = z.object({
-  manualBadges: z.array(manualProductBadgeSchema).max(2).default([]),
-  suppressAutoBadges: z.array(productBadgeKindSchema).optional(),
-});
-
-export const productCardBadgeDtoSchema = z.object({
-  kind: productBadgeKindSchema,
-  text: z.string(),
-  bg: z.string(),
-});
-
-export type ProductMerchandising = z.infer<typeof productMerchandisingSchema>;
-export type ManualProductBadge = z.infer<typeof manualProductBadgeSchema>;
-export type ProductCardBadgeDto = z.infer<typeof productCardBadgeDtoSchema>;
+/** API + persistence: sanitize auto-only manual kinds and invalid entries before validate. */
+export const productMerchandisingSchema = z.preprocess(
+  (input) => sanitizeProductMerchandising(input),
+  productMerchandisingShape
+);

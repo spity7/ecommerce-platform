@@ -6,10 +6,7 @@ import {
   loadServerWishlist,
 } from "@/lib/wishlist-sync";
 import { applyPendingWishlistAfterAuth } from "@/lib/pending-wishlist";
-import {
-  applyServerWishlistToStoreWhenIdle,
-  useStore,
-} from "@/context/store";
+import { applyServerWishlistToStoreWhenIdle, useStore } from "@/context/store";
 import {
   isWishlistAuthenticated,
   waitForAuthSessionReady,

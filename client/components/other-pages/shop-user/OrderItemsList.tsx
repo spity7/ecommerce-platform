@@ -22,7 +22,10 @@ export default function OrderItemsList({
           className="d-flex gap-3 mb--16"
         >
           <Image
-            src={item.productImage || "/assets/images/product-img/beauty-product/beauty-product-st-05.webp"}
+            src={
+              item.productImage ||
+              "/assets/images/product-img/beauty-product/beauty-product-st-05.webp"
+            }
             alt={item.productName}
             width={64}
             height={64}

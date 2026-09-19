@@ -218,8 +218,9 @@ export function ProductCatalogForm({
   const [attributeValues, setAttributeValues] = useState(() =>
     initialAttributeValues(attributes, initial)
   );
-  const [merchandising, setMerchandising] = useState<ProductMerchandising>(() =>
-    initial?.merchandising ??
+  const [merchandising, setMerchandising] = useState<ProductMerchandising>(
+    () =>
+      initial?.merchandising ??
       parseProductMerchandising(initial?.metadata ?? {})
   );
   const [formState, setFormState] = useState<FormState>({

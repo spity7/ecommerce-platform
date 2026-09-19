@@ -5,7 +5,6 @@ export const PRODUCT_BADGE_KINDS = [
   "bundle",
   "free_gift",
   "new",
-  "new_arrival",
   "preorder",
   "coming_soon",
   "sold_out",

@@ -54,7 +54,9 @@ function readPendingWishlistProducts(): PendingWishlistProduct[] {
   }
 }
 
-function writePendingWishlistProducts(products: PendingWishlistProduct[]): void {
+function writePendingWishlistProducts(
+  products: PendingWishlistProduct[]
+): void {
   if (typeof window === "undefined") {
     return;
   }
@@ -131,7 +133,9 @@ export async function applyPendingWishlistAfterAuth(): Promise<boolean> {
   return applied;
 }
 
-async function applyServerWishlistWhenIdle(serverWishlist: Product[]): Promise<void> {
+async function applyServerWishlistWhenIdle(
+  serverWishlist: Product[]
+): Promise<void> {
   if (getPendingWishlistMutationCount() !== 0) {
     return;
   }

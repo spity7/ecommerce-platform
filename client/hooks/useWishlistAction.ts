@@ -19,9 +19,7 @@ export function useWishlistAction() {
       return;
     }
 
-    showToaster(
-      isWishlisted ? "Removed from Wishlist" : "Added to Wishlist"
-    );
+    showToaster(isWishlisted ? "Removed from Wishlist" : "Added to Wishlist");
   }
 
   return {

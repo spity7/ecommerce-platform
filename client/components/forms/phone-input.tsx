@@ -112,7 +112,10 @@ export default function StorefrontPhoneInput({
   );
 
   return (
-    <div ref={containerRef} className="rbt-input-field-grp rbt-phone-input-field">
+    <div
+      ref={containerRef}
+      className="rbt-input-field-grp rbt-phone-input-field"
+    >
       <label className="rbt-field-label" htmlFor={id}>
         {label}
         {required ? <span className="rbt-text-color-danger"> *</span> : null}

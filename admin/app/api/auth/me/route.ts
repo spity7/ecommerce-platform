@@ -18,7 +18,10 @@ export async function GET() {
   const body = (await upstream.json()) as UserDto & { error?: string };
 
   if (upstream.ok && body.role !== "admin") {
-    return NextResponse.json({ error: "Admin access required" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Admin access required" },
+      { status: 401 }
+    );
   }
 
   return NextResponse.json(body, { status: upstream.status });

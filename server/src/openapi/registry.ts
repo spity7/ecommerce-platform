@@ -164,7 +164,10 @@ openApiRegistry.register("CreateReviewInput", createReviewSchema);
 openApiRegistry.register("UpdateReviewInput", updateReviewSchema);
 openApiRegistry.register("ReviewDto", reviewDtoSchema);
 openApiRegistry.register("PaginatedReviews", paginatedReviewsSchema);
-openApiRegistry.register("ProductReviewListQuery", productReviewListQuerySchema);
+openApiRegistry.register(
+  "ProductReviewListQuery",
+  productReviewListQuerySchema
+);
 openApiRegistry.register("AdminReviewListQuery", adminReviewListQuerySchema);
 openApiRegistry.register(
   "AdminReviewModerationInput",
@@ -796,7 +799,10 @@ openApiRegistry.registerPath({
   tags: ["Reviews"],
   operationId: "listProductReviews",
   summary: "List approved product reviews",
-  request: { params: productIdParamSchema, query: productReviewListQuerySchema },
+  request: {
+    params: productIdParamSchema,
+    query: productReviewListQuerySchema,
+  },
   responses: {
     200: {
       description: "Paginated reviews",

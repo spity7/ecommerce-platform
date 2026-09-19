@@ -14,6 +14,15 @@ type PlaceOrderContext = {
 
 const CUSTOMER_CANCELLABLE_STATUSES = new Set(["pending", "processing"]);
 
+async function clampProductUnitsSoldNonNegative(
+  productId: unknown
+): Promise<void> {
+  await Product.updateOne(
+    { _id: productId, unitsSold: { $lt: 0 } },
+    { $set: { unitsSold: 0 } }
+  );
+}
+
 function shouldRefreshVerifiedPurchaseOnStatusChange(
   previousStatus: OrderStatus,
   nextStatus: OrderStatus
@@ -55,6 +64,7 @@ async function decrementStockWithRollback(
         { _id: entry.productId },
         { $inc: { stock: entry.quantity, unitsSold: -entry.quantity } }
       );
+      await clampProductUnitsSoldNonNegative(entry.productId);
     }
     throw error;
   }
@@ -68,6 +78,7 @@ export async function restoreOrderStock(
       { _id: item.productId },
       { $inc: { stock: item.quantity, unitsSold: -item.quantity } }
     );
+    await clampProductUnitsSoldNonNegative(item.productId);
   }
 }
 

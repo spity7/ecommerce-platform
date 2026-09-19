@@ -8,6 +8,7 @@ function mapBadgeDtoToStorefront(badge: ProductCardBadgeDto): ProductBadge {
   return {
     text: badge.text,
     bg: badge.bg,
+    kind: badge.kind,
   };
 }
 

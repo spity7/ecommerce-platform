@@ -26,7 +26,6 @@ export async function clearSession(): Promise<void> {
   }
   clearLegacyAuthCookies();
   setAccessToken(null);
-  notifyAuthSessionUpdated();
 }
 
 export async function clearSessionAndRedirectToSignIn(): Promise<void> {

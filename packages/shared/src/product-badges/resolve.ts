@@ -37,7 +37,11 @@ function resolveMerchandisingConfig(
 }
 
 function isOnSale(price: number, compareAtPrice?: number | null): boolean {
-  if (compareAtPrice == null || compareAtPrice <= price || compareAtPrice <= 0) {
+  if (
+    compareAtPrice == null ||
+    compareAtPrice <= price ||
+    compareAtPrice <= 0
+  ) {
     return false;
   }
   return true;
@@ -58,12 +62,11 @@ function isNewProduct(
 
 function toBadgeDto(
   kind: ProductBadgeKind,
-  overrides?: { label?: string; style?: string }
+  overrides?: { style?: string }
 ): ProductCardBadgeDto {
   const entry = PRODUCT_BADGE_REGISTRY[kind];
-  const text = overrides?.label?.trim() || entry.label;
   const bg = normalizeBadgeStyle(overrides?.style ?? entry.style);
-  return { kind, text, bg };
+  return { kind, text: entry.label, bg };
 }
 
 function kindAlreadyUsed(
@@ -77,7 +80,7 @@ function tryAddBadge(
   badges: ProductCardBadgeDto[],
   max: number,
   kind: ProductBadgeKind,
-  overrides?: { label?: string; style?: string }
+  overrides?: { style?: string }
 ): void {
   if (badges.length >= max || kindAlreadyUsed(badges, kind)) {
     return;
@@ -94,24 +97,34 @@ export function resolveProductCardBadges(
   const merchandising = parseProductMerchandising(input.metadata);
   const badges: ProductCardBadgeDto[] = [];
 
+  const suppressed = (kind: ProductBadgeKind) =>
+    isAutoBadgeSuppressed(merchandising, kind);
+
+  const soldOutActive = input.stock <= 0 && !suppressed("sold_out");
+
+  if (soldOutActive) {
+    tryAddBadge(badges, max, "sold_out");
+    for (const manual of merchandising.manualBadges) {
+      if (badges.length >= max) {
+        break;
+      }
+      tryAddBadge(badges, max, manual.kind, {
+        style: manual.style,
+      });
+    }
+    return badges.slice(0, max);
+  }
+
   for (const manual of merchandising.manualBadges) {
     if (badges.length >= max) {
       break;
     }
     tryAddBadge(badges, max, manual.kind, {
-      label: manual.label,
       style: manual.style,
     });
   }
 
-  const suppressed = (kind: ProductBadgeKind) =>
-    isAutoBadgeSuppressed(merchandising, kind);
-
   const autoCandidates: ProductBadgeKind[] = [];
-
-  if (input.stock <= 0 && !suppressed("sold_out")) {
-    autoCandidates.push("sold_out");
-  }
 
   if (
     input.stock > 0 &&
@@ -148,7 +161,7 @@ export function resolveProductCardBadges(
     autoCandidates.push("top_rated");
   }
 
-  const unitsSold = input.unitsSold ?? 0;
+  const unitsSold = Math.max(0, input.unitsSold ?? 0);
   if (
     unitsSold >= config.bestSellerMinUnitsSold &&
     !suppressed("best_seller")
@@ -159,14 +172,6 @@ export function resolveProductCardBadges(
   for (const kind of autoCandidates) {
     if (badges.length >= max) {
       break;
-    }
-    if (kind === "sale" && kindAlreadyUsed(badges, "sold_out")) {
-      continue;
-    }
-    if (kind === "sold_out") {
-      const withoutSale = badges.filter((b) => b.kind !== "sale");
-      badges.length = 0;
-      badges.push(...withoutSale);
     }
     tryAddBadge(badges, max, kind);
   }

@@ -1,9 +1,9 @@
 "use client";
 
 import {
-  AUTO_PRODUCT_BADGE_KINDS,
   MANUAL_PRODUCT_BADGE_KINDS,
   PRODUCT_BADGE_REGISTRY,
+  SUPPRESSIBLE_AUTO_BADGE_KINDS,
   type ProductBadgeKind,
   type ProductMerchandising,
 } from "@platform/shared";
@@ -79,8 +79,9 @@ export function ProductMerchandisingFields({
           Storefront badges (max 2)
         </p>
         <p className="mt-1 text-[12px] text-ink-400">
-          Shown on the product image. Automatic Sale, New, stock, and rating
-          badges fill remaining slots unless suppressed.
+          Shown on the product image. Auto badges (priority: sold out, sale,
+          new, low stock, top rated, best seller) fill free slots unless
+          suppressed. Sold out always uses the first slot when stock is zero.
         </p>
         <div className="mt-3 flex flex-wrap gap-2">
           {manualOptions.map(({ kind, label, style }) => {
@@ -123,18 +124,14 @@ export function ProductMerchandisingFields({
 
       {merchandising.manualBadges.length > 0 ? (
         <div className="flex flex-wrap gap-2">
-          {merchandising.manualBadges.map((badge) => {
-            const entry = PRODUCT_BADGE_REGISTRY[badge.kind];
-            const text = badge.label?.trim() || entry.label;
-            return (
-              <span
-                className="inline-flex items-center rounded-md bg-ink-900 px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white"
-                key={badge.kind}
-              >
-                {text}
-              </span>
-            );
-          })}
+          {merchandising.manualBadges.map((badge) => (
+            <span
+              className="inline-flex items-center rounded-md bg-ink-900 px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white"
+              key={badge.kind}
+            >
+              {PRODUCT_BADGE_REGISTRY[badge.kind].label}
+            </span>
+          ))}
         </div>
       ) : null}
 
@@ -143,7 +140,7 @@ export function ProductMerchandisingFields({
           Suppress automatic badges
         </p>
         <div className="mt-2 grid gap-2 sm:grid-cols-2">
-          {AUTO_PRODUCT_BADGE_KINDS.map((kind) => (
+          {SUPPRESSIBLE_AUTO_BADGE_KINDS.map((kind) => (
             <label
               className="flex cursor-pointer items-center gap-2 text-[12px] text-ink-600"
               key={kind}

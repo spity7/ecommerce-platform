@@ -1,7 +1,10 @@
+import type { ProductBadgeKind } from "@platform/shared";
+
 // Product Badge Type
 export interface ProductBadge {
   text: string;
   bg?: string;
+  kind?: ProductBadgeKind;
   position?: string;
   className?: string;
 }

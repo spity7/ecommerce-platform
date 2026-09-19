@@ -26,9 +26,7 @@ export default function AccountInfoPanel() {
     return <AccountInfo />;
   }
 
-  return (
-    <AccountInfoApi />
-  );
+  return <AccountInfoApi />;
 }
 
 function AccountInfoApi() {

@@ -1,7 +1,7 @@
 import {
-  mergeMerchandisingIntoMetadata,
   parseProductMerchandising,
   resolveProductCardBadges,
+  resolveProductMetadataForWrite,
   type ProductMerchandising,
 } from "@platform/shared";
 import type { ProductDocument } from "../models/Product.js";
@@ -16,15 +16,7 @@ export function resolveMetadataForProductWrite(
   existing: Record<string, unknown> | undefined,
   payload: ProductWritePayload
 ): Record<string, unknown> | undefined {
-  if (payload.metadata === undefined && payload.merchandising === undefined) {
-    return undefined;
-  }
-
-  let metadata = payload.metadata ?? existing ?? {};
-  if (payload.merchandising !== undefined) {
-    metadata = mergeMerchandisingIntoMetadata(metadata, payload.merchandising);
-  }
-  return metadata;
+  return resolveProductMetadataForWrite(existing, payload);
 }
 
 export function stripMerchandisingFromAssignPayload<
@@ -46,7 +38,7 @@ export function resolveBadgesForProductDocument(doc: ProductDocument) {
     metadata: (doc.metadata as Record<string, unknown>) ?? {},
     averageRating: doc.averageRating ?? 0,
     reviewCount: doc.reviewCount ?? 0,
-    unitsSold: doc.unitsSold ?? 0,
+    unitsSold: Math.max(0, doc.unitsSold ?? 0),
     reviewsEnabled: env.site.features.reviews,
     merchandisingConfig: env.site.merchandising,
   });

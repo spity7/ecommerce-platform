@@ -115,7 +115,6 @@
                     "bundle",
                     "free_gift",
                     "new",
-                    "new_arrival",
                     "preorder",
                     "coming_soon",
                     "sold_out",
@@ -145,6 +144,7 @@
           },
           "merchandising": {
             "type": "object",
+            "nullable": true,
             "properties": {
               "manualBadges": {
                 "type": "array",
@@ -160,7 +160,6 @@
                         "bundle",
                         "free_gift",
                         "new",
-                        "new_arrival",
                         "preorder",
                         "coming_soon",
                         "sold_out",
@@ -177,11 +176,6 @@
                         "organic"
                       ]
                     },
-                    "label": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 24
-                    },
                     "style": {
                       "type": "string",
                       "minLength": 1,
@@ -191,8 +185,7 @@
                   },
                   "required": ["kind"]
                 },
-                "maxItems": 2,
-                "default": []
+                "maxItems": 2
               },
               "suppressAutoBadges": {
                 "type": "array",
@@ -205,7 +198,6 @@
                     "bundle",
                     "free_gift",
                     "new",
-                    "new_arrival",
                     "preorder",
                     "coming_soon",
                     "sold_out",
@@ -223,7 +215,8 @@
                   ]
                 }
               }
-            }
+            },
+            "required": ["manualBadges"]
           },
           "unitsSold": {
             "type": "integer",
@@ -486,6 +479,7 @@
           },
           "merchandising": {
             "type": "object",
+            "nullable": true,
             "properties": {
               "manualBadges": {
                 "type": "array",
@@ -501,7 +495,6 @@
                         "bundle",
                         "free_gift",
                         "new",
-                        "new_arrival",
                         "preorder",
                         "coming_soon",
                         "sold_out",
@@ -518,11 +511,6 @@
                         "organic"
                       ]
                     },
-                    "label": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 24
-                    },
                     "style": {
                       "type": "string",
                       "minLength": 1,
@@ -532,8 +520,7 @@
                   },
                   "required": ["kind"]
                 },
-                "maxItems": 2,
-                "default": []
+                "maxItems": 2
               },
               "suppressAutoBadges": {
                 "type": "array",
@@ -546,7 +533,6 @@
                     "bundle",
                     "free_gift",
                     "new",
-                    "new_arrival",
                     "preorder",
                     "coming_soon",
                     "sold_out",
@@ -564,7 +550,8 @@
                   ]
                 }
               }
-            }
+            },
+            "required": ["manualBadges"]
           }
         },
         "required": ["name", "price"]
@@ -643,6 +630,7 @@
           },
           "merchandising": {
             "type": "object",
+            "nullable": true,
             "properties": {
               "manualBadges": {
                 "type": "array",
@@ -658,7 +646,6 @@
                         "bundle",
                         "free_gift",
                         "new",
-                        "new_arrival",
                         "preorder",
                         "coming_soon",
                         "sold_out",
@@ -675,11 +662,6 @@
                         "organic"
                       ]
                     },
-                    "label": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 24
-                    },
                     "style": {
                       "type": "string",
                       "minLength": 1,
@@ -689,8 +671,7 @@
                   },
                   "required": ["kind"]
                 },
-                "maxItems": 2,
-                "default": []
+                "maxItems": 2
               },
               "suppressAutoBadges": {
                 "type": "array",
@@ -703,7 +684,6 @@
                     "bundle",
                     "free_gift",
                     "new",
-                    "new_arrival",
                     "preorder",
                     "coming_soon",
                     "sold_out",
@@ -721,7 +701,8 @@
                   ]
                 }
               }
-            }
+            },
+            "required": ["manualBadges"]
           }
         }
       },
@@ -1088,7 +1069,6 @@
                           "bundle",
                           "free_gift",
                           "new",
-                          "new_arrival",
                           "preorder",
                           "coming_soon",
                           "sold_out",
@@ -1118,6 +1098,7 @@
                 },
                 "merchandising": {
                   "type": "object",
+                  "nullable": true,
                   "properties": {
                     "manualBadges": {
                       "type": "array",
@@ -1133,7 +1114,6 @@
                               "bundle",
                               "free_gift",
                               "new",
-                              "new_arrival",
                               "preorder",
                               "coming_soon",
                               "sold_out",
@@ -1150,11 +1130,6 @@
                               "organic"
                             ]
                           },
-                          "label": {
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": 24
-                          },
                           "style": {
                             "type": "string",
                             "minLength": 1,
@@ -1164,8 +1139,7 @@
                         },
                         "required": ["kind"]
                       },
-                      "maxItems": 2,
-                      "default": []
+                      "maxItems": 2
                     },
                     "suppressAutoBadges": {
                       "type": "array",
@@ -1178,7 +1152,6 @@
                           "bundle",
                           "free_gift",
                           "new",
-                          "new_arrival",
                           "preorder",
                           "coming_soon",
                           "sold_out",
@@ -1196,7 +1169,8 @@
                         ]
                       }
                     }
-                  }
+                  },
+                  "required": ["manualBadges"]
                 },
                 "unitsSold": {
                   "type": "integer",
@@ -3040,7 +3014,6 @@
                                     "bundle",
                                     "free_gift",
                                     "new",
-                                    "new_arrival",
                                     "preorder",
                                     "coming_soon",
                                     "sold_out",
@@ -3070,6 +3043,7 @@
                           },
                           "merchandising": {
                             "type": "object",
+                            "nullable": true,
                             "properties": {
                               "manualBadges": {
                                 "type": "array",
@@ -3085,7 +3059,6 @@
                                         "bundle",
                                         "free_gift",
                                         "new",
-                                        "new_arrival",
                                         "preorder",
                                         "coming_soon",
                                         "sold_out",
@@ -3102,11 +3075,6 @@
                                         "organic"
                                       ]
                                     },
-                                    "label": {
-                                      "type": "string",
-                                      "minLength": 1,
-                                      "maxLength": 24
-                                    },
                                     "style": {
                                       "type": "string",
                                       "minLength": 1,
@@ -3116,8 +3084,7 @@
                                   },
                                   "required": ["kind"]
                                 },
-                                "maxItems": 2,
-                                "default": []
+                                "maxItems": 2
                               },
                               "suppressAutoBadges": {
                                 "type": "array",
@@ -3130,7 +3097,6 @@
                                     "bundle",
                                     "free_gift",
                                     "new",
-                                    "new_arrival",
                                     "preorder",
                                     "coming_soon",
                                     "sold_out",
@@ -3148,7 +3114,8 @@
                                   ]
                                 }
                               }
-                            }
+                            },
+                            "required": ["manualBadges"]
                           },
                           "unitsSold": {
                             "type": "integer",
@@ -3290,6 +3257,7 @@
                   },
                   "merchandising": {
                     "type": "object",
+                    "nullable": true,
                     "properties": {
                       "manualBadges": {
                         "type": "array",
@@ -3305,7 +3273,6 @@
                                 "bundle",
                                 "free_gift",
                                 "new",
-                                "new_arrival",
                                 "preorder",
                                 "coming_soon",
                                 "sold_out",
@@ -3322,11 +3289,6 @@
                                 "organic"
                               ]
                             },
-                            "label": {
-                              "type": "string",
-                              "minLength": 1,
-                              "maxLength": 24
-                            },
                             "style": {
                               "type": "string",
                               "minLength": 1,
@@ -3336,8 +3298,7 @@
                           },
                           "required": ["kind"]
                         },
-                        "maxItems": 2,
-                        "default": []
+                        "maxItems": 2
                       },
                       "suppressAutoBadges": {
                         "type": "array",
@@ -3350,7 +3311,6 @@
                             "bundle",
                             "free_gift",
                             "new",
-                            "new_arrival",
                             "preorder",
                             "coming_soon",
                             "sold_out",
@@ -3368,7 +3328,8 @@
                           ]
                         }
                       }
-                    }
+                    },
+                    "required": ["manualBadges"]
                   }
                 },
                 "required": ["name", "price"]
@@ -3475,7 +3436,6 @@
                               "bundle",
                               "free_gift",
                               "new",
-                              "new_arrival",
                               "preorder",
                               "coming_soon",
                               "sold_out",
@@ -3505,6 +3465,7 @@
                     },
                     "merchandising": {
                       "type": "object",
+                      "nullable": true,
                       "properties": {
                         "manualBadges": {
                           "type": "array",
@@ -3520,7 +3481,6 @@
                                   "bundle",
                                   "free_gift",
                                   "new",
-                                  "new_arrival",
                                   "preorder",
                                   "coming_soon",
                                   "sold_out",
@@ -3537,11 +3497,6 @@
                                   "organic"
                                 ]
                               },
-                              "label": {
-                                "type": "string",
-                                "minLength": 1,
-                                "maxLength": 24
-                              },
                               "style": {
                                 "type": "string",
                                 "minLength": 1,
@@ -3551,8 +3506,7 @@
                             },
                             "required": ["kind"]
                           },
-                          "maxItems": 2,
-                          "default": []
+                          "maxItems": 2
                         },
                         "suppressAutoBadges": {
                           "type": "array",
@@ -3565,7 +3519,6 @@
                               "bundle",
                               "free_gift",
                               "new",
-                              "new_arrival",
                               "preorder",
                               "coming_soon",
                               "sold_out",
@@ -3583,7 +3536,8 @@
                             ]
                           }
                         }
-                      }
+                      },
+                      "required": ["manualBadges"]
                     },
                     "unitsSold": {
                       "type": "integer",
@@ -3794,7 +3748,6 @@
                               "bundle",
                               "free_gift",
                               "new",
-                              "new_arrival",
                               "preorder",
                               "coming_soon",
                               "sold_out",
@@ -3824,6 +3777,7 @@
                     },
                     "merchandising": {
                       "type": "object",
+                      "nullable": true,
                       "properties": {
                         "manualBadges": {
                           "type": "array",
@@ -3839,7 +3793,6 @@
                                   "bundle",
                                   "free_gift",
                                   "new",
-                                  "new_arrival",
                                   "preorder",
                                   "coming_soon",
                                   "sold_out",
@@ -3856,11 +3809,6 @@
                                   "organic"
                                 ]
                               },
-                              "label": {
-                                "type": "string",
-                                "minLength": 1,
-                                "maxLength": 24
-                              },
                               "style": {
                                 "type": "string",
                                 "minLength": 1,
@@ -3870,8 +3818,7 @@
                             },
                             "required": ["kind"]
                           },
-                          "maxItems": 2,
-                          "default": []
+                          "maxItems": 2
                         },
                         "suppressAutoBadges": {
                           "type": "array",
@@ -3884,7 +3831,6 @@
                               "bundle",
                               "free_gift",
                               "new",
-                              "new_arrival",
                               "preorder",
                               "coming_soon",
                               "sold_out",
@@ -3902,7 +3848,8 @@
                             ]
                           }
                         }
-                      }
+                      },
+                      "required": ["manualBadges"]
                     },
                     "unitsSold": {
                       "type": "integer",
@@ -4053,6 +4000,7 @@
                   },
                   "merchandising": {
                     "type": "object",
+                    "nullable": true,
                     "properties": {
                       "manualBadges": {
                         "type": "array",
@@ -4068,7 +4016,6 @@
                                 "bundle",
                                 "free_gift",
                                 "new",
-                                "new_arrival",
                                 "preorder",
                                 "coming_soon",
                                 "sold_out",
@@ -4085,11 +4032,6 @@
                                 "organic"
                               ]
                             },
-                            "label": {
-                              "type": "string",
-                              "minLength": 1,
-                              "maxLength": 24
-                            },
                             "style": {
                               "type": "string",
                               "minLength": 1,
@@ -4099,8 +4041,7 @@
                           },
                           "required": ["kind"]
                         },
-                        "maxItems": 2,
-                        "default": []
+                        "maxItems": 2
                       },
                       "suppressAutoBadges": {
                         "type": "array",
@@ -4113,7 +4054,6 @@
                             "bundle",
                             "free_gift",
                             "new",
-                            "new_arrival",
                             "preorder",
                             "coming_soon",
                             "sold_out",
@@ -4131,7 +4071,8 @@
                           ]
                         }
                       }
-                    }
+                    },
+                    "required": ["manualBadges"]
                   }
                 }
               }
@@ -4237,7 +4178,6 @@
                               "bundle",
                               "free_gift",
                               "new",
-                              "new_arrival",
                               "preorder",
                               "coming_soon",
                               "sold_out",
@@ -4267,6 +4207,7 @@
                     },
                     "merchandising": {
                       "type": "object",
+                      "nullable": true,
                       "properties": {
                         "manualBadges": {
                           "type": "array",
@@ -4282,7 +4223,6 @@
                                   "bundle",
                                   "free_gift",
                                   "new",
-                                  "new_arrival",
                                   "preorder",
                                   "coming_soon",
                                   "sold_out",
@@ -4299,11 +4239,6 @@
                                   "organic"
                                 ]
                               },
-                              "label": {
-                                "type": "string",
-                                "minLength": 1,
-                                "maxLength": 24
-                              },
                               "style": {
                                 "type": "string",
                                 "minLength": 1,
@@ -4313,8 +4248,7 @@
                             },
                             "required": ["kind"]
                           },
-                          "maxItems": 2,
-                          "default": []
+                          "maxItems": 2
                         },
                         "suppressAutoBadges": {
                           "type": "array",
@@ -4327,7 +4261,6 @@
                               "bundle",
                               "free_gift",
                               "new",
-                              "new_arrival",
                               "preorder",
                               "coming_soon",
                               "sold_out",
@@ -4345,7 +4278,8 @@
                             ]
                           }
                         }
-                      }
+                      },
+                      "required": ["manualBadges"]
                     },
                     "unitsSold": {
                       "type": "integer",
@@ -4631,7 +4565,6 @@
                               "bundle",
                               "free_gift",
                               "new",
-                              "new_arrival",
                               "preorder",
                               "coming_soon",
                               "sold_out",
@@ -4661,6 +4594,7 @@
                     },
                     "merchandising": {
                       "type": "object",
+                      "nullable": true,
                       "properties": {
                         "manualBadges": {
                           "type": "array",
@@ -4676,7 +4610,6 @@
                                   "bundle",
                                   "free_gift",
                                   "new",
-                                  "new_arrival",
                                   "preorder",
                                   "coming_soon",
                                   "sold_out",
@@ -4693,11 +4626,6 @@
                                   "organic"
                                 ]
                               },
-                              "label": {
-                                "type": "string",
-                                "minLength": 1,
-                                "maxLength": 24
-                              },
                               "style": {
                                 "type": "string",
                                 "minLength": 1,
@@ -4707,8 +4635,7 @@
                             },
                             "required": ["kind"]
                           },
-                          "maxItems": 2,
-                          "default": []
+                          "maxItems": 2
                         },
                         "suppressAutoBadges": {
                           "type": "array",
@@ -4721,7 +4648,6 @@
                               "bundle",
                               "free_gift",
                               "new",
-                              "new_arrival",
                               "preorder",
                               "coming_soon",
                               "sold_out",
@@ -4739,7 +4665,8 @@
                             ]
                           }
                         }
-                      }
+                      },
+                      "required": ["manualBadges"]
                     },
                     "unitsSold": {
                       "type": "integer",

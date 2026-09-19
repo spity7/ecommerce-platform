@@ -19,8 +19,7 @@ export function resolveCatalogReferenceDeleteError(
     return null;
   }
 
-  const productCount =
-    entity === "attribute" ? row.products : row.count;
+  const productCount = entity === "attribute" ? row.products : row.count;
   if (typeof productCount !== "number" || productCount <= 0) {
     return null;
   }

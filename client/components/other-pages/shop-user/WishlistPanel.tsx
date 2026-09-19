@@ -29,9 +29,7 @@ export default function WishlistPanel() {
           return;
         }
 
-        applyServerWishlistToStoreWhenIdle(
-          mapWishlistDtoToProducts(wishlist)
-        );
+        applyServerWishlistToStoreWhenIdle(mapWishlistDtoToProducts(wishlist));
       })
       .catch(() => {
         if (!cancelled) {
