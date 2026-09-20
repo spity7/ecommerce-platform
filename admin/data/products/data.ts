@@ -18,6 +18,7 @@ export type Product = {
   slug?: string;
   status: ProductStatus;
   stock: number;
+  storefrontBadges?: string[];
 };
 
 export const products: Product[] = [

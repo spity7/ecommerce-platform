@@ -30,7 +30,12 @@ import {
   resolveMetadataForProductWrite,
   stripMerchandisingFromAssignPayload,
 } from "../services/product-merchandising.js";
-import { isUniqueKeyError, toProductDto } from "../utils/serializers.js";
+import {
+  isUniqueKeyError,
+  toProductDto,
+  toProductDtoForAudience,
+  toStorefrontProductDto,
+} from "../utils/serializers.js";
 import { generateSku, slugify } from "../utils/strings.js";
 import {
   collectRemovedManagedCatalogImages,
@@ -69,7 +74,7 @@ productsRouter.get(
     if (!product) {
       throw new AppError(404, "Product not found");
     }
-    res.json(toProductDto(product));
+    res.json(toStorefrontProductDto(product));
   })
 );
 
@@ -89,8 +94,9 @@ productsRouter.get(
       Product.countDocuments(filter),
     ]);
 
+    const audience = isAdminRequest(req) ? "admin" : "storefront";
     res.json({
-      data: items.map(toProductDto),
+      data: items.map((item) => toProductDtoForAudience(item, audience)),
       total,
       page: query.page,
       limit: query.limit,
@@ -147,7 +153,12 @@ productsRouter.get(
     if (!isAdminRequest(req) && product.status !== "published") {
       throw new AppError(404, "Product not found");
     }
-    res.json(toProductDto(product));
+    res.json(
+      toProductDtoForAudience(
+        product,
+        isAdminRequest(req) ? "admin" : "storefront"
+      )
+    );
   })
 );
 

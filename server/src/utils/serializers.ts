@@ -4,6 +4,7 @@ import type {
   BrandDto,
   CategoryDto,
   ProductDto,
+  StorefrontProductDto,
   UserAddressDto,
   UserDto,
 } from "@platform/shared";
@@ -26,7 +27,7 @@ function toIsoString(value: Date | string | undefined): string {
     : new Date(value).toISOString();
 }
 
-export function toProductDto(doc: ProductDocument): ProductDto {
+function buildProductDtoCore(doc: ProductDocument) {
   return {
     id: doc._id.toString(),
     name: doc.name,
@@ -43,15 +44,36 @@ export function toProductDto(doc: ProductDocument): ProductDto {
     brandName: doc.brandName,
     images: doc.images,
     attributes: doc.attributes ?? {},
-    metadata: doc.metadata ?? {},
     averageRating: doc.averageRating ?? 0,
     reviewCount: doc.reviewCount ?? 0,
     badges: resolveBadgesForProductDocument(doc),
-    merchandising: getMerchandisingFromDocument(doc),
-    unitsSold: doc.unitsSold ?? 0,
     createdAt: toIsoString(doc.createdAt),
     updatedAt: toIsoString(doc.updatedAt),
   };
+}
+
+export function toStorefrontProductDto(
+  doc: ProductDocument
+): StorefrontProductDto {
+  return buildProductDtoCore(doc);
+}
+
+export function toProductDto(doc: ProductDocument): ProductDto {
+  return {
+    ...buildProductDtoCore(doc),
+    metadata: doc.metadata ?? {},
+    merchandising: getMerchandisingFromDocument(doc),
+    unitsSold: doc.unitsSold ?? 0,
+  };
+}
+
+export type ProductDtoAudience = "storefront" | "admin";
+
+export function toProductDtoForAudience(
+  doc: ProductDocument,
+  audience: ProductDtoAudience
+): ProductDto | StorefrontProductDto {
+  return audience === "admin" ? toProductDto(doc) : toStorefrontProductDto(doc);
 }
 
 export function toCategoryDto(doc: CategoryDocument): CategoryDto {

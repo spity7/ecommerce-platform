@@ -17,8 +17,6 @@ export const ProductDtoStatus = {
 
 export type ProductDtoAttributes = { [key: string]: string | string[] };
 
-export type ProductDtoMetadata = { [key: string]: unknown | null };
-
 export type ProductDtoBadgesItemKind =
   (typeof ProductDtoBadgesItemKind)[keyof typeof ProductDtoBadgesItemKind];
 
@@ -52,6 +50,8 @@ export type ProductDtoBadgesItem = {
   bg: string;
 };
 
+export type ProductDtoMetadata = { [key: string]: unknown | null };
+
 export type ProductDtoMerchandisingManualBadgesItemKind =
   (typeof ProductDtoMerchandisingManualBadgesItemKind)[keyof typeof ProductDtoMerchandisingManualBadgesItemKind];
 
@@ -81,12 +81,6 @@ export const ProductDtoMerchandisingManualBadgesItemKind = {
 
 export type ProductDtoMerchandisingManualBadgesItem = {
   kind: ProductDtoMerchandisingManualBadgesItemKind;
-  /**
-   * @minLength 1
-   * @maxLength 120
-   * @pattern ^rbt-product-badge-
-   */
-  style?: string;
 };
 
 export type ProductDtoMerchandisingSuppressAutoBadgesItem =
@@ -141,7 +135,6 @@ export interface ProductDto {
   brandName?: string;
   images: string[];
   attributes: ProductDtoAttributes;
-  metadata: ProductDtoMetadata;
   /**
    * @minimum 0
    * @maximum 5
@@ -151,10 +144,87 @@ export interface ProductDto {
   reviewCount?: number;
   /** @maxItems 2 */
   badges: ProductDtoBadgesItem[];
+  createdAt: string;
+  updatedAt: string;
+  metadata: ProductDtoMetadata;
   /** @nullable */
   merchandising?: ProductDtoMerchandising;
   /** @minimum 0 */
   unitsSold?: number;
+}
+
+export type StorefrontProductDtoStatus =
+  (typeof StorefrontProductDtoStatus)[keyof typeof StorefrontProductDtoStatus];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const StorefrontProductDtoStatus = {
+  draft: "draft",
+  published: "published",
+  archived: "archived",
+} as const;
+
+export type StorefrontProductDtoAttributes = {
+  [key: string]: string | string[];
+};
+
+export type StorefrontProductDtoBadgesItemKind =
+  (typeof StorefrontProductDtoBadgesItemKind)[keyof typeof StorefrontProductDtoBadgesItemKind];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const StorefrontProductDtoBadgesItemKind = {
+  sale: "sale",
+  clearance: "clearance",
+  limited_offer: "limited_offer",
+  bundle: "bundle",
+  free_gift: "free_gift",
+  new: "new",
+  preorder: "preorder",
+  coming_soon: "coming_soon",
+  sold_out: "sold_out",
+  low_stock: "low_stock",
+  back_in_stock: "back_in_stock",
+  best_seller: "best_seller",
+  trending: "trending",
+  top_rated: "top_rated",
+  staff_pick: "staff_pick",
+  exclusive: "exclusive",
+  hot: "hot",
+  cruelty_free: "cruelty_free",
+  vegan: "vegan",
+  organic: "organic",
+} as const;
+
+export type StorefrontProductDtoBadgesItem = {
+  kind: StorefrontProductDtoBadgesItemKind;
+  text: string;
+  bg: string;
+};
+
+export interface StorefrontProductDto {
+  id: string;
+  name: string;
+  slug: string;
+  sku: string;
+  description: string;
+  price: number;
+  compareAtPrice?: number;
+  stock: number;
+  status: StorefrontProductDtoStatus;
+  categoryId?: string;
+  categoryName?: string;
+  brandId?: string;
+  brandName?: string;
+  images: string[];
+  attributes: StorefrontProductDtoAttributes;
+  /**
+   * @minimum 0
+   * @maximum 5
+   */
+  averageRating?: number;
+  /** @minimum 0 */
+  reviewCount?: number;
+  /** @maxItems 2 */
+  badges: StorefrontProductDtoBadgesItem[];
   createdAt: string;
   updatedAt: string;
 }
@@ -288,12 +358,6 @@ export const CreateProductInputMerchandisingManualBadgesItemKind = {
 
 export type CreateProductInputMerchandisingManualBadgesItem = {
   kind: CreateProductInputMerchandisingManualBadgesItemKind;
-  /**
-   * @minLength 1
-   * @maxLength 120
-   * @pattern ^rbt-product-badge-
-   */
-  style?: string;
 };
 
 export type CreateProductInputMerchandisingSuppressAutoBadgesItem =
@@ -409,12 +473,6 @@ export const UpdateProductInputMerchandisingManualBadgesItemKind = {
 
 export type UpdateProductInputMerchandisingManualBadgesItem = {
   kind: UpdateProductInputMerchandisingManualBadgesItemKind;
-  /**
-   * @minLength 1
-   * @maxLength 120
-   * @pattern ^rbt-product-badge-
-   */
-  style?: string;
 };
 
 export type UpdateProductInputMerchandisingSuppressAutoBadgesItem =
@@ -754,10 +812,6 @@ export type PaginatedProductsDataItemAttributes = {
   [key: string]: string | string[];
 };
 
-export type PaginatedProductsDataItemMetadata = {
-  [key: string]: unknown | null;
-};
-
 export type PaginatedProductsDataItemBadgesItemKind =
   (typeof PaginatedProductsDataItemBadgesItemKind)[keyof typeof PaginatedProductsDataItemBadgesItemKind];
 
@@ -791,6 +845,10 @@ export type PaginatedProductsDataItemBadgesItem = {
   bg: string;
 };
 
+export type PaginatedProductsDataItemMetadata = {
+  [key: string]: unknown | null;
+};
+
 export type PaginatedProductsDataItemMerchandisingManualBadgesItemKind =
   (typeof PaginatedProductsDataItemMerchandisingManualBadgesItemKind)[keyof typeof PaginatedProductsDataItemMerchandisingManualBadgesItemKind];
 
@@ -820,12 +878,6 @@ export const PaginatedProductsDataItemMerchandisingManualBadgesItemKind = {
 
 export type PaginatedProductsDataItemMerchandisingManualBadgesItem = {
   kind: PaginatedProductsDataItemMerchandisingManualBadgesItemKind;
-  /**
-   * @minLength 1
-   * @maxLength 120
-   * @pattern ^rbt-product-badge-
-   */
-  style?: string;
 };
 
 export type PaginatedProductsDataItemMerchandisingSuppressAutoBadgesItem =
@@ -880,7 +932,6 @@ export type PaginatedProductsDataItem = {
   brandName?: string;
   images: string[];
   attributes: PaginatedProductsDataItemAttributes;
-  metadata: PaginatedProductsDataItemMetadata;
   /**
    * @minimum 0
    * @maximum 5
@@ -890,12 +941,13 @@ export type PaginatedProductsDataItem = {
   reviewCount?: number;
   /** @maxItems 2 */
   badges: PaginatedProductsDataItemBadgesItem[];
+  createdAt: string;
+  updatedAt: string;
+  metadata: PaginatedProductsDataItemMetadata;
   /** @nullable */
   merchandising?: PaginatedProductsDataItemMerchandising;
   /** @minimum 0 */
   unitsSold?: number;
-  createdAt: string;
-  updatedAt: string;
 };
 
 export interface PaginatedProducts {
@@ -1835,8 +1887,6 @@ export type ListProduct200DataItemAttributes = {
   [key: string]: string | string[];
 };
 
-export type ListProduct200DataItemMetadata = { [key: string]: unknown | null };
-
 export type ListProduct200DataItemBadgesItemKind =
   (typeof ListProduct200DataItemBadgesItemKind)[keyof typeof ListProduct200DataItemBadgesItemKind];
 
@@ -1870,79 +1920,6 @@ export type ListProduct200DataItemBadgesItem = {
   bg: string;
 };
 
-export type ListProduct200DataItemMerchandisingManualBadgesItemKind =
-  (typeof ListProduct200DataItemMerchandisingManualBadgesItemKind)[keyof typeof ListProduct200DataItemMerchandisingManualBadgesItemKind];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ListProduct200DataItemMerchandisingManualBadgesItemKind = {
-  sale: "sale",
-  clearance: "clearance",
-  limited_offer: "limited_offer",
-  bundle: "bundle",
-  free_gift: "free_gift",
-  new: "new",
-  preorder: "preorder",
-  coming_soon: "coming_soon",
-  sold_out: "sold_out",
-  low_stock: "low_stock",
-  back_in_stock: "back_in_stock",
-  best_seller: "best_seller",
-  trending: "trending",
-  top_rated: "top_rated",
-  staff_pick: "staff_pick",
-  exclusive: "exclusive",
-  hot: "hot",
-  cruelty_free: "cruelty_free",
-  vegan: "vegan",
-  organic: "organic",
-} as const;
-
-export type ListProduct200DataItemMerchandisingManualBadgesItem = {
-  kind: ListProduct200DataItemMerchandisingManualBadgesItemKind;
-  /**
-   * @minLength 1
-   * @maxLength 120
-   * @pattern ^rbt-product-badge-
-   */
-  style?: string;
-};
-
-export type ListProduct200DataItemMerchandisingSuppressAutoBadgesItem =
-  (typeof ListProduct200DataItemMerchandisingSuppressAutoBadgesItem)[keyof typeof ListProduct200DataItemMerchandisingSuppressAutoBadgesItem];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ListProduct200DataItemMerchandisingSuppressAutoBadgesItem = {
-  sale: "sale",
-  clearance: "clearance",
-  limited_offer: "limited_offer",
-  bundle: "bundle",
-  free_gift: "free_gift",
-  new: "new",
-  preorder: "preorder",
-  coming_soon: "coming_soon",
-  sold_out: "sold_out",
-  low_stock: "low_stock",
-  back_in_stock: "back_in_stock",
-  best_seller: "best_seller",
-  trending: "trending",
-  top_rated: "top_rated",
-  staff_pick: "staff_pick",
-  exclusive: "exclusive",
-  hot: "hot",
-  cruelty_free: "cruelty_free",
-  vegan: "vegan",
-  organic: "organic",
-} as const;
-
-/**
- * @nullable
- */
-export type ListProduct200DataItemMerchandising = {
-  /** @maxItems 2 */
-  manualBadges: ListProduct200DataItemMerchandisingManualBadgesItem[];
-  suppressAutoBadges?: ListProduct200DataItemMerchandisingSuppressAutoBadgesItem[];
-} | null;
-
 export type ListProduct200DataItem = {
   id: string;
   name: string;
@@ -1959,7 +1936,6 @@ export type ListProduct200DataItem = {
   brandName?: string;
   images: string[];
   attributes: ListProduct200DataItemAttributes;
-  metadata: ListProduct200DataItemMetadata;
   /**
    * @minimum 0
    * @maximum 5
@@ -1969,10 +1945,6 @@ export type ListProduct200DataItem = {
   reviewCount?: number;
   /** @maxItems 2 */
   badges: ListProduct200DataItemBadgesItem[];
-  /** @nullable */
-  merchandising?: ListProduct200DataItemMerchandising;
-  /** @minimum 0 */
-  unitsSold?: number;
   createdAt: string;
   updatedAt: string;
 };
@@ -2027,12 +1999,6 @@ export const CreateProductBodyMerchandisingManualBadgesItemKind = {
 
 export type CreateProductBodyMerchandisingManualBadgesItem = {
   kind: CreateProductBodyMerchandisingManualBadgesItemKind;
-  /**
-   * @minLength 1
-   * @maxLength 120
-   * @pattern ^rbt-product-badge-
-   */
-  style?: string;
 };
 
 export type CreateProductBodyMerchandisingSuppressAutoBadgesItem =
@@ -2117,8 +2083,6 @@ export const CreateProduct201Status = {
 
 export type CreateProduct201Attributes = { [key: string]: string | string[] };
 
-export type CreateProduct201Metadata = { [key: string]: unknown | null };
-
 export type CreateProduct201BadgesItemKind =
   (typeof CreateProduct201BadgesItemKind)[keyof typeof CreateProduct201BadgesItemKind];
 
@@ -2152,6 +2116,8 @@ export type CreateProduct201BadgesItem = {
   bg: string;
 };
 
+export type CreateProduct201Metadata = { [key: string]: unknown | null };
+
 export type CreateProduct201MerchandisingManualBadgesItemKind =
   (typeof CreateProduct201MerchandisingManualBadgesItemKind)[keyof typeof CreateProduct201MerchandisingManualBadgesItemKind];
 
@@ -2181,12 +2147,6 @@ export const CreateProduct201MerchandisingManualBadgesItemKind = {
 
 export type CreateProduct201MerchandisingManualBadgesItem = {
   kind: CreateProduct201MerchandisingManualBadgesItemKind;
-  /**
-   * @minLength 1
-   * @maxLength 120
-   * @pattern ^rbt-product-badge-
-   */
-  style?: string;
 };
 
 export type CreateProduct201MerchandisingSuppressAutoBadgesItem =
@@ -2241,7 +2201,6 @@ export type CreateProduct201 = {
   brandName?: string;
   images: string[];
   attributes: CreateProduct201Attributes;
-  metadata: CreateProduct201Metadata;
   /**
    * @minimum 0
    * @maximum 5
@@ -2251,12 +2210,13 @@ export type CreateProduct201 = {
   reviewCount?: number;
   /** @maxItems 2 */
   badges: CreateProduct201BadgesItem[];
+  createdAt: string;
+  updatedAt: string;
+  metadata: CreateProduct201Metadata;
   /** @nullable */
   merchandising?: CreateProduct201Merchandising;
   /** @minimum 0 */
   unitsSold?: number;
-  createdAt: string;
-  updatedAt: string;
 };
 
 export type CreateProduct400Details = { [key: string]: string[] };
@@ -2285,8 +2245,6 @@ export const GetProduct200Status = {
 } as const;
 
 export type GetProduct200Attributes = { [key: string]: string | string[] };
-
-export type GetProduct200Metadata = { [key: string]: unknown | null };
 
 export type GetProduct200BadgesItemKind =
   (typeof GetProduct200BadgesItemKind)[keyof typeof GetProduct200BadgesItemKind];
@@ -2321,79 +2279,6 @@ export type GetProduct200BadgesItem = {
   bg: string;
 };
 
-export type GetProduct200MerchandisingManualBadgesItemKind =
-  (typeof GetProduct200MerchandisingManualBadgesItemKind)[keyof typeof GetProduct200MerchandisingManualBadgesItemKind];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetProduct200MerchandisingManualBadgesItemKind = {
-  sale: "sale",
-  clearance: "clearance",
-  limited_offer: "limited_offer",
-  bundle: "bundle",
-  free_gift: "free_gift",
-  new: "new",
-  preorder: "preorder",
-  coming_soon: "coming_soon",
-  sold_out: "sold_out",
-  low_stock: "low_stock",
-  back_in_stock: "back_in_stock",
-  best_seller: "best_seller",
-  trending: "trending",
-  top_rated: "top_rated",
-  staff_pick: "staff_pick",
-  exclusive: "exclusive",
-  hot: "hot",
-  cruelty_free: "cruelty_free",
-  vegan: "vegan",
-  organic: "organic",
-} as const;
-
-export type GetProduct200MerchandisingManualBadgesItem = {
-  kind: GetProduct200MerchandisingManualBadgesItemKind;
-  /**
-   * @minLength 1
-   * @maxLength 120
-   * @pattern ^rbt-product-badge-
-   */
-  style?: string;
-};
-
-export type GetProduct200MerchandisingSuppressAutoBadgesItem =
-  (typeof GetProduct200MerchandisingSuppressAutoBadgesItem)[keyof typeof GetProduct200MerchandisingSuppressAutoBadgesItem];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetProduct200MerchandisingSuppressAutoBadgesItem = {
-  sale: "sale",
-  clearance: "clearance",
-  limited_offer: "limited_offer",
-  bundle: "bundle",
-  free_gift: "free_gift",
-  new: "new",
-  preorder: "preorder",
-  coming_soon: "coming_soon",
-  sold_out: "sold_out",
-  low_stock: "low_stock",
-  back_in_stock: "back_in_stock",
-  best_seller: "best_seller",
-  trending: "trending",
-  top_rated: "top_rated",
-  staff_pick: "staff_pick",
-  exclusive: "exclusive",
-  hot: "hot",
-  cruelty_free: "cruelty_free",
-  vegan: "vegan",
-  organic: "organic",
-} as const;
-
-/**
- * @nullable
- */
-export type GetProduct200Merchandising = {
-  /** @maxItems 2 */
-  manualBadges: GetProduct200MerchandisingManualBadgesItem[];
-  suppressAutoBadges?: GetProduct200MerchandisingSuppressAutoBadgesItem[];
-} | null;
-
 export type GetProduct200 = {
   id: string;
   name: string;
@@ -2410,7 +2295,6 @@ export type GetProduct200 = {
   brandName?: string;
   images: string[];
   attributes: GetProduct200Attributes;
-  metadata: GetProduct200Metadata;
   /**
    * @minimum 0
    * @maximum 5
@@ -2420,10 +2304,6 @@ export type GetProduct200 = {
   reviewCount?: number;
   /** @maxItems 2 */
   badges: GetProduct200BadgesItem[];
-  /** @nullable */
-  merchandising?: GetProduct200Merchandising;
-  /** @minimum 0 */
-  unitsSold?: number;
   createdAt: string;
   updatedAt: string;
 };
@@ -2475,12 +2355,6 @@ export const UpdateProductBodyMerchandisingManualBadgesItemKind = {
 
 export type UpdateProductBodyMerchandisingManualBadgesItem = {
   kind: UpdateProductBodyMerchandisingManualBadgesItemKind;
-  /**
-   * @minLength 1
-   * @maxLength 120
-   * @pattern ^rbt-product-badge-
-   */
-  style?: string;
 };
 
 export type UpdateProductBodyMerchandisingSuppressAutoBadgesItem =
@@ -2565,8 +2439,6 @@ export const UpdateProduct200Status = {
 
 export type UpdateProduct200Attributes = { [key: string]: string | string[] };
 
-export type UpdateProduct200Metadata = { [key: string]: unknown | null };
-
 export type UpdateProduct200BadgesItemKind =
   (typeof UpdateProduct200BadgesItemKind)[keyof typeof UpdateProduct200BadgesItemKind];
 
@@ -2600,6 +2472,8 @@ export type UpdateProduct200BadgesItem = {
   bg: string;
 };
 
+export type UpdateProduct200Metadata = { [key: string]: unknown | null };
+
 export type UpdateProduct200MerchandisingManualBadgesItemKind =
   (typeof UpdateProduct200MerchandisingManualBadgesItemKind)[keyof typeof UpdateProduct200MerchandisingManualBadgesItemKind];
 
@@ -2629,12 +2503,6 @@ export const UpdateProduct200MerchandisingManualBadgesItemKind = {
 
 export type UpdateProduct200MerchandisingManualBadgesItem = {
   kind: UpdateProduct200MerchandisingManualBadgesItemKind;
-  /**
-   * @minLength 1
-   * @maxLength 120
-   * @pattern ^rbt-product-badge-
-   */
-  style?: string;
 };
 
 export type UpdateProduct200MerchandisingSuppressAutoBadgesItem =
@@ -2689,7 +2557,6 @@ export type UpdateProduct200 = {
   brandName?: string;
   images: string[];
   attributes: UpdateProduct200Attributes;
-  metadata: UpdateProduct200Metadata;
   /**
    * @minimum 0
    * @maximum 5
@@ -2699,12 +2566,13 @@ export type UpdateProduct200 = {
   reviewCount?: number;
   /** @maxItems 2 */
   badges: UpdateProduct200BadgesItem[];
+  createdAt: string;
+  updatedAt: string;
+  metadata: UpdateProduct200Metadata;
   /** @nullable */
   merchandising?: UpdateProduct200Merchandising;
   /** @minimum 0 */
   unitsSold?: number;
-  createdAt: string;
-  updatedAt: string;
 };
 
 export type UpdateProduct400Details = { [key: string]: string[] };
@@ -2748,8 +2616,6 @@ export type GetProductBySlug200Attributes = {
   [key: string]: string | string[];
 };
 
-export type GetProductBySlug200Metadata = { [key: string]: unknown | null };
-
 export type GetProductBySlug200BadgesItemKind =
   (typeof GetProductBySlug200BadgesItemKind)[keyof typeof GetProductBySlug200BadgesItemKind];
 
@@ -2783,79 +2649,6 @@ export type GetProductBySlug200BadgesItem = {
   bg: string;
 };
 
-export type GetProductBySlug200MerchandisingManualBadgesItemKind =
-  (typeof GetProductBySlug200MerchandisingManualBadgesItemKind)[keyof typeof GetProductBySlug200MerchandisingManualBadgesItemKind];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetProductBySlug200MerchandisingManualBadgesItemKind = {
-  sale: "sale",
-  clearance: "clearance",
-  limited_offer: "limited_offer",
-  bundle: "bundle",
-  free_gift: "free_gift",
-  new: "new",
-  preorder: "preorder",
-  coming_soon: "coming_soon",
-  sold_out: "sold_out",
-  low_stock: "low_stock",
-  back_in_stock: "back_in_stock",
-  best_seller: "best_seller",
-  trending: "trending",
-  top_rated: "top_rated",
-  staff_pick: "staff_pick",
-  exclusive: "exclusive",
-  hot: "hot",
-  cruelty_free: "cruelty_free",
-  vegan: "vegan",
-  organic: "organic",
-} as const;
-
-export type GetProductBySlug200MerchandisingManualBadgesItem = {
-  kind: GetProductBySlug200MerchandisingManualBadgesItemKind;
-  /**
-   * @minLength 1
-   * @maxLength 120
-   * @pattern ^rbt-product-badge-
-   */
-  style?: string;
-};
-
-export type GetProductBySlug200MerchandisingSuppressAutoBadgesItem =
-  (typeof GetProductBySlug200MerchandisingSuppressAutoBadgesItem)[keyof typeof GetProductBySlug200MerchandisingSuppressAutoBadgesItem];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetProductBySlug200MerchandisingSuppressAutoBadgesItem = {
-  sale: "sale",
-  clearance: "clearance",
-  limited_offer: "limited_offer",
-  bundle: "bundle",
-  free_gift: "free_gift",
-  new: "new",
-  preorder: "preorder",
-  coming_soon: "coming_soon",
-  sold_out: "sold_out",
-  low_stock: "low_stock",
-  back_in_stock: "back_in_stock",
-  best_seller: "best_seller",
-  trending: "trending",
-  top_rated: "top_rated",
-  staff_pick: "staff_pick",
-  exclusive: "exclusive",
-  hot: "hot",
-  cruelty_free: "cruelty_free",
-  vegan: "vegan",
-  organic: "organic",
-} as const;
-
-/**
- * @nullable
- */
-export type GetProductBySlug200Merchandising = {
-  /** @maxItems 2 */
-  manualBadges: GetProductBySlug200MerchandisingManualBadgesItem[];
-  suppressAutoBadges?: GetProductBySlug200MerchandisingSuppressAutoBadgesItem[];
-} | null;
-
 export type GetProductBySlug200 = {
   id: string;
   name: string;
@@ -2872,7 +2665,6 @@ export type GetProductBySlug200 = {
   brandName?: string;
   images: string[];
   attributes: GetProductBySlug200Attributes;
-  metadata: GetProductBySlug200Metadata;
   /**
    * @minimum 0
    * @maximum 5
@@ -2882,10 +2674,6 @@ export type GetProductBySlug200 = {
   reviewCount?: number;
   /** @maxItems 2 */
   badges: GetProductBySlug200BadgesItem[];
-  /** @nullable */
-  merchandising?: GetProductBySlug200Merchandising;
-  /** @minimum 0 */
-  unitsSold?: number;
   createdAt: string;
   updatedAt: string;
 };

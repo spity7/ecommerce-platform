@@ -44,7 +44,11 @@ import {
 } from "@/lib/product-form-options";
 import { useToast } from "@/providers/toast-provider";
 import { useCatalogFormLeaveGuard } from "@/components/catalog/use-catalog-form-leave-guard";
-import { ProductMerchandisingFields } from "@/components/catalog/product-merchandising-fields";
+import {
+  ProductMerchandisingFields,
+  type MerchandisingBadgePreviewInput,
+} from "@/components/catalog/product-merchandising-fields";
+import { getAdminSiteConfig } from "@/lib/site";
 import { createProductApi, updateProductApi } from "@platform/api-client";
 import {
   parseProductMerchandising,
@@ -261,6 +265,43 @@ export function ProductCatalogForm({
     loading: formState.loading,
   });
 
+  const siteConfig = useMemo(() => getAdminSiteConfig(), []);
+
+  const badgePreview = useMemo((): MerchandisingBadgePreviewInput | undefined => {
+    const parsedPrice = Number(price);
+    if (price.trim() === "" || Number.isNaN(parsedPrice)) {
+      return undefined;
+    }
+    const parsedCompare = compareAtPrice.trim()
+      ? Number(compareAtPrice)
+      : undefined;
+    const parsedStock = Number(stock);
+    return {
+      price: parsedPrice,
+      compareAtPrice:
+        parsedCompare !== undefined && !Number.isNaN(parsedCompare)
+          ? parsedCompare
+          : undefined,
+      stock: Number.isNaN(parsedStock) ? 0 : parsedStock,
+      createdAt: initial?.createdAt ?? new Date().toISOString(),
+      averageRating: initial?.averageRating,
+      reviewCount: initial?.reviewCount,
+      unitsSold: initial?.unitsSold,
+      reviewsEnabled: siteConfig.features.reviews,
+      merchandisingConfig: siteConfig.merchandising,
+    };
+  }, [
+    compareAtPrice,
+    initial?.averageRating,
+    initial?.createdAt,
+    initial?.reviewCount,
+    initial?.unitsSold,
+    price,
+    siteConfig.features.reviews,
+    siteConfig.merchandising,
+    stock,
+  ]);
+
   const imagePreviews = imageEntries;
   const imageEntriesRef = useRef(imageEntries);
   imageEntriesRef.current = imageEntries;
@@ -428,6 +469,7 @@ export function ProductCatalogForm({
                 disabled={disabled}
                 merchandising={merchandising}
                 onChange={setMerchandising}
+                preview={badgePreview}
               />
             </FormCard>
           </>

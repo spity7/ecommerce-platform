@@ -403,6 +403,7 @@ export function ProductListTable({
                 <th className="pb-3 pr-4 font-semibold">
                   <SortButton label="Stock" name="stock" onSort={toggleSort} />
                 </th>
+                <th className="pb-3 pr-4 font-semibold">Badges</th>
                 <th className="pb-3 pr-4 font-semibold">
                   <SortButton
                     label="Status"
@@ -477,6 +478,16 @@ export function ProductListTable({
                       )}
                     >
                       {product.stock}
+                    </td>
+                    <td className="max-w-[140px] py-4 pr-4 text-[12px] text-ink-600">
+                      {product.storefrontBadges &&
+                      product.storefrontBadges.length > 0 ? (
+                        <span className="line-clamp-2">
+                          {product.storefrontBadges.join(", ")}
+                        </span>
+                      ) : (
+                        <span className="text-ink-400">—</span>
+                      )}
                     </td>
                     <td className="py-4 pr-4">
                       <StatusBadge

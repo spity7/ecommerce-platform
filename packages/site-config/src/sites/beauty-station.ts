@@ -26,6 +26,7 @@ export const beautyStationConfig = {
     wishlist: true,
     customerAuth: true,
   },
+  /** Badge auto thresholds; resolver hard-caps image badges at 2. */
   merchandising: {
     newProductDays: 30,
     lowStockThreshold: 5,

@@ -86,10 +86,225 @@
               ]
             }
           },
+          "averageRating": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 5
+          },
+          "reviewCount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "badges": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "sale",
+                    "clearance",
+                    "limited_offer",
+                    "bundle",
+                    "free_gift",
+                    "new",
+                    "preorder",
+                    "coming_soon",
+                    "sold_out",
+                    "low_stock",
+                    "back_in_stock",
+                    "best_seller",
+                    "trending",
+                    "top_rated",
+                    "staff_pick",
+                    "exclusive",
+                    "hot",
+                    "cruelty_free",
+                    "vegan",
+                    "organic"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                },
+                "bg": {
+                  "type": "string"
+                }
+              },
+              "required": ["kind", "text", "bg"]
+            },
+            "maxItems": 2
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
           "metadata": {
             "type": "object",
             "additionalProperties": {
               "nullable": true
+            }
+          },
+          "merchandising": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "manualBadges": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "sale",
+                        "clearance",
+                        "limited_offer",
+                        "bundle",
+                        "free_gift",
+                        "new",
+                        "preorder",
+                        "coming_soon",
+                        "sold_out",
+                        "low_stock",
+                        "back_in_stock",
+                        "best_seller",
+                        "trending",
+                        "top_rated",
+                        "staff_pick",
+                        "exclusive",
+                        "hot",
+                        "cruelty_free",
+                        "vegan",
+                        "organic"
+                      ]
+                    }
+                  },
+                  "required": ["kind"]
+                },
+                "maxItems": 2
+              },
+              "suppressAutoBadges": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "sale",
+                    "clearance",
+                    "limited_offer",
+                    "bundle",
+                    "free_gift",
+                    "new",
+                    "preorder",
+                    "coming_soon",
+                    "sold_out",
+                    "low_stock",
+                    "back_in_stock",
+                    "best_seller",
+                    "trending",
+                    "top_rated",
+                    "staff_pick",
+                    "exclusive",
+                    "hot",
+                    "cruelty_free",
+                    "vegan",
+                    "organic"
+                  ]
+                }
+              }
+            },
+            "required": ["manualBadges"]
+          },
+          "unitsSold": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "sku",
+          "description",
+          "price",
+          "stock",
+          "status",
+          "images",
+          "attributes",
+          "badges",
+          "createdAt",
+          "updatedAt",
+          "metadata"
+        ]
+      },
+      "StorefrontProductDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "compareAtPrice": {
+            "type": "number"
+          },
+          "stock": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["draft", "published", "archived"]
+          },
+          "categoryId": {
+            "type": "string"
+          },
+          "categoryName": {
+            "type": "string"
+          },
+          "brandId": {
+            "type": "string"
+          },
+          "brandName": {
+            "type": "string"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "attributes": {
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              ]
             }
           },
           "averageRating": {
@@ -142,86 +357,6 @@
             },
             "maxItems": 2
           },
-          "merchandising": {
-            "type": "object",
-            "nullable": true,
-            "properties": {
-              "manualBadges": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "properties": {
-                    "kind": {
-                      "type": "string",
-                      "enum": [
-                        "sale",
-                        "clearance",
-                        "limited_offer",
-                        "bundle",
-                        "free_gift",
-                        "new",
-                        "preorder",
-                        "coming_soon",
-                        "sold_out",
-                        "low_stock",
-                        "back_in_stock",
-                        "best_seller",
-                        "trending",
-                        "top_rated",
-                        "staff_pick",
-                        "exclusive",
-                        "hot",
-                        "cruelty_free",
-                        "vegan",
-                        "organic"
-                      ]
-                    },
-                    "style": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 120,
-                      "pattern": "^rbt-product-badge-"
-                    }
-                  },
-                  "required": ["kind"]
-                },
-                "maxItems": 2
-              },
-              "suppressAutoBadges": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "enum": [
-                    "sale",
-                    "clearance",
-                    "limited_offer",
-                    "bundle",
-                    "free_gift",
-                    "new",
-                    "preorder",
-                    "coming_soon",
-                    "sold_out",
-                    "low_stock",
-                    "back_in_stock",
-                    "best_seller",
-                    "trending",
-                    "top_rated",
-                    "staff_pick",
-                    "exclusive",
-                    "hot",
-                    "cruelty_free",
-                    "vegan",
-                    "organic"
-                  ]
-                }
-              }
-            },
-            "required": ["manualBadges"]
-          },
-          "unitsSold": {
-            "type": "integer",
-            "minimum": 0
-          },
           "createdAt": {
             "type": "string",
             "format": "date-time"
@@ -242,7 +377,6 @@
           "status",
           "images",
           "attributes",
-          "metadata",
           "badges",
           "createdAt",
           "updatedAt"
@@ -510,12 +644,6 @@
                         "vegan",
                         "organic"
                       ]
-                    },
-                    "style": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 120,
-                      "pattern": "^rbt-product-badge-"
                     }
                   },
                   "required": ["kind"]
@@ -661,12 +789,6 @@
                         "vegan",
                         "organic"
                       ]
-                    },
-                    "style": {
-                      "type": "string",
-                      "minLength": 1,
-                      "maxLength": 120,
-                      "pattern": "^rbt-product-badge-"
                     }
                   },
                   "required": ["kind"]
@@ -1040,12 +1162,6 @@
                     ]
                   }
                 },
-                "metadata": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "nullable": true
-                  }
-                },
                 "averageRating": {
                   "type": "number",
                   "minimum": 0,
@@ -1096,6 +1212,20 @@
                   },
                   "maxItems": 2
                 },
+                "createdAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "nullable": true
+                  }
+                },
                 "merchandising": {
                   "type": "object",
                   "nullable": true,
@@ -1129,12 +1259,6 @@
                               "vegan",
                               "organic"
                             ]
-                          },
-                          "style": {
-                            "type": "string",
-                            "minLength": 1,
-                            "maxLength": 120,
-                            "pattern": "^rbt-product-badge-"
                           }
                         },
                         "required": ["kind"]
@@ -1175,14 +1299,6 @@
                 "unitsSold": {
                   "type": "integer",
                   "minimum": 0
-                },
-                "createdAt": {
-                  "type": "string",
-                  "format": "date-time"
-                },
-                "updatedAt": {
-                  "type": "string",
-                  "format": "date-time"
                 }
               },
               "required": [
@@ -1196,10 +1312,10 @@
                 "status",
                 "images",
                 "attributes",
-                "metadata",
                 "badges",
                 "createdAt",
-                "updatedAt"
+                "updatedAt",
+                "metadata"
               ]
             }
           },
@@ -2985,12 +3101,6 @@
                               ]
                             }
                           },
-                          "metadata": {
-                            "type": "object",
-                            "additionalProperties": {
-                              "nullable": true
-                            }
-                          },
                           "averageRating": {
                             "type": "number",
                             "minimum": 0,
@@ -3041,86 +3151,6 @@
                             },
                             "maxItems": 2
                           },
-                          "merchandising": {
-                            "type": "object",
-                            "nullable": true,
-                            "properties": {
-                              "manualBadges": {
-                                "type": "array",
-                                "items": {
-                                  "type": "object",
-                                  "properties": {
-                                    "kind": {
-                                      "type": "string",
-                                      "enum": [
-                                        "sale",
-                                        "clearance",
-                                        "limited_offer",
-                                        "bundle",
-                                        "free_gift",
-                                        "new",
-                                        "preorder",
-                                        "coming_soon",
-                                        "sold_out",
-                                        "low_stock",
-                                        "back_in_stock",
-                                        "best_seller",
-                                        "trending",
-                                        "top_rated",
-                                        "staff_pick",
-                                        "exclusive",
-                                        "hot",
-                                        "cruelty_free",
-                                        "vegan",
-                                        "organic"
-                                      ]
-                                    },
-                                    "style": {
-                                      "type": "string",
-                                      "minLength": 1,
-                                      "maxLength": 120,
-                                      "pattern": "^rbt-product-badge-"
-                                    }
-                                  },
-                                  "required": ["kind"]
-                                },
-                                "maxItems": 2
-                              },
-                              "suppressAutoBadges": {
-                                "type": "array",
-                                "items": {
-                                  "type": "string",
-                                  "enum": [
-                                    "sale",
-                                    "clearance",
-                                    "limited_offer",
-                                    "bundle",
-                                    "free_gift",
-                                    "new",
-                                    "preorder",
-                                    "coming_soon",
-                                    "sold_out",
-                                    "low_stock",
-                                    "back_in_stock",
-                                    "best_seller",
-                                    "trending",
-                                    "top_rated",
-                                    "staff_pick",
-                                    "exclusive",
-                                    "hot",
-                                    "cruelty_free",
-                                    "vegan",
-                                    "organic"
-                                  ]
-                                }
-                              }
-                            },
-                            "required": ["manualBadges"]
-                          },
-                          "unitsSold": {
-                            "type": "integer",
-                            "minimum": 0
-                          },
                           "createdAt": {
                             "type": "string",
                             "format": "date-time"
@@ -3141,7 +3171,6 @@
                           "status",
                           "images",
                           "attributes",
-                          "metadata",
                           "badges",
                           "createdAt",
                           "updatedAt"
@@ -3288,12 +3317,6 @@
                                 "vegan",
                                 "organic"
                               ]
-                            },
-                            "style": {
-                              "type": "string",
-                              "minLength": 1,
-                              "maxLength": 120,
-                              "pattern": "^rbt-product-badge-"
                             }
                           },
                           "required": ["kind"]
@@ -3407,12 +3430,6 @@
                         ]
                       }
                     },
-                    "metadata": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "nullable": true
-                      }
-                    },
                     "averageRating": {
                       "type": "number",
                       "minimum": 0,
@@ -3463,6 +3480,20 @@
                       },
                       "maxItems": 2
                     },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "nullable": true
+                      }
+                    },
                     "merchandising": {
                       "type": "object",
                       "nullable": true,
@@ -3496,12 +3527,6 @@
                                   "vegan",
                                   "organic"
                                 ]
-                              },
-                              "style": {
-                                "type": "string",
-                                "minLength": 1,
-                                "maxLength": 120,
-                                "pattern": "^rbt-product-badge-"
                               }
                             },
                             "required": ["kind"]
@@ -3542,14 +3567,6 @@
                     "unitsSold": {
                       "type": "integer",
                       "minimum": 0
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
                     }
                   },
                   "required": [
@@ -3563,10 +3580,10 @@
                     "status",
                     "images",
                     "attributes",
-                    "metadata",
                     "badges",
                     "createdAt",
-                    "updatedAt"
+                    "updatedAt",
+                    "metadata"
                   ]
                 }
               }
@@ -3719,12 +3736,6 @@
                         ]
                       }
                     },
-                    "metadata": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "nullable": true
-                      }
-                    },
                     "averageRating": {
                       "type": "number",
                       "minimum": 0,
@@ -3775,86 +3786,6 @@
                       },
                       "maxItems": 2
                     },
-                    "merchandising": {
-                      "type": "object",
-                      "nullable": true,
-                      "properties": {
-                        "manualBadges": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "kind": {
-                                "type": "string",
-                                "enum": [
-                                  "sale",
-                                  "clearance",
-                                  "limited_offer",
-                                  "bundle",
-                                  "free_gift",
-                                  "new",
-                                  "preorder",
-                                  "coming_soon",
-                                  "sold_out",
-                                  "low_stock",
-                                  "back_in_stock",
-                                  "best_seller",
-                                  "trending",
-                                  "top_rated",
-                                  "staff_pick",
-                                  "exclusive",
-                                  "hot",
-                                  "cruelty_free",
-                                  "vegan",
-                                  "organic"
-                                ]
-                              },
-                              "style": {
-                                "type": "string",
-                                "minLength": 1,
-                                "maxLength": 120,
-                                "pattern": "^rbt-product-badge-"
-                              }
-                            },
-                            "required": ["kind"]
-                          },
-                          "maxItems": 2
-                        },
-                        "suppressAutoBadges": {
-                          "type": "array",
-                          "items": {
-                            "type": "string",
-                            "enum": [
-                              "sale",
-                              "clearance",
-                              "limited_offer",
-                              "bundle",
-                              "free_gift",
-                              "new",
-                              "preorder",
-                              "coming_soon",
-                              "sold_out",
-                              "low_stock",
-                              "back_in_stock",
-                              "best_seller",
-                              "trending",
-                              "top_rated",
-                              "staff_pick",
-                              "exclusive",
-                              "hot",
-                              "cruelty_free",
-                              "vegan",
-                              "organic"
-                            ]
-                          }
-                        }
-                      },
-                      "required": ["manualBadges"]
-                    },
-                    "unitsSold": {
-                      "type": "integer",
-                      "minimum": 0
-                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time"
@@ -3875,7 +3806,6 @@
                     "status",
                     "images",
                     "attributes",
-                    "metadata",
                     "badges",
                     "createdAt",
                     "updatedAt"
@@ -4031,12 +3961,6 @@
                                 "vegan",
                                 "organic"
                               ]
-                            },
-                            "style": {
-                              "type": "string",
-                              "minLength": 1,
-                              "maxLength": 120,
-                              "pattern": "^rbt-product-badge-"
                             }
                           },
                           "required": ["kind"]
@@ -4149,12 +4073,6 @@
                         ]
                       }
                     },
-                    "metadata": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "nullable": true
-                      }
-                    },
                     "averageRating": {
                       "type": "number",
                       "minimum": 0,
@@ -4205,6 +4123,20 @@
                       },
                       "maxItems": 2
                     },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "nullable": true
+                      }
+                    },
                     "merchandising": {
                       "type": "object",
                       "nullable": true,
@@ -4238,12 +4170,6 @@
                                   "vegan",
                                   "organic"
                                 ]
-                              },
-                              "style": {
-                                "type": "string",
-                                "minLength": 1,
-                                "maxLength": 120,
-                                "pattern": "^rbt-product-badge-"
                               }
                             },
                             "required": ["kind"]
@@ -4284,14 +4210,6 @@
                     "unitsSold": {
                       "type": "integer",
                       "minimum": 0
-                    },
-                    "createdAt": {
-                      "type": "string",
-                      "format": "date-time"
-                    },
-                    "updatedAt": {
-                      "type": "string",
-                      "format": "date-time"
                     }
                   },
                   "required": [
@@ -4305,10 +4223,10 @@
                     "status",
                     "images",
                     "attributes",
-                    "metadata",
                     "badges",
                     "createdAt",
-                    "updatedAt"
+                    "updatedAt",
+                    "metadata"
                   ]
                 }
               }
@@ -4536,12 +4454,6 @@
                         ]
                       }
                     },
-                    "metadata": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "nullable": true
-                      }
-                    },
                     "averageRating": {
                       "type": "number",
                       "minimum": 0,
@@ -4592,86 +4504,6 @@
                       },
                       "maxItems": 2
                     },
-                    "merchandising": {
-                      "type": "object",
-                      "nullable": true,
-                      "properties": {
-                        "manualBadges": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "kind": {
-                                "type": "string",
-                                "enum": [
-                                  "sale",
-                                  "clearance",
-                                  "limited_offer",
-                                  "bundle",
-                                  "free_gift",
-                                  "new",
-                                  "preorder",
-                                  "coming_soon",
-                                  "sold_out",
-                                  "low_stock",
-                                  "back_in_stock",
-                                  "best_seller",
-                                  "trending",
-                                  "top_rated",
-                                  "staff_pick",
-                                  "exclusive",
-                                  "hot",
-                                  "cruelty_free",
-                                  "vegan",
-                                  "organic"
-                                ]
-                              },
-                              "style": {
-                                "type": "string",
-                                "minLength": 1,
-                                "maxLength": 120,
-                                "pattern": "^rbt-product-badge-"
-                              }
-                            },
-                            "required": ["kind"]
-                          },
-                          "maxItems": 2
-                        },
-                        "suppressAutoBadges": {
-                          "type": "array",
-                          "items": {
-                            "type": "string",
-                            "enum": [
-                              "sale",
-                              "clearance",
-                              "limited_offer",
-                              "bundle",
-                              "free_gift",
-                              "new",
-                              "preorder",
-                              "coming_soon",
-                              "sold_out",
-                              "low_stock",
-                              "back_in_stock",
-                              "best_seller",
-                              "trending",
-                              "top_rated",
-                              "staff_pick",
-                              "exclusive",
-                              "hot",
-                              "cruelty_free",
-                              "vegan",
-                              "organic"
-                            ]
-                          }
-                        }
-                      },
-                      "required": ["manualBadges"]
-                    },
-                    "unitsSold": {
-                      "type": "integer",
-                      "minimum": 0
-                    },
                     "createdAt": {
                       "type": "string",
                       "format": "date-time"
@@ -4692,7 +4524,6 @@
                     "status",
                     "images",
                     "attributes",
-                    "metadata",
                     "badges",
                     "createdAt",
                     "updatedAt"

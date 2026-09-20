@@ -12,7 +12,7 @@ import {
   PRODUCT_STATUSES,
 } from "../types/catalog.js";
 
-export const productDtoSchema = z.object({
+const productDtoCoreSchema = z.object({
   id: z.string(),
   name: z.string(),
   slug: z.string(),
@@ -28,14 +28,20 @@ export const productDtoSchema = z.object({
   brandName: z.string().optional(),
   images: z.array(z.string()),
   attributes: z.record(z.string(), z.union([z.string(), z.array(z.string())])),
-  metadata: z.record(z.string(), z.unknown()),
   averageRating: z.number().min(0).max(5).optional(),
   reviewCount: z.number().int().min(0).optional(),
   badges: z.array(productCardBadgeDtoSchema).max(2),
-  merchandising: productMerchandisingSchema.optional(),
-  unitsSold: z.number().int().min(0).optional(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
+});
+
+/** Public catalog responses (storefront + anonymous API reads). */
+export const storefrontProductDtoSchema = productDtoCoreSchema;
+
+export const productDtoSchema = productDtoCoreSchema.extend({
+  metadata: z.record(z.string(), z.unknown()),
+  merchandising: productMerchandisingSchema.optional(),
+  unitsSold: z.number().int().min(0).optional(),
 });
 
 export const categoryDtoSchema = z.object({
@@ -74,6 +80,13 @@ export const attributeDtoSchema = z.object({
   productCount: z.number().int(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
+});
+
+export const paginatedStorefrontProductsSchema = z.object({
+  data: z.array(storefrontProductDtoSchema),
+  total: z.number().int(),
+  page: z.number().int(),
+  limit: z.number().int(),
 });
 
 export const paginatedProductsSchema = z.object({
@@ -134,6 +147,7 @@ export const validationErrorResponseSchema = z.object({
   details: z.record(z.string(), z.array(z.string()).optional()),
 });
 
+export type StorefrontProductDto = z.infer<typeof storefrontProductDtoSchema>;
 export type ProductDto = z.infer<typeof productDtoSchema>;
 export type CategoryDto = z.infer<typeof categoryDtoSchema>;
 export type BrandDto = z.infer<typeof brandDtoSchema>;

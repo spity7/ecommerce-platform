@@ -43,6 +43,7 @@ export function mapProductDto(product: ProductDto): Product & { id: string } {
     slug: product.slug,
     status: toAdminProductStatus(product),
     stock: product.stock,
+    storefrontBadges: product.badges?.map((badge) => badge.text) ?? [],
   };
 }
 

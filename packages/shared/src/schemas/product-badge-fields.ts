@@ -3,15 +3,8 @@ import { PRODUCT_BADGE_KINDS } from "../types/product-badges.js";
 
 export const productBadgeKindSchema = z.enum(PRODUCT_BADGE_KINDS);
 
-export const productBadgeStyleSchema = z
-  .string()
-  .min(1)
-  .max(120)
-  .regex(/^rbt-product-badge-/, "Expected a theme product badge class");
-
 export const manualProductBadgeSchema = z.object({
   kind: productBadgeKindSchema,
-  style: productBadgeStyleSchema.optional(),
 });
 
 export const productMerchandisingShape = z.object({

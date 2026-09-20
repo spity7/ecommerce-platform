@@ -51,7 +51,7 @@ export default function ProductCardImageBadges({
       <>
         {list.map((item, index) => (
           <div
-            key={`${item.text}-${index}`}
+            key={item.kind ?? `${item.text}-${index}`}
             className={`${normalizeBadgeClass(item.bg)} rbt-product-badge rbt-badge-top-left--position${roundedClass}`}
           >
             {item.text}
@@ -65,7 +65,7 @@ export default function ProductCardImageBadges({
     <div className="rbt-badge-wrapper rbt-content-top-left">
       {list.map((item, index) => (
         <div
-          key={`${item.text}-${index}`}
+          key={item.kind ?? `${item.text}-${index}`}
           className={`rbt-product-badge ${normalizeBadgeClass(item.bg)}${roundedClass}`}
         >
           {item.text}

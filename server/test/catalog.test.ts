@@ -803,6 +803,7 @@ describe("catalog API", () => {
 
     const afterInvalidManual = await request(app)
       .get(`/api/products/${productId}`)
+      .set(authHeader(body.accessToken))
       .expect(200);
 
     assert.deepEqual(
@@ -829,6 +830,7 @@ describe("catalog API", () => {
 
     const afterPartialSuppress = await request(app)
       .get(`/api/products/${productId}`)
+      .set(authHeader(body.accessToken))
       .expect(200);
 
     assert.deepEqual(
@@ -876,6 +878,7 @@ describe("catalog API", () => {
 
     const withBadges = await request(app)
       .get(`/api/products/${productId}`)
+      .set(authHeader(body.accessToken))
       .expect(200);
 
     assert.equal(
@@ -902,6 +905,7 @@ describe("catalog API", () => {
 
     const afterMetadataPatch = await request(app)
       .get(`/api/products/${productId}`)
+      .set(authHeader(body.accessToken))
       .expect(200);
 
     assert.equal(afterMetadataPatch.body.metadata?.legacyNote, "keep-me");
@@ -910,6 +914,59 @@ describe("catalog API", () => {
       afterMetadataPatch.body.merchandising?.manualBadges?.[0]?.kind,
       "staff_pick"
     );
+  });
+
+  it("omits merchant fields on anonymous product reads but keeps resolved badges", async () => {
+    const { body } = await registerAdmin(app);
+    const suffix = Date.now();
+
+    const created = await request(app)
+      .post("/api/products")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: `Public DTO ${suffix}`,
+        sku: `PUB-DTO-${suffix}`,
+        price: 12,
+        compareAtPrice: 18,
+        stock: 3,
+        status: "published",
+        merchandising: {
+          manualBadges: [{ kind: "trending" }],
+          suppressAutoBadges: ["sale"],
+        },
+      })
+      .expect(201);
+
+    const productId = created.body.id;
+    const slug = created.body.slug;
+
+    const anonymousById = await request(app)
+      .get(`/api/products/${productId}`)
+      .expect(200);
+
+    assert.ok(Array.isArray(anonymousById.body.badges));
+    assert.equal(anonymousById.body.merchandising, undefined);
+    assert.equal(anonymousById.body.unitsSold, undefined);
+    assert.equal(anonymousById.body.metadata, undefined);
+
+    const anonymousBySlug = await request(app)
+      .get(`/api/products/slug/${slug}`)
+      .expect(200);
+
+    assert.ok(anonymousBySlug.body.badges.length >= 1);
+    assert.equal(anonymousBySlug.body.merchandising, undefined);
+
+    const adminView = await request(app)
+      .get(`/api/products/${productId}`)
+      .set(authHeader(body.accessToken))
+      .expect(200);
+
+    assert.equal(
+      adminView.body.merchandising?.manualBadges?.[0]?.kind,
+      "trending"
+    );
+    assert.ok(adminView.body.metadata);
+    assert.equal(typeof adminView.body.unitsSold, "number");
   });
 
   it("keeps product slug when the name is updated", async () => {

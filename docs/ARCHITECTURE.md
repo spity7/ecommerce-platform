@@ -2,7 +2,7 @@
 
 Multipurpose ecommerce monorepo: one codebase, many site deployments.
 
-**Last reviewed:** 2026-09-16. See [AI-INDEX.md](AI-INDEX.md) for the full doc map and tree.
+**Last reviewed:** 2026-09-19. See [AI-INDEX.md](AI-INDEX.md) for the full doc map and tree.
 
 ## Layout
 
@@ -81,6 +81,18 @@ npm run dev:client   # :3000
 | Admin      | http://localhost:3001 |
 | API        | http://localhost:5000 |
 
+## Product card badges
+
+Storefront image badges (max **2** per product) are resolved on the **server** when serializing products:
+
+- **Registry + rules:** `@platform/shared` (`PRODUCT_BADGE_REGISTRY`, `resolveProductCardBadges`, merchandising sanitize/merge).
+- **Persistence:** `metadata.merchandising` (`manualBadges`, `suppressAutoBadges`); admin edits via `ProductCatalogForm`.
+- **Auto thresholds:** optional `SiteConfig.merchandising` (defaults in `DEFAULT_MERCHANDISING`; resolver hard-caps at 2 badges).
+- **Public API:** anonymous reads return **`StorefrontProductDto`** (`badges` only — no `merchandising`, `unitsSold`, or `metadata`). Admin JWT receives full **`ProductDto`** on list/get.
+- **Storefront:** maps `ProductDto.badges` → `ProductCardImageBadges` on production catalog routes (home layout, `/shop`, PDP).
+
+See [CONVENTIONS.md](CONVENTIONS.md) for priority order (sold out, sale, new, stock, ratings, units sold).
+
 ## Adding a new site
 
 ```bash
@@ -91,7 +103,7 @@ Then:
 
 1. Add config in `packages/site-config/src/sites/sport-shop.ts`
 2. Register in `packages/site-config/src/index.ts`
-3. Add entry to `docs/site-registry.json`
+3. Add entry to `docs/site-registry.json` (include `merchandising` thresholds when the site uses auto badges)
 4. Create MongoDB + GCS + deploy with new env vars
 
 ## API contract (OpenAPI + Orval)

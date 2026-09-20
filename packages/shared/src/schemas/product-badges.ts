@@ -4,7 +4,6 @@ import { sanitizeProductMerchandising } from "../product-badges/sanitize.js";
 export {
   manualProductBadgeSchema,
   productBadgeKindSchema,
-  productBadgeStyleSchema,
   productCardBadgeDtoSchema,
   productMerchandisingShape,
   type ManualProductBadge,

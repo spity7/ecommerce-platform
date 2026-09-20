@@ -45,6 +45,7 @@ export const DEFAULT_MERCHANDISING: MerchandisingDefaults = {
   lowStockThreshold: 5,
   topRatedMinRating: 4.5,
   topRatedMinReviews: 10,
+  /** Hard cap in resolver is 2; keep at 2 unless theme adds multi-badge layout support. */
   maxImageBadges: 2,
   bestSellerMinUnitsSold: 5,
 };

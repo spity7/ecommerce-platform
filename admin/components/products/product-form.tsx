@@ -796,7 +796,7 @@ function StorefrontDisplay() {
           placeholder="e.g. Beats"
         />
         <Field
-          help="Separate multiple storefront badges with commas."
+          help="Demo-only: not saved to the API. Live catalog badges are set on Products → edit (Storefront badges)."
           label="Product Badges"
           name="product_badges"
           placeholder="New, Hot, Sale"

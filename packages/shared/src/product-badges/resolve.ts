@@ -60,12 +60,9 @@ function isNewProduct(
   return now.getTime() - created <= windowMs;
 }
 
-function toBadgeDto(
-  kind: ProductBadgeKind,
-  overrides?: { style?: string }
-): ProductCardBadgeDto {
+function toBadgeDto(kind: ProductBadgeKind): ProductCardBadgeDto {
   const entry = PRODUCT_BADGE_REGISTRY[kind];
-  const bg = normalizeBadgeStyle(overrides?.style ?? entry.style);
+  const bg = normalizeBadgeStyle(entry.style);
   return { kind, text: entry.label, bg };
 }
 
@@ -79,19 +76,19 @@ function kindAlreadyUsed(
 function tryAddBadge(
   badges: ProductCardBadgeDto[],
   max: number,
-  kind: ProductBadgeKind,
-  overrides?: { style?: string }
+  kind: ProductBadgeKind
 ): void {
   if (badges.length >= max || kindAlreadyUsed(badges, kind)) {
     return;
   }
-  badges.push(toBadgeDto(kind, overrides));
+  badges.push(toBadgeDto(kind));
 }
 
 export function resolveProductCardBadges(
   input: ResolveProductCardBadgesInput
 ): ProductCardBadgeDto[] {
   const config = resolveMerchandisingConfig(input.merchandisingConfig);
+  /** Storefront UI supports at most two image badges regardless of site config. */
   const max = Math.max(1, Math.min(config.maxImageBadges, 2));
   const now = input.now ?? new Date();
   const merchandising = parseProductMerchandising(input.metadata);
@@ -108,9 +105,7 @@ export function resolveProductCardBadges(
       if (badges.length >= max) {
         break;
       }
-      tryAddBadge(badges, max, manual.kind, {
-        style: manual.style,
-      });
+      tryAddBadge(badges, max, manual.kind);
     }
     return badges.slice(0, max);
   }
@@ -119,9 +114,7 @@ export function resolveProductCardBadges(
     if (badges.length >= max) {
       break;
     }
-    tryAddBadge(badges, max, manual.kind, {
-      style: manual.style,
-    });
+    tryAddBadge(badges, max, manual.kind);
   }
 
   const autoCandidates: ProductBadgeKind[] = [];

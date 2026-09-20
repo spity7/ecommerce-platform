@@ -29,7 +29,9 @@ import {
   paginatedBrandsSchema,
   paginatedCategoriesSchema,
   paginatedProductsSchema,
+  paginatedStorefrontProductsSchema,
   productDtoSchema,
+  storefrontProductDtoSchema,
   refreshTokenSchema,
   registerSchema,
   updateAttributeSchema,
@@ -105,6 +107,7 @@ const reviewIdParamSchema = z.object({
 });
 
 openApiRegistry.register("ProductDto", productDtoSchema);
+openApiRegistry.register("StorefrontProductDto", storefrontProductDtoSchema);
 openApiRegistry.register("CategoryDto", categoryDtoSchema);
 openApiRegistry.register("BrandDto", brandDtoSchema);
 openApiRegistry.register("AttributeDto", attributeDtoSchema);
@@ -184,6 +187,8 @@ function registerCrudPaths(options: {
   updateSchema: z.ZodType;
   resourceName: string;
   listQuery?: typeof listQuerySchema | typeof productListQuerySchema;
+  readDtoSchema?: z.ZodType;
+  readPaginatedSchema?: z.ZodType;
 }) {
   const {
     tag,
@@ -194,6 +199,8 @@ function registerCrudPaths(options: {
     updateSchema,
     resourceName,
     listQuery = listQuerySchema,
+    readDtoSchema = dtoSchema,
+    readPaginatedSchema = paginatedSchema,
   } = options;
 
   openApiRegistry.registerPath({
@@ -206,7 +213,7 @@ function registerCrudPaths(options: {
     responses: {
       200: {
         description: "Paginated list",
-        content: { "application/json": { schema: paginatedSchema } },
+        content: { "application/json": { schema: readPaginatedSchema } },
       },
     },
   });
@@ -255,7 +262,7 @@ function registerCrudPaths(options: {
     responses: {
       200: {
         description: "Resource found",
-        content: { "application/json": { schema: dtoSchema } },
+        content: { "application/json": { schema: readDtoSchema } },
       },
       404: {
         description: "Not found",
@@ -330,6 +337,8 @@ registerCrudPaths({
   basePath: "/api/products",
   dtoSchema: productDtoSchema,
   paginatedSchema: paginatedProductsSchema,
+  readDtoSchema: storefrontProductDtoSchema,
+  readPaginatedSchema: paginatedStorefrontProductsSchema,
   createSchema: createProductSchema,
   updateSchema: updateProductSchema,
   resourceName: "Product",
@@ -346,7 +355,7 @@ openApiRegistry.registerPath({
   responses: {
     200: {
       description: "Product found",
-      content: { "application/json": { schema: productDtoSchema } },
+      content: { "application/json": { schema: storefrontProductDtoSchema } },
     },
     404: {
       description: "Not found",
