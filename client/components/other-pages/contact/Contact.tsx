@@ -5,9 +5,13 @@ import {
   EnvelopeIcon,
 } from "../../svg-icons";
 import Tooltip from "@/components/common/ui/Tooltip";
+import { SiteContactEmailLink } from "@/components/site/SiteContactLinks";
+import { getSiteContactInfo } from "@/lib/site-branding";
 import ContactForm from "./ContactForm";
 
 export default function Contact() {
+  const contact = getSiteContactInfo();
+
   return (
     <div className="rbt-component-area rbt-bg-color-gray-light">
       <div className="container">
@@ -26,25 +30,24 @@ export default function Contact() {
               {/* Call via Phone */}
               <Tooltip content="Call via Phone" placement="top">
                 <a
-                  href="tel:+958445612564"
+                  href={contact.phoneHref || undefined}
                   className="rbt-trns-modern-btn tooltips"
                 >
                   <span className="icon">
                     <PhoneReceiverIcon />
                   </span>
-                  +9584 4561 2564
+                  {contact.phone}
                 </a>
               </Tooltip>
-              {/* Call via WhatsApp */}
               <Tooltip content="Email to" placement="top">
                 <a
-                  href="mailto:hello@beautystation.com"
+                  href={contact.emailHref || undefined}
                   className="rbt-trns-modern-btn tooltips"
                 >
                   <span className="icon">
                     <EnvelopeIcon />
                   </span>
-                  hello@beautystation.com
+                  {contact.email}
                 </a>
               </Tooltip>
               {/* Call via Telegram */}
@@ -90,20 +93,15 @@ export default function Contact() {
                       <li>
                         <span>Phone : </span>
                         <a
-                          href="tel:+2085550112"
+                          href={contact.phoneHref || undefined}
                           className="rbt-contact-info-single color-primary"
                         >
-                          (208) 555-0112
+                          {contact.phone}
                         </a>
                       </li>
                       <li>
                         <span>Email : </span>
-                        <a
-                          href="mailto:hello@beautystation.com"
-                          className="rbt-contact-info-single color-primary"
-                        >
-                          hello@beautystation.com
-                        </a>
+                        <SiteContactEmailLink className="rbt-contact-info-single color-primary" />
                       </li>
                     </ul>
                   </div>
@@ -125,20 +123,15 @@ export default function Contact() {
                       <li>
                         <span>Phone : </span>
                         <a
-                          href="tel:+2085550112"
+                          href={contact.phoneHref || undefined}
                           className="rbt-contact-info-single color-primary"
                         >
-                          (208) 555-0112
+                          {contact.phone}
                         </a>
                       </li>
                       <li>
                         <span>Email : </span>
-                        <a
-                          href="mailto:hello@beautystation.com"
-                          className="rbt-contact-info-single color-primary"
-                        >
-                          hello@beautystation.com
-                        </a>
+                        <SiteContactEmailLink className="rbt-contact-info-single color-primary" />
                       </li>
                     </ul>
                   </div>
@@ -160,20 +153,15 @@ export default function Contact() {
                       <li>
                         <span>Phone : </span>
                         <a
-                          href="tel:+2085550112"
+                          href={contact.phoneHref || undefined}
                           className="rbt-contact-info-single color-primary"
                         >
-                          (208) 555-0112
+                          {contact.phone}
                         </a>
                       </li>
                       <li>
                         <span>Email : </span>
-                        <a
-                          href="mailto:hello@beautystation.com"
-                          className="rbt-contact-info-single color-primary"
-                        >
-                          hello@beautystation.com
-                        </a>
+                        <SiteContactEmailLink className="rbt-contact-info-single color-primary" />
                       </li>
                     </ul>
                   </div>
@@ -195,20 +183,15 @@ export default function Contact() {
                       <li>
                         <span>Phone : </span>
                         <a
-                          href="tel:+2085550112"
+                          href={contact.phoneHref || undefined}
                           className="rbt-contact-info-single color-primary"
                         >
-                          (208) 555-0112
+                          {contact.phone}
                         </a>
                       </li>
                       <li>
                         <span>Email : </span>
-                        <a
-                          href="mailto:hello@beautystation.com"
-                          className="rbt-contact-info-single color-primary"
-                        >
-                          hello@beautystation.com
-                        </a>
+                        <SiteContactEmailLink className="rbt-contact-info-single color-primary" />
                       </li>
                     </ul>
                   </div>

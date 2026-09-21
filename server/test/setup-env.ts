@@ -16,6 +16,5 @@ process.env.JWT_REFRESH_EXPIRES_IN = "7d";
 delete process.env.SMTP_HOST;
 delete process.env.SMTP_USER;
 delete process.env.SMTP_PASS;
-delete process.env.EMAIL_FROM;
 process.env.GOOGLE_CLIENT_ID = "test-google-client-id";
 process.env.SKIP_AUTH_RATE_LIMIT = "1";

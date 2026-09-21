@@ -32,7 +32,6 @@ const envSchema = z.object({
     .enum(["true", "false", "1", "0"])
     .optional()
     .transform((value) => value === "true" || value === "1"),
-  EMAIL_FROM: z.string().optional(),
   GOOGLE_CLIENT_ID: z.string().optional(),
 });
 
@@ -88,7 +87,7 @@ export const env = {
     user: data.SMTP_USER,
     pass: data.SMTP_PASS,
     secure: data.SMTP_SECURE ?? false,
-    from: data.EMAIL_FROM ?? site.contact.email,
+    from: site.contact.email,
     isConfigured: Boolean(data.SMTP_HOST),
   },
   google: {

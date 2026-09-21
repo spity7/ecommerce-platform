@@ -1,3 +1,8 @@
+import {
+  SiteContactEmailLink,
+  SiteContactPhoneLink,
+} from "@/components/site/SiteContactLinks";
+
 export default function ReturnPolicy() {
   return (
     <div className="rbt-privacy-area rbt-bg-color-gray-light rbt-section-gap">
@@ -30,10 +35,8 @@ export default function ReturnPolicy() {
                 </p>
                 <ol>
                   <li>
-                    Contact our customer service at
-                    <a href="mailto:hello@beautystation.com">
-                      hello@beautystation.com
-                    </a>
+                    Contact our customer service at{" "}
+                    <SiteContactEmailLink />
                     to initiate the return.
                   </li>
                   <li>
@@ -84,16 +87,10 @@ export default function ReturnPolicy() {
                   out to our customer support team:
                 </p>
                 <p>
-                  Email:
-                  <a href="mailto:hello@beautystation.com" className="ml--4">
-                    hello@beautystation.com
-                  </a>
+                  Email: <SiteContactEmailLink className="ml--4" />
                 </p>
                 <p>
-                  Phone:{" "}
-                  <a href="tel:+11234567890" className="ml--4">
-                    +1 123 456 7890
-                  </a>
+                  Phone: <SiteContactPhoneLink className="ml--4" />
                 </p>
               </div>
             </div>

@@ -1,3 +1,8 @@
+import {
+  SiteContactEmailLink,
+  SiteContactPhoneLink,
+} from "@/components/site/SiteContactLinks";
+
 export default function PrivacyPolicy() {
   return (
     <div className="rbt-privacy-area rbt-bg-color-gray-light rbt-section-gap">
@@ -171,16 +176,10 @@ export default function PrivacyPolicy() {
                   contact us:
                 </p>
                 <p className="mb--16">
-                  Email:
-                  <a href="mailto:hello@beautystation.com" className="ml--4">
-                    hello@beautystation.com
-                  </a>
+                  Email: <SiteContactEmailLink className="ml--4" />
                 </p>
                 <p className="mb--0">
-                  Phone:{" "}
-                  <a href="tel:+11234567890" className="ml--4">
-                    +1 123 456 7890
-                  </a>
+                  Phone: <SiteContactPhoneLink className="ml--4" />
                 </p>
               </div>
             </div>

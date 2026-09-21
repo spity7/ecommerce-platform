@@ -9,6 +9,7 @@ import { Icon } from "@/components/layout/icon";
 import { PageHeader } from "@/components/layout/page-header";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { routes } from "@/config/routes";
+import { getAdminSiteConfig } from "@/lib/site";
 
 type SettingsHeaderProps = {
   description: string;
@@ -133,6 +134,8 @@ export function TaxPage() {
 }
 
 export function StoreProfilePage() {
+  const site = getAdminSiteConfig();
+
   return (
     <>
       <SettingsHeader
@@ -152,12 +155,12 @@ export function StoreProfilePage() {
         </div>
         <div className="mt-6 grid gap-5 md:grid-cols-2">
           <Field
-            defaultValue="Beauty Station"
+            defaultValue={site.name}
             label="Store name"
             name="store_name"
           />
           <Field
-            defaultValue="hello@beautystation.com"
+            defaultValue={site.contact.email}
             label="Support email"
             name="support_email"
             type="email"
@@ -353,6 +356,7 @@ export function PermissionSettingsPage() {
 }
 
 export function NotificationsPage() {
+  const site = getAdminSiteConfig();
   const preferences = [
     [
       "Order Alerts",
@@ -409,7 +413,7 @@ export function NotificationsPage() {
         </div>
         <div className="mt-6 grid gap-5 border-t border-surface-line pt-6 md:grid-cols-2">
           <Field
-            defaultValue="hello@beautystation.com"
+            defaultValue={site.contact.email}
             label="Primary email"
             name="primary_email"
             type="email"

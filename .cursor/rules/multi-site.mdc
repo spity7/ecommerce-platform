@@ -14,17 +14,21 @@ import { getSiteConfig } from "@platform/site-config";
 const site = getSiteConfig(process.env.SITE_ID ?? "beauty-station");
 ```
 
-| Env                               | Apps          | Purpose                       |
-| --------------------------------- | ------------- | ----------------------------- |
-| `SITE_ID`                         | server        | Site config + DB              |
-| `NEXT_PUBLIC_SITE_ID`             | admin, client | Site config in browser        |
-| `MONGODB_URI`                     | server        | One MongoDB database per site |
-| `API_URL` / `NEXT_PUBLIC_API_URL` | admin, client | Backend URL                   |
+| Env                               | Apps          | Purpose                                                           |
+| --------------------------------- | ------------- | ----------------------------------------------------------------- |
+| `SITE_ID`                         | server        | Site config + DB                                                  |
+| `NEXT_PUBLIC_SITE_ID`             | admin, client | Site config in browser                                            |
+| `MONGODB_URI`                     | server        | One MongoDB database per site                                     |
+| `API_URL` / `NEXT_PUBLIC_API_URL` | admin, client | Backend URL                                                       |
+| `SMTP_*`                          | server        | Auth email for **this deploy**; From = `SiteConfig.contact.email` |
+| `NEXT_PUBLIC_FORMSPREE_ENDPOINT`  | client        | `/contact` form delivery (per deploy)                             |
+
+Public **mailto** and transactional **From** both come from `SiteConfig.contact` in `packages/site-config/src/sites/{id}.ts` — not hardcoded in UI and not a separate `EMAIL_FROM` env.
 
 ## Adding a site
 
 1. `npm run create-site <id> [--template beauty|sport|general]`
-2. Add `packages/site-config/src/sites/<id>.ts`
+2. Add `packages/site-config/src/sites/<id>.ts` (include `contact.email` / `contact.phone`)
 3. Register in `packages/site-config/src/index.ts`
 4. Add row to `docs/site-registry.json`
 5. Provision MongoDB + GCS + deploy env

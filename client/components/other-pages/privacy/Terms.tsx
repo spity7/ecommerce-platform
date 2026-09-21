@@ -1,4 +1,8 @@
 import Link from "next/link";
+import {
+  SiteContactEmailLink,
+  SiteContactPhoneLink,
+} from "@/components/site/SiteContactLinks";
 
 export default function Terms() {
   return (
@@ -151,13 +155,10 @@ export default function Terms() {
                   inquiries or issues you may have:
                 </p>
                 <p>
-                  Email:
-                  <a href="mailto:hello@beautystation.com">
-                    hello@beautystation.com
-                  </a>
+                  Email: <SiteContactEmailLink />
                 </p>
                 <p>
-                  Phone: <a href="tel:+11234567890">+1 123 456 7890</a>
+                  Phone: <SiteContactPhoneLink />
                 </p>
               </div>
             </div>

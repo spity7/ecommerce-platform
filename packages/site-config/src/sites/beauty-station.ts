@@ -43,7 +43,7 @@ export const beautyStationConfig = {
   },
   defaultPhoneCountry: "LB",
   contact: {
-    email: "hello@beautystation.com",
+    email: "Beautystation961@gmail.com",
     phone: "+961 81 712 851",
   },
   branding: {

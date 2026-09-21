@@ -1,6 +1,10 @@
 "use client";
 import { WaveThinIcon } from "../../svg-icons";
+import { getSiteContactInfo } from "@/lib/site-branding";
+
 export default function Contact() {
+  const contact = getSiteContactInfo();
+
   return (
     <div className="rbt-component-area rbt-section-gap rbt-bg-color-gray-light">
       <div className="container">
@@ -91,19 +95,19 @@ export default function Contact() {
                     </div>
                     <ul className="rbt-contact-sidebar-social-list">
                       <li>
-                        <a href="tel:+2085550112">
+                        <a href={contact.phoneHref || "#!"}>
                           <span className="icon phone">
                             <i className="fa-sharp fa-solid fa-phone" />
                           </span>
-                          <span>(208) 555-0112</span>
+                          <span>{contact.phone}</span>
                         </a>
                       </li>
                       <li>
-                        <a href="mailto:hello@beautystation.com">
+                        <a href={contact.emailHref || "#!"}>
                           <span className="icon email">
                             <i className="fa-sharp fa-solid fa-envelope" />
                           </span>
-                          <span>hello@beautystation.com</span>
+                          <span>{contact.email}</span>
                         </a>
                       </li>
                       <li>
