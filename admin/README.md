@@ -62,7 +62,7 @@ proxy.ts                  Route gate via /api/auth/me (admin role)
 
 **Connected today:** catalog list + CRUD (products, categories, brands, attributes) via `components/catalog/*-catalog-form.tsx` and `ProductCatalogForm` (includes published-attribute picker); orders list/detail (`ApiOrdersPanel`). Slugs are server-generated — not editable in admin forms.
 
-**Template only:** dashboard home, customers, coupons, settings, reports, and most other nav items use demo data. The legacy `products/demo/edit` form (comma-separated “Product Badges”) is UI preview only — use **Products → New/Edit** (`ProductCatalogForm`) for API-backed storefront badges. See [docs/ROUTES.md](../docs/ROUTES.md).
+**Template only:** dashboard home widgets (greeting uses the signed-in admin name), coupons, settings, reports, and most other nav items use demo data. The legacy `products/demo/edit` form (comma-separated “Product Badges”) is UI preview only — use **Products → New/Edit** (`ProductCatalogForm`) for API-backed storefront badges. See [docs/ROUTES.md](../docs/ROUTES.md).
 
 ## Auth
 

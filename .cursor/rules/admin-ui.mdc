@@ -16,7 +16,7 @@ Folder: `admin/`. Dev port **3001**.
 
 - Site: `getAdminSiteConfig()` in `lib/site.ts`.
 - **API-connected:** catalog list + CRUD (`components/catalog/*-catalog-form.tsx`, `ProductCatalogForm` with published-attribute picker; re-exported from `catalog-forms.tsx`; shared UI in `catalog-form-primitives.tsx`), orders list/detail (`ApiOrdersPanel`), customers list (`ApiCustomersPanel`), product review moderation (`ApiReviewsPanel` on `/product-reviews`). Slugs are server-generated — not shown in forms.
-- Map DTOs in `lib/mappers/`. Other dashboard pages (dashboard home, coupons, settings, reports, media, roles) are template/demo data — do not assume API submit works.
+- Map DTOs in `lib/mappers/`. Dashboard home greeting uses the signed-in admin name; remaining dashboard widgets, coupons, settings, reports, media, roles are template/demo data — do not assume API submit works.
 
 ## Navigation
 
