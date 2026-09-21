@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { ZodError } from "zod";
 import {
+  assertProductCategoryIdPresent,
   createProductSchema,
   createReviewSchema,
   getCompareAtPriceValidationError,
@@ -174,9 +175,7 @@ productsRouter.post(
     const attributes = await validateProductAttributes(payload.attributes);
     const sku = payload.sku?.trim() || generateSku(payload.name);
 
-    const category = payload.categoryId
-      ? await requireCategory(payload.categoryId)
-      : null;
+    const category = await requireCategory(payload.categoryId);
     const brand = payload.brandId ? await requireBrand(payload.brandId) : null;
 
     await assertPublishableProductLinks({
@@ -195,16 +194,14 @@ productsRouter.post(
         slug,
         sku,
         attributes,
-        categoryName: category?.name ?? "",
+        categoryName: category.name,
         brandName: brand?.name ?? "",
       });
 
-      if (category) {
-        await Category.updateOne(
-          { _id: category._id },
-          { $inc: { productCount: 1 } }
-        );
-      }
+      await Category.updateOne(
+        { _id: category._id },
+        { $inc: { productCount: 1 } }
+      );
       if (brand) {
         await Brand.updateOne(
           { _id: brand._id },
@@ -256,14 +253,9 @@ productsRouter.patch(
     }
 
     if (payload.categoryId !== undefined) {
-      if (payload.categoryId) {
-        const category = await requireCategory(payload.categoryId);
-        product.categoryId = category._id;
-        product.categoryName = category.name;
-      } else {
-        product.categoryId = undefined;
-        product.categoryName = "";
-      }
+      const category = await requireCategory(payload.categoryId);
+      product.categoryId = category._id;
+      product.categoryName = category.name;
     }
 
     if (payload.brandId !== undefined) {
@@ -290,6 +282,8 @@ productsRouter.patch(
       payload.brandId !== undefined
         ? payload.brandId || undefined
         : product.brandId?.toString();
+
+    assertProductCategoryIdPresent(publishCategoryId);
 
     await assertPublishableProductLinks({
       status: nextStatus,

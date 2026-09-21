@@ -53,16 +53,19 @@ export async function seedCatalog(
 
   const products = seedData.products.map((product) => {
     const category =
-      categoryBySlug.get(
-        product.categorySlug ?? seedData.primaryCategorySlug
-      ) ?? fallbackCategory;
+      categoryBySlug.get(product.categorySlug) ?? fallbackCategory;
+    if (!category?._id) {
+      throw new Error(
+        `Seed product "${product.slug}" references unknown category "${product.categorySlug}"`
+      );
+    }
     const brandSlug = product.brandSlug ?? seedData.primaryBrandSlug;
     const brand = brandBySlug.get(brandSlug);
 
     return {
       ...product,
-      categoryId: category?._id,
-      categoryName: category?.name ?? "",
+      categoryId: category._id,
+      categoryName: category.name ?? "",
       brandId: brand?._id,
       brandName: brand?.name ?? "",
     };

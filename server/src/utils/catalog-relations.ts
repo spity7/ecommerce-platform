@@ -155,6 +155,10 @@ export async function assertPublishableProductLinks(params: {
     return;
   }
 
+  if (!params.categoryId?.trim()) {
+    throw new AppError(400, "Category is required");
+  }
+
   if (params.categoryId) {
     const category = await Category.findById(params.categoryId);
     if (!category) {

@@ -69,15 +69,15 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) § API contract and `.cursor/rules/api-co
 
 ## Server (`@platform/server`)
 
-| Pattern      | Location                                                                                                                                                                 |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Routes       | `server/src/routes/*.routes.ts`                                                                                                                                          |
-| Models       | Mongoose in `server/src/models/`                                                                                                                                         |
-| Errors       | `AppError` + `middleware/errorHandler.ts`                                                                                                                                |
-| Async routes | `asyncHandler` wrapper                                                                                                                                                   |
-| OpenAPI      | `server/src/openapi/registry.ts`                                                                                                                                         |
-| Seed         | `npm run seed` → `server/src/scripts/seed.ts` (site dataset + `productCount` on categories/brands/attributes); `npm run seed:admin` → `server/src/scripts/seed-admin.ts` |
-| Format       | Prettier                                                                                                                                                                 |
+| Pattern      | Location                                                                                                                                                                                                                                          |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Routes       | `server/src/routes/*.routes.ts`                                                                                                                                                                                                                   |
+| Models       | Mongoose in `server/src/models/`                                                                                                                                                                                                                  |
+| Errors       | `AppError` + `middleware/errorHandler.ts`                                                                                                                                                                                                         |
+| Async routes | `asyncHandler` wrapper                                                                                                                                                                                                                            |
+| OpenAPI      | `server/src/openapi/registry.ts`                                                                                                                                                                                                                  |
+| Seed         | `npm run seed` → `server/src/scripts/seed.ts` (site dataset; every seed product has `categorySlug` + `productCount` on categories/brands/attributes; reviews seeded per dataset label); `npm run seed:admin` → `server/src/scripts/seed-admin.ts` |
+| Format       | Prettier                                                                                                                                                                                                                                          |
 
 ## Admin (`@platform/admin`)
 
@@ -95,7 +95,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) § API contract and `.cursor/rules/api-co
 
 Catalog list pages fetch from API in Server Components; show inline error banner with seed hint on failure.
 
-Production catalog CRUD forms: `admin/components/catalog/*-catalog-form.tsx` (re-exported from `catalog-forms.tsx`); shared controls in `catalog-form-primitives.tsx`. Slugs are never edited in the UI — the API derives them from names. Category thumbnails are **required** (GCS upload on save); API and admin form reject create/update without an image. Product **compare-at price** is optional; when set above zero it must be **greater than price** (Zod on create/update + merged check on PATCH; admin validates before submit). Product merchandising pickers list published categories/brands only; assigned draft/archived links stay visible on edit with labels. Publishing a product is blocked when linked category/brand is not published (admin form + API). Legacy `*/demo/*` admin routes render `DemoRouteShell` with links to live CRUD.
+Production catalog CRUD forms: `admin/components/catalog/*-catalog-form.tsx` (re-exported from `catalog-forms.tsx`); shared controls in `catalog-form-primitives.tsx`. Slugs are never edited in the UI — the API derives them from names. Category thumbnails are **required** (GCS upload on save); API and admin form reject create/update without an image. Product **category** is **required** on create (and cannot be cleared on update). **Compare-at price** is optional; when set above zero it must be **greater than price** (Zod on create/update + merged check on PATCH; admin validates before submit). Product merchandising pickers list published categories/brands only; assigned draft/archived links stay visible on edit with labels. Publishing a product is blocked when linked category/brand is not published (admin form + API). Legacy `*/demo/*` admin routes render `DemoRouteShell` with links to live CRUD.
 
 **Async action guard:** `@platform/react-busy` — wrap each app in `BusyProvider` (admin re-exports as `CrudBusyProvider`). During create/update/delete/submit, call `useSubmitBusy(submitting)` or `useBusyActionGuard({ active })` so a centered **BusyViewportOverlay** waiting modal blocks interaction and `beforeunload` warns on tab close. List deletes use `BusyShield` on table sections; confirm dialogs stay above the overlay (`z-50`).
 

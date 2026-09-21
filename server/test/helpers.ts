@@ -5,6 +5,7 @@ import request from "supertest";
 import type { AuthResponse } from "@platform/shared";
 import { createApp } from "../src/app.js";
 import { connectDatabase, disconnectDatabase } from "../src/config/database.js";
+import { Category } from "../src/models/Category.js";
 import { Product } from "../src/models/Product.js";
 import { User } from "../src/models/User.js";
 import type { ProductDocument } from "../src/models/Product.js";
@@ -28,6 +29,14 @@ export async function teardownTestDatabase(): Promise<void> {
 }
 
 export async function seedPublishedProduct(): Promise<ProductDocument> {
+  const category = await Category.create({
+    name: "Seed Published Category",
+    slug: `seed-published-cat-${Date.now()}`,
+    image: TEST_CATEGORY_IMAGE,
+    status: "published",
+    productCount: 0,
+  });
+
   return Product.create({
     name: "Integration Test Serum",
     slug: `test-serum-${Date.now()}`,
@@ -35,10 +44,20 @@ export async function seedPublishedProduct(): Promise<ProductDocument> {
     price: 29.99,
     stock: 25,
     status: "published",
+    categoryId: category._id,
+    categoryName: category.name,
   });
 }
 
 export async function seedDraftProduct(): Promise<ProductDocument> {
+  const category = await Category.create({
+    name: "Seed Draft Category",
+    slug: `seed-draft-cat-${Date.now()}`,
+    image: TEST_CATEGORY_IMAGE,
+    status: "published",
+    productCount: 0,
+  });
+
   return Product.create({
     name: "Draft Test Product",
     slug: `draft-product-${Date.now()}`,
@@ -46,7 +65,27 @@ export async function seedDraftProduct(): Promise<ProductDocument> {
     price: 19.99,
     stock: 10,
     status: "draft",
+    categoryId: category._id,
+    categoryName: category.name,
   });
+}
+
+export async function createPublishedCategoryForTests(
+  app: Express,
+  accessToken: string,
+  suffix: number | string = Date.now()
+): Promise<string> {
+  const response = await request(app)
+    .post("/api/categories")
+    .set(authHeader(accessToken))
+    .send({
+      name: `Test Category ${suffix}`,
+      image: TEST_CATEGORY_IMAGE,
+      status: "published",
+    })
+    .expect(201);
+
+  return response.body.id as string;
 }
 
 export async function registerAdmin(

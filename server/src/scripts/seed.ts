@@ -28,9 +28,9 @@ async function seed() {
   const catalog = await seedCatalog(seedData);
   const admin = await seedAdminUser();
   const demoCustomer = await seedDemoCustomerUser();
-  const reviewCount = demoCustomer
-    ? await seedSampleReviews(demoCustomer.email)
-    : 0;
+  const reviews = demoCustomer
+    ? await seedSampleReviews(demoCustomer.email, seedData.label)
+    : { count: 0, summaryNote: null };
 
   printSeedSummary({
     siteName: env.site.name,
@@ -40,7 +40,8 @@ async function seed() {
     admin,
     demoCustomer,
     removedCustomers,
-    reviewCount,
+    reviewCount: reviews.count,
+    reviewSummaryNote: reviews.summaryNote,
     credentialHints: getDefaultCredentialHints(),
   });
 

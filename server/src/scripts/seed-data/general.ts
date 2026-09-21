@@ -63,6 +63,8 @@ export const generalSeedData: SiteSeedData = {
       price: 18,
       stock: 140,
       status: "published",
+      categorySlug: "essentials",
+      brandSlug: "core-home",
       images: [
         "/assets/images/product-img/beauty-product/beauty-product-st-05.webp",
       ],
@@ -76,6 +78,8 @@ export const generalSeedData: SiteSeedData = {
       price: 45,
       stock: 36,
       status: "published",
+      categorySlug: "home",
+      brandSlug: "everyday-co",
       images: [
         "/assets/images/product-img/beauty-product/beauty-product-st-06.webp",
       ],
@@ -89,6 +93,8 @@ export const generalSeedData: SiteSeedData = {
       price: 29,
       stock: 48,
       status: "published",
+      categorySlug: "accessories",
+      brandSlug: "core-home",
       images: [
         "/assets/images/product-img/beauty-product/beauty-product-st-07.webp",
       ],

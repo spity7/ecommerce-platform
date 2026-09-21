@@ -7,6 +7,7 @@ import {
   createTestApp,
   registerAdmin,
   registerCustomer,
+  createPublishedCategoryForTests,
   seedDraftProduct,
   seedPublishedProduct,
   setupTestDatabase,
@@ -252,6 +253,11 @@ describe("catalog API", () => {
   it("allows admin to create, update, and delete a product", async () => {
     const { body } = await registerAdmin(app);
     const sku = `ADMIN-${Date.now()}`;
+    const categoryId = await createPublishedCategoryForTests(
+      app,
+      body.accessToken,
+      sku
+    );
 
     const createResponse = await request(app)
       .post("/api/products")
@@ -262,6 +268,7 @@ describe("catalog API", () => {
         price: 42,
         stock: 8,
         status: "published",
+        categoryId,
       })
       .expect(201);
 
@@ -275,6 +282,7 @@ describe("catalog API", () => {
         name: "Auto Sku Product",
         price: 10,
         stock: 1,
+        categoryId,
       })
       .expect(201);
 
@@ -409,6 +417,11 @@ describe("catalog API", () => {
   it("keeps product status when patching images only", async () => {
     const { body } = await registerAdmin(app);
     const suffix = Date.now();
+    const categoryId = await createPublishedCategoryForTests(
+      app,
+      body.accessToken,
+      suffix
+    );
 
     const createResponse = await request(app)
       .post("/api/products")
@@ -419,6 +432,7 @@ describe("catalog API", () => {
         price: 12,
         stock: 4,
         status: "published",
+        categoryId,
       })
       .expect(201);
 
@@ -557,6 +571,11 @@ describe("catalog API", () => {
       .expect(201);
 
     const brandId = brandResponse.body.id;
+    const categoryId = await createPublishedCategoryForTests(
+      app,
+      body.accessToken,
+      brandId
+    );
 
     await request(app)
       .post("/api/products")
@@ -568,6 +587,7 @@ describe("catalog API", () => {
         stock: 3,
         status: "published",
         brandId,
+        categoryId,
       })
       .expect(201);
 
@@ -622,6 +642,25 @@ describe("catalog API", () => {
     assert.equal(product.body.categoryName, renamed);
   });
 
+  it("rejects creating a product without a category", async () => {
+    const { body } = await registerAdmin(app);
+
+    const response = await request(app)
+      .post("/api/products")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: "No Category Product",
+        sku: `NO-CAT-${Date.now()}`,
+        price: 10,
+        stock: 1,
+        status: "draft",
+      })
+      .expect(400);
+
+    assert.equal(response.body.error, "Validation failed");
+    assert.ok(response.body.details?.categoryId?.length);
+  });
+
   it("returns 404 when product references missing category", async () => {
     const { body } = await registerAdmin(app);
 
@@ -655,6 +694,11 @@ describe("catalog API", () => {
 
     const attributeSlug = attributeResponse.body.slug;
     assert.equal(attributeResponse.body.productCount, 0);
+    const categoryId = await createPublishedCategoryForTests(
+      app,
+      body.accessToken,
+      suffix
+    );
 
     const productResponse = await request(app)
       .post("/api/products")
@@ -665,6 +709,7 @@ describe("catalog API", () => {
         price: 15,
         stock: 2,
         status: "published",
+        categoryId,
         attributes: { [attributeSlug]: "Matte" },
       })
       .expect(201);
@@ -702,6 +747,12 @@ describe("catalog API", () => {
       })
       .expect(201);
 
+    const categoryId = await createPublishedCategoryForTests(
+      app,
+      body.accessToken,
+      suffix
+    );
+
     await request(app)
       .post("/api/products")
       .set(authHeader(body.accessToken))
@@ -711,6 +762,7 @@ describe("catalog API", () => {
         price: 12,
         stock: 3,
         status: "published",
+        categoryId,
         attributes: { [attributeResponse.body.slug]: "Small" },
       })
       .expect(201);
@@ -738,6 +790,11 @@ describe("catalog API", () => {
       .expect(201);
 
     const brandId = brandResponse.body.id;
+    const categoryId = await createPublishedCategoryForTests(
+      app,
+      body.accessToken,
+      suffix
+    );
 
     const productResponse = await request(app)
       .post("/api/products")
@@ -749,6 +806,7 @@ describe("catalog API", () => {
         stock: 1,
         status: "published",
         brandId,
+        categoryId,
       })
       .expect(201);
 
@@ -769,6 +827,11 @@ describe("catalog API", () => {
   it("rejects compare-at price that is not higher than price", async () => {
     const { body } = await registerAdmin(app);
     const suffix = Date.now();
+    const categoryId = await createPublishedCategoryForTests(
+      app,
+      body.accessToken,
+      suffix
+    );
 
     await request(app)
       .post("/api/products")
@@ -780,6 +843,7 @@ describe("catalog API", () => {
         compareAtPrice: 0,
         stock: 1,
         status: "draft",
+        categoryId,
       })
       .expect(400);
 
@@ -793,6 +857,7 @@ describe("catalog API", () => {
         compareAtPrice: 40,
         stock: 1,
         status: "draft",
+        categoryId,
       })
       .expect(400);
 
@@ -809,6 +874,7 @@ describe("catalog API", () => {
         compareAtPrice: 60,
         stock: 1,
         status: "draft",
+        categoryId,
       })
       .expect(201);
 
@@ -825,6 +891,11 @@ describe("catalog API", () => {
   it("sanitizes merchandising sent via metadata and deep-merges partial merchandising patches", async () => {
     const { body } = await registerAdmin(app);
     const suffix = Date.now();
+    const categoryId = await createPublishedCategoryForTests(
+      app,
+      body.accessToken,
+      suffix
+    );
 
     const productResponse = await request(app)
       .post("/api/products")
@@ -835,6 +906,7 @@ describe("catalog API", () => {
         price: 40,
         stock: 8,
         status: "published",
+        categoryId,
         merchandising: {
           manualBadges: [{ kind: "exclusive" }],
           suppressAutoBadges: ["new"],
@@ -904,6 +976,11 @@ describe("catalog API", () => {
   it("returns resolved badges after merchandising patch and preserves metadata on partial patch", async () => {
     const { body } = await registerAdmin(app);
     const suffix = Date.now();
+    const categoryId = await createPublishedCategoryForTests(
+      app,
+      body.accessToken,
+      suffix
+    );
 
     const productResponse = await request(app)
       .post("/api/products")
@@ -915,6 +992,7 @@ describe("catalog API", () => {
         compareAtPrice: 79,
         stock: 10,
         status: "published",
+        categoryId,
         metadata: { legacyNote: "keep-me" },
       })
       .expect(201);
@@ -975,6 +1053,11 @@ describe("catalog API", () => {
   it("omits merchant fields on anonymous product reads but keeps resolved badges", async () => {
     const { body } = await registerAdmin(app);
     const suffix = Date.now();
+    const categoryId = await createPublishedCategoryForTests(
+      app,
+      body.accessToken,
+      suffix
+    );
 
     const created = await request(app)
       .post("/api/products")
@@ -986,6 +1069,7 @@ describe("catalog API", () => {
         compareAtPrice: 18,
         stock: 3,
         status: "published",
+        categoryId,
         merchandising: {
           manualBadges: [{ kind: "limited_offer" }],
           suppressAutoBadges: ["sale"],
@@ -1028,6 +1112,11 @@ describe("catalog API", () => {
   it("keeps product slug when the name is updated", async () => {
     const { body } = await registerAdmin(app);
     const suffix = Date.now();
+    const categoryId = await createPublishedCategoryForTests(
+      app,
+      body.accessToken,
+      suffix
+    );
 
     const productResponse = await request(app)
       .post("/api/products")
@@ -1038,6 +1127,7 @@ describe("catalog API", () => {
         price: 10,
         stock: 1,
         status: "published",
+        categoryId,
       })
       .expect(201);
 
@@ -1073,6 +1163,12 @@ describe("catalog API", () => {
       })
       .expect(201);
 
+    const categoryId = await createPublishedCategoryForTests(
+      app,
+      body.accessToken,
+      suffix
+    );
+
     await request(app)
       .post("/api/products")
       .set(authHeader(body.accessToken))
@@ -1082,6 +1178,7 @@ describe("catalog API", () => {
         price: 12,
         stock: 3,
         status: "published",
+        categoryId,
         attributes: { [attributeResponse.body.slug]: "Matte" },
       })
       .expect(201);

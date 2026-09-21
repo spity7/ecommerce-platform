@@ -758,6 +758,7 @@ type ControlledSelectProps = {
   label: string;
   onChange: (value: string) => void;
   options: Array<{ label: string; value: string }>;
+  required?: boolean;
   value: string;
 };
 
@@ -770,6 +771,7 @@ export function ControlledSelect({
   label,
   onChange,
   options,
+  required = false,
   value,
 }: ControlledSelectProps) {
   const fieldId = fieldKey
@@ -782,11 +784,20 @@ export function ControlledSelect({
       {hideLabel ? (
         <span className="sr-only">{label}</span>
       ) : (
-        <span className="text-[13px] font-semibold text-ink-700">{label}</span>
+        <span className="text-[13px] font-semibold text-ink-700">
+          {label}
+          {required ? (
+            <span aria-hidden className="text-danger-600">
+              {" "}
+              *
+            </span>
+          ) : null}
+        </span>
       )}
       <select
         aria-describedby={errorId}
         aria-invalid={Boolean(error)}
+        aria-required={required}
         className={cn(
           "h-10 w-full rounded-base border bg-surface-body px-3 text-[14px] focus:border-brand-600 disabled:cursor-not-allowed disabled:bg-surface-muted disabled:text-ink-400",
           hideLabel ? "mt-0" : "mt-1.5",
@@ -797,6 +808,7 @@ export function ControlledSelect({
         disabled={disabled}
         id={fieldId}
         onChange={(event) => onChange(event.target.value)}
+        required={required}
         value={value}
       >
         {options.map((option) => (

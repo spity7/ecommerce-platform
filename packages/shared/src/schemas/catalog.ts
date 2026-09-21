@@ -1,3 +1,4 @@
+import { ZodError } from "zod";
 import { z } from "../zod.js";
 import { productMerchandisingSchema } from "./product-badges.js";
 import { PRODUCT_SORT_OPTIONS } from "../types/catalog.js";
@@ -10,6 +11,8 @@ import {
   PRODUCT_STATUSES,
 } from "../types/catalog.js";
 
+export const CATEGORY_REQUIRED_MESSAGE = "Category is required";
+
 /** When compare-at is set, it must be greater than zero. */
 export const COMPARE_AT_MUST_BE_POSITIVE_MESSAGE = "Must be greater than 0";
 
@@ -20,6 +23,24 @@ const compareAtPriceFieldSchema = z
   .number()
   .positive(COMPARE_AT_MUST_BE_POSITIVE_MESSAGE)
   .optional();
+
+const productCategoryIdSchema = z
+  .string()
+  .min(1, CATEGORY_REQUIRED_MESSAGE);
+
+export function assertProductCategoryIdPresent(
+  categoryId: string | undefined | null
+): void {
+  if (!categoryId?.trim()) {
+    throw new ZodError([
+      {
+        code: z.ZodIssueCode.custom,
+        path: ["categoryId"],
+        message: CATEGORY_REQUIRED_MESSAGE,
+      },
+    ]);
+  }
+}
 
 export function getCompareAtPriceValidationError(
   price: number,
@@ -78,7 +99,7 @@ export const createProductSchema = z
     compareAtPrice: compareAtPriceFieldSchema,
     stock: z.number().int().min(0).default(0),
     status: z.enum(PRODUCT_STATUSES).default("draft"),
-    categoryId: z.string().optional(),
+    categoryId: productCategoryIdSchema,
     brandId: z.string().optional(),
     images: z.array(z.string()).default([]),
     attributes: z
@@ -101,7 +122,7 @@ export const updateProductSchema = z
     compareAtPrice: compareAtPriceFieldSchema,
     stock: z.number().int().min(0).optional(),
     status: z.enum(PRODUCT_STATUSES).optional(),
-    categoryId: z.string().optional(),
+    categoryId: productCategoryIdSchema.optional(),
     brandId: z.string().optional(),
     images: z.array(z.string()).optional(),
     attributes: z

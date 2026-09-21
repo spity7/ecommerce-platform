@@ -39,6 +39,7 @@ import {
   finishCatalogSave,
 } from "@/lib/catalog-feedback";
 import {
+  getProductCategoryRequiredError,
   getPublishLinkError,
   productFormPickLabel,
   type ProductFormPickOption,
@@ -314,6 +315,7 @@ export function ProductCatalogForm({
   });
   const [stockError, setStockError] = useState<string>();
   const [compareAtPriceError, setCompareAtPriceError] = useState<string>();
+  const [categoryIdError, setCategoryIdError] = useState<string>();
   const initialHostedImages = useMemo(
     () => (initial?.images ?? []).filter(isHostedCatalogImageUrl),
     [initial?.images]
@@ -331,8 +333,12 @@ export function ProductCatalogForm({
     if (compareAtPriceError) {
       merged = { ...merged, compareAtPrice: compareAtPriceError };
     }
+    if (categoryIdError) {
+      merged = { ...merged, categoryId: categoryIdError };
+    }
     return merged;
   }, [
+    categoryIdError,
     compareAtPriceError,
     formState.error,
     formState.validationDetails,
@@ -435,6 +441,13 @@ export function ProductCatalogForm({
     }
     setCompareAtPriceError(undefined);
 
+    const nextCategoryError = getProductCategoryRequiredError(categoryId);
+    if (nextCategoryError) {
+      setCategoryIdError(nextCategoryError);
+      return;
+    }
+    setCategoryIdError(undefined);
+
     const publishError = getPublishLinkError(
       status,
       categoryId,
@@ -474,7 +487,7 @@ export function ProductCatalogForm({
         stock: Number(stock),
         description,
         status,
-        categoryId: categoryId || undefined,
+        categoryId,
         brandId: brandId || undefined,
         images: savedImages,
         attributes: attributesPayload,
@@ -744,14 +757,20 @@ export function ProductCatalogForm({
                 fieldKey="categoryId"
                 help="Only published categories are listed. An assigned draft category stays visible on edit."
                 label="Category"
-                onChange={setCategoryId}
+                onChange={(value) => {
+                  setCategoryId(value);
+                  if (categoryIdError) {
+                    setCategoryIdError(undefined);
+                  }
+                }}
                 options={[
-                  { label: "None", value: "" },
+                  { label: "Select category", value: "" },
                   ...categories.map((category) => ({
                     label: productFormPickLabel(category),
                     value: category.id,
                   })),
                 ]}
+                required
                 value={categoryId}
               />
               <ControlledSelect

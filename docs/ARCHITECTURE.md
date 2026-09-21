@@ -239,7 +239,7 @@ Catalog **GET** routes are public (no auth). Catalog **POST/PATCH/DELETE** and *
 
 - **MongoDB** via Mongoose 9 — one database per site (`MONGODB_URI`)
 - Models: `Product`, `Category`, `Brand`, `Attribute` in `server/src/models/`
-- Seed: `npm run seed` → `server/src/scripts/seed.ts` (dataset from `SITE_ID` + `homeLayout`: beauty, sport, or general). Sets `productCount` on categories, brands, and attributes from seeded product links.
+- Seed: `npm run seed` → `server/src/scripts/seed.ts` (dataset from `SITE_ID` + `homeLayout`: beauty, sport, or general). Each seed product declares `categorySlug` (required, same as API `categoryId`); `seed-catalog.ts` throws if the slug is unknown. Sets `productCount` on categories, brands, and attributes. Sample reviews follow the dataset (beauty-specific slugs vs generic catalog products).
 - Optional media: Google Cloud Storage (`POST /api/uploads` returns 503 if not configured; `DELETE /api/uploads` removes managed catalog images). Server deletes managed GCS objects when products/categories are deleted or when image fields change on PATCH. Image uploads above **800 KB** are automatically re-encoded to WebP between **400 KB and 800 KB** before storage (applies to all GCS uploads, including profile photos).
 
 ## Feature flags

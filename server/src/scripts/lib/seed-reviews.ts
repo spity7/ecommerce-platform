@@ -10,10 +10,15 @@ type SeedReviewer = {
   name: string;
 };
 
+export type SeedSampleReviewsResult = {
+  count: number;
+  summaryNote: string | null;
+};
+
 const SEED_REVIEWER_PASSWORD = "SeedReview1!";
 const SEED_REVIEWER_COUNT = 12;
 
-const TOP_RATED_PRODUCT_SLUGS = [
+const BEAUTY_TOP_RATED_SLUGS = [
   "peptide-firming-eye-cream",
   "rosewater-balancing-toner",
 ] as const;
@@ -61,7 +66,7 @@ async function ensureSeedReviewers(): Promise<SeedReviewer[]> {
 
   for (let index = 1; index <= SEED_REVIEWER_COUNT; index += 1) {
     const padded = String(index).padStart(2, "0");
-    const email = `beauty-seed-reviewer-${padded}@example.com`;
+    const email = `catalog-seed-reviewer-${padded}@example.com`;
     const name = `Seed Reviewer ${padded}`;
 
     let user = await User.findOne({ email });
@@ -150,9 +155,21 @@ async function seedTopRatedReviews(
   return count;
 }
 
-export async function seedSampleReviews(
+async function recomputeAggregatesForSlugs(
+  slugs: string[],
+  bySlug: (slug: string) => { _id: Types.ObjectId } | undefined
+): Promise<void> {
+  for (const slug of slugs) {
+    const product = bySlug(slug);
+    if (product) {
+      await recomputeProductReviewAggregates(product._id.toString());
+    }
+  }
+}
+
+async function seedBeautySampleReviews(
   demoCustomerEmail: string
-): Promise<number> {
+): Promise<SeedSampleReviewsResult> {
   const reviewers = await ensureSeedReviewers();
   const customer = await User.findOne({ email: demoCustomerEmail });
 
@@ -218,17 +235,15 @@ export async function seedSampleReviews(
     total += 1;
   }
 
-  // Peptide eye cream: 12× five-star → Top rated + New (auto badges)
   total += await seedTopRatedReviews(
     reviewers,
-    TOP_RATED_PRODUCT_SLUGS[0],
+    BEAUTY_TOP_RATED_SLUGS[0],
     Array.from({ length: 12 }, () => 5)
   );
 
-  // Rosewater toner: 10 reviews (9×5, 1×4) → Top rated + Sale (new suppressed in seed metadata)
   total += await seedTopRatedReviews(
     reviewers.slice(0, 10),
-    TOP_RATED_PRODUCT_SLUGS[1],
+    BEAUTY_TOP_RATED_SLUGS[1],
     [5, 5, 5, 5, 5, 5, 5, 5, 5, 4]
   );
 
@@ -273,12 +288,129 @@ export async function seedSampleReviews(
     await recomputeProductReviewAggregates(productId);
   }
 
-  for (const slug of TOP_RATED_PRODUCT_SLUGS) {
-    const product = bySlug(slug);
-    if (product) {
-      await recomputeProductReviewAggregates(product._id.toString());
+  await recomputeAggregatesForSlugs([...BEAUTY_TOP_RATED_SLUGS], bySlug);
+
+  return {
+    count: total,
+    summaryNote: "incl. Top rated demos on peptide eye cream + rosewater toner",
+  };
+}
+
+async function seedGenericSampleReviews(
+  demoCustomerEmail: string
+): Promise<SeedSampleReviewsResult> {
+  const reviewers = await ensureSeedReviewers();
+  const customer = await User.findOne({ email: demoCustomerEmail });
+
+  const published = await Product.find({ status: "published" }).sort({
+    sku: 1,
+  });
+  if (published.length === 0) {
+    return { count: 0, summaryNote: null };
+  }
+
+  const bySlug = (slug: string) =>
+    published.find((product) => product.slug === slug);
+
+  let total = 0;
+  const touchedProductIds = new Set<string>();
+  const topRatedSlugs: string[] = [];
+
+  const primary = published[0]!;
+  const secondary = published[1];
+  const tertiary = published[2];
+
+  if (customer) {
+    await upsertReview({
+      productId: primary._id,
+      userId: customer._id,
+      authorName: customer.name,
+      rating: 5,
+      title: "Love it",
+      body: "Great quality and fast shipping.",
+      status: "approved",
+      verifiedPurchase: true,
+      productName: primary.name,
+      productSlug: primary.slug,
+    });
+    touchedProductIds.add(primary._id.toString());
+    total += 1;
+
+    if (secondary) {
+      await upsertReview({
+        productId: secondary._id,
+        userId: customer._id,
+        authorName: customer.name,
+        rating: 4,
+        title: "Waiting to publish",
+        body: "Good so far, still testing.",
+        status: "pending",
+        productName: secondary.name,
+        productSlug: secondary.slug,
+      });
+      touchedProductIds.add(secondary._id.toString());
+      total += 1;
+    }
+
+    if (tertiary) {
+      await upsertReview({
+        productId: tertiary._id,
+        userId: customer._id,
+        authorName: customer.name,
+        rating: 4,
+        title: "Solid daily use",
+        body: "Works well for me.",
+        status: "approved",
+        productName: tertiary.name,
+        productSlug: tertiary.slug,
+      });
+      touchedProductIds.add(tertiary._id.toString());
+      total += 1;
     }
   }
 
-  return total;
+  total += await seedTopRatedReviews(
+    reviewers,
+    primary.slug,
+    Array.from({ length: 12 }, () => 5)
+  );
+  topRatedSlugs.push(primary.slug);
+
+  if (secondary) {
+    total += await seedTopRatedReviews(
+      reviewers.slice(0, 10),
+      secondary.slug,
+      [5, 5, 5, 5, 5, 5, 5, 5, 5, 4]
+    );
+    topRatedSlugs.push(secondary.slug);
+  }
+
+  for (const productId of touchedProductIds) {
+    await recomputeProductReviewAggregates(productId);
+  }
+
+  await recomputeAggregatesForSlugs(topRatedSlugs, bySlug);
+
+  const topRatedNames = topRatedSlugs
+    .map((slug) => bySlug(slug)?.name)
+    .filter(Boolean)
+    .join(" + ");
+
+  return {
+    count: total,
+    summaryNote: topRatedNames
+      ? `incl. Top rated demos on ${topRatedNames}`
+      : "mixed approved and pending samples",
+  };
+}
+
+export async function seedSampleReviews(
+  demoCustomerEmail: string,
+  datasetLabel: string
+): Promise<SeedSampleReviewsResult> {
+  if (datasetLabel === "beauty") {
+    return seedBeautySampleReviews(demoCustomerEmail);
+  }
+
+  return seedGenericSampleReviews(demoCustomerEmail);
 }

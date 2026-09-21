@@ -71,6 +71,8 @@ export const sportSeedData: SiteSeedData = {
       price: 32,
       stock: 90,
       status: "published",
+      categorySlug: "training",
+      brandSlug: "active-pro",
       images: [
         "/assets/images/product-img/beauty-product/beauty-product-st-05.webp",
       ],
@@ -84,6 +86,8 @@ export const sportSeedData: SiteSeedData = {
       price: 28,
       stock: 55,
       status: "published",
+      categorySlug: "running",
+      brandSlug: "trail-forge",
       images: [
         "/assets/images/product-img/beauty-product/beauty-product-st-06.webp",
       ],
@@ -97,6 +101,8 @@ export const sportSeedData: SiteSeedData = {
       price: 74,
       stock: 24,
       status: "published",
+      categorySlug: "outdoor",
+      brandSlug: "trail-forge",
       images: [
         "/assets/images/product-img/beauty-product/beauty-product-st-07.webp",
       ],

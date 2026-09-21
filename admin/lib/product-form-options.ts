@@ -109,6 +109,12 @@ export function productFormPickLabel(option: ProductFormPickOption): string {
   return `${option.name} (draft)`;
 }
 
+export function getProductCategoryRequiredError(
+  categoryId: string
+): string | null {
+  return categoryId.trim() ? null : "Category is required.";
+}
+
 export function getPublishLinkError(
   status: string,
   categoryId: string,
@@ -118,6 +124,11 @@ export function getPublishLinkError(
 ): string | null {
   if (status !== "published") {
     return null;
+  }
+
+  const categoryRequired = getProductCategoryRequiredError(categoryId);
+  if (categoryRequired) {
+    return categoryRequired;
   }
 
   if (categoryId) {

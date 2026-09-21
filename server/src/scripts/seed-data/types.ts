@@ -34,7 +34,8 @@ export type SeedProduct = {
   stock: number;
   status: "published" | "draft";
   images: string[];
-  categorySlug?: string;
+  /** Must match a slug in `categories`; resolved to `categoryId` at insert. */
+  categorySlug: string;
   brandSlug?: string;
   attributes?: Record<string, string>;
   metadata?: Record<string, unknown>;

@@ -10,6 +10,8 @@ export function printSeedSummary(input: {
   demoCustomer: SeedUserResult | null;
   removedCustomers: number;
   reviewCount?: number;
+  /** Dataset-specific detail line after review count (e.g. top-rated demo products). */
+  reviewSummaryNote?: string | null;
   credentialHints: {
     adminUsesDefaultPassword: boolean;
     demoUsesDefaultPassword: boolean;
@@ -31,8 +33,11 @@ export function printSeedSummary(input: {
   );
   console.log(`  Commerce:   carts, orders, wishlists, and reviews cleared`);
   if (input.reviewCount !== undefined && input.reviewCount > 0) {
+    const reviewDetail = input.reviewSummaryNote?.trim();
     console.log(
-      `  Reviews:    ${input.reviewCount} seeded (incl. Top rated demos on peptide eye cream + rosewater toner)`
+      reviewDetail
+        ? `  Reviews:    ${input.reviewCount} seeded (${reviewDetail})`
+        : `  Reviews:    ${input.reviewCount} seeded`
     );
   }
   if (input.removedCustomers > 0) {
