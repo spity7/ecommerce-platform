@@ -16,6 +16,7 @@ import { ReviewStatusBadge } from "@/components/reviews/review-status-badge";
 import { ReviewStatusFilterSelect } from "@/components/reviews/review-status-filter-select";
 import { routes } from "@/config/routes";
 import {
+  formatReviewDeleteLabel,
   mapReviewDtoToApiReviewRow,
   type ApiReviewRow,
 } from "@/lib/mappers/reviews";
@@ -197,7 +198,7 @@ export function ApiReviewsPanel({
       <div className="flex flex-nowrap items-center justify-end gap-1">
         {review.status !== "approved" ? (
           <button
-            className="rounded-base border border-success-200 bg-success-50 px-2 py-1 text-[12px] font-semibold text-success-700 disabled:opacity-50"
+            className="cursor-pointer rounded-base border border-success-200 bg-success-50 px-2 py-1 text-[12px] font-semibold text-success-700 transition-colors hover:border-success-300 hover:bg-success-100 hover:text-success-800 disabled:cursor-not-allowed disabled:opacity-50"
             disabled={actionId === review.id}
             onClick={() =>
               setModerationConfirm({
@@ -214,7 +215,7 @@ export function ApiReviewsPanel({
         ) : null}
         {review.status !== "rejected" ? (
           <button
-            className="rounded-base border border-surface-line px-2 py-1 text-[12px] font-semibold text-ink-600 disabled:opacity-50"
+            className="cursor-pointer rounded-base border border-surface-line bg-surface-card px-2 py-1 text-[12px] font-semibold text-ink-600 transition-colors hover:border-danger-200 hover:bg-danger-50 hover:text-danger-600 disabled:cursor-not-allowed disabled:opacity-50"
             disabled={actionId === review.id}
             onClick={() =>
               setModerationConfirm({
@@ -256,8 +257,8 @@ export function ApiReviewsPanel({
       ) : null}
       <EntityTable
         columns={columns}
-        deleteMessage="This review will be permanently removed from the catalog and will no longer appear on the storefront."
         editHref={routes.productReviews}
+        getRowLabel={formatReviewDeleteLabel}
         filterGroups={[
           {
             ariaLabel: "Filter by rating",

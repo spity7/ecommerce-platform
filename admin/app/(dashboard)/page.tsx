@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CategoryScroller } from "@/components/dashboard/category-scroller";
+import { fetchCategories } from "@platform/api-client";
+import {
+  CategoryScroller,
+  type DashboardCategoryItem,
+} from "@/components/dashboard/category-scroller";
 import {
   EarningChart,
   RevenueChart,
@@ -24,12 +28,52 @@ import {
   topProducts,
   transactions,
 } from "@/data/dashboard/data";
+import { mapCategoryDto } from "@/lib/mappers/catalog";
+import { productsListPath } from "@/lib/paths";
 
 export const metadata: Metadata = {
   title: "Dashboard",
 };
 
-export default function DashboardPage() {
+function toDashboardCategories(
+  categories: ReturnType<typeof mapCategoryDto>[]
+): DashboardCategoryItem[] {
+  return [...categories]
+    .sort((a, b) => {
+      if (a.status !== b.status) {
+        return a.status === "published" ? -1 : 1;
+      }
+      if (b.count !== a.count) {
+        return b.count - a.count;
+      }
+      return a.name.localeCompare(b.name);
+    })
+    .map((category) => ({
+      href: productsListPath({ categoryId: category.id }),
+      image: category.image,
+      label: category.name,
+    }));
+}
+
+export default async function DashboardPage() {
+  let categories: DashboardCategoryItem[] = dashboardCategories.map(
+    (category) => ({
+      href: routes.products,
+      image: category.image,
+      label: category.label,
+    })
+  );
+
+  try {
+    const response = await fetchCategories({ limit: 100 });
+    const live = toDashboardCategories(response.data.map(mapCategoryDto));
+    if (live.length > 0) {
+      categories = live;
+    }
+  } catch {
+    // Keep template categories when the catalog API is unavailable.
+  }
+
   return (
     <>
       <DashboardHeader />
@@ -41,7 +85,7 @@ export default function DashboardPage() {
           <StatCard key={stat.label} {...stat} />
         ))}
       </section>
-      <CategoryScroller categories={dashboardCategories} />
+      <CategoryScroller categories={categories} />
       <section className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(520px,0.95fr)]">
         <RevenueReport />
         <BestSellingProductsTable products={topProducts} />

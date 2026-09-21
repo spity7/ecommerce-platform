@@ -117,7 +117,7 @@ Proxies to `@platform/server` and sets httpOnly cookies on the admin origin (`:3
 
 | Path                                                                             | API-connected? | Notes                                                                                       |
 | -------------------------------------------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------- |
-| `/`                                                                              | No             | Dashboard home (demo charts)                                                                |
+| `/`                                                                              | Partial        | Dashboard home (category strip from catalog API; other widgets are demo)                    |
 | `/products`                                                                      | **Yes**        | List + delete; query `categoryId`, `brandId`, `attributeSlug`, `productId` (highlights row) |
 | `/products/new`, `/products/[id]/edit`                                           | **Yes**        | Create/update via API (published attributes picker; archived status on edit only)           |
 | `/categories`                                                                    | **Yes**        | List + delete from API                                                                      |

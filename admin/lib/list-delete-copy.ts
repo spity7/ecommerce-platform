@@ -4,6 +4,7 @@ const ENTITY_PLURALS: Record<string, string> = {
   category: "categories",
   customer: "customers",
   product: "products",
+  review: "reviews",
 };
 
 export function pluralEntityName(singular: string, count: number): string {
@@ -47,6 +48,10 @@ export function buildDeleteDialogDescription(
 
   if (entityName === "customer") {
     return `${subject} will be removed from the customer directory. Order history will remain, but the profile will no longer appear in admin lists. This action cannot be undone.`;
+  }
+
+  if (entityName === "review") {
+    return `${subject} will be removed from the product page and moderation queue. Storefront rating summaries may change. This action cannot be undone.`;
   }
 
   if (

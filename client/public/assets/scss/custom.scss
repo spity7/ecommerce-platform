@@ -87,6 +87,24 @@
       $gap: 16px,
       $breakpoint: 992px
     );
+
+    // Match Swiper `slidesPerView` at 576+ (see getPdpThumbSlidesPerView) so the
+    // thumb row does not jump when `.swiper-initialized` replaces the SSR grid.
+    &:not(.swiper-initialized) {
+      @media (min-width: 576px) {
+        .swiper-wrapper {
+          grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+
+        .swiper-slide:nth-child(n + 5) {
+          display: block;
+        }
+
+        .swiper-slide:nth-child(n + 6) {
+          display: none;
+        }
+      }
+    }
   }
 
   .rbt-thumb-slide-part .rbt-thumb-img-sm,
@@ -132,8 +150,12 @@
   .rbt-pdp-thumb-strip {
     max-width: 100%;
 
-    .swiper-slide-thumb-active button.thumbnail {
-      border-color: transparent;
+    // Two-up main gallery marks two Swiper thumb slides active; only highlight the
+    // slide that matches `activeMainIndex` (rbt-pdp-thumb-is-active).
+    &.rbt-thumb-slide-part
+      .swiper-slide-thumb-active
+      button.thumbnail:not(.rbt-pdp-thumb-is-active) {
+      border-color: transparent !important;
     }
 
     button.thumbnail.rbt-pdp-thumb-is-active {

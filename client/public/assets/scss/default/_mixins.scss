@@ -59,7 +59,9 @@ body {
   );
   $cols-lg-resolved: if(sass($cols-lg == null): $cols-default; else: $cols-lg);
 
-  &:not(.swiper-initialized) {
+  // LightGallery adds a non-initializing `.lg-react-element` wrapper with the same
+  // activation classes; excluding it prevents SSR hide rules from affecting nested Swipers.
+  &:not(.swiper-initialized):not(.lg-react-element) {
     .swiper-wrapper {
       display: grid;
       grid-template-columns: repeat($cols-default, minmax(0, 1fr));

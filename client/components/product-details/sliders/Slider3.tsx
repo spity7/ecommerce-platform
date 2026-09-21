@@ -153,7 +153,7 @@ export default function Slider3({
     <>
       <div className="rbt-medea-lg-img-area">
         <LightGallery
-          elementClassNames="swiper rbt-arrow-between rbt-product-single-slider-twolayout-activation rbt-arrow-show-dfl"
+          elementClassNames="rbt-pdp-lightgallery-root"
           plugins={[lgThumbnail, lgZoom]}
           selector=".rbt-product-single-img"
           speed={400}
