@@ -1,6 +1,7 @@
 import type {
   ProductBadgeKind,
   ProductBadgeRegistryEntry,
+  SiteMerchandisingConfig,
 } from "../types/product-badges.js";
 
 export const PRODUCT_BADGE_REGISTRY: Record<
@@ -110,7 +111,7 @@ export const PRODUCT_BADGE_REGISTRY: Record<
   },
 };
 
-/** Manual kinds shown in admin picker (excludes auto-only kinds). */
+/** Manual kinds shown in admin when the site has no `manualBadgeKinds` allowlist. */
 export const MANUAL_PRODUCT_BADGE_KINDS = (
   Object.entries(PRODUCT_BADGE_REGISTRY) as [
     ProductBadgeKind,
@@ -119,6 +120,22 @@ export const MANUAL_PRODUCT_BADGE_KINDS = (
 )
   .filter(([, entry]) => entry.source === "manual")
   .map(([kind]) => kind);
+
+/** Admin picker + persisted manual badges for a site (subset when allowlist is set). */
+export function resolveManualProductBadgeKinds(
+  config?: SiteMerchandisingConfig
+): ProductBadgeKind[] {
+  const allowlist = config?.manualBadgeKinds;
+  if (!allowlist?.length) {
+    return MANUAL_PRODUCT_BADGE_KINDS;
+  }
+  const allowed = new Set(
+    allowlist.filter((kind): kind is ProductBadgeKind =>
+      MANUAL_PRODUCT_BADGE_KINDS.includes(kind)
+    )
+  );
+  return MANUAL_PRODUCT_BADGE_KINDS.filter((kind) => allowed.has(kind));
+}
 
 export const AUTO_PRODUCT_BADGE_KINDS = (
   Object.entries(PRODUCT_BADGE_REGISTRY) as [

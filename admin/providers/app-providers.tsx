@@ -44,7 +44,7 @@ export function AppProviders({ children }: AppProvidersProps) {
     <ToastProvider>
       <CrudBusyProvider>
         <AuthSessionProvider>{children}</AuthSessionProvider>
-        <BusyViewportOverlay zIndex={45} />
+        <BusyViewportOverlay label="Working…" zIndex={45} />
       </CrudBusyProvider>
     </ToastProvider>
   );

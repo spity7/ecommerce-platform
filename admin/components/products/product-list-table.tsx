@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/list-filter-controls";
 import { ListDeleteConfirmDialog } from "@/components/ui/list-delete-confirm-dialog";
 import { CrudBusyShield } from "@/components/ui/crud-busy-shield";
+import { ProductListBadgeChips } from "@/components/products/product-list-badge-chips";
 import { StatusBadge } from "@/components/products/status-badge";
 import { routes } from "@/config/routes";
 import { productEditPath, storefrontProductPath } from "@/lib/paths";
@@ -19,7 +20,8 @@ import { StorefrontProductViewAction } from "@/components/ui/linked-products-vie
 import { finishCatalogDelete } from "@/lib/catalog-feedback";
 import { useToast } from "@/providers/toast-provider";
 import { useCrudBusyLock } from "@/providers/crud-busy-provider";
-import type { Product, ProductStatus } from "@/data/products/data";
+import type { CatalogStatus, Product } from "@/data/products/data";
+import { isAdminLowStock, isAdminOutOfStock } from "@/lib/product-stock";
 import { deleteProductApi } from "@platform/api-client";
 import { cn } from "@/utils/cn";
 
@@ -37,12 +39,15 @@ type ProductListInitialFilters = {
   categoryId?: string;
 };
 
+type StatusFilter = "all" | CatalogStatus | "low stock";
+
 type ProductListTableProps = {
   attributeFilters: CatalogFilterOption[];
   brandFilters: CatalogFilterOption[];
   categoryFilters: CatalogFilterOption[];
   focusProductId?: string;
   initialFilters?: ProductListInitialFilters;
+  lowStockThreshold: number;
   products: Product[];
 };
 
@@ -60,17 +65,15 @@ function productKey(product: Product): string {
   return product.id ?? product.sku;
 }
 
-const statusClass: Record<ProductStatus, string> = {
+const statusClass: Record<CatalogStatus, string> = {
   archived: "bg-surface-muted text-ink-600",
   draft: "bg-surface-muted text-ink-600",
-  "low stock": "bg-warning-50 text-warning-600",
   published: "bg-success-50 text-success-600",
 };
 
-const statusLabel: Record<ProductStatus, string> = {
+const statusLabel: Record<CatalogStatus, string> = {
   archived: "Archived",
   draft: "Draft",
-  "low stock": "Low stock",
   published: "Published",
 };
 
@@ -80,13 +83,14 @@ export function ProductListTable({
   categoryFilters,
   focusProductId,
   initialFilters = {},
+  lowStockThreshold,
   products,
 }: ProductListTableProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { showToast } = useToast();
   const [query, setQuery] = useState("");
-  const [status, setStatus] = useState<"all" | ProductStatus>("all");
+  const [status, setStatus] = useState<StatusFilter>("all");
   const [categoryId, setCategoryId] = useState(() =>
     resolveInitialListFilter(initialFilters.categoryId, categoryFilters)
   );
@@ -156,11 +160,12 @@ export function ProductListTable({
         `${product.name} ${product.sku} ${product.category} ${product.brand ?? ""}`
           .toLowerCase()
           .includes(normalizedQuery);
+      const catalogStatus = product.catalogStatus ?? product.status;
       const matchesStatus =
         status === "all" ||
         (status === "low stock"
-          ? product.status === "low stock"
-          : product.catalogStatus === status);
+          ? isAdminLowStock(catalogStatus, product.stock, lowStockThreshold)
+          : catalogStatus === status);
       const matchesCategory =
         categoryId === "all" || product.categoryId === categoryId;
       const matchesBrand = brandId === "all" || product.brandId === brandId;
@@ -184,7 +189,16 @@ export function ProductListTable({
 
       return String(a[sort.key]).localeCompare(String(b[sort.key])) * direction;
     });
-  }, [attributeSlug, brandId, categoryId, query, rows, sort, status]);
+  }, [
+    attributeSlug,
+    brandId,
+    categoryId,
+    lowStockThreshold,
+    query,
+    rows,
+    sort,
+    status,
+  ]);
 
   useEffect(() => {
     const id = focusProductId?.trim();
@@ -351,9 +365,7 @@ export function ProductListTable({
               ariaLabel="Filter by status"
               className="w-[160px]"
               defaultValue="all"
-              onValueChange={(value) =>
-                setStatus(value as "all" | ProductStatus)
-              }
+              onValueChange={(value) => setStatus(value as StatusFilter)}
               options={[
                 { label: "All statuses", value: "all" },
                 { label: "Published", value: "published" },
@@ -370,7 +382,7 @@ export function ProductListTable({
             />
           </div>
           <button
-            className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-base bg-danger-500 px-4 text-[14px] font-semibold text-white transition-colors hover:bg-danger-600 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex h-11 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-base bg-danger-500 px-4 text-[14px] font-semibold text-white transition-colors hover:bg-danger-600 disabled:cursor-not-allowed disabled:opacity-50"
             disabled={selected.size === 0 || deleting}
             onClick={() => setConfirmOpen(true)}
             type="button"
@@ -388,7 +400,7 @@ export function ProductListTable({
                   <input
                     aria-label="Select all"
                     checked={allVisibleSelected}
-                    className="h-4 w-4 rounded border-surface-line text-brand-600 focus:ring-brand-600"
+                    className="h-4 w-4 cursor-pointer rounded border-surface-line text-brand-600 focus:ring-brand-600"
                     onChange={(event) => toggleAllVisible(event.target.checked)}
                     type="checkbox"
                   />
@@ -403,7 +415,7 @@ export function ProductListTable({
                 <th className="pb-3 pr-4 font-semibold">
                   <SortButton label="Stock" name="stock" onSort={toggleSort} />
                 </th>
-                <th className="pb-3 pr-4 font-semibold">Badges</th>
+                <th className="w-[7.25rem] pb-3 pr-4 font-semibold">Badges</th>
                 <th className="pb-3 pr-4 font-semibold">
                   <SortButton
                     label="Status"
@@ -419,6 +431,13 @@ export function ProductListTable({
                 const key = productKey(product);
                 const isHighlighted =
                   highlightProductId !== null && highlightProductId === key;
+                const catalogStatus = product.catalogStatus ?? product.status;
+                const outOfStock = isAdminOutOfStock(product.stock);
+                const lowStock = isAdminLowStock(
+                  catalogStatus,
+                  product.stock,
+                  lowStockThreshold
+                );
 
                 return (
                   <tr
@@ -434,7 +453,7 @@ export function ProductListTable({
                       <input
                         aria-label={`Select ${product.name}`}
                         checked={selected.has(productKey(product))}
-                        className="h-4 w-4 rounded border-surface-line text-brand-600 focus:ring-brand-600"
+                        className="h-4 w-4 cursor-pointer rounded border-surface-line text-brand-600 focus:ring-brand-600"
                         onChange={(event) =>
                           toggleSelected(product, event.target.checked)
                         }
@@ -463,36 +482,42 @@ export function ProductListTable({
                         </div>
                       </div>
                     </td>
-                    <td className="py-4 pr-4 text-ink-700">
-                      {product.category}
+                    <td className="py-4 pr-4">
+                      {product.categoryId && product.category ? (
+                        <span className="text-ink-700">{product.category}</span>
+                      ) : (
+                        <span className="text-ink-400">—</span>
+                      )}
                     </td>
                     <td className="py-4 pr-4 text-ink-700">
                       ${product.price.toFixed(2)}
                     </td>
                     <td
                       className={cn(
-                        "py-4 pr-4",
-                        product.status === "low stock"
-                          ? "text-warning-600"
-                          : "text-ink-700"
+                        "py-4 pr-4 tabular-nums",
+                        outOfStock
+                          ? "font-semibold text-danger-600"
+                          : lowStock
+                            ? "font-semibold text-warning-600"
+                            : "text-ink-700"
                       )}
+                      title={
+                        outOfStock
+                          ? "Out of stock"
+                          : lowStock
+                            ? `Low stock — at or below ${lowStockThreshold} units`
+                            : undefined
+                      }
                     >
                       {product.stock}
                     </td>
-                    <td className="max-w-[140px] py-4 pr-4 text-[12px] text-ink-600">
-                      {product.storefrontBadges &&
-                      product.storefrontBadges.length > 0 ? (
-                        <span className="line-clamp-2">
-                          {product.storefrontBadges.join(", ")}
-                        </span>
-                      ) : (
-                        <span className="text-ink-400">—</span>
-                      )}
+                    <td className="w-[7.25rem] py-4 pr-4 align-middle">
+                      <ProductListBadgeChips badges={product.badges} />
                     </td>
                     <td className="py-4 pr-4">
                       <StatusBadge
-                        className={statusClass[product.status]}
-                        label={statusLabel[product.status]}
+                        className={statusClass[catalogStatus]}
+                        label={statusLabel[catalogStatus]}
                       />
                     </td>
                     <td className="py-4 text-right">
@@ -607,7 +632,7 @@ type SortButtonProps = {
 function SortButton({ label, name, onSort }: SortButtonProps) {
   return (
     <button
-      className="inline-flex items-center gap-1 uppercase hover:text-ink-700"
+      className="inline-flex cursor-pointer items-center gap-1 uppercase hover:text-ink-700"
       onClick={() => onSort(name)}
       type="button"
     >

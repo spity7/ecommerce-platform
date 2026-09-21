@@ -766,6 +766,62 @@ describe("catalog API", () => {
     assert.equal(product.body.brandName, renamed);
   });
 
+  it("rejects compare-at price that is not higher than price", async () => {
+    const { body } = await registerAdmin(app);
+    const suffix = Date.now();
+
+    await request(app)
+      .post("/api/products")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: `Zero Compare ${suffix}`,
+        sku: `CMP-ZERO-${suffix}`,
+        price: 50,
+        compareAtPrice: 0,
+        stock: 1,
+        status: "draft",
+      })
+      .expect(400);
+
+    const invalidCreate = await request(app)
+      .post("/api/products")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: `Invalid Compare ${suffix}`,
+        sku: `CMP-INV-${suffix}`,
+        price: 50,
+        compareAtPrice: 40,
+        stock: 1,
+        status: "draft",
+      })
+      .expect(400);
+
+    assert.equal(invalidCreate.body.error, "Validation failed");
+    assert.ok(invalidCreate.body.details?.compareAtPrice?.length);
+
+    const created = await request(app)
+      .post("/api/products")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: `Valid Compare ${suffix}`,
+        sku: `CMP-OK-${suffix}`,
+        price: 50,
+        compareAtPrice: 60,
+        stock: 1,
+        status: "draft",
+      })
+      .expect(201);
+
+    const invalidPatch = await request(app)
+      .patch(`/api/products/${created.body.id}`)
+      .set(authHeader(body.accessToken))
+      .send({ price: 65 })
+      .expect(400);
+
+    assert.equal(invalidPatch.body.error, "Validation failed");
+    assert.ok(invalidPatch.body.details?.compareAtPrice?.length);
+  });
+
   it("sanitizes merchandising sent via metadata and deep-merges partial merchandising patches", async () => {
     const { body } = await registerAdmin(app);
     const suffix = Date.now();
@@ -794,7 +850,7 @@ describe("catalog API", () => {
       .send({
         metadata: {
           merchandising: {
-            manualBadges: [{ kind: "sale" }, { kind: "hot" }],
+            manualBadges: [{ kind: "sale" }, { kind: "limited_offer" }],
             suppressAutoBadges: ["sale"],
           },
         },
@@ -810,7 +866,7 @@ describe("catalog API", () => {
       afterInvalidManual.body.merchandising.manualBadges.map(
         (badge: { kind: string }) => badge.kind
       ),
-      ["hot"]
+      ["limited_offer"]
     );
     assert.deepEqual(afterInvalidManual.body.merchandising.suppressAutoBadges, [
       "sale",
@@ -837,7 +893,7 @@ describe("catalog API", () => {
       afterPartialSuppress.body.merchandising.manualBadges.map(
         (badge: { kind: string }) => badge.kind
       ),
-      ["hot"]
+      ["limited_offer"]
     );
     assert.deepEqual(
       afterPartialSuppress.body.merchandising.suppressAutoBadges,
@@ -870,7 +926,7 @@ describe("catalog API", () => {
       .set(authHeader(body.accessToken))
       .send({
         merchandising: {
-          manualBadges: [{ kind: "staff_pick" }],
+          manualBadges: [{ kind: "limited_offer" }],
           suppressAutoBadges: ["sale"],
         },
       })
@@ -883,12 +939,12 @@ describe("catalog API", () => {
 
     assert.equal(
       withBadges.body.merchandising?.manualBadges?.[0]?.kind,
-      "staff_pick"
+      "limited_offer"
     );
     assert.ok(
       withBadges.body.badges.some(
         (badge: { kind: string; text: string }) =>
-          badge.kind === "staff_pick" && badge.text === "Staff pick"
+          badge.kind === "limited_offer" && badge.text === "Limited time"
       )
     );
     assert.ok(
@@ -912,7 +968,7 @@ describe("catalog API", () => {
     assert.equal(afterMetadataPatch.body.metadata?.seoTitle, "Badge SEO");
     assert.equal(
       afterMetadataPatch.body.merchandising?.manualBadges?.[0]?.kind,
-      "staff_pick"
+      "limited_offer"
     );
   });
 
@@ -931,7 +987,7 @@ describe("catalog API", () => {
         stock: 3,
         status: "published",
         merchandising: {
-          manualBadges: [{ kind: "trending" }],
+          manualBadges: [{ kind: "limited_offer" }],
           suppressAutoBadges: ["sale"],
         },
       })
@@ -963,7 +1019,7 @@ describe("catalog API", () => {
 
     assert.equal(
       adminView.body.merchandising?.manualBadges?.[0]?.kind,
-      "trending"
+      "limited_offer"
     );
     assert.ok(adminView.body.metadata);
     assert.equal(typeof adminView.body.unitsSold, "number");

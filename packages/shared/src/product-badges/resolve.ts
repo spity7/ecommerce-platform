@@ -117,29 +117,53 @@ export function resolveProductCardBadges(
     tryAddBadge(badges, max, manual.kind);
   }
 
+  const autoCandidates = collectAutoProductBadgeCandidates(
+    input,
+    config,
+    merchandising,
+    now
+  );
+
+  for (const kind of autoCandidates) {
+    if (badges.length >= max) {
+      break;
+    }
+    tryAddBadge(badges, max, kind);
+  }
+
+  return badges.slice(0, max);
+}
+
+/** Ordered auto kinds that qualify for this product (before max-badge slot limits). */
+export function collectAutoProductBadgeCandidates(
+  input: ResolveProductCardBadgesInput,
+  config: MerchandisingDefaults = resolveMerchandisingConfig(
+    input.merchandisingConfig
+  ),
+  merchandising = parseProductMerchandising(input.metadata),
+  now: Date = input.now ?? new Date()
+): ProductBadgeKind[] {
+  const suppressed = (kind: ProductBadgeKind) =>
+    isAutoBadgeSuppressed(merchandising, kind);
+
+  if (input.stock <= 0) {
+    return [];
+  }
+
   const autoCandidates: ProductBadgeKind[] = [];
 
-  if (
-    input.stock > 0 &&
-    isOnSale(input.price, input.compareAtPrice) &&
-    !suppressed("sale")
-  ) {
+  if (isOnSale(input.price, input.compareAtPrice) && !suppressed("sale")) {
     autoCandidates.push("sale");
   }
 
   if (
-    input.stock > 0 &&
     !suppressed("new") &&
     isNewProduct(input.createdAt, config.newProductDays, now)
   ) {
     autoCandidates.push("new");
   }
 
-  if (
-    input.stock > 0 &&
-    input.stock <= config.lowStockThreshold &&
-    !suppressed("low_stock")
-  ) {
+  if (input.stock <= config.lowStockThreshold && !suppressed("low_stock")) {
     autoCandidates.push("low_stock");
   }
 
@@ -162,12 +186,14 @@ export function resolveProductCardBadges(
     autoCandidates.push("best_seller");
   }
 
-  for (const kind of autoCandidates) {
-    if (badges.length >= max) {
-      break;
-    }
-    tryAddBadge(badges, max, kind);
-  }
+  return autoCandidates;
+}
 
-  return badges.slice(0, max);
+export function listEligibleAutoProductBadgeKinds(
+  input: ResolveProductCardBadgesInput
+): ProductBadgeKind[] {
+  const config = resolveMerchandisingConfig(input.merchandisingConfig);
+  const merchandising = parseProductMerchandising(input.metadata);
+  const now = input.now ?? new Date();
+  return collectAutoProductBadgeCandidates(input, config, merchandising, now);
 }

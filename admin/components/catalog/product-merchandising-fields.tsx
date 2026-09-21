@@ -1,15 +1,19 @@
 "use client";
 
 import {
-  MANUAL_PRODUCT_BADGE_KINDS,
   PRODUCT_BADGE_REGISTRY,
   SUPPRESSIBLE_AUTO_BADGE_KINDS,
+  getAutoProductBadgeRuleHintLong,
+  getAutoProductBadgeRuleHintShort,
+  getProductBadgeChipAppearanceForKind,
   resolveProductCardBadges,
   type ProductBadgeKind,
   type ProductMerchandising,
   type SiteMerchandisingConfig,
 } from "@platform/shared";
 import { useMemo } from "react";
+import { AdminProductBadgeChip } from "@/components/catalog/admin-product-badge-chip";
+import { Icon } from "@/components/layout/icon";
 import { cn } from "@/utils/cn";
 
 export type MerchandisingBadgePreviewInput = {
@@ -26,23 +30,36 @@ export type MerchandisingBadgePreviewInput = {
 
 type ProductMerchandisingFieldsProps = {
   disabled?: boolean;
+  manualBadgeKinds: ProductBadgeKind[];
   merchandising: ProductMerchandising;
   onChange: (next: ProductMerchandising) => void;
   preview?: MerchandisingBadgePreviewInput;
+  /** Site thresholds for auto badge hints (used when preview is unavailable). */
+  merchandisingConfig?: SiteMerchandisingConfig;
+  reviewsEnabled?: boolean;
 };
 
-const manualOptions = MANUAL_PRODUCT_BADGE_KINDS.map((kind) => ({
-  kind,
-  label: PRODUCT_BADGE_REGISTRY[kind].label,
-  style: PRODUCT_BADGE_REGISTRY[kind].style,
-}));
+function buildManualOptions(kinds: ProductBadgeKind[]) {
+  return kinds.map((kind) => ({
+    kind,
+    label: PRODUCT_BADGE_REGISTRY[kind].label,
+    appearance: getProductBadgeChipAppearanceForKind(kind),
+  }));
+}
 
 export function ProductMerchandisingFields({
   disabled = false,
+  manualBadgeKinds,
   merchandising,
   onChange,
   preview,
+  merchandisingConfig: merchandisingConfigProp,
+  reviewsEnabled: reviewsEnabledProp,
 }: ProductMerchandisingFieldsProps) {
+  const manualOptions = useMemo(
+    () => buildManualOptions(manualBadgeKinds),
+    [manualBadgeKinds]
+  );
   const selectedKinds = useMemo(
     () => new Set(merchandising.manualBadges.map((badge) => badge.kind)),
     [merchandising.manualBadges]
@@ -53,11 +70,23 @@ export function ProductMerchandisingFields({
     [merchandising.suppressAutoBadges]
   );
 
-  const previewBadges = useMemo(() => {
+  const merchandisingConfig =
+    preview?.merchandisingConfig ?? merchandisingConfigProp;
+  const reviewsEnabled = preview?.reviewsEnabled ?? reviewsEnabledProp ?? true;
+
+  const autoHintOptions = useMemo(
+    () => ({
+      config: merchandisingConfig,
+      reviewsEnabled,
+    }),
+    [merchandisingConfig, reviewsEnabled]
+  );
+
+  const resolveInput = useMemo(() => {
     if (!preview || preview.price < 0 || Number.isNaN(preview.price)) {
-      return [];
+      return null;
     }
-    return resolveProductCardBadges({
+    return {
       price: preview.price,
       compareAtPrice: preview.compareAtPrice,
       stock: Math.max(0, preview.stock),
@@ -68,8 +97,15 @@ export function ProductMerchandisingFields({
       reviewsEnabled: preview.reviewsEnabled,
       merchandisingConfig: preview.merchandisingConfig,
       metadata: { merchandising },
-    });
+    };
   }, [merchandising, preview]);
+
+  const previewBadges = useMemo(() => {
+    if (!resolveInput) {
+      return [];
+    }
+    return resolveProductCardBadges(resolveInput);
+  }, [resolveInput]);
 
   function toggleManual(kind: ProductBadgeKind) {
     const exists = merchandising.manualBadges.some(
@@ -106,114 +142,173 @@ export function ProductMerchandisingFields({
     });
   }
 
+  const panelHeaderClass =
+    "border-b border-surface-line/80 px-4 py-3.5 sm:px-5";
+  const panelTitleClass = "text-sm font-semibold leading-tight text-ink-900";
+  const panelSubtitleClass = "mt-1 text-xs leading-normal text-ink-500";
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div>
-        <p className="text-[13px] font-medium text-ink-800">
-          Storefront badges (max 2)
-        </p>
-        <p className="mt-1 text-[12px] text-ink-400">
-          Shown on the product image. Auto badges (priority: sold out, sale,
-          new, low stock, top rated, best seller) fill free slots unless
-          suppressed. Sold out always uses the first slot when stock is zero.
-        </p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {manualOptions.map(({ kind, label, style }) => {
+        <p className={panelTitleClass}>Manual badges (max 2)</p>
+        <ul className="mt-3 flex flex-wrap gap-2">
+          {manualOptions.map(({ kind, label, appearance }) => {
             const active = selectedKinds.has(kind);
             const atCapacity =
               !active && merchandising.manualBadges.length >= 2;
+            const ariaLabel =
+              kind === "best_seller"
+                ? `${label} — manual pin or automatic when units sold threshold is met`
+                : label;
             return (
-              <button
-                className={cn(
-                  "rounded-full border px-3 py-1.5 text-[12px] font-medium transition",
-                  active
-                    ? "border-brand-600 bg-brand-50 text-brand-700"
-                    : "border-ink-200 bg-white text-ink-600 hover:border-ink-300",
-                  (disabled || atCapacity) && "cursor-not-allowed opacity-50"
-                )}
-                disabled={disabled || atCapacity}
-                key={kind}
-                onClick={() => toggleManual(kind)}
-                type="button"
-              >
-                <span
+              <li className="max-w-full min-w-0" key={kind}>
+                <button
+                  aria-label={ariaLabel}
+                  aria-pressed={active}
                   className={cn(
-                    "mr-2 inline-block rounded px-1.5 py-0.5 text-[10px] uppercase text-white",
-                    style.includes("gradient") ? "bg-brand-600" : ""
+                    "inline-flex max-w-full cursor-pointer items-center gap-1.5 rounded-lg border px-2 py-1.5 transition-[background-color,border-color,box-shadow] duration-200 ease-out focus-visible:outline focus-visible:ring-2 focus-visible:ring-brand-500/40 focus-visible:ring-offset-2",
+                    active
+                      ? "border-2 border-brand-500 bg-brand-50/70 pr-2 shadow-[0_2px_12px_rgba(33,90,218,0.18),0_1px_3px_rgba(16,24,40,0.06)]"
+                      : "border-2 border-transparent bg-transparent shadow-none hover:bg-surface-muted/35",
+                    (disabled || atCapacity) &&
+                      !active &&
+                      "cursor-not-allowed opacity-40 hover:bg-transparent"
                   )}
-                  style={
-                    style.includes("gradient")
-                      ? undefined
-                      : { background: "var(--color-primary, #215ada)" }
-                  }
+                  disabled={disabled || (atCapacity && !active)}
+                  onClick={() => toggleManual(kind)}
+                  title={ariaLabel}
+                  type="button"
                 >
-                  {label}
-                </span>
-                {label}
-              </button>
+                  <AdminProductBadgeChip
+                    appearance={appearance}
+                    className="max-w-full"
+                    size="lg"
+                    text={label}
+                  />
+                  {active ? (
+                    <span
+                      aria-hidden
+                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-600 text-white"
+                    >
+                      <Icon className="h-3 w-3" name="check" />
+                    </span>
+                  ) : null}
+                </button>
+              </li>
             );
           })}
-        </div>
+        </ul>
       </div>
 
-      {merchandising.manualBadges.length > 0 ? (
-        <div className="flex flex-wrap gap-2">
-          {merchandising.manualBadges.map((badge) => (
-            <span
-              className="inline-flex items-center rounded-md bg-ink-900 px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white"
-              key={badge.kind}
-            >
-              {PRODUCT_BADGE_REGISTRY[badge.kind].label}
-            </span>
-          ))}
-        </div>
-      ) : null}
-
-      {preview ? (
-        <div className="rounded-lg border border-ink-100 bg-surface-body/80 p-3">
-          <p className="text-[12px] font-medium text-ink-700">
-            Storefront preview
-          </p>
-          <p className="mt-0.5 text-[11px] text-ink-400">
-            Based on current price, stock, and ratings (not saved until you
-            submit).
-          </p>
-          {previewBadges.length === 0 ? (
-            <p className="mt-2 text-[12px] text-ink-500">No badges</p>
-          ) : (
-            <div className="mt-2 flex flex-wrap gap-2">
-              {previewBadges.map((badge) => (
-                <span
-                  className="inline-flex rounded-md bg-ink-900 px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-white"
-                  key={badge.kind}
-                >
-                  {badge.text}
-                </span>
-              ))}
+      <div
+        className={cn(
+          "grid gap-4",
+          preview ? "md:grid-cols-2 md:items-stretch" : undefined
+        )}
+      >
+        {preview ? (
+          <div className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-xl border border-surface-line/80 bg-surface-card shadow-card">
+            <div className={panelHeaderClass}>
+              <p className={panelTitleClass}>Storefront preview</p>
+              <p className={panelSubtitleClass}>
+                Resolved from price, stock, reviews, and units sold.
+              </p>
             </div>
-          )}
-        </div>
-      ) : null}
+            <div className="flex flex-1 flex-col p-4 sm:p-5">
+              <div
+                aria-label="Product card badge preview"
+                className="relative min-h-[11rem] flex-1 overflow-hidden rounded-lg bg-gradient-to-br from-surface-muted via-surface-body to-ink-100 ring-1 ring-inset ring-surface-line/60"
+                role="img"
+              >
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 opacity-50"
+                  style={{
+                    backgroundImage:
+                      "radial-gradient(circle at 28% 18%, rgba(255,255,255,0.85) 0%, transparent 50%)",
+                  }}
+                />
+                {previewBadges.length === 0 ? (
+                  <p className="absolute inset-0 flex items-center justify-center px-4 text-center text-xs font-medium text-ink-500">
+                    No badges would show on the card
+                  </p>
+                ) : (
+                  <div className="absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] flex-col gap-1.5 sm:left-4 sm:top-4">
+                    {previewBadges.map((badge) => (
+                      <AdminProductBadgeChip
+                        bgClass={badge.bg}
+                        key={badge.kind ?? badge.text}
+                        size="md"
+                        text={badge.text}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ) : null}
 
-      <div>
-        <p className="text-[13px] font-medium text-ink-800">
-          Suppress automatic badges
-        </p>
-        <div className="mt-2 grid gap-2 sm:grid-cols-2">
-          {SUPPRESSIBLE_AUTO_BADGE_KINDS.map((kind) => (
-            <label
-              className="flex cursor-pointer items-center gap-2 text-[12px] text-ink-600"
-              key={kind}
-            >
-              <input
-                checked={suppressSet.has(kind)}
-                disabled={disabled}
-                onChange={() => toggleSuppress(kind)}
-                type="checkbox"
-              />
-              {PRODUCT_BADGE_REGISTRY[kind].label}
-            </label>
-          ))}
+        <div className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-xl border border-surface-line/80 bg-surface-card shadow-card">
+          <div className={panelHeaderClass}>
+            <p className={panelTitleClass}>Automatic badges</p>
+            <p className={panelSubtitleClass}>
+              Uncheck to suppress an auto badge for this product.
+            </p>
+          </div>
+          <ul className="grid flex-1 gap-2 p-4 sm:grid-cols-2 sm:p-5">
+            {SUPPRESSIBLE_AUTO_BADGE_KINDS.map((kind) => {
+              const suppressed = suppressSet.has(kind);
+              const label = PRODUCT_BADGE_REGISTRY[kind].label;
+              const hintShort = getAutoProductBadgeRuleHintShort(
+                kind,
+                autoHintOptions
+              );
+              const hintLong = getAutoProductBadgeRuleHintLong(
+                kind,
+                autoHintOptions
+              );
+              return (
+                <li className="min-h-[3.25rem]" key={kind}>
+                  <label
+                    className={cn(
+                      "flex h-full min-h-[3.25rem] cursor-pointer items-start gap-2.5 rounded-lg border px-3 py-2.5 transition-[background-color,border-color,box-shadow] duration-150",
+                      suppressed
+                        ? "border-surface-line/80 bg-surface-body hover:bg-surface-muted/50"
+                        : "border-brand-200/90 bg-brand-50/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] hover:bg-brand-50/55",
+                      disabled && "cursor-not-allowed opacity-50"
+                    )}
+                    title={hintLong}
+                  >
+                    <input
+                      checked={!suppressed}
+                      className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-surface-line text-brand-600 focus:ring-2 focus:ring-brand-500/25 disabled:cursor-not-allowed"
+                      disabled={disabled}
+                      onChange={() => toggleSuppress(kind)}
+                      type="checkbox"
+                    />
+                    <span className="min-w-0 leading-snug">
+                      <span
+                        className={cn(
+                          "block text-xs",
+                          suppressed
+                            ? "font-medium text-ink-500"
+                            : "font-semibold text-ink-800"
+                        )}
+                      >
+                        {label}
+                      </span>
+                      {hintShort ? (
+                        <span className="mt-0.5 block text-[10px] leading-tight text-ink-400">
+                          {hintShort}
+                        </span>
+                      ) : null}
+                    </span>
+                  </label>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </div>
     </div>

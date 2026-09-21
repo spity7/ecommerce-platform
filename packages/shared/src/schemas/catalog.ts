@@ -10,45 +10,122 @@ import {
   PRODUCT_STATUSES,
 } from "../types/catalog.js";
 
-export const createProductSchema = z.object({
-  name: z.string().min(1).max(200),
-  slug: z.string().min(1).max(200).optional(),
-  sku: z.string().min(1).max(100).optional(),
-  description: z.string().max(5000).optional().default(""),
-  price: z.number().min(0),
-  compareAtPrice: z.number().min(0).optional(),
-  stock: z.number().int().min(0).default(0),
-  status: z.enum(PRODUCT_STATUSES).default("draft"),
-  categoryId: z.string().optional(),
-  brandId: z.string().optional(),
-  images: z.array(z.string()).default([]),
-  attributes: z
-    .record(z.string(), z.union([z.string(), z.array(z.string())]))
-    .default({}),
-  metadata: z.record(z.string(), z.unknown()).default({}),
-  merchandising: productMerchandisingSchema.optional(),
-});
+/** When compare-at is set, it must be greater than zero. */
+export const COMPARE_AT_MUST_BE_POSITIVE_MESSAGE = "Must be greater than 0";
+
+/** When compare-at is set and > 0, it must exceed the selling price. */
+export const COMPARE_AT_MUST_EXCEED_PRICE_MESSAGE = "Must be higher than price";
+
+const compareAtPriceFieldSchema = z
+  .number()
+  .positive(COMPARE_AT_MUST_BE_POSITIVE_MESSAGE)
+  .optional();
+
+export function getCompareAtPriceValidationError(
+  price: number,
+  compareAtPrice?: number | null
+): string | undefined {
+  if (compareAtPrice == null) {
+    return undefined;
+  }
+
+  if (!Number.isFinite(compareAtPrice) || compareAtPrice <= 0) {
+    return COMPARE_AT_MUST_BE_POSITIVE_MESSAGE;
+  }
+
+  if (!Number.isFinite(price) || price >= compareAtPrice) {
+    return COMPARE_AT_MUST_EXCEED_PRICE_MESSAGE;
+  }
+
+  return undefined;
+}
+
+function refineProductPricePair(data: {
+  price: number;
+  compareAtPrice?: number;
+}): { message: string; path: ["compareAtPrice"] } | undefined {
+  const message = getCompareAtPriceValidationError(
+    data.price,
+    data.compareAtPrice
+  );
+  if (!message) {
+    return undefined;
+  }
+  return { message, path: ["compareAtPrice"] };
+}
+
+const productPricePairSuperRefine = (
+  data: { price: number; compareAtPrice?: number },
+  ctx: z.RefinementCtx
+) => {
+  const issue = refineProductPricePair(data);
+  if (issue) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: issue.message,
+      path: issue.path,
+    });
+  }
+};
+
+export const createProductSchema = z
+  .object({
+    name: z.string().min(1).max(200),
+    slug: z.string().min(1).max(200).optional(),
+    sku: z.string().min(1).max(100).optional(),
+    description: z.string().max(5000).optional().default(""),
+    price: z.number().min(0),
+    compareAtPrice: compareAtPriceFieldSchema,
+    stock: z.number().int().min(0).default(0),
+    status: z.enum(PRODUCT_STATUSES).default("draft"),
+    categoryId: z.string().optional(),
+    brandId: z.string().optional(),
+    images: z.array(z.string()).default([]),
+    attributes: z
+      .record(z.string(), z.union([z.string(), z.array(z.string())]))
+      .default({}),
+    metadata: z.record(z.string(), z.unknown()).default({}),
+    merchandising: productMerchandisingSchema.optional(),
+  })
+  .superRefine(productPricePairSuperRefine);
 
 // PATCH bodies must not inherit create defaults — `.partial()` on defaulted fields
 // still applies defaults for omitted keys and would overwrite unrelated fields.
-export const updateProductSchema = z.object({
-  name: z.string().min(1).max(200).optional(),
-  slug: z.string().min(1).max(200).optional(),
-  sku: z.string().min(1).max(100).optional(),
-  description: z.string().max(5000).optional(),
-  price: z.number().min(0).optional(),
-  compareAtPrice: z.number().min(0).optional(),
-  stock: z.number().int().min(0).optional(),
-  status: z.enum(PRODUCT_STATUSES).optional(),
-  categoryId: z.string().optional(),
-  brandId: z.string().optional(),
-  images: z.array(z.string()).optional(),
-  attributes: z
-    .record(z.string(), z.union([z.string(), z.array(z.string())]))
-    .optional(),
-  metadata: z.record(z.string(), z.unknown()).optional(),
-  merchandising: productMerchandisingSchema.optional(),
-});
+export const updateProductSchema = z
+  .object({
+    name: z.string().min(1).max(200).optional(),
+    slug: z.string().min(1).max(200).optional(),
+    sku: z.string().min(1).max(100).optional(),
+    description: z.string().max(5000).optional(),
+    price: z.number().min(0).optional(),
+    compareAtPrice: compareAtPriceFieldSchema,
+    stock: z.number().int().min(0).optional(),
+    status: z.enum(PRODUCT_STATUSES).optional(),
+    categoryId: z.string().optional(),
+    brandId: z.string().optional(),
+    images: z.array(z.string()).optional(),
+    attributes: z
+      .record(z.string(), z.union([z.string(), z.array(z.string())]))
+      .optional(),
+    metadata: z.record(z.string(), z.unknown()).optional(),
+    merchandising: productMerchandisingSchema.optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.price === undefined || data.compareAtPrice === undefined) {
+      return;
+    }
+    const issue = refineProductPricePair({
+      price: data.price,
+      compareAtPrice: data.compareAtPrice,
+    });
+    if (issue) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: issue.message,
+        path: issue.path,
+      });
+    }
+  });
 
 const categoryImageSchema = z
   .string()

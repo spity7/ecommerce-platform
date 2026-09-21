@@ -1,6 +1,8 @@
 import { baseURL } from "@/utils/cn";
+import type { ProductCardBadgeDto } from "@platform/shared";
 
 export type CatalogStatus = "archived" | "draft" | "published";
+/** @deprecated Use CatalogStatus; list filters may still use `"low stock"` as a filter token. */
 export type ProductStatus = CatalogStatus | "low stock";
 
 export type Product = {
@@ -16,9 +18,9 @@ export type Product = {
   price: number;
   sku: string;
   slug?: string;
-  status: ProductStatus;
+  status: CatalogStatus;
   stock: number;
-  storefrontBadges?: string[];
+  badges?: ProductCardBadgeDto[];
 };
 
 export const products: Product[] = [
@@ -37,7 +39,7 @@ export const products: Product[] = [
     name: "Bakery Breakfast Box With Long Marketplace Name",
     price: 24,
     sku: "GRC-2188",
-    status: "low stock",
+    status: "published",
     stock: 18,
   },
   {

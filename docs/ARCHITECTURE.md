@@ -87,7 +87,7 @@ Storefront image badges (max **2** per product) are resolved on the **server** w
 
 - **Registry + rules:** `@platform/shared` (`PRODUCT_BADGE_REGISTRY`, `resolveProductCardBadges`, merchandising sanitize/merge).
 - **Persistence:** `metadata.merchandising` (`manualBadges`, `suppressAutoBadges`); admin edits via `ProductCatalogForm`.
-- **Auto thresholds:** optional `SiteConfig.merchandising` (defaults in `DEFAULT_MERCHANDISING`; resolver hard-caps at 2 badges).
+- **Auto thresholds:** optional `SiteConfig.merchandising` (defaults in `DEFAULT_MERCHANDISING`; resolver hard-caps at 2 badges). Optional **`manualBadgeKinds`** allowlist per site for admin manual picks (see `resolveManualProductBadgeKinds`).
 - **Public API:** anonymous reads return **`StorefrontProductDto`** (`badges` only — no `merchandising`, `unitsSold`, or `metadata`). Admin JWT receives full **`ProductDto`** on list/get.
 - **Storefront:** maps `ProductDto.badges` → `ProductCardImageBadges` on production catalog routes (home layout, `/shop`, PDP).
 

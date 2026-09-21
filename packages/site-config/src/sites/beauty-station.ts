@@ -34,6 +34,13 @@ export const beautyStationConfig = {
     topRatedMinReviews: 10,
     maxImageBadges: 2,
     bestSellerMinUnitsSold: 5,
+    manualBadgeKinds: [
+      "limited_offer",
+      "best_seller",
+      "clearance",
+      "cruelty_free",
+      "organic",
+    ],
   },
   defaultPhoneCountry: "LB",
   contact: {

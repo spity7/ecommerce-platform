@@ -1,7 +1,9 @@
 import { Router } from "express";
+import { ZodError } from "zod";
 import {
   createProductSchema,
   createReviewSchema,
+  getCompareAtPriceValidationError,
   productListQuerySchema,
   productReviewListQuerySchema,
   updateProductSchema,
@@ -301,6 +303,25 @@ productsRouter.patch(
     );
     if (metadataUpdate !== undefined) {
       product.metadata = metadataUpdate;
+    }
+
+    const nextPrice = payload.price ?? product.price;
+    const nextCompareAt =
+      payload.compareAtPrice !== undefined
+        ? payload.compareAtPrice
+        : (product.compareAtPrice ?? undefined);
+    const compareAtError = getCompareAtPriceValidationError(
+      nextPrice,
+      nextCompareAt
+    );
+    if (compareAtError) {
+      throw new ZodError([
+        {
+          code: "custom",
+          path: ["compareAtPrice"],
+          message: compareAtError,
+        },
+      ]);
     }
 
     const assignable = stripMerchandisingFromAssignPayload({ ...payload });

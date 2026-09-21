@@ -8,7 +8,9 @@ import {
   CatalogFormFooter,
   ControlledField,
   ControlledSelect,
-  getCatalogFieldErrors,
+  catalogSubmitErrorState,
+  resolveCatalogFieldErrors,
+  useFocusFirstCatalogFieldError,
   StatusDot,
   type AssignedProductPreview,
 } from "@/components/catalog/catalog-form-primitives";
@@ -27,12 +29,17 @@ import {
   normalizeBrandInitials,
   resolveBrandInitials,
 } from "@/lib/brand-tile";
-import { createBrandApi, updateBrandApi } from "@platform/api-client";
+import {
+  createBrandApi,
+  updateBrandApi,
+  type ApiValidationDetails,
+} from "@platform/api-client";
 import type { BrandDto } from "@platform/shared";
 
 type FormState = {
   error: string | null;
   loading: boolean;
+  validationDetails: ApiValidationDetails | null;
 };
 
 type BrandCatalogFormProps = {
@@ -67,6 +74,7 @@ export function BrandCatalogForm({
   const [formState, setFormState] = useState<FormState>({
     error: null,
     loading: false,
+    validationDetails: null,
   });
 
   const previewInitials = useMemo(
@@ -99,16 +107,22 @@ export function BrandCatalogForm({
   );
 
   const fieldErrors = useMemo(
-    () => getCatalogFieldErrors(formState.error),
-    [formState.error]
+    () =>
+      resolveCatalogFieldErrors(
+        formState.error,
+        formState.validationDetails
+      ),
+    [formState.error, formState.validationDetails]
   );
+
+  useFocusFirstCatalogFieldError(fieldErrors);
   const { disabled } = useCatalogFormLeaveGuard({
     loading: formState.loading,
   });
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setFormState({ error: null, loading: true });
+    setFormState({ error: null, loading: true, validationDetails: null });
 
     const payload = {
       name,
@@ -135,7 +149,7 @@ export function BrandCatalogForm({
       });
     } catch (error) {
       setFormState({
-        error: error instanceof Error ? error.message : "Save failed",
+        ...catalogSubmitErrorState(error),
         loading: false,
       });
     }
@@ -154,10 +168,15 @@ export function BrandCatalogForm({
               <ControlledField
                 disabled={disabled}
                 error={fieldErrors.name}
+                fieldKey="name"
                 label="Brand name"
                 onChange={(value) => {
                   setName(value);
-                  setFormState((current) => ({ ...current, error: null }));
+                  setFormState((current) => ({
+                    ...current,
+                    error: null,
+                    validationDetails: null,
+                  }));
                 }}
                 placeholder="Brand name"
                 required

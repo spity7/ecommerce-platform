@@ -29,9 +29,16 @@
       "topRatedMinRating": 4.5,
       "topRatedMinReviews": 10,
       "maxImageBadges": 2,
-      "bestSellerMinUnitsSold": 5
+      "bestSellerMinUnitsSold": 5,
+      "manualBadgeKinds": [
+        "limited_offer",
+        "best_seller",
+        "clearance",
+        "cruelty_free",
+        "organic"
+      ]
     },
     "deploySha": null,
-    "notes": "Primary cosmetics & skincare site. Features must match packages/site-config/src/sites/beauty-station.ts."
+    "notes": "Primary cosmetics & skincare site. Features and merchandising (including manualBadgeKinds) must match packages/site-config/src/sites/beauty-station.ts."
   }
 ]

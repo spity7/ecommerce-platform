@@ -3,7 +3,12 @@
  * Regenerate: `npm run api:generate`
  */
 
-export { platformInstance, customInstance, ApiError } from "./mutator.js";
+export {
+  platformInstance,
+  customInstance,
+  ApiError,
+  type ApiValidationDetails,
+} from "./mutator.js";
 export { getApiBaseUrl } from "./apiBaseUrl.js";
 export { getAccessToken, setAccessToken } from "./auth.js";
 export { setGuestCartId, getGuestCartId } from "./guest-cart.js";

@@ -12,12 +12,13 @@ import {
   collectRemovedHostedImages,
   createPendingCatalogFile,
   deleteHostedCatalogImages,
-  getCatalogFieldErrors,
+  catalogSubmitErrorState,
+  resolveCatalogFieldErrors,
+  useFocusFirstCatalogFieldError,
   getSavedCatalogImageUrls,
   hasPendingCatalogImages,
   isHostedCatalogImageUrl,
   ProductAttributesFields,
-  ReadOnlyField,
   revokePendingCatalogFile,
   StatusDot,
   uploadPendingCatalogImageUrls,
@@ -49,9 +50,15 @@ import {
   type MerchandisingBadgePreviewInput,
 } from "@/components/catalog/product-merchandising-fields";
 import { getAdminSiteConfig } from "@/lib/site";
-import { createProductApi, updateProductApi } from "@platform/api-client";
 import {
+  createProductApi,
+  updateProductApi,
+  type ApiValidationDetails,
+} from "@platform/api-client";
+import {
+  getCompareAtPriceValidationError,
   parseProductMerchandising,
+  resolveManualProductBadgeKinds,
   type ProductDto,
   type ProductMerchandising,
 } from "@platform/shared";
@@ -63,6 +70,7 @@ export { CategoryCatalogForm } from "./category-catalog-form";
 type FormState = {
   error: string | null;
   loading: boolean;
+  validationDetails: ApiValidationDetails | null;
 };
 
 type ProductCatalogFormProps = {
@@ -139,6 +147,63 @@ function sanitizeStockInput(value: string): string | null {
   return /^\d+$/.test(value) ? value : null;
 }
 
+function sanitizeDecimalInput(value: string): string | null {
+  if (value === "") {
+    return "";
+  }
+
+  if (!/^\d*\.?\d*$/.test(value)) {
+    return null;
+  }
+
+  const dotCount = (value.match(/\./g) ?? []).length;
+  if (dotCount > 1) {
+    return null;
+  }
+
+  return value;
+}
+
+function blockInvalidDecimalKeys(
+  event: React.KeyboardEvent<HTMLInputElement>
+): void {
+  if (event.ctrlKey || event.metaKey || event.altKey) {
+    return;
+  }
+
+  if (STOCK_NAVIGATION_KEYS.has(event.key)) {
+    return;
+  }
+
+  if (/^\d$/.test(event.key)) {
+    return;
+  }
+
+  if (event.key === "." && !event.currentTarget.value.includes(".")) {
+    return;
+  }
+
+  event.preventDefault();
+}
+
+function pasteDecimalValue(
+  event: React.ClipboardEvent<HTMLInputElement>,
+  onValidPaste: (value: string) => void
+): void {
+  event.preventDefault();
+  const raw = event.clipboardData.getData("text").replace(/[^\d.]/g, "");
+  const firstDot = raw.indexOf(".");
+  const normalized =
+    firstDot === -1
+      ? raw
+      : `${raw.slice(0, firstDot + 1)}${raw.slice(firstDot + 1).replace(/\./g, "")}`;
+  const nextValue = sanitizeDecimalInput(normalized);
+
+  if (nextValue !== null) {
+    onValidPaste(nextValue);
+  }
+}
+
 function blockInvalidStockKeys(
   event: React.KeyboardEvent<HTMLInputElement>
 ): void {
@@ -198,6 +263,11 @@ export function ProductCatalogForm({
 }: ProductCatalogFormProps) {
   const router = useRouter();
   const { showToast } = useToast();
+  const siteConfig = useMemo(() => getAdminSiteConfig(), []);
+  const manualBadgeKinds = useMemo(
+    () => resolveManualProductBadgeKinds(siteConfig.merchandising),
+    [siteConfig.merchandising]
+  );
   const [name, setName] = useState(initial?.name ?? "");
   const [price, setPrice] = useState(String(initial?.price ?? ""));
   const [compareAtPrice, setCompareAtPrice] = useState(
@@ -223,24 +293,53 @@ export function ProductCatalogForm({
     initialAttributeValues(attributes, initial)
   );
   const [merchandising, setMerchandising] = useState<ProductMerchandising>(
-    () =>
-      initial?.merchandising ??
-      parseProductMerchandising(initial?.metadata ?? {})
+    () => {
+      const sanitizeOptions = siteConfig.merchandising?.manualBadgeKinds?.length
+        ? {
+            allowedManualKinds: resolveManualProductBadgeKinds(
+              siteConfig.merchandising
+            ),
+          }
+        : undefined;
+      return (
+        initial?.merchandising ??
+        parseProductMerchandising(initial?.metadata ?? {}, sanitizeOptions)
+      );
+    }
   );
   const [formState, setFormState] = useState<FormState>({
     error: null,
     loading: false,
+    validationDetails: null,
   });
   const [stockError, setStockError] = useState<string>();
+  const [compareAtPriceError, setCompareAtPriceError] = useState<string>();
   const initialHostedImages = useMemo(
     () => (initial?.images ?? []).filter(isHostedCatalogImageUrl),
     [initial?.images]
   );
 
-  const fieldErrors = useMemo(
-    () => getCatalogFieldErrors(formState.error),
-    [formState.error]
-  );
+  const fieldErrors = useMemo(() => {
+    const resolved = resolveCatalogFieldErrors(
+      formState.error,
+      formState.validationDetails
+    );
+    let merged = resolved;
+    if (stockError) {
+      merged = { ...merged, stock: stockError };
+    }
+    if (compareAtPriceError) {
+      merged = { ...merged, compareAtPrice: compareAtPriceError };
+    }
+    return merged;
+  }, [
+    compareAtPriceError,
+    formState.error,
+    formState.validationDetails,
+    stockError,
+  ]);
+
+  useFocusFirstCatalogFieldError(fieldErrors);
   const statusHelp = useMemo(() => {
     switch (status) {
       case "published":
@@ -265,9 +364,8 @@ export function ProductCatalogForm({
     loading: formState.loading,
   });
 
-  const siteConfig = useMemo(() => getAdminSiteConfig(), []);
-
-  const badgePreview = useMemo((): MerchandisingBadgePreviewInput | undefined => {
+  const badgePreview = useMemo(():
+    MerchandisingBadgePreviewInput | undefined => {
     const parsedPrice = Number(price);
     if (price.trim() === "" || Number.isNaN(parsedPrice)) {
       return undefined;
@@ -324,6 +422,19 @@ export function ProductCatalogForm({
     }
     setStockError(undefined);
 
+    const parsedCompare = compareAtPrice.trim()
+      ? Number(compareAtPrice)
+      : undefined;
+    const nextCompareAtError =
+      compareAtPrice.trim() !== ""
+        ? getCompareAtPriceValidationError(Number(price), parsedCompare)
+        : undefined;
+    if (nextCompareAtError) {
+      setCompareAtPriceError(nextCompareAtError);
+      return;
+    }
+    setCompareAtPriceError(undefined);
+
     const publishError = getPublishLinkError(
       status,
       categoryId,
@@ -332,11 +443,15 @@ export function ProductCatalogForm({
       brands
     );
     if (publishError) {
-      setFormState({ error: publishError, loading: false });
+      setFormState({
+        error: publishError,
+        loading: false,
+        validationDetails: null,
+      });
       return;
     }
 
-    setFormState({ error: null, loading: true });
+    setFormState({ error: null, loading: true, validationDetails: null });
 
     const attributesPayload = Object.fromEntries(
       Object.entries(attributeValues).filter(([, value]) => value.trim())
@@ -352,7 +467,10 @@ export function ProductCatalogForm({
       const payload = {
         name,
         price: Number(price),
-        compareAtPrice: compareAtPrice ? Number(compareAtPrice) : undefined,
+        compareAtPrice:
+          parsedCompare !== undefined && parsedCompare > 0
+            ? parsedCompare
+            : undefined,
         stock: Number(stock),
         description,
         status,
@@ -407,14 +525,18 @@ export function ProductCatalogForm({
         await deleteHostedCatalogImages(uploadedInThisAttempt);
       }
       setFormState({
-        error: error instanceof Error ? error.message : "Save failed",
+        ...catalogSubmitErrorState(error),
         loading: false,
       });
     }
   }
 
   function handleAddImages(files: File[]) {
-    setFormState((current) => ({ ...current, error: null }));
+    setFormState((current) => ({
+      ...current,
+      error: null,
+      validationDetails: null,
+    }));
     setImageEntries((previous) => [
       ...previous,
       ...files.map((file) =>
@@ -464,68 +586,126 @@ export function ProductCatalogForm({
               onChange={setAttributeValues}
               values={attributeValues}
             />
+          </>
+        }
+        fullWidth={
+          <div className="grid gap-4 md:grid-cols-2 md:items-start">
             <FormCard title="Storefront badges">
               <ProductMerchandisingFields
                 disabled={disabled}
+                manualBadgeKinds={manualBadgeKinds}
                 merchandising={merchandising}
+                merchandisingConfig={siteConfig.merchandising}
                 onChange={setMerchandising}
                 preview={badgePreview}
+                reviewsEnabled={siteConfig.features.reviews}
               />
             </FormCard>
-          </>
+            <FormCard title="Media">
+              <CatalogMediaUploadField
+                disabled={disabled}
+                helperText={
+                  formState.loading
+                    ? "Saving…"
+                    : imagePreviews.length > 0
+                      ? `${imagePreviews.length} image${imagePreviews.length === 1 ? "" : "s"} selected. Files upload to storage when you save.`
+                      : "Add PNG, JPG, or WebP images. Uploads on save."
+                }
+                images={imagePreviews}
+                onAddFiles={handleAddImages}
+                onRemove={handleRemoveImage}
+                onReorder={handleReorderImages}
+              />
+            </FormCard>
+          </div>
         }
       >
         <FormCard title="General">
-          <ControlledField
-            disabled={disabled}
-            error={fieldErrors.name}
-            label="Product name"
-            onChange={(value) => {
-              setName(value);
-              setFormState((current) => ({ ...current, error: null }));
-            }}
-            placeholder="Product name"
-            required
-            value={name}
-          />
-          {mode === "edit" && initial ? (
-            <div className="mt-4">
-              <ReadOnlyField
-                help="Generated on create and used for inventory tracking."
-                label="SKU"
-                value={initial.sku}
-              />
-            </div>
-          ) : (
-            <p className="mt-2 text-[12px] text-ink-400">
-              SKU will be generated automatically when you save.
-            </p>
-          )}
+          <div className="grid gap-4 md:grid-cols-2 md:items-start">
+            <ControlledField
+              disabled={disabled}
+              error={fieldErrors.name}
+              fieldKey="name"
+              label="Product name"
+              onChange={(value) => {
+                setName(value);
+                setFormState((current) => ({
+                  ...current,
+                  error: null,
+                  validationDetails: null,
+                }));
+              }}
+              placeholder="Product name"
+              required
+              value={name}
+            />
+            <ControlledTextarea
+              disabled={disabled}
+              error={fieldErrors.description}
+              fieldKey="description"
+              label="Product description"
+              minRows={2}
+              onChange={setDescription}
+              placeholder="Describe the product…"
+              value={description}
+            />
+          </div>
         </FormCard>
         <div className="grid gap-4 md:grid-cols-2">
           <FormCard title="Pricing & inventory">
             <div className="grid gap-4 sm:grid-cols-3">
               <ControlledField
                 disabled={disabled}
+                error={fieldErrors.price}
+                fieldKey="price"
+                inputMode="decimal"
                 label="Price"
-                onChange={setPrice}
+                onChange={(value) => {
+                  const nextValue = sanitizeDecimalInput(value);
+                  if (nextValue !== null) {
+                    setPrice(nextValue);
+                    if (compareAtPriceError) {
+                      setCompareAtPriceError(undefined);
+                    }
+                  }
+                }}
+                onKeyDown={blockInvalidDecimalKeys}
+                onPaste={(event) =>
+                  pasteDecimalValue(event, (value) => setPrice(value))
+                }
                 placeholder="0.00"
                 required
-                type="number"
+                type="text"
                 value={price}
               />
               <ControlledField
                 disabled={disabled}
-                help="Optional strikethrough price."
+                error={fieldErrors.compareAtPrice}
+                fieldKey="compareAtPrice"
+                help="Optional strikethrough price; must be above 0 and higher than price."
+                inputMode="decimal"
                 label="Compare at price"
-                onChange={setCompareAtPrice}
+                onChange={(value) => {
+                  const nextValue = sanitizeDecimalInput(value);
+                  if (nextValue !== null) {
+                    setCompareAtPrice(nextValue);
+                    if (compareAtPriceError) {
+                      setCompareAtPriceError(undefined);
+                    }
+                  }
+                }}
+                onKeyDown={blockInvalidDecimalKeys}
+                onPaste={(event) =>
+                  pasteDecimalValue(event, (value) => setCompareAtPrice(value))
+                }
                 placeholder="0.00"
-                type="number"
+                type="text"
                 value={compareAtPrice}
               />
               <ControlledField
                 disabled={disabled}
-                error={stockError}
+                error={fieldErrors.stock}
+                fieldKey="stock"
                 help="Units available to sell. Must be 0 or greater."
                 inputMode="numeric"
                 label="Stock"
@@ -560,6 +740,8 @@ export function ProductCatalogForm({
             <div className="grid gap-4 sm:grid-cols-2">
               <ControlledSelect
                 disabled={disabled}
+                error={fieldErrors.categoryId}
+                fieldKey="categoryId"
                 help="Only published categories are listed. An assigned draft category stays visible on edit."
                 label="Category"
                 onChange={setCategoryId}
@@ -574,6 +756,8 @@ export function ProductCatalogForm({
               />
               <ControlledSelect
                 disabled={disabled}
+                error={fieldErrors.brandId}
+                fieldKey="brandId"
                 help="Only published brands are listed. An assigned draft or archived brand stays visible on edit."
                 label="Brand"
                 onChange={setBrandId}
@@ -587,35 +771,6 @@ export function ProductCatalogForm({
                 value={brandId}
               />
             </div>
-          </FormCard>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          <FormCard title="Media">
-            <CatalogMediaUploadField
-              disabled={disabled}
-              helperText={
-                formState.loading
-                  ? "Saving…"
-                  : imagePreviews.length > 0
-                    ? `${imagePreviews.length} image${imagePreviews.length === 1 ? "" : "s"} selected. Files upload to storage when you save.`
-                    : "Add PNG, JPG, or WebP images. Uploads on save."
-              }
-              images={imagePreviews}
-              onAddFiles={handleAddImages}
-              onRemove={handleRemoveImage}
-              onReorder={handleReorderImages}
-            />
-          </FormCard>
-          <FormCard title="Description">
-            <ControlledTextarea
-              disabled={disabled}
-              help="Shown on the product detail page."
-              label="Product description"
-              minRows={5}
-              onChange={setDescription}
-              placeholder="Describe the product…"
-              value={description}
-            />
           </FormCard>
         </div>
       </CatalogFormLayout>

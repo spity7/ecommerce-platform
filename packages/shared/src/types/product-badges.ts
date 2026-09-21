@@ -50,4 +50,7 @@ export const DEFAULT_MERCHANDISING: MerchandisingDefaults = {
   bestSellerMinUnitsSold: 5,
 };
 
-export type SiteMerchandisingConfig = Partial<MerchandisingDefaults>;
+export type SiteMerchandisingConfig = Partial<MerchandisingDefaults> & {
+  /** When set, only these manual badge kinds appear in admin and persist on products. */
+  manualBadgeKinds?: ProductBadgeKind[];
+};

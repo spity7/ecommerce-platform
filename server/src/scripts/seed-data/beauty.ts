@@ -91,7 +91,7 @@ export const beautySeedData: SiteSeedData = {
       unitsSold: 24,
       metadata: {
         merchandising: {
-          manualBadges: [{ kind: "staff_pick" }, { kind: "best_seller" }],
+          manualBadges: [{ kind: "limited_offer" }, { kind: "best_seller" }],
         },
       },
     },
@@ -106,7 +106,7 @@ export const beautySeedData: SiteSeedData = {
       status: "published",
       metadata: {
         merchandising: {
-          manualBadges: [{ kind: "trending" }],
+          manualBadges: [{ kind: "limited_offer" }],
         },
       },
       categorySlug: "skincare",
@@ -191,7 +191,7 @@ export const beautySeedData: SiteSeedData = {
       images: [productImage("beauty-product-st-07.webp")],
       metadata: {
         merchandising: {
-          manualBadges: [{ kind: "hot" }],
+          manualBadges: [{ kind: "clearance" }],
         },
       },
     },
@@ -292,7 +292,7 @@ export const beautySeedData: SiteSeedData = {
       images: [productImage("beauty-product-st-14.webp")],
       metadata: {
         merchandising: {
-          manualBadges: [{ kind: "best_seller" }, { kind: "hot" }],
+          manualBadges: [{ kind: "best_seller" }, { kind: "clearance" }],
         },
       },
     },
@@ -330,7 +330,7 @@ export const beautySeedData: SiteSeedData = {
       images: [productImage("beauty-product-st-09.webp")],
       metadata: {
         merchandising: {
-          manualBadges: [{ kind: "exclusive" }, { kind: "limited_offer" }],
+          manualBadges: [{ kind: "limited_offer" }, { kind: "clearance" }],
         },
       },
     },
@@ -348,7 +348,7 @@ export const beautySeedData: SiteSeedData = {
       images: [productImage("beauty-product-st-04.webp")],
       metadata: {
         merchandising: {
-          manualBadges: [{ kind: "organic" }, { kind: "vegan" }],
+          manualBadges: [{ kind: "organic" }, { kind: "cruelty_free" }],
         },
       },
     },
@@ -403,7 +403,7 @@ export const beautySeedData: SiteSeedData = {
       images: [productImage("beauty-product-st-02.webp")],
       metadata: {
         merchandising: {
-          manualBadges: [{ kind: "back_in_stock" }],
+          manualBadges: [{ kind: "clearance" }],
         },
       },
     },
@@ -422,7 +422,7 @@ export const beautySeedData: SiteSeedData = {
       images: [productImage("beauty-product-st-01.webp")],
       metadata: {
         merchandising: {
-          manualBadges: [{ kind: "bundle" }, { kind: "free_gift" }],
+          manualBadges: [{ kind: "clearance" }, { kind: "limited_offer" }],
         },
       },
     },

@@ -1,5 +1,6 @@
 import {
   parseProductMerchandising,
+  resolveManualProductBadgeKinds,
   resolveProductCardBadges,
   resolveProductMetadataForWrite,
   type ProductMerchandising,
@@ -12,11 +13,34 @@ type ProductWritePayload = {
   merchandising?: ProductMerchandising;
 };
 
+function siteMerchandisingSanitizeOptions() {
+  const allowedManualKinds = resolveManualProductBadgeKinds(
+    env.site.merchandising
+  );
+  const allowlist = env.site.merchandising?.manualBadgeKinds;
+  return allowlist?.length
+    ? { allowedManualKinds: allowedManualKinds }
+    : undefined;
+}
+
+function metadataForBadgeResolve(doc: ProductDocument): Record<string, unknown> {
+  const raw = (doc.metadata as Record<string, unknown>) ?? {};
+  const merchandising = parseProductMerchandising(
+    raw,
+    siteMerchandisingSanitizeOptions()
+  );
+  return { ...raw, merchandising };
+}
+
 export function resolveMetadataForProductWrite(
   existing: Record<string, unknown> | undefined,
   payload: ProductWritePayload
 ): Record<string, unknown> | undefined {
-  return resolveProductMetadataForWrite(existing, payload);
+  return resolveProductMetadataForWrite(
+    existing,
+    payload,
+    siteMerchandisingSanitizeOptions()
+  );
 }
 
 export function stripMerchandisingFromAssignPayload<
@@ -35,7 +59,7 @@ export function resolveBadgesForProductDocument(doc: ProductDocument) {
       doc.createdAt instanceof Date
         ? doc.createdAt.toISOString()
         : new Date(doc.createdAt ?? 0).toISOString(),
-    metadata: (doc.metadata as Record<string, unknown>) ?? {},
+    metadata: metadataForBadgeResolve(doc),
     averageRating: doc.averageRating ?? 0,
     reviewCount: doc.reviewCount ?? 0,
     unitsSold: Math.max(0, doc.unitsSold ?? 0),
@@ -46,6 +70,7 @@ export function resolveBadgesForProductDocument(doc: ProductDocument) {
 
 export function getMerchandisingFromDocument(doc: ProductDocument) {
   return parseProductMerchandising(
-    (doc.metadata as Record<string, unknown>) ?? {}
+    (doc.metadata as Record<string, unknown>) ?? {},
+    siteMerchandisingSanitizeOptions()
   );
 }

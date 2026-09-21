@@ -3,17 +3,23 @@ import type { ProductBadgeKind } from "../types/product-badges.js";
 import {
   mergeMerchandisingPatch,
   sanitizeProductMerchandising,
+  type SanitizeMerchandisingOptions,
 } from "./sanitize.js";
 
 const MERCHANDISING_KEY = "merchandising";
 
-export { mergeMerchandisingPatch, sanitizeProductMerchandising } from "./sanitize.js";
+export {
+  mergeMerchandisingPatch,
+  sanitizeProductMerchandising,
+  type SanitizeMerchandisingOptions,
+} from "./sanitize.js";
 
 export function parseProductMerchandising(
-  metadata: Record<string, unknown> | undefined | null
+  metadata: Record<string, unknown> | undefined | null,
+  options?: SanitizeMerchandisingOptions
 ): ProductMerchandising {
   const raw = metadata?.[MERCHANDISING_KEY];
-  return sanitizeProductMerchandising(raw);
+  return sanitizeProductMerchandising(raw, options);
 }
 
 export function normalizeBadgeStyle(style: string): string {
@@ -28,10 +34,11 @@ export function normalizeBadgeStyle(style: string): string {
 
 export function mergeMerchandisingIntoMetadata(
   metadata: Record<string, unknown> | undefined,
-  merchandising: ProductMerchandising
+  merchandising: ProductMerchandising,
+  options?: SanitizeMerchandisingOptions
 ): Record<string, unknown> {
   const next = { ...(metadata ?? {}) };
-  next[MERCHANDISING_KEY] = sanitizeProductMerchandising(merchandising);
+  next[MERCHANDISING_KEY] = sanitizeProductMerchandising(merchandising, options);
   delete next.cardBadge;
   return next;
 }
@@ -48,13 +55,14 @@ export function resolveProductMetadataForWrite(
   payload: {
     metadata?: Record<string, unknown>;
     merchandising?: ProductMerchandising;
-  }
+  },
+  options?: SanitizeMerchandisingOptions
 ): Record<string, unknown> | undefined {
   if (payload.metadata === undefined && payload.merchandising === undefined) {
     return undefined;
   }
 
-  const existingMerchandising = parseProductMerchandising(existing);
+  const existingMerchandising = parseProductMerchandising(existing, options);
   let metadata: Record<string, unknown>;
 
   if (payload.metadata !== undefined) {
@@ -64,7 +72,8 @@ export function resolveProductMetadataForWrite(
     if (merchandisingPatch !== undefined) {
       metadata[MERCHANDISING_KEY] = mergeMerchandisingPatch(
         existingMerchandising,
-        merchandisingPatch
+        merchandisingPatch,
+        options
       );
     }
   } else {
@@ -72,12 +81,17 @@ export function resolveProductMetadataForWrite(
   }
 
   if (payload.merchandising !== undefined) {
-    metadata = mergeMerchandisingIntoMetadata(metadata, payload.merchandising);
+    metadata = mergeMerchandisingIntoMetadata(
+      metadata,
+      payload.merchandising,
+      options
+    );
   }
 
   if (metadata[MERCHANDISING_KEY] !== undefined) {
     metadata[MERCHANDISING_KEY] = sanitizeProductMerchandising(
-      metadata[MERCHANDISING_KEY]
+      metadata[MERCHANDISING_KEY],
+      options
     );
   }
 

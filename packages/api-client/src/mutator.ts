@@ -6,10 +6,13 @@ import { getUnauthorizedHandler } from "./unauthorized.js";
 
 export { getApiBaseUrl } from "./apiBaseUrl.js";
 
+export type ApiValidationDetails = Record<string, string[] | undefined>;
+
 export class ApiError extends Error {
   constructor(
     message: string,
-    public status: number
+    public status: number,
+    public details?: ApiValidationDetails
   ) {
     super(message);
     this.name = "ApiError";
@@ -66,11 +69,12 @@ platformInstance.interceptors.response.use(
       }
 
       let message = `Request failed (${status})`;
-      const body = error.response?.data as { error?: string } | undefined;
+      const body = error.response?.data as
+        { error?: string; details?: ApiValidationDetails } | undefined;
       if (body?.error) {
         message = body.error;
       }
-      throw new ApiError(message, status);
+      throw new ApiError(message, status, body?.details);
     }
     throw error;
   }

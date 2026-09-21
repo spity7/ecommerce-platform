@@ -21,7 +21,11 @@ export type AssignedProductsListFilter = {
   categoryId?: string;
 };
 import type { ProductFormAttribute } from "@/lib/product-form-attributes";
-import { platformInstance } from "@platform/api-client";
+import {
+  ApiError,
+  platformInstance,
+  type ApiValidationDetails,
+} from "@platform/api-client";
 import { cn } from "@/utils/cn";
 
 export const CATALOG_IMAGE_ACCEPT = ".png,.jpg,.jpeg,.webp";
@@ -310,20 +314,129 @@ export async function deleteHostedCatalogImages(urls: string[]): Promise<void> {
 }
 
 export type CatalogFieldErrors = {
+  brandId?: string;
+  categoryId?: string;
+  compareAtPrice?: string;
+  description?: string;
   image?: string;
   name?: string;
+  price?: string;
   sku?: string;
+  stock?: string;
 };
+
+const CATALOG_FIELD_FOCUS_ORDER: (keyof CatalogFieldErrors)[] = [
+  "name",
+  "price",
+  "compareAtPrice",
+  "stock",
+  "description",
+  "categoryId",
+  "brandId",
+  "image",
+  "sku",
+];
 
 type ParsedCatalogFormError = {
   fieldErrors: CatalogFieldErrors;
   summary: string;
 };
 
+function isCatalogFieldKey(key: string): key is keyof CatalogFieldErrors {
+  return (
+    key === "name" ||
+    key === "price" ||
+    key === "compareAtPrice" ||
+    key === "stock" ||
+    key === "description" ||
+    key === "categoryId" ||
+    key === "brandId" ||
+    key === "image" ||
+    key === "sku"
+  );
+}
+
+function validationDetailsToFieldErrors(
+  details: ApiValidationDetails | null | undefined
+): CatalogFieldErrors {
+  if (!details) {
+    return {};
+  }
+
+  const fieldErrors: CatalogFieldErrors = {};
+  for (const [path, messages] of Object.entries(details)) {
+    const topLevel = path.split(".")[0] ?? path;
+    const message = messages?.[0];
+    if (message && isCatalogFieldKey(topLevel)) {
+      fieldErrors[topLevel] = message;
+    }
+  }
+  return fieldErrors;
+}
+
+export function resolveCatalogFieldErrors(
+  message: string | null,
+  validationDetails?: ApiValidationDetails | null
+): CatalogFieldErrors {
+  const fromMessage = parseCatalogFormError(message).fieldErrors;
+  const fromApi = validationDetailsToFieldErrors(validationDetails);
+  return { ...fromApi, ...fromMessage };
+}
+
 export function getCatalogFieldErrors(
   message: string | null
 ): CatalogFieldErrors {
-  return parseCatalogFormError(message).fieldErrors;
+  return resolveCatalogFieldErrors(message);
+}
+
+export function catalogSubmitErrorState(error: unknown): {
+  error: string;
+  validationDetails: ApiValidationDetails | null;
+} {
+  if (error instanceof ApiError) {
+    return {
+      error: error.message,
+      validationDetails: error.details ?? null,
+    };
+  }
+
+  return {
+    error: error instanceof Error ? error.message : "Save failed",
+    validationDetails: null,
+  };
+}
+
+export function useFocusFirstCatalogFieldError(
+  fieldErrors: CatalogFieldErrors
+): void {
+  const signature = CATALOG_FIELD_FOCUS_ORDER.filter(
+    (key) => fieldErrors[key]
+  ).join("|");
+
+  useEffect(() => {
+    if (!signature) {
+      return;
+    }
+
+    const firstKey = CATALOG_FIELD_FOCUS_ORDER.find((key) => fieldErrors[key]);
+    if (!firstKey) {
+      return;
+    }
+
+    const element = document.getElementById(`catalog-field-${firstKey}`);
+    if (!element) {
+      return;
+    }
+
+    element.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (element instanceof HTMLElement) {
+      element.focus({ preventScroll: true });
+    }
+  }, [fieldErrors, signature]);
+}
+
+export function catalogFieldId(fieldKey: keyof CatalogFieldErrors): string {
+  return `catalog-field-${fieldKey}`;
 }
 
 function parseCatalogFormError(message: string | null): ParsedCatalogFormError {
@@ -555,6 +668,7 @@ export function StatusDot({
 type ControlledFieldProps = {
   disabled?: boolean;
   error?: string;
+  fieldKey?: keyof CatalogFieldErrors;
   help?: string;
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   label: string;
@@ -573,6 +687,7 @@ type ControlledFieldProps = {
 export function ControlledField({
   disabled = false,
   error,
+  fieldKey,
   help,
   inputMode,
   label,
@@ -587,7 +702,9 @@ export function ControlledField({
   type = "text",
   value,
 }: ControlledFieldProps) {
-  const fieldId = label.toLowerCase().replace(/\s+/g, "-");
+  const fieldId = fieldKey
+    ? catalogFieldId(fieldKey)
+    : label.toLowerCase().replace(/\s+/g, "-");
   const errorId = error ? `${fieldId}-error` : undefined;
 
   return (
@@ -605,6 +722,7 @@ export function ControlledField({
             : "border-surface-line focus:border-brand-600"
         )}
         disabled={disabled}
+        id={fieldId}
         inputMode={inputMode}
         maxLength={maxLength}
         min={min}
@@ -633,6 +751,8 @@ export function ControlledField({
 
 type ControlledSelectProps = {
   disabled?: boolean;
+  error?: string;
+  fieldKey?: keyof CatalogFieldErrors;
   help?: string;
   hideLabel?: boolean;
   label: string;
@@ -643,6 +763,8 @@ type ControlledSelectProps = {
 
 export function ControlledSelect({
   disabled = false,
+  error,
+  fieldKey,
   help,
   hideLabel,
   label,
@@ -650,6 +772,11 @@ export function ControlledSelect({
   options,
   value,
 }: ControlledSelectProps) {
+  const fieldId = fieldKey
+    ? catalogFieldId(fieldKey)
+    : label.toLowerCase().replace(/\s+/g, "-");
+  const errorId = error ? `${fieldId}-error` : undefined;
+
   return (
     <label className="block">
       {hideLabel ? (
@@ -658,11 +785,17 @@ export function ControlledSelect({
         <span className="text-[13px] font-semibold text-ink-700">{label}</span>
       )}
       <select
+        aria-describedby={errorId}
+        aria-invalid={Boolean(error)}
         className={cn(
-          "h-10 w-full rounded-base border border-surface-line bg-surface-body px-3 text-[14px] focus:border-brand-600 disabled:cursor-not-allowed disabled:bg-surface-muted disabled:text-ink-400",
-          hideLabel ? "mt-0" : "mt-1.5"
+          "h-10 w-full rounded-base border bg-surface-body px-3 text-[14px] focus:border-brand-600 disabled:cursor-not-allowed disabled:bg-surface-muted disabled:text-ink-400",
+          hideLabel ? "mt-0" : "mt-1.5",
+          error
+            ? "border-danger-500 focus:border-danger-500"
+            : "border-surface-line"
         )}
         disabled={disabled}
+        id={fieldId}
         onChange={(event) => onChange(event.target.value)}
         value={value}
       >
@@ -672,13 +805,24 @@ export function ControlledSelect({
           </option>
         ))}
       </select>
-      {help ? <p className="mt-1 text-[12px] text-ink-400">{help}</p> : null}
+      {error ? (
+        <p
+          className="mt-1 text-[12px] font-medium text-danger-600"
+          id={errorId}
+        >
+          {error}
+        </p>
+      ) : help ? (
+        <p className="mt-1 text-[12px] text-ink-400">{help}</p>
+      ) : null}
     </label>
   );
 }
 
 type ControlledTextareaProps = {
   disabled?: boolean;
+  error?: string;
+  fieldKey?: keyof CatalogFieldErrors;
   help?: string;
   label: string;
   minRows?: number;
@@ -709,6 +853,8 @@ export function ReadOnlyField({
 
 export function ControlledTextarea({
   disabled = false,
+  error,
+  fieldKey,
   help,
   label,
   minRows = 4,
@@ -716,18 +862,40 @@ export function ControlledTextarea({
   placeholder,
   value,
 }: ControlledTextareaProps) {
+  const fieldId = fieldKey
+    ? catalogFieldId(fieldKey)
+    : label.toLowerCase().replace(/\s+/g, "-");
+  const errorId = error ? `${fieldId}-error` : undefined;
+
   return (
     <label className="block">
       <span className="text-[13px] font-semibold text-ink-700">{label}</span>
       <textarea
-        className="mt-1.5 w-full rounded-base border border-surface-line bg-surface-body px-3 py-2 text-[14px] placeholder:text-ink-400 focus:border-brand-600 disabled:cursor-not-allowed disabled:bg-surface-muted disabled:text-ink-400"
+        aria-describedby={errorId}
+        aria-invalid={Boolean(error)}
+        className={cn(
+          "mt-1.5 w-full rounded-base border bg-surface-body px-3 py-2 text-[14px] placeholder:text-ink-400 focus:border-brand-600 disabled:cursor-not-allowed disabled:bg-surface-muted disabled:text-ink-400",
+          error
+            ? "border-danger-500 focus:border-danger-500"
+            : "border-surface-line"
+        )}
         disabled={disabled}
+        id={fieldId}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         rows={minRows}
         value={value}
       />
-      {help ? <p className="mt-1 text-[12px] text-ink-400">{help}</p> : null}
+      {error ? (
+        <p
+          className="mt-1 text-[12px] font-medium text-danger-600"
+          id={errorId}
+        >
+          {error}
+        </p>
+      ) : help ? (
+        <p className="mt-1 text-[12px] text-ink-400">{help}</p>
+      ) : null}
     </label>
   );
 }
@@ -736,6 +904,7 @@ export function ThumbnailUploadCard({
   alt,
   disabled = false,
   error,
+  fieldKey = "image",
   help,
   onClear,
   onUpload,
@@ -747,6 +916,7 @@ export function ThumbnailUploadCard({
   alt: string;
   disabled?: boolean;
   error?: string;
+  fieldKey?: keyof CatalogFieldErrors;
   help?: string;
   onClear?: () => void;
   onUpload: (file: File) => void;
@@ -810,6 +980,7 @@ export function ThumbnailUploadCard({
           <input
             accept={CATALOG_IMAGE_ACCEPT}
             aria-label={`Upload ${title.toLowerCase()}`}
+            id={catalogFieldId(fieldKey)}
             className="sr-only"
             disabled={disabled}
             onChange={(event) => {
@@ -1345,14 +1516,22 @@ export function AttributeValuesEditor({
 export function CatalogFormLayout({
   aside,
   children,
+  fullWidth,
 }: {
   aside: ReactNode;
   children: ReactNode;
+  /** Renders below the sidebar + main columns, spanning both (xl+). */
+  fullWidth?: ReactNode;
 }) {
   return (
     <div className="grid min-w-0 max-w-full items-start gap-4 xl:grid-cols-[280px_minmax(0,1fr)]">
       <aside className="min-w-0 space-y-4 xl:order-1">{aside}</aside>
       <div className="min-w-0 space-y-4 xl:order-2">{children}</div>
+      {fullWidth ? (
+        <div className="min-w-0 space-y-4 xl:order-3 xl:col-span-2">
+          {fullWidth}
+        </div>
+      ) : null}
     </div>
   );
 }

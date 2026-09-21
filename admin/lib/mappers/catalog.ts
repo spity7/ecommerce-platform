@@ -5,26 +5,12 @@ import type {
   ProductDto,
 } from "@platform/shared";
 import type { Attribute, Brand, Category } from "@/data/admin/catalog";
-import type { Product, ProductStatus } from "@/data/products/data";
+import type { Product } from "@/data/products/data";
 
-const LOW_STOCK_THRESHOLD = 10;
 const PLACEHOLDER_IMAGE = "/assets/products/oat-biscuit.svg";
 
 function resolveImage(images: string[]): string {
   return images[0] ?? PLACEHOLDER_IMAGE;
-}
-
-export function toAdminProductStatus(product: ProductDto): ProductStatus {
-  if (product.status === "archived") {
-    return "archived";
-  }
-  if (product.status === "draft") {
-    return "draft";
-  }
-  if (product.stock <= LOW_STOCK_THRESHOLD) {
-    return "low stock";
-  }
-  return "published";
 }
 
 export function mapProductDto(product: ProductDto): Product & { id: string } {
@@ -34,16 +20,16 @@ export function mapProductDto(product: ProductDto): Product & { id: string } {
     brand: product.brandName,
     brandId: product.brandId,
     catalogStatus: product.status,
-    category: product.categoryName || "Uncategorized",
+    category: product.categoryName?.trim() ?? "",
     categoryId: product.categoryId,
     image: resolveImage(product.images),
     name: product.name,
     price: product.price,
     sku: product.sku,
     slug: product.slug,
-    status: toAdminProductStatus(product),
+    status: product.status,
     stock: product.stock,
-    storefrontBadges: product.badges?.map((badge) => badge.text) ?? [],
+    badges: product.badges ?? [],
   };
 }
 

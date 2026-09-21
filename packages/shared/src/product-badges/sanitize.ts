@@ -8,12 +8,29 @@ import { AUTO_ONLY_MANUAL_BADGE_KINDS } from "./registry.js";
 
 const VALID_KINDS = new Set<string>(PRODUCT_BADGE_KINDS);
 
+export type SanitizeMerchandisingOptions = {
+  allowedManualKinds?: readonly ProductBadgeKind[];
+};
+
 function isValidKind(value: unknown): value is ProductBadgeKind {
   return typeof value === "string" && VALID_KINDS.has(value);
 }
 
+function isAllowedManualKind(
+  kind: ProductBadgeKind,
+  options?: SanitizeMerchandisingOptions
+): boolean {
+  if (!options?.allowedManualKinds?.length) {
+    return true;
+  }
+  return options.allowedManualKinds.includes(kind);
+}
+
 /** Lenient normalize: drop invalid entries instead of failing entirely. */
-export function sanitizeProductMerchandising(raw: unknown): ProductMerchandising {
+export function sanitizeProductMerchandising(
+  raw: unknown,
+  options?: SanitizeMerchandisingOptions
+): ProductMerchandising {
   if (!raw || typeof raw !== "object") {
     return { manualBadges: [], suppressAutoBadges: undefined };
   }
@@ -32,6 +49,9 @@ export function sanitizeProductMerchandising(raw: unknown): ProductMerchandising
       }
       const kind = (item as { kind?: unknown }).kind;
       if (!isValidKind(kind) || AUTO_ONLY_MANUAL_BADGE_KINDS.includes(kind)) {
+        continue;
+      }
+      if (!isAllowedManualKind(kind, options)) {
         continue;
       }
       if (seenManual.has(kind)) {
@@ -67,21 +87,25 @@ export function sanitizeProductMerchandising(raw: unknown): ProductMerchandising
 /** Partial PATCH of nested `metadata.merchandising` (omit keys to keep existing). */
 export function mergeMerchandisingPatch(
   base: ProductMerchandising,
-  patch: unknown
+  patch: unknown,
+  options?: SanitizeMerchandisingOptions
 ): ProductMerchandising {
   if (!patch || typeof patch !== "object") {
-    return sanitizeProductMerchandising(base);
+    return sanitizeProductMerchandising(base, options);
   }
 
   const record = patch as Record<string, unknown>;
-  return sanitizeProductMerchandising({
-    manualBadges:
-      record.manualBadges !== undefined
-        ? record.manualBadges
-        : base.manualBadges,
-    suppressAutoBadges:
-      record.suppressAutoBadges !== undefined
-        ? record.suppressAutoBadges
-        : base.suppressAutoBadges,
-  });
+  return sanitizeProductMerchandising(
+    {
+      manualBadges:
+        record.manualBadges !== undefined
+          ? record.manualBadges
+          : base.manualBadges,
+      suppressAutoBadges:
+        record.suppressAutoBadges !== undefined
+          ? record.suppressAutoBadges
+          : base.suppressAutoBadges,
+    },
+    options
+  );
 }

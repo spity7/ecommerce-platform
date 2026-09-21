@@ -1,6 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
+  getAutoProductBadgeRuleHintShort,
   mergeMerchandisingPatch,
   productMerchandisingSchema,
   resolveProductCardBadges,
@@ -159,6 +160,20 @@ describe("mergeMerchandisingPatch", () => {
 });
 
 describe("sanitizeProductMerchandising", () => {
+  it("drops manual kinds outside the site allowlist", () => {
+    const result = sanitizeProductMerchandising(
+      {
+        manualBadges: [{ kind: "hot" }, { kind: "staff_pick" }],
+      },
+      { allowedManualKinds: ["staff_pick", "limited_offer"] }
+    );
+
+    assert.deepEqual(
+      result.manualBadges.map((badge) => badge.kind),
+      ["staff_pick"]
+    );
+  });
+
   it("keeps valid manual badges and drops auto-only kinds", () => {
     const result = sanitizeProductMerchandising({
       manualBadges: [
@@ -174,5 +189,35 @@ describe("sanitizeProductMerchandising", () => {
       ["trending"]
     );
     assert.deepEqual(result.suppressAutoBadges, ["new"]);
+  });
+});
+
+describe("getAutoProductBadgeRuleHintShort", () => {
+  it("uses site merchandising thresholds and review flag", () => {
+    assert.equal(
+      getAutoProductBadgeRuleHintShort("low_stock", {
+        config: { lowStockThreshold: 5 },
+      }),
+      "Stock ≤5"
+    );
+    assert.equal(
+      getAutoProductBadgeRuleHintShort("new", {
+        config: { newProductDays: 30 },
+      }),
+      "≤30 days"
+    );
+    assert.equal(
+      getAutoProductBadgeRuleHintShort("top_rated", {
+        config: { topRatedMinRating: 4.5, topRatedMinReviews: 10 },
+        reviewsEnabled: true,
+      }),
+      "4.5+, 10+ reviews"
+    );
+    assert.equal(
+      getAutoProductBadgeRuleHintShort("top_rated", {
+        reviewsEnabled: false,
+      }),
+      "Reviews off on site"
+    );
   });
 });

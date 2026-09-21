@@ -207,6 +207,7 @@ textarea:focus-visible {
 .icon-button {
   align-items: center;
   border-radius: 6px;
+  cursor: pointer;
   display: inline-flex;
   height: 36px;
   justify-content: center;

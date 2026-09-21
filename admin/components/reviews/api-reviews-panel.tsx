@@ -19,6 +19,7 @@ import {
   type ApiReviewRow,
 } from "@/lib/mappers/reviews";
 import { ProductReviewsTableSkeleton } from "@/components/reviews/product-reviews-skeleton";
+import { useBusyActionGuard } from "@platform/react-busy";
 
 const statusClass: Record<ApiReviewRow["status"], string> = {
   approved: "bg-success-50 text-success-700",
@@ -51,6 +52,8 @@ export function ApiReviewsPanel({
     productName: string;
     customer: string;
   } | null>(null);
+
+  useBusyActionGuard({ active: actionId !== null });
 
   const loadReviews = useCallback(
     async (options?: { silent?: boolean }) => {

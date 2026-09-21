@@ -17,8 +17,12 @@ import {
   mapProductDto,
 } from "@/lib/mappers/catalog";
 import { getAdminSiteConfig } from "@/lib/site";
+import { DEFAULT_MERCHANDISING } from "@platform/shared";
 
 const site = getAdminSiteConfig();
+const lowStockThreshold =
+  site.merchandising?.lowStockThreshold ??
+  DEFAULT_MERCHANDISING.lowStockThreshold;
 
 export const metadata: Metadata = {
   title: `Products | ${site.name} Admin`,
@@ -101,6 +105,7 @@ export default async function ProductsPage({
         categoryFilters={categoryFilters}
         focusProductId={productId}
         initialFilters={{ attributeSlug, brandId, categoryId }}
+        lowStockThreshold={lowStockThreshold}
         products={products}
       />
     </>

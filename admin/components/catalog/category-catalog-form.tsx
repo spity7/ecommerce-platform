@@ -9,7 +9,9 @@ import {
   ControlledSelect,
   collectRemovedHostedImages,
   deleteHostedCatalogImages,
-  getCatalogFieldErrors,
+  catalogSubmitErrorState,
+  resolveCatalogFieldErrors,
+  useFocusFirstCatalogFieldError,
   getThumbnailPreviewState,
   isHostedCatalogImageUrl,
   revokeBlobPreviewUrl,
@@ -27,12 +29,17 @@ import {
 } from "@/lib/catalog-feedback";
 import { useCatalogFormLeaveGuard } from "@/components/catalog/use-catalog-form-leave-guard";
 import { useToast } from "@/providers/toast-provider";
-import { createCategoryApi, updateCategoryApi } from "@platform/api-client";
+import {
+  createCategoryApi,
+  updateCategoryApi,
+  type ApiValidationDetails,
+} from "@platform/api-client";
 import type { CategoryDto } from "@platform/shared";
 
 type FormState = {
   error: string | null;
   loading: boolean;
+  validationDetails: ApiValidationDetails | null;
 };
 
 type CategoryCatalogFormProps = {
@@ -67,6 +74,7 @@ export function CategoryCatalogForm({
   const [formState, setFormState] = useState<FormState>({
     error: null,
     loading: false,
+    validationDetails: null,
   });
   const initialHostedImage =
     mode === "edit" && initial && isHostedCatalogImageUrl(initial.image)
@@ -79,9 +87,12 @@ export function CategoryCatalogForm({
   );
 
   const fieldErrors = useMemo(
-    () => getCatalogFieldErrors(formState.error),
-    [formState.error]
+    () =>
+      resolveCatalogFieldErrors(formState.error, formState.validationDetails),
+    [formState.error, formState.validationDetails]
   );
+
+  useFocusFirstCatalogFieldError(fieldErrors);
   const { disabled } = useCatalogFormLeaveGuard({
     loading: formState.loading,
   });
@@ -95,7 +106,11 @@ export function CategoryCatalogForm({
   }, [pendingImageFile, previewUrl]);
 
   function handleImageUpload(file: File) {
-    setFormState((current) => ({ ...current, error: null }));
+    setFormState((current) => ({
+      ...current,
+      error: null,
+      validationDetails: null,
+    }));
     if (pendingImageFile) {
       revokeBlobPreviewUrl(previewUrl);
     }
@@ -110,11 +125,12 @@ export function CategoryCatalogForm({
       setFormState({
         error: "Category image is required",
         loading: false,
+        validationDetails: null,
       });
       return;
     }
 
-    setFormState({ error: null, loading: true });
+    setFormState({ error: null, loading: true, validationDetails: null });
 
     let finalImage = savedImageUrl.trim();
     const uploadedInThisAttempt: string[] = [];
@@ -159,7 +175,7 @@ export function CategoryCatalogForm({
         await deleteHostedCatalogImages(uploadedInThisAttempt);
       }
       setFormState({
-        error: error instanceof Error ? error.message : "Save failed",
+        ...catalogSubmitErrorState(error),
         loading: false,
       });
     }
@@ -176,11 +192,16 @@ export function CategoryCatalogForm({
           <ControlledField
             disabled={disabled}
             error={fieldErrors.name}
+            fieldKey="name"
             help="A category name is required and should be unique."
             label="Category name"
             onChange={(value) => {
               setName(value);
-              setFormState((current) => ({ ...current, error: null }));
+              setFormState((current) => ({
+                ...current,
+                error: null,
+                validationDetails: null,
+              }));
             }}
             placeholder="Category name"
             required

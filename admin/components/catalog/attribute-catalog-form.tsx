@@ -10,7 +10,9 @@ import {
   ControlledSelect,
   ControlledTextarea,
   createAttributeValueRows,
-  getCatalogFieldErrors,
+  catalogSubmitErrorState,
+  resolveCatalogFieldErrors,
+  useFocusFirstCatalogFieldError,
   StatusDot,
   type AssignedProductPreview,
   type AttributeValueRow,
@@ -25,12 +27,17 @@ import {
 import { useToast } from "@/providers/toast-provider";
 import { useCatalogFormLeaveGuard } from "@/components/catalog/use-catalog-form-leave-guard";
 import { cn } from "@/utils/cn";
-import { createAttributeApi, updateAttributeApi } from "@platform/api-client";
+import {
+  createAttributeApi,
+  updateAttributeApi,
+  type ApiValidationDetails,
+} from "@platform/api-client";
 import type { AttributeDto } from "@platform/shared";
 
 type FormState = {
   error: string | null;
   loading: boolean;
+  validationDetails: ApiValidationDetails | null;
 };
 
 type AttributeCatalogFormProps = {
@@ -62,21 +69,28 @@ export function AttributeCatalogForm({
   const [formState, setFormState] = useState<FormState>({
     error: null,
     loading: false,
+    validationDetails: null,
   });
 
   const usesPredefinedValues = displayType !== "Text";
 
   const fieldErrors = useMemo(
-    () => getCatalogFieldErrors(formState.error),
-    [formState.error]
+    () =>
+      resolveCatalogFieldErrors(
+        formState.error,
+        formState.validationDetails
+      ),
+    [formState.error, formState.validationDetails]
   );
+
+  useFocusFirstCatalogFieldError(fieldErrors);
   const { disabled } = useCatalogFormLeaveGuard({
     loading: formState.loading,
   });
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setFormState({ error: null, loading: true });
+    setFormState({ error: null, loading: true, validationDetails: null });
 
     const values = usesPredefinedValues
       ? valueRows.map((row) => row.value.trim()).filter(Boolean)
@@ -106,7 +120,7 @@ export function AttributeCatalogForm({
       });
     } catch (error) {
       setFormState({
-        error: error instanceof Error ? error.message : "Save failed",
+        ...catalogSubmitErrorState(error),
         loading: false,
       });
     }
@@ -131,11 +145,16 @@ export function AttributeCatalogForm({
             <ControlledField
               disabled={disabled}
               error={fieldErrors.name}
+              fieldKey="name"
               help="Attribute names appear in product option controls."
               label="Attribute name"
               onChange={(value) => {
                 setName(value);
-                setFormState((current) => ({ ...current, error: null }));
+                setFormState((current) => ({
+                  ...current,
+                  error: null,
+                  validationDetails: null,
+                }));
               }}
               placeholder="e.g. Color"
               required

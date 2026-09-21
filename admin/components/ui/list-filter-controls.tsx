@@ -62,7 +62,7 @@ export function ListSearchField({
           <ListFilterMarker />
           <button
             aria-label="Clear search"
-            className="absolute right-3 top-1/2 inline-flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-base text-ink-400 transition-colors hover:bg-surface-muted hover:text-ink-700"
+            className="absolute right-3 top-1/2 inline-flex h-6 w-6 -translate-y-1/2 cursor-pointer items-center justify-center rounded-base text-ink-400 transition-colors hover:bg-surface-muted hover:text-ink-700"
             onClick={() => onChange("")}
             type="button"
           >
@@ -88,7 +88,7 @@ export function ListClearFiltersButton({
   return (
     <button
       aria-label="Clear all filters"
-      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-base border border-danger-200 bg-danger-50 text-danger-600 transition-colors hover:border-danger-300 hover:bg-danger-100 hover:text-danger-700"
+      className="inline-flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-base border border-danger-200 bg-danger-50 text-danger-600 transition-colors hover:border-danger-300 hover:bg-danger-100 hover:text-danger-700"
       onClick={onClear}
       title="Clear all filters"
       type="button"
