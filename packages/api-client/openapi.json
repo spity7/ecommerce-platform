@@ -562,7 +562,8 @@
           },
           "compareAtPrice": {
             "type": "number",
-            "minimum": 0
+            "minimum": 0,
+            "exclusiveMinimum": true
           },
           "stock": {
             "type": "integer",
@@ -575,7 +576,8 @@
             "default": "draft"
           },
           "categoryId": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "brandId": {
             "type": "string"
@@ -682,7 +684,7 @@
             "required": ["manualBadges"]
           }
         },
-        "required": ["name", "price"]
+        "required": ["name", "price", "categoryId"]
       },
       "UpdateProductInput": {
         "type": "object",
@@ -712,7 +714,8 @@
           },
           "compareAtPrice": {
             "type": "number",
-            "minimum": 0
+            "minimum": 0,
+            "exclusiveMinimum": true
           },
           "stock": {
             "type": "integer",
@@ -723,7 +726,8 @@
             "enum": ["draft", "published", "archived"]
           },
           "categoryId": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "brandId": {
             "type": "string"
@@ -3235,7 +3239,8 @@
                   },
                   "compareAtPrice": {
                     "type": "number",
-                    "minimum": 0
+                    "minimum": 0,
+                    "exclusiveMinimum": true
                   },
                   "stock": {
                     "type": "integer",
@@ -3248,7 +3253,8 @@
                     "default": "draft"
                   },
                   "categoryId": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                   },
                   "brandId": {
                     "type": "string"
@@ -3355,7 +3361,7 @@
                     "required": ["manualBadges"]
                   }
                 },
-                "required": ["name", "price"]
+                "required": ["name", "price", "categoryId"]
               }
             }
           }
@@ -3884,7 +3890,8 @@
                   },
                   "compareAtPrice": {
                     "type": "number",
-                    "minimum": 0
+                    "minimum": 0,
+                    "exclusiveMinimum": true
                   },
                   "stock": {
                     "type": "integer",
@@ -3895,7 +3902,8 @@
                     "enum": ["draft", "published", "archived"]
                   },
                   "categoryId": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                   },
                   "brandId": {
                     "type": "string"

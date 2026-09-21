@@ -416,12 +416,16 @@ export interface CreateProductInput {
   description?: string;
   /** @minimum 0 */
   price: number;
-  /** @minimum 0 */
+  /**
+   * @minimum 0
+   * @exclusiveMinimum
+   */
   compareAtPrice?: number;
   /** @minimum 0 */
   stock?: number;
   status?: CreateProductInputStatus;
-  categoryId?: string;
+  /** @minLength 1 */
+  categoryId: string;
   brandId?: string;
   images?: string[];
   attributes?: CreateProductInputAttributes;
@@ -531,11 +535,15 @@ export interface UpdateProductInput {
   description?: string;
   /** @minimum 0 */
   price?: number;
-  /** @minimum 0 */
+  /**
+   * @minimum 0
+   * @exclusiveMinimum
+   */
   compareAtPrice?: number;
   /** @minimum 0 */
   stock?: number;
   status?: UpdateProductInputStatus;
+  /** @minLength 1 */
   categoryId?: string;
   brandId?: string;
   images?: string[];
@@ -2057,12 +2065,16 @@ export type CreateProductBody = {
   description?: string;
   /** @minimum 0 */
   price: number;
-  /** @minimum 0 */
+  /**
+   * @minimum 0
+   * @exclusiveMinimum
+   */
   compareAtPrice?: number;
   /** @minimum 0 */
   stock?: number;
   status?: CreateProductBodyStatus;
-  categoryId?: string;
+  /** @minLength 1 */
+  categoryId: string;
   brandId?: string;
   images?: string[];
   attributes?: CreateProductBodyAttributes;
@@ -2413,11 +2425,15 @@ export type UpdateProductBody = {
   description?: string;
   /** @minimum 0 */
   price?: number;
-  /** @minimum 0 */
+  /**
+   * @minimum 0
+   * @exclusiveMinimum
+   */
   compareAtPrice?: number;
   /** @minimum 0 */
   stock?: number;
   status?: UpdateProductBodyStatus;
+  /** @minLength 1 */
   categoryId?: string;
   brandId?: string;
   images?: string[];
