@@ -44,13 +44,18 @@ export function ProductReviewsTableSkeleton() {
       aria-label="Loading reviews table"
       className="rounded-card border border-surface-line bg-surface-card p-6 shadow-card"
     >
-      <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap items-center gap-3">
-          <SkeletonBar className="h-11 w-[340px] max-w-full" />
-          <SkeletonBar className="h-11 w-[140px]" />
-          <SkeletonBar className="h-11 w-[180px]" />
+      <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex min-w-0 flex-1 flex-col gap-3 md:flex-row md:flex-wrap md:items-center md:gap-3">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 md:contents">
+            <SkeletonBar className="h-11 w-full md:w-[340px]" />
+            <SkeletonBar className="h-11 w-11 md:hidden" />
+          </div>
+          <div className="grid grid-cols-2 gap-3 md:contents">
+            <SkeletonBar className="h-11 w-full md:w-[180px]" />
+            <SkeletonBar className="h-11 w-full md:w-[140px]" />
+          </div>
         </div>
-        <SkeletonBar className="h-11 w-[120px]" />
+        <SkeletonBar className="hidden h-11 w-[120px] md:block" />
       </div>
 
       <div className="overflow-x-auto">

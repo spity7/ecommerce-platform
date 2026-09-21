@@ -6,6 +6,7 @@ import { getProductReviewCount } from "@/lib/mappers/product";
 import { Product } from "@/types";
 import AddToQuickViewOne from "../action-buttons/AddToQuickViewOne";
 import AddToWishlistTwo from "../action-buttons/AddToWishlistTwo";
+import { PRODUCT_CARD_SQUARE_IMAGE } from "@/lib/product-card-image";
 import ProductCardImageBadges from "./ProductCardImageBadges";
 
 export default function ProductCard5({
@@ -49,25 +50,30 @@ export default function ProductCard5({
       className={`rbt-card rbt-product-card rbt-scroll-trigger fade_in animation-order-${animationOrder}`}
     >
       <div
-        className={`rbt-card-img top-rounded-md rbt-scroll-trigger ${
+        className={`rbt-card-img rbt-card-img-aspect-square top-rounded-md rbt-scroll-trigger ${
           product.hoverImg ? "rbt-has-hover-img" : ""
         } ${imbBgClass} zoom_in animation-order-${animationOrder}`}
       >
         <Link href={detailsPageLink}>
           <Image
             alt="Card Image"
+            className="rbt-prd-img"
+            quality={PRODUCT_CARD_SQUARE_IMAGE.quality}
+            sizes={PRODUCT_CARD_SQUARE_IMAGE.sizes}
             src={product.imgSrc}
-            width={312} // Using the smaller dimension from the HTML
-            height={312} // Using the smaller dimension from the HTML
+            width={PRODUCT_CARD_SQUARE_IMAGE.width}
+            height={PRODUCT_CARD_SQUARE_IMAGE.height}
           />
 
           {product.hoverImg && (
             <Image
               alt="Card Image"
-              src={product.hoverImg}
-              width={312} // Using the smaller dimension from the HTML
-              height={312} // Using the smaller dimension from the HTML
               className="rbt-hover-img"
+              quality={PRODUCT_CARD_SQUARE_IMAGE.quality}
+              sizes={PRODUCT_CARD_SQUARE_IMAGE.sizes}
+              src={product.hoverImg}
+              width={PRODUCT_CARD_SQUARE_IMAGE.width}
+              height={PRODUCT_CARD_SQUARE_IMAGE.height}
             />
           )}
         </Link>

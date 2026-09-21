@@ -12,9 +12,21 @@ import {
 } from "@/components/ui/list-filter-controls";
 import { ListDeleteConfirmDialog } from "@/components/ui/list-delete-confirm-dialog";
 import { CrudBusyShield } from "@/components/ui/crud-busy-shield";
+import {
+  ListTableBody,
+  ListTableEmptyMessage,
+} from "@/components/ui/list-table-body";
+import { ListTablePagination } from "@/components/ui/list-table-pagination";
+import {
+  ADMIN_LIST_TABLE_PAGE_SIZE,
+  clampListTablePage,
+  listTablePageIndexForItem,
+  sliceListTablePage,
+} from "@/lib/list-table-pagination";
 import { ProductListBadgeChips } from "@/components/products/product-list-badge-chips";
 import { StatusBadge } from "@/components/products/status-badge";
 import { routes } from "@/config/routes";
+import { ADMIN_LIST_ROW_THUMB } from "@/lib/catalog-image-display";
 import { productEditPath, storefrontProductPath } from "@/lib/paths";
 import { StorefrontProductViewAction } from "@/components/ui/linked-products-view-action";
 import { finishCatalogDelete } from "@/lib/catalog-feedback";
@@ -112,6 +124,7 @@ export function ProductListTable({
   const [highlightProductId, setHighlightProductId] = useState<string | null>(
     null
   );
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     setRows(products);
@@ -201,18 +214,57 @@ export function ProductListTable({
   ]);
 
   useEffect(() => {
+    setPage(1);
+  }, [query, status, categoryId, brandId, attributeSlug, sort]);
+
+  const safePage = clampListTablePage(
+    page,
+    filteredProducts.length,
+    ADMIN_LIST_TABLE_PAGE_SIZE
+  );
+
+  const pagedProducts = useMemo(
+    () =>
+      sliceListTablePage(
+        filteredProducts,
+        safePage,
+        ADMIN_LIST_TABLE_PAGE_SIZE
+      ),
+    [filteredProducts, safePage]
+  );
+
+  const filterSignature = useMemo(
+    () =>
+      JSON.stringify({
+        attributeSlug,
+        brandId,
+        categoryId,
+        query: query.trim(),
+        sort,
+        status,
+      }),
+    [attributeSlug, brandId, categoryId, query, sort, status]
+  );
+
+  const rowSetToken = useMemo(
+    () => pagedProducts.map((product) => productKey(product)).join("|"),
+    [pagedProducts]
+  );
+
+  useEffect(() => {
     const id = focusProductId?.trim();
     if (!id) {
       return;
     }
 
-    const isVisible = filteredProducts.some(
+    const itemIndex = filteredProducts.findIndex(
       (product) => productKey(product) === id
     );
-    if (!isVisible) {
+    if (itemIndex < 0) {
       return;
     }
 
+    setPage(listTablePageIndexForItem(itemIndex, ADMIN_LIST_TABLE_PAGE_SIZE));
     setHighlightProductId(id);
     requestAnimationFrame(() => {
       document
@@ -240,8 +292,8 @@ export function ProductListTable({
   }, [filteredProducts, focusProductId, router, searchParams]);
 
   const allVisibleSelected =
-    filteredProducts.length > 0 &&
-    filteredProducts.every((product) => selected.has(productKey(product)));
+    pagedProducts.length > 0 &&
+    pagedProducts.every((product) => selected.has(productKey(product)));
 
   function toggleSort(key: SortKey) {
     setSort((current) => ({
@@ -267,7 +319,7 @@ export function ProductListTable({
   function toggleAllVisible(checked: boolean) {
     setSelected((current) => {
       const next = new Set(current);
-      for (const product of filteredProducts) {
+      for (const product of pagedProducts) {
         const key = productKey(product);
         if (checked) {
           next.add(key);
@@ -324,76 +376,92 @@ export function ProductListTable({
     .map((product) => product.name);
 
   return (
-    <section className="rounded-card border border-surface-line bg-surface-card p-6 shadow-card">
+    <section className="min-w-0 rounded-card border border-surface-line bg-surface-card p-6 shadow-card">
       <CrudBusyShield active={deleting}>
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-3">
-            <ListSearchField
-              label="Search products"
-              onChange={setQuery}
-              placeholder="Search products"
-              value={query}
-            />
-            <ListFilterSelect
-              ariaLabel="Filter by category"
-              className="w-[180px]"
-              defaultValue="all"
-              onValueChange={setCategoryId}
-              options={categoryOptions}
-              size="lg"
-              value={categoryId}
-            />
-            <ListFilterSelect
-              ariaLabel="Filter by brand"
-              className="w-[180px]"
-              defaultValue="all"
-              onValueChange={setBrandId}
-              options={brandOptions}
-              size="lg"
-              value={brandId}
-            />
-            <ListFilterSelect
-              ariaLabel="Filter by attribute"
-              className="w-[180px]"
-              defaultValue="all"
-              onValueChange={setAttributeSlug}
-              options={attributeOptions}
-              size="lg"
-              value={attributeSlug}
-            />
-            <ListFilterSelect
-              ariaLabel="Filter by status"
-              className="w-[160px]"
-              defaultValue="all"
-              onValueChange={(value) => setStatus(value as StatusFilter)}
-              options={[
-                { label: "All statuses", value: "all" },
-                { label: "Published", value: "published" },
-                { label: "Draft", value: "draft" },
-                { label: "Archived", value: "archived" },
-                { label: "Low stock", value: "low stock" },
-              ]}
-              size="lg"
-              value={status}
-            />
-            <ListClearFiltersButton
-              active={hasActiveFilters}
-              onClear={clearAllFilters}
-            />
+        <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div className="flex min-w-0 flex-1 flex-col gap-3 md:flex-row md:flex-wrap md:items-center md:gap-3">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 md:contents">
+              <ListSearchField
+                className="min-w-0 w-full md:w-[200px]"
+                label="Search products"
+                onChange={setQuery}
+                placeholder="Search products"
+                value={query}
+              />
+              <button
+                aria-label={`Delete ${selected.size} selected product${selected.size === 1 ? "" : "s"}`}
+                className="inline-flex h-11 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-base bg-danger-500 px-4 text-[14px] font-semibold text-white transition-colors hover:bg-danger-600 disabled:cursor-not-allowed disabled:opacity-50 md:hidden"
+                disabled={selected.size === 0 || deleting}
+                onClick={() => setConfirmOpen(true)}
+                type="button"
+              >
+                <Icon className="h-4 w-4" name="trash-2" />
+                <span className="tabular-nums">({selected.size})</span>
+              </button>
+            </div>
+            <div className="grid min-w-0 grid-cols-2 gap-3 md:contents">
+              <ListFilterSelect
+                ariaLabel="Filter by category"
+                className="min-w-0 w-full md:w-[180px]"
+                defaultValue="all"
+                onValueChange={setCategoryId}
+                options={categoryOptions}
+                size="lg"
+                value={categoryId}
+              />
+              <ListFilterSelect
+                ariaLabel="Filter by brand"
+                className="min-w-0 w-full md:w-[180px]"
+                defaultValue="all"
+                onValueChange={setBrandId}
+                options={brandOptions}
+                size="lg"
+                value={brandId}
+              />
+              <ListFilterSelect
+                ariaLabel="Filter by attribute"
+                className="min-w-0 w-full md:w-[180px]"
+                defaultValue="all"
+                onValueChange={setAttributeSlug}
+                options={attributeOptions}
+                size="lg"
+                value={attributeSlug}
+              />
+              <ListFilterSelect
+                ariaLabel="Filter by status"
+                className="min-w-0 w-full md:w-[160px]"
+                defaultValue="all"
+                onValueChange={(value) => setStatus(value as StatusFilter)}
+                options={[
+                  { label: "All statuses", value: "all" },
+                  { label: "Published", value: "published" },
+                  { label: "Draft", value: "draft" },
+                  { label: "Archived", value: "archived" },
+                  { label: "Low stock", value: "low stock" },
+                ]}
+                size="lg"
+                value={status}
+              />
+              <ListClearFiltersButton
+                active={hasActiveFilters}
+                onClear={clearAllFilters}
+              />
+            </div>
           </div>
           <button
-            className="inline-flex h-11 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-base bg-danger-500 px-4 text-[14px] font-semibold text-white transition-colors hover:bg-danger-600 disabled:cursor-not-allowed disabled:opacity-50"
+            aria-label={`Delete ${selected.size} selected product${selected.size === 1 ? "" : "s"}`}
+            className="max-md:hidden md:inline-flex h-11 shrink-0 cursor-pointer items-center justify-center gap-2 rounded-base bg-danger-500 px-4 text-[14px] font-semibold text-white transition-colors hover:bg-danger-600 disabled:cursor-not-allowed disabled:opacity-50"
             disabled={selected.size === 0 || deleting}
             onClick={() => setConfirmOpen(true)}
             type="button"
           >
             <Icon className="h-4 w-4" name="trash-2" />
-            Delete (<span>{selected.size}</span>)
+            <span className="tabular-nums">({selected.size})</span>
           </button>
         </div>
 
-        <div className="dashboard-scrollbar overflow-x-auto">
-          <table className="w-full min-w-[880px] text-left">
+        <div className="admin-entity-table-scroll dashboard-scrollbar min-w-0 max-w-full overflow-x-auto">
+          <table className="w-full min-w-0 text-left">
             <thead>
               <tr className="border-b border-surface-line text-[13px] uppercase text-ink-400">
                 <th className="w-10 pb-3 pr-3">
@@ -423,11 +491,18 @@ export function ProductListTable({
                     onSort={toggleSort}
                   />
                 </th>
-                <th className="pb-3 text-right font-semibold">Action</th>
+                <th className="entity-table-actions-col w-[8.25rem] min-w-[8.25rem] max-w-[8.25rem] whitespace-nowrap px-2 pb-3 text-right font-semibold">
+                  Action
+                </th>
               </tr>
             </thead>
-            <tbody className="text-[14px]">
-              {filteredProducts.map((product) => {
+            <ListTableBody
+              className="text-[14px]"
+              filterSignature={filterSignature}
+              page={safePage}
+              rowSetToken={rowSetToken}
+            >
+              {pagedProducts.map((product) => {
                 const key = productKey(product);
                 const isHighlighted =
                   highlightProductId !== null && highlightProductId === key;
@@ -460,24 +535,23 @@ export function ProductListTable({
                         type="checkbox"
                       />
                     </td>
-                    <td className="py-4 pr-4">
-                      <div className="flex items-center gap-3">
+                    <td className="min-w-0 py-4 pr-4">
+                      <div className="flex min-w-0 items-center gap-3">
                         <Image
                           alt={product.name}
-                          className="h-12 w-12 rounded-base bg-surface-body object-cover"
-                          height={48}
+                          className="h-12 w-12 shrink-0 rounded-base bg-surface-body object-cover"
                           src={product.image}
-                          width={48}
+                          {...ADMIN_LIST_ROW_THUMB}
                         />
-                        <div>
+                        <div className="min-w-0">
                           <Link
-                            className="font-semibold text-ink-900 hover:text-brand-600"
+                            className="block truncate font-semibold text-ink-900 hover:text-brand-600"
                             href={productEditPath(String(product.id))}
                           >
                             {product.name}
                           </Link>
                           <p className="mt-1 text-[13px] text-ink-400">
-                            SKU: {product.sku}
+                            {product.sku}
                           </p>
                         </div>
                       </div>
@@ -520,7 +594,7 @@ export function ProductListTable({
                         label={statusLabel[catalogStatus]}
                       />
                     </td>
-                    <td className="py-4 text-right">
+                    <td className="entity-table-actions-col w-[8.25rem] min-w-[8.25rem] max-w-[8.25rem] whitespace-nowrap px-2 py-4 text-right">
                       <div className="inline-flex items-center gap-1">
                         {product.slug &&
                         product.catalogStatus === "published" ? (
@@ -574,37 +648,23 @@ export function ProductListTable({
                   </tr>
                 );
               })}
-            </tbody>
+            </ListTableBody>
           </table>
         </div>
 
         {filteredProducts.length === 0 ? (
-          <p className="py-10 text-center text-[14px] text-ink-400">
+          <ListTableEmptyMessage filterSignature={filterSignature}>
             No products match your search.
-          </p>
+          </ListTableEmptyMessage>
         ) : null}
 
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-          <p className="text-[13px] text-ink-500">
-            Showing {filteredProducts.length} of {rows.length} products
-          </p>
-          <div className="flex items-center gap-2">
-            <button
-              className="inline-flex h-9 items-center rounded-base border border-surface-line px-3 text-[13px] font-semibold text-ink-700 transition-colors hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
-              disabled
-              type="button"
-            >
-              Previous
-            </button>
-            <button
-              className="inline-flex h-9 items-center rounded-base border border-surface-line px-3 text-[13px] font-semibold text-ink-700 transition-colors hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
-              disabled
-              type="button"
-            >
-              Next
-            </button>
-          </div>
-        </div>
+        <ListTablePagination
+          disabled={deleting}
+          itemLabel="products"
+          onPageChange={setPage}
+          page={safePage}
+          totalItems={filteredProducts.length}
+        />
       </CrudBusyShield>
 
       {confirmOpen ? (

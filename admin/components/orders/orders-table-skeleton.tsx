@@ -28,13 +28,13 @@ export function OrdersTableSkeleton({
       aria-label="Loading orders table"
       className="rounded-card border border-surface-line bg-surface-card p-6 shadow-card"
     >
-      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex min-w-0 flex-1 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
-          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-            <SkeletonBar className="h-11 w-full sm:w-[340px] sm:max-w-full" />
+      <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex min-w-0 flex-1 flex-col gap-3 md:flex-row md:flex-wrap md:items-center md:gap-3">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 md:contents">
+            <SkeletonBar className="h-11 w-full md:w-[340px]" />
             <SkeletonBar className="h-11 w-11 md:hidden" />
           </div>
-          <div className="grid grid-cols-2 gap-3 md:flex md:flex-wrap md:items-center md:gap-3">
+          <div className="grid grid-cols-2 gap-3 md:contents">
             <SkeletonBar className="h-11 w-full md:w-[180px]" />
             <SkeletonBar className="h-11 w-full md:w-[200px]" />
           </div>

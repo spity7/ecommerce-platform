@@ -219,7 +219,7 @@
 }
 
 .rbt-shop-product-skeleton-image {
-  aspect-ratio: 1 / 0.85;
+  aspect-ratio: var(--rbt-catalog-image-aspect-ratio, 1246 / 976);
   width: 100%;
 }
 

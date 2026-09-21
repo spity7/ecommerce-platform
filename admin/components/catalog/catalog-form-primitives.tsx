@@ -13,6 +13,12 @@ import {
   LOW_STOCK_THRESHOLD,
   type AssignedProductPreview,
 } from "@/lib/assigned-products";
+import {
+  ADMIN_ASSIGNED_PRODUCT_THUMB,
+  ADMIN_CATALOG_THUMB_PREVIEW,
+  ADMIN_PRODUCT_GALLERY_GRID,
+  catalogPreviewImageUnoptimized,
+} from "@/lib/catalog-image-display";
 import { productsListPath } from "@/lib/paths";
 
 export type AssignedProductsListFilter = {
@@ -1019,8 +1025,6 @@ export function ThumbnailUploadCard({
   title?: string;
 }) {
   const hasImage = previewState !== "none" && Boolean(previewUrl);
-  const isRemote = previewUrl.startsWith("http");
-  const isBlobPreview = previewUrl.startsWith("blob:");
 
   const caption = disabled ? "Saving…" : (error ?? help);
 
@@ -1060,10 +1064,9 @@ export function ThumbnailUploadCard({
             <Image
               alt={alt}
               className="absolute inset-0 h-full w-full object-cover p-2"
-              height={144}
               src={previewUrl}
-              unoptimized={isRemote || isBlobPreview}
-              width={144}
+              unoptimized={catalogPreviewImageUnoptimized(previewUrl)}
+              {...ADMIN_CATALOG_THUMB_PREVIEW}
             />
           ) : (
             <span className="grid h-20 w-20 -rotate-6 place-items-center rounded-base bg-brand-50 text-brand-200">
@@ -1234,8 +1237,6 @@ function CatalogNavAction({
 function AssignedProductThumb({ alt, src }: { alt: string; src: string }) {
   const [failed, setFailed] = useState(false);
   const resolved = src.trim() || ASSIGNED_PRODUCTS_PLACEHOLDER;
-  const isRemote = resolved.startsWith("http");
-  const isBlobPreview = resolved.startsWith("blob:");
 
   if (failed) {
     return (
@@ -1250,12 +1251,10 @@ function AssignedProductThumb({ alt, src }: { alt: string; src: string }) {
       <Image
         alt={alt}
         className="h-full w-full object-cover"
-        height={36}
         onError={() => setFailed(true)}
-        sizes="36px"
         src={resolved}
-        unoptimized={isRemote || isBlobPreview}
-        width={36}
+        unoptimized={catalogPreviewImageUnoptimized(resolved)}
+        {...ADMIN_ASSIGNED_PRODUCT_THUMB}
       />
     </span>
   );
@@ -1713,8 +1712,6 @@ export function ProductImageList({
           image.kind === "saved"
             ? (image.url.split("/").pop() ?? "image")
             : image.file.name;
-        const isRemote = previewUrl.startsWith("http");
-        const isBlobPreview = previewUrl.startsWith("blob:");
         const isDragging = draggedId === image.id;
         const isDropTarget = dropTargetId === image.id;
 
@@ -1739,14 +1736,15 @@ export function ProductImageList({
                 <Icon className="h-3.5 w-3.5" name="grip-vertical" />
               </span>
             ) : null}
-            {isRemote || previewUrl.startsWith("/") || isBlobPreview ? (
+            {previewUrl.startsWith("http") ||
+            previewUrl.startsWith("/") ||
+            previewUrl.startsWith("blob:") ? (
               <Image
                 alt={fileName}
                 className="aspect-square w-full object-cover"
-                height={96}
                 src={previewUrl}
-                unoptimized={isRemote || isBlobPreview}
-                width={96}
+                unoptimized={catalogPreviewImageUnoptimized(previewUrl)}
+                {...ADMIN_PRODUCT_GALLERY_GRID}
               />
             ) : (
               <div className="grid aspect-square place-items-center bg-surface-muted text-[12px] text-ink-400">

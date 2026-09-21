@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { ADMIN_LIST_ROW_THUMB } from "@/lib/catalog-image-display";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { fetchOrder, platformApi } from "@platform/api-client";
@@ -244,10 +245,9 @@ export function ApiOrderDetailPanel({ orderId }: ApiOrderDetailPanelProps) {
                       {item.productImage ? (
                         <Image
                           alt={item.productName}
-                          className="rounded-base object-cover"
-                          height={48}
+                          className="h-12 w-12 rounded-base object-cover"
                           src={item.productImage}
-                          width={48}
+                          {...ADMIN_LIST_ROW_THUMB}
                         />
                       ) : null}
                       <span className="font-medium text-ink-900">

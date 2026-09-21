@@ -1,6 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import {
+  ADMIN_CATALOG_THUMB_PREVIEW,
+  catalogPreviewImageUnoptimized,
+} from "@/lib/catalog-image-display";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { SelectField } from "@/components/forms/admin-form-primitives";
@@ -503,9 +507,9 @@ export function ProductForm({
                   <Image
                     alt="Thumbnail preview"
                     className="absolute inset-0 h-full w-full object-cover p-2"
-                    height={144}
                     src={thumbPreview}
-                    width={144}
+                    unoptimized={catalogPreviewImageUnoptimized(thumbPreview)}
+                    {...ADMIN_CATALOG_THUMB_PREVIEW}
                   />
                 ) : (
                   <span className="grid h-20 w-20 -rotate-6 place-items-center rounded-base bg-brand-50 text-brand-200">

@@ -220,7 +220,7 @@ export function ApiOrdersPanel() {
   const totalFilterGroup = useMemo(
     () => ({
       ...buildOrderTotalFilterGroup(orders),
-      className: "w-full sm:w-[200px]",
+      className: "min-w-0 w-full md:w-[200px]",
     }),
     [orders]
   );
@@ -249,17 +249,15 @@ export function ApiOrdersPanel() {
         filterOptions={[...ORDER_STATUS_FILTER_OPTIONS]}
         filterOptionsFirst
         items={orders}
-        compactMobileToolbar
         deleteButtonClassName="max-md:w-auto md:ml-auto"
-        filtersClassName="w-full min-w-0 sm:w-auto"
         renderFilterSelect={({ onValueChange, value }) => (
           <OrderStatusFilterSelect
-            className="w-full sm:w-[180px]"
+            className="min-w-0 w-full md:w-[180px]"
             onValueChange={onValueChange}
             value={value}
           />
         )}
-        searchFieldClassName="w-full sm:w-[340px] sm:max-w-full"
+        searchFieldClassName="md:w-[340px]"
         searchLabel="Search orders"
         searchPlaceholder="Search order ID or customer"
         searchText={(order) =>

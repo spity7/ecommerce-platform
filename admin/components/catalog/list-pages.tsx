@@ -9,6 +9,7 @@ import {
 } from "@/components/admin/entity-table";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { routes } from "@/config/routes";
+import { ADMIN_LIST_ROW_THUMB } from "@/lib/catalog-image-display";
 import {
   categoryEditPath,
   brandEditPath,
@@ -57,17 +58,16 @@ export function CategoryListTable({
       key: "category",
       label: "Category",
       render: (category) => (
-        <div className="flex items-center gap-3">
+        <div className="flex min-w-0 items-center gap-3">
           <Image
             alt={category.name}
-            className="h-12 w-12 rounded-base bg-surface-body object-cover"
-            height={48}
+            className="h-12 w-12 shrink-0 rounded-base bg-surface-body object-cover"
             src={category.image}
-            width={48}
+            {...ADMIN_LIST_ROW_THUMB}
           />
-          <div>
+          <div className="min-w-0">
             <Link
-              className="font-semibold text-ink-900 hover:text-brand-600"
+              className="block truncate font-semibold text-ink-900 hover:text-brand-600"
               href={categoryEditPath(category.id)}
             >
               {category.name}
@@ -323,7 +323,7 @@ export function AttributeListTable({
       filterGroups={[
         {
           ariaLabel: "Filter by status",
-          className: "w-[160px]",
+          className: "min-w-0 w-full md:w-[160px]",
           defaultValue: "all",
           key: "status",
           options: [
@@ -342,7 +342,7 @@ export function AttributeListTable({
         },
         {
           ariaLabel: "Filter by type",
-          className: "w-[160px]",
+          className: "min-w-0 w-full md:w-[160px]",
           defaultValue: "all",
           key: "type",
           options: [

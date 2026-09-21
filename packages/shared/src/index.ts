@@ -16,3 +16,4 @@ export * from "./password.js";
 export * from "./phone.js";
 export * from "./avatar.js";
 export * from "./image-storage.js";
+export * from "./catalog-image-download.js";

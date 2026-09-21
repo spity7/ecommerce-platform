@@ -8,10 +8,22 @@ import {
   ListClearFiltersButton,
   ListFilterSelect,
   ListSearchField,
+  listFilterSelectClassName,
 } from "@/components/ui/list-filter-controls";
 import { LinkedProductsViewAction } from "@/components/ui/linked-products-view-action";
 import { ListDeleteConfirmDialog } from "@/components/ui/list-delete-confirm-dialog";
 import { CrudBusyShield } from "@/components/ui/crud-busy-shield";
+import {
+  ListTableBody,
+  ListTableEmptyMessage,
+} from "@/components/ui/list-table-body";
+import { ListTablePagination } from "@/components/ui/list-table-pagination";
+import {
+  ADMIN_LIST_TABLE_PAGE_SIZE,
+  ADMIN_TABLE_ACTIONS_COL_WIDTH,
+  clampListTablePage,
+  sliceListTablePage,
+} from "@/lib/list-table-pagination";
 import { cn } from "@/utils/cn";
 import { useCrudBusyLock } from "@/providers/crud-busy-provider";
 
@@ -72,7 +84,6 @@ type EntityTableProps<T extends { id: string }> = {
   resolvePreflightDeleteError?: (ids: string[]) => string | null;
   rowActionsColWidth?: string;
   rowActionsHeaderLabel?: string;
-  compactMobileToolbar?: boolean;
   deleteButtonClassName?: string;
   filtersClassName?: string;
   searchFieldClassName?: string;
@@ -93,6 +104,27 @@ type SortState = {
 
 const TABLE_CELL_X = "px-4";
 const TABLE_CHECKBOX_X = "px-3";
+const TABLE_ACTIONS_X = "px-2";
+const ENTITY_TABLE_ACTIONS_COL_CLASS =
+  "entity-table-actions-col w-[8.25rem] min-w-[8.25rem] max-w-[8.25rem] whitespace-nowrap";
+
+function resolveEntityTableActionsColWidth(
+  rowActionsColWidth: string | undefined,
+  options: {
+    hasCustomRowActions: boolean;
+    hasViewAction: boolean;
+  }
+): string {
+  if (rowActionsColWidth) {
+    return rowActionsColWidth;
+  }
+
+  if (options.hasCustomRowActions) {
+    return "10rem";
+  }
+
+  return options.hasViewAction ? ADMIN_TABLE_ACTIONS_COL_WIDTH : "6.5rem";
+}
 
 function SortableColumnHeader({
   align = "left",
@@ -147,9 +179,8 @@ export function EntityTable<T extends { id: string }>({
   onDelete,
   renderRowActions,
   resolvePreflightDeleteError,
-  rowActionsColWidth = "88px",
+  rowActionsColWidth,
   rowActionsHeaderLabel = "Action",
-  compactMobileToolbar = false,
   deleteButtonClassName,
   filtersClassName,
   searchFieldClassName,
@@ -165,6 +196,14 @@ export function EntityTable<T extends { id: string }>({
   const router = useRouter();
   const sortableColumns = columns.filter((column) => column.sortValue);
   const hideableColumns = columns.filter((column) => column.hideable);
+  const usesFixedTableLayout = columns.some((column) => column.colWidth);
+  const resolvedActionsColWidth = resolveEntityTableActionsColWidth(
+    rowActionsColWidth,
+    {
+      hasCustomRowActions: renderRowActions != null,
+      hasViewAction: viewHref != null,
+    }
+  );
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState(filterOptions?.[0]?.value ?? "all");
   const [groupFilters, setGroupFilters] = useState<Record<string, string>>(() =>
@@ -185,6 +224,7 @@ export function EntityTable<T extends { id: string }>({
   const [visibleColumns, setVisibleColumns] = useState<Set<string>>(
     new Set(hideableColumns.map((column) => column.key))
   );
+  const [page, setPage] = useState(1);
 
   useCrudBusyLock(deleting);
 
@@ -263,9 +303,40 @@ export function EntityTable<T extends { id: string }>({
     sort,
   ]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [query, filter, groupFilters, sort]);
+
+  const safePage = clampListTablePage(
+    page,
+    filteredRows.length,
+    ADMIN_LIST_TABLE_PAGE_SIZE
+  );
+
+  const pagedRows = useMemo(
+    () =>
+      sliceListTablePage(filteredRows, safePage, ADMIN_LIST_TABLE_PAGE_SIZE),
+    [filteredRows, safePage]
+  );
+
+  const filterSignature = useMemo(
+    () =>
+      JSON.stringify({
+        filter,
+        groupFilters,
+        query: query.trim(),
+        sort,
+      }),
+    [filter, groupFilters, query, sort]
+  );
+
+  const rowSetToken = useMemo(
+    () => pagedRows.map((row) => row.id).join("|"),
+    [pagedRows]
+  );
+
   const allVisibleSelected =
-    filteredRows.length > 0 &&
-    filteredRows.every((row) => selected.has(row.id));
+    pagedRows.length > 0 && pagedRows.every((row) => selected.has(row.id));
 
   function toggleSort(key: string) {
     setSort((current) => ({
@@ -290,7 +361,7 @@ export function EntityTable<T extends { id: string }>({
   function toggleAllVisible(checked: boolean) {
     setSelected((current) => {
       const next = new Set(current);
-      for (const row of filteredRows) {
+      for (const row of pagedRows) {
         if (checked) {
           next.add(row.id);
         } else {
@@ -410,36 +481,28 @@ export function EntityTable<T extends { id: string }>({
     .filter((row) => selected.has(row.id))
     .map((row) => getRowLabel?.(row) ?? row.id);
 
-  const deleteToolbarButton = (
-    visibilityClassName: string,
-    { compactLabel = false }: { compactLabel?: boolean } = {}
-  ) => (
-    <button
-      aria-label={`Delete ${selected.size} selected ${singularName}${selected.size === 1 ? "" : "s"}`}
-      className={cn(
-        "h-11 shrink-0 items-center justify-center gap-2 rounded-base bg-danger-500 px-4 text-[14px] font-semibold text-white transition-colors hover:bg-danger-600 disabled:cursor-not-allowed disabled:opacity-50",
-        visibilityClassName,
-        deleteButtonClassName
-      )}
-      disabled={selected.size === 0 || deleting}
-      onClick={openDeleteConfirm}
-      type="button"
-    >
-      <Icon className="h-4 w-4 shrink-0" name="trash-2" />
-      {compactLabel ? (
+  const deleteToolbarButton = (visibilityClassName: string) =>
+    onDelete ? (
+      <button
+        aria-label={`Delete ${selected.size} selected ${singularName}${selected.size === 1 ? "" : "s"}`}
+        className={cn(
+          "h-11 shrink-0 items-center justify-center gap-2 rounded-base bg-danger-500 px-4 text-[14px] font-semibold text-white transition-colors hover:bg-danger-600 disabled:cursor-not-allowed disabled:opacity-50",
+          visibilityClassName,
+          deleteButtonClassName
+        )}
+        disabled={selected.size === 0 || deleting}
+        onClick={openDeleteConfirm}
+        type="button"
+      >
+        <Icon className="h-4 w-4 shrink-0" name="trash-2" />
         <span className="tabular-nums">({selected.size})</span>
-      ) : (
-        <>
-          Delete (<span>{selected.size}</span>)
-        </>
-      )}
-    </button>
-  );
+      </button>
+    ) : null;
 
   const groupFilterControls = filterGroups?.map((group) => (
     <ListFilterSelect
       ariaLabel={group.ariaLabel}
-      className={group.className ?? "w-[180px]"}
+      className={group.className ?? listFilterSelectClassName()}
       defaultValue={group.defaultValue}
       key={group.key}
       onValueChange={(value) => setGroupFilter(group.key, value)}
@@ -459,7 +522,7 @@ export function EntityTable<T extends { id: string }>({
     ) : (
       <ListFilterSelect
         ariaLabel={filterOptionsAriaLabel}
-        className="w-[180px]"
+        className={listFilterSelectClassName()}
         defaultValue={defaultFilterValue}
         onValueChange={setFilter}
         options={filterOptions}
@@ -487,7 +550,7 @@ export function EntityTable<T extends { id: string }>({
         onClear={clearAllFilters}
       />
       {enableColumnToggle && hideableColumns.length ? (
-        <div className="relative">
+        <div className="relative col-span-2 md:col-span-1">
           <button
             aria-expanded={columnsOpen}
             aria-haspopup="true"
@@ -535,89 +598,67 @@ export function EntityTable<T extends { id: string }>({
   );
 
   return (
-    <section className="rounded-card border border-surface-line bg-surface-card p-6 shadow-card">
+    <section className="min-w-0 rounded-card border border-surface-line bg-surface-card p-6 shadow-card">
       <CrudBusyShield active={deleting}>
-        {compactMobileToolbar ? (
-          <div
-            className={cn(
-              "mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between",
-              toolbarClassName
-            )}
-          >
-            <div className="flex min-w-0 flex-1 flex-col gap-3 md:flex-row md:flex-wrap md:items-center md:gap-3">
-              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-                <ListSearchField
-                  className={cn("min-w-0", searchFieldClassName)}
-                  label={searchLabel}
-                  onChange={setQuery}
-                  placeholder={searchPlaceholder}
-                  value={query}
-                />
-                {deleteToolbarButton("flex max-md:px-3 md:hidden", {
-                  compactLabel: true,
-                })}
-              </div>
-              <div
-                className={cn(
-                  "grid min-w-0 grid-cols-2 gap-3 md:flex md:flex-wrap md:items-center md:gap-3",
-                  filtersClassName
-                )}
-              >
-                {filterControls}
-              </div>
-            </div>
-            {deleteToolbarButton("hidden md:flex")}
-          </div>
-        ) : (
-          <div
-            className={cn(
-              "mb-5 flex flex-wrap items-center justify-between gap-3",
-              toolbarClassName
-            )}
-          >
-            <div
-              className={cn(
-                "flex flex-wrap items-center gap-3",
-                filtersClassName
-              )}
-            >
+        <div
+          className={cn(
+            "mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between",
+            toolbarClassName
+          )}
+        >
+          <div className="flex min-w-0 flex-1 flex-col gap-3 md:flex-row md:flex-wrap md:items-center md:gap-3">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 md:contents">
               <ListSearchField
-                className={searchFieldClassName}
+                className={cn(
+                  "min-w-0 w-full md:w-[200px]",
+                  searchFieldClassName
+                )}
                 label={searchLabel}
                 onChange={setQuery}
                 placeholder={searchPlaceholder}
                 value={query}
               />
+              {deleteToolbarButton("inline-flex max-md:px-3 md:hidden")}
+            </div>
+            <div
+              className={cn(
+                "grid min-w-0 grid-cols-2 gap-3 md:contents",
+                filtersClassName
+              )}
+            >
               {filterControls}
             </div>
-            {deleteToolbarButton("flex")}
           </div>
-        )}
+          {deleteToolbarButton("max-md:hidden md:inline-flex shrink-0")}
+        </div>
 
-        <div className="dashboard-scrollbar overflow-x-auto">
+        <div className="admin-entity-table-scroll dashboard-scrollbar min-w-0 max-w-full overflow-x-auto">
           <table
             className={cn(
-              "w-full min-w-[960px] table-fixed text-left",
+              "w-full min-w-0 text-left",
+              usesFixedTableLayout && "table-fixed",
               tableClassName
             )}
           >
-            <colgroup>
-              <col style={{ width: "40px" }} />
-              {columns.map((column) => {
-                if (isColumnHidden(column)) {
-                  return null;
-                }
-                return (
-                  <col
-                    key={column.key}
-                    style={
-                      column.colWidth ? { width: column.colWidth } : undefined
-                    }
-                  />
-                );
-              })}
-              <col style={{ width: rowActionsColWidth }} />
-            </colgroup>
+            {usesFixedTableLayout ? (
+              <colgroup>
+                <col style={{ width: "40px" }} />
+                {columns.map((column) => {
+                  if (isColumnHidden(column)) {
+                    return null;
+                  }
+                  return (
+                    <col
+                      key={column.key}
+                      style={
+                        column.colWidth ? { width: column.colWidth } : undefined
+                      }
+                    />
+                  );
+                })}
+                <col style={{ width: resolvedActionsColWidth }} />
+              </colgroup>
+            ) : null}
             <thead>
               <tr className="border-b border-surface-line text-[13px] uppercase text-ink-400">
                 <th className={cn(TABLE_CHECKBOX_X, "pb-3 align-bottom")}>
@@ -635,7 +676,7 @@ export function EntityTable<T extends { id: string }>({
                     <th
                       className={cn(
                         TABLE_CELL_X,
-                        "pb-3 align-bottom font-semibold",
+                        "min-w-0 pb-3 align-bottom font-semibold",
                         column.headClassName,
                         hidden ? "hidden" : ""
                       )}
@@ -670,7 +711,8 @@ export function EntityTable<T extends { id: string }>({
                 })}
                 <th
                   className={cn(
-                    TABLE_CELL_X,
+                    TABLE_ACTIONS_X,
+                    ENTITY_TABLE_ACTIONS_COL_CLASS,
                     "pb-3 text-right align-bottom font-semibold"
                   )}
                 >
@@ -678,8 +720,13 @@ export function EntityTable<T extends { id: string }>({
                 </th>
               </tr>
             </thead>
-            <tbody className="text-[14px]">
-              {filteredRows.map((row) => (
+            <ListTableBody
+              className="text-[14px]"
+              filterSignature={filterSignature}
+              page={safePage}
+              rowSetToken={rowSetToken}
+            >
+              {pagedRows.map((row) => (
                 <tr
                   className="border-b border-surface-line hover:bg-surface-body/70"
                   key={row.id}
@@ -702,7 +749,7 @@ export function EntityTable<T extends { id: string }>({
                       <td
                         className={cn(
                           TABLE_CELL_X,
-                          "py-4 align-top text-ink-700",
+                          "min-w-0 py-4 align-top text-ink-700",
                           column.cellClassName,
                           hidden ? "hidden" : ""
                         )}
@@ -712,7 +759,13 @@ export function EntityTable<T extends { id: string }>({
                       </td>
                     );
                   })}
-                  <td className={cn(TABLE_CELL_X, "py-4 text-right align-top")}>
+                  <td
+                    className={cn(
+                      TABLE_ACTIONS_X,
+                      ENTITY_TABLE_ACTIONS_COL_CLASS,
+                      "py-4 text-right align-top"
+                    )}
+                  >
                     {renderRowActions ? (
                       renderRowActions(row, rowActionHelpers)
                     ) : (
@@ -756,39 +809,23 @@ export function EntityTable<T extends { id: string }>({
                   </td>
                 </tr>
               ))}
-            </tbody>
+            </ListTableBody>
           </table>
         </div>
 
         {filteredRows.length === 0 ? (
-          <p className="py-10 text-center text-[14px] text-ink-400">
+          <ListTableEmptyMessage filterSignature={filterSignature}>
             No {singularName}s match your search.
-          </p>
+          </ListTableEmptyMessage>
         ) : null}
 
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-          <p className="text-[13px] text-ink-500">
-            Showing {filteredRows.length} of {rows.length} {singularName}s
-          </p>
-          <div className="flex items-center gap-2">
-            <button
-              aria-label="Previous page"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-base border border-surface-line text-ink-700 transition-colors hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
-              disabled
-              type="button"
-            >
-              <Icon className="h-4 w-4" name="chevron-left" />
-            </button>
-            <button
-              aria-label="Next page"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-base border border-surface-line text-ink-700 transition-colors hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-50"
-              disabled
-              type="button"
-            >
-              <Icon className="h-4 w-4" name="chevron-right" />
-            </button>
-          </div>
-        </div>
+        <ListTablePagination
+          disabled={deleting}
+          itemLabel={`${singularName}s`}
+          onPageChange={setPage}
+          page={safePage}
+          totalItems={filteredRows.length}
+        />
       </CrudBusyShield>
 
       {confirmOpen ? (

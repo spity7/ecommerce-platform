@@ -95,7 +95,7 @@ export function DashboardChrome({ children }: DashboardChromeProps) {
         <Sidebar />
         <div className="flex min-h-screen flex-col lg:pl-sidebar">
           <Header />
-          <main className="min-h-[calc(100vh-140px)] flex-1 px-4 py-6 lg:px-6">
+          <main className="min-h-[calc(100vh-140px)] min-w-0 flex-1 px-4 py-6 lg:px-6">
             {children}
           </main>
           <Footer />

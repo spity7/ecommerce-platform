@@ -7,6 +7,11 @@ import { cn } from "@/utils/cn";
 export const listFilterActiveClass =
   "border-brand-600 bg-brand-50/50 ring-2 ring-brand-600/15";
 
+/** Full width in mobile filter grids; fixed width from the `md` breakpoint up. */
+export function listFilterSelectClassName(desktopWidthClass = "md:w-[180px]") {
+  return cn("min-w-0 w-full", desktopWidthClass);
+}
+
 function ListFilterMarker() {
   return (
     <span
@@ -35,7 +40,10 @@ export function ListSearchField({
 
   return (
     <label
-      className={cn("relative block w-[200px] max-w-full shrink-0", className)}
+      className={cn(
+        "relative block w-full max-w-full shrink-0 md:w-[200px]",
+        className
+      )}
     >
       <span className="sr-only">{label}</span>
       <Icon

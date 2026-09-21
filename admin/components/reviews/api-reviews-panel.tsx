@@ -275,7 +275,7 @@ export function ApiReviewsPanel({
         filterGroups={[
           {
             ariaLabel: "Filter by rating",
-            className: "w-[140px]",
+            className: "min-w-0 w-full md:w-[140px]",
             defaultValue: "all",
             key: "rating",
             options: [
@@ -316,13 +316,14 @@ export function ApiReviewsPanel({
         renderRowActions={renderRowActions}
         rowActionsColWidth="160px"
         rowActionsHeaderLabel="Actions"
-        searchFieldClassName="w-[340px] max-w-full"
+        searchFieldClassName="md:w-[340px]"
         searchLabel="Search reviews"
         searchPlaceholder="Search product, customer, review"
         searchText={(review) =>
           `${review.product} ${review.customer} ${review.title} ${review.review}`
         }
         singularName="review"
+        tableClassName="md:min-w-[960px]"
       />
       <ConfirmDialog
         cancelLabel="Cancel"

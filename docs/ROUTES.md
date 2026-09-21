@@ -1,6 +1,6 @@
 # Routes reference
 
-HTTP API routes, admin pages, and storefront routing. **Last reviewed:** 2026-09-19.
+HTTP API routes, admin pages, and storefront routing. **Last reviewed:** 2026-09-21.
 
 ## Server API (`@platform/server`)
 
@@ -197,6 +197,12 @@ Proxies to `@platform/server` and sets httpOnly cookies on the storefront origin
 | POST   | `/api/auth/refresh`  | Refresh; rotates cookies; `200` with error body when no refresh cookie |
 | POST   | `/api/auth/logout`   | Logout; revokes refresh + clears cookies                               |
 | GET    | `/api/auth/me`       | Current user from access cookie; `200` + `null` when no access cookie  |
+
+### Catalog BFF (Next route handlers)
+
+| Method | Path                          | Notes                                                                                                                                                                                                  |
+| ------ | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| GET    | `/api/catalog-image-download` | `?url=` HTTPS GCS catalog image (`products`/`categories`/`brands`); streams `Content-Disposition: attachment` for LightGallery download (same-origin; cross-origin GCS URLs cannot use `<a download>`) |
 
 ### Theme demo surface
 
