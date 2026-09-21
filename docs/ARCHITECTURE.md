@@ -204,7 +204,7 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every push and PR:
 2. `npm run build:packages`
 3. `npm run typecheck` — full monorepo type check
 4. `npm run test:ci` — API integration tests against MongoDB 7 (`MONGODB_URI_TEST`)
-5. `npm run build -w @platform/admin` — production admin build
+5. `npm run build -w @platform/admin` — production admin build (Tailwind v4 uses `lightningcss`; admin lists `lightningcss` as a devDependency so `package-lock.json` resolves Linux/macOS/Windows native bindings for `npm ci` on Ubuntu runners)
 6. `npm run build -w @platform/storefront` — production storefront build
 
 Workspace lint/format gates (`npm run check -w @platform/admin`, `npm run lint -w @platform/storefront`) are not in CI yet due to pre-existing theme/demo debt.
