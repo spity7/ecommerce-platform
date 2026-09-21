@@ -37,7 +37,6 @@ export const beautyStationConfig = {
     manualBadgeKinds: [
       "limited_offer",
       "best_seller",
-      "clearance",
       "cruelty_free",
       "organic",
     ],

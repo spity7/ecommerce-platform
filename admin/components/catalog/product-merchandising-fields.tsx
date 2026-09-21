@@ -200,115 +200,139 @@ export function ProductMerchandisingFields({
         </ul>
       </div>
 
-      <div
-        className={cn(
-          "grid gap-4",
-          preview ? "md:grid-cols-2 md:items-stretch" : undefined
-        )}
-      >
-        {preview ? (
-          <div className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-xl border border-surface-line/80 bg-surface-card shadow-card">
-            <div className={panelHeaderClass}>
-              <p className={panelTitleClass}>Storefront preview</p>
-              <p className={panelSubtitleClass}>
-                Resolved from price, stock, reviews, and units sold.
-              </p>
-            </div>
-            <div className="flex flex-1 flex-col p-4 sm:p-5">
-              <div
-                aria-label="Product card badge preview"
-                className="relative min-h-[11rem] flex-1 overflow-hidden rounded-lg bg-gradient-to-br from-surface-muted via-surface-body to-ink-100 ring-1 ring-inset ring-surface-line/60"
-                role="img"
-              >
+      <div className="min-w-0">
+        <div
+          className={cn(
+            "grid min-w-0 gap-4",
+            preview
+              ? "md:grid-cols-[minmax(0,11rem)_minmax(0,1fr)] md:items-stretch"
+              : undefined
+          )}
+        >
+          {preview ? (
+            <div className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-xl border border-surface-line/80 bg-surface-card shadow-card md:max-w-[11rem]">
+              <div className={panelHeaderClass}>
+                <p className={panelTitleClass}>Storefront preview</p>
+                <p className={panelSubtitleClass}>
+                  Resolved from price, stock, reviews, and units sold.
+                </p>
+              </div>
+              <div className="flex flex-1 flex-col p-4 sm:p-5">
                 <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 opacity-50"
-                  style={{
-                    backgroundImage:
-                      "radial-gradient(circle at 28% 18%, rgba(255,255,255,0.85) 0%, transparent 50%)",
-                  }}
-                />
-                {previewBadges.length === 0 ? (
-                  <p className="absolute inset-0 flex items-center justify-center px-4 text-center text-xs font-medium text-ink-500">
-                    No badges would show on the card
-                  </p>
-                ) : (
-                  <div className="absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] flex-col gap-1.5 sm:left-4 sm:top-4">
-                    {previewBadges.map((badge) => (
-                      <AdminProductBadgeChip
-                        bgClass={badge.bg}
-                        key={badge.kind ?? badge.text}
-                        size="md"
-                        text={badge.text}
-                      />
-                    ))}
-                  </div>
-                )}
+                  aria-label="Product card badge preview"
+                  className="relative min-h-[9rem] flex-1 overflow-hidden rounded-lg bg-gradient-to-br from-surface-muted via-surface-body to-ink-100 ring-1 ring-inset ring-surface-line/60 md:min-h-[11rem]"
+                  role="img"
+                >
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 opacity-50"
+                    style={{
+                      backgroundImage:
+                        "radial-gradient(circle at 28% 18%, rgba(255,255,255,0.85) 0%, transparent 50%)",
+                    }}
+                  />
+                  {previewBadges.length === 0 ? (
+                    <p className="absolute inset-0 flex items-center justify-center px-4 text-center text-xs font-medium text-ink-500">
+                      No badges would show on the card
+                    </p>
+                  ) : (
+                    <div className="absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] flex-col gap-1.5 sm:left-4 sm:top-4">
+                      {previewBadges.map((badge) => (
+                        <AdminProductBadgeChip
+                          bgClass={badge.bg}
+                          key={badge.kind ?? badge.text}
+                          size="md"
+                          text={badge.text}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ) : null}
+          ) : null}
 
-        <div className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-xl border border-surface-line/80 bg-surface-card shadow-card">
-          <div className={panelHeaderClass}>
-            <p className={panelTitleClass}>Automatic badges</p>
-            <p className={panelSubtitleClass}>
-              Uncheck to suppress an auto badge for this product.
-            </p>
-          </div>
-          <ul className="grid flex-1 gap-2 p-4 sm:grid-cols-2 sm:p-5">
-            {SUPPRESSIBLE_AUTO_BADGE_KINDS.map((kind) => {
-              const suppressed = suppressSet.has(kind);
-              const label = PRODUCT_BADGE_REGISTRY[kind].label;
-              const hintShort = getAutoProductBadgeRuleHintShort(
-                kind,
-                autoHintOptions
-              );
-              const hintLong = getAutoProductBadgeRuleHintLong(
-                kind,
-                autoHintOptions
-              );
-              return (
-                <li className="min-h-[3.25rem]" key={kind}>
-                  <label
-                    className={cn(
-                      "flex h-full min-h-[3.25rem] cursor-pointer items-start gap-2.5 rounded-lg border px-3 py-2.5 transition-[background-color,border-color,box-shadow] duration-150",
-                      suppressed
-                        ? "border-surface-line/80 bg-surface-body hover:bg-surface-muted/50"
-                        : "border-brand-200/90 bg-brand-50/40 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] hover:bg-brand-50/55",
-                      disabled && "cursor-not-allowed opacity-50"
-                    )}
-                    title={hintLong}
-                  >
-                    <input
-                      checked={!suppressed}
-                      className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded border-surface-line text-brand-600 focus:ring-2 focus:ring-brand-500/25 disabled:cursor-not-allowed"
-                      disabled={disabled}
-                      onChange={() => toggleSuppress(kind)}
-                      type="checkbox"
-                    />
-                    <span className="min-w-0 leading-snug">
-                      <span
-                        className={cn(
-                          "block text-xs",
-                          suppressed
-                            ? "font-medium text-ink-500"
-                            : "font-semibold text-ink-800"
-                        )}
-                      >
-                        {label}
+          <div className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-xl border border-surface-line/80 bg-surface-card shadow-card">
+            <div className={panelHeaderClass}>
+              <p className={panelTitleClass}>Automatic badges</p>
+              <p className={panelSubtitleClass}>
+                Uncheck to suppress an auto badge for this product.
+              </p>
+            </div>
+            <ul className="grid flex-1 grid-cols-2 gap-1.5 p-4 sm:p-5">
+              {SUPPRESSIBLE_AUTO_BADGE_KINDS.map((kind) => {
+                const suppressed = suppressSet.has(kind);
+                const enabled = !suppressed;
+                const label = PRODUCT_BADGE_REGISTRY[kind].label;
+                const appearance = getProductBadgeChipAppearanceForKind(kind);
+                const hintShort = getAutoProductBadgeRuleHintShort(
+                  kind,
+                  autoHintOptions
+                );
+                const hintLong = getAutoProductBadgeRuleHintLong(
+                  kind,
+                  autoHintOptions
+                );
+                return (
+                  <li className="min-w-0" key={kind}>
+                    <label
+                      className={cn(
+                        "group flex h-full w-full min-w-0 cursor-pointer flex-col gap-1 rounded-lg px-2.5 py-2 ring-1 ring-inset transition-[background-color,box-shadow,opacity,ring-color] duration-200 ease-out focus-within:outline focus-within:ring-2 focus-within:ring-brand-500/35 focus-within:ring-offset-2",
+                        enabled
+                          ? "bg-surface-card shadow-[0_1px_2px_rgba(16,24,40,0.06)] ring-surface-line/90"
+                          : "bg-surface-muted/20 ring-surface-line/60 hover:bg-surface-muted/35",
+                        disabled &&
+                          "cursor-not-allowed opacity-50 hover:bg-surface-muted/20"
+                      )}
+                      title={hintLong}
+                    >
+                      <input
+                        aria-label={`${label}${hintShort ? ` — ${hintShort}` : ""}. ${enabled ? "Shown on storefront when rules match" : "Suppressed for this product"}`}
+                        checked={enabled}
+                        className="sr-only"
+                        disabled={disabled}
+                        onChange={() => toggleSuppress(kind)}
+                        type="checkbox"
+                      />
+                      <span className="flex min-w-0 items-center justify-between gap-2">
+                        <AdminProductBadgeChip
+                          appearance={appearance}
+                          className={cn(
+                            "min-w-0 max-w-[calc(100%-1.75rem)] truncate",
+                            suppressed && "opacity-40 saturate-[0.55]"
+                          )}
+                          labelStyle="sentence"
+                          size="sm"
+                          text={label}
+                        />
+                        <span
+                          aria-hidden
+                          className={cn(
+                            "flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors duration-200",
+                            enabled
+                              ? "border-brand-600 bg-brand-600 text-white"
+                              : "border-ink-300/80 bg-surface-card text-transparent group-hover:border-ink-400"
+                          )}
+                        >
+                          <Icon className="h-3 w-3" name="check" />
+                        </span>
                       </span>
                       {hintShort ? (
-                        <span className="mt-0.5 block text-[10px] leading-tight text-ink-400">
+                        <span
+                          className={cn(
+                            "block text-[11px] leading-snug",
+                            enabled ? "text-ink-600" : "text-ink-400"
+                          )}
+                        >
                           {hintShort}
                         </span>
                       ) : null}
-                    </span>
-                  </label>
-                </li>
-              );
-            })}
-          </ul>
+                    </label>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       </div>
     </div>

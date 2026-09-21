@@ -11,7 +11,7 @@ import {
 describe("resolveProductCardBadges", () => {
   const now = new Date("2026-09-16T12:00:00.000Z");
 
-  it("returns sale and new when discounted and recently created", () => {
+  it("returns sale and new when discounted and recently created and no higher-priority auto badges qualify", () => {
     const badges = resolveProductCardBadges({
       price: 59,
       compareAtPrice: 90,
@@ -24,6 +24,24 @@ describe("resolveProductCardBadges", () => {
     assert.equal(badges.length, 2);
     assert.equal(badges[0]?.kind, "sale");
     assert.equal(badges[1]?.kind, "new");
+  });
+
+  it("prefers best seller over new when both qualify within two badge slots", () => {
+    const badges = resolveProductCardBadges({
+      price: 59,
+      compareAtPrice: 90,
+      stock: 10,
+      createdAt: "2026-09-01T00:00:00.000Z",
+      unitsSold: 12,
+      metadata: {},
+      merchandisingConfig: { bestSellerMinUnitsSold: 5 },
+      now,
+    });
+
+    assert.deepEqual(
+      badges.map((badge) => badge.kind),
+      ["sale", "best_seller"]
+    );
   });
 
   it("prefers sold out over sale when stock is zero", () => {
@@ -79,7 +97,7 @@ describe("resolveProductCardBadges", () => {
     assert.equal(badges.length, 0);
   });
 
-  it("shows sold out first when stock is zero even with two manual badges", () => {
+  it("shows only sold out when stock is zero even with manual badges pinned", () => {
     const badges = resolveProductCardBadges({
       price: 100,
       stock: 0,
@@ -94,7 +112,7 @@ describe("resolveProductCardBadges", () => {
 
     assert.deepEqual(
       badges.map((badge) => badge.kind),
-      ["sold_out", "best_seller"]
+      ["sold_out"]
     );
   });
 

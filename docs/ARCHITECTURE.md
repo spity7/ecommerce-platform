@@ -91,7 +91,7 @@ Storefront image badges (max **2** per product) are resolved on the **server** w
 - **Public API:** anonymous reads return **`StorefrontProductDto`** (`badges` only — no `merchandising`, `unitsSold`, or `metadata`). Admin JWT receives full **`ProductDto`** on list/get.
 - **Storefront:** maps `ProductDto.badges` → `ProductCardImageBadges` on production catalog routes (home layout, `/shop`, PDP).
 
-See [CONVENTIONS.md](CONVENTIONS.md) for priority order (sold out, sale, new, stock, ratings, units sold).
+See [CONVENTIONS.md](CONVENTIONS.md) for badge priority (sold out alone when stock is 0; otherwise sale, stock, ratings, units sold, then new).
 
 ## Adding a new site
 

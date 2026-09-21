@@ -602,7 +602,7 @@ export function ProductCatalogForm({
           </>
         }
         fullWidth={
-          <div className="grid gap-4 md:grid-cols-2 md:items-start">
+          <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
             <FormCard title="Storefront badges">
               <ProductMerchandisingFields
                 disabled={disabled}

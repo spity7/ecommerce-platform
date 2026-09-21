@@ -5,6 +5,7 @@ import {
   type ProductBadgeKind,
   type SiteMerchandisingConfig,
 } from "../types/product-badges.js";
+import { AUTO_PRODUCT_BADGE_PRIORITY_ORDER } from "./auto-badge-order.js";
 import {
   isAutoBadgeSuppressed,
   normalizeBadgeStyle,
@@ -101,12 +102,6 @@ export function resolveProductCardBadges(
 
   if (soldOutActive) {
     tryAddBadge(badges, max, "sold_out");
-    for (const manual of merchandising.manualBadges) {
-      if (badges.length >= max) {
-        break;
-      }
-      tryAddBadge(badges, max, manual.kind);
-    }
     return badges.slice(0, max);
   }
 
@@ -151,39 +146,50 @@ export function collectAutoProductBadgeCandidates(
   }
 
   const autoCandidates: ProductBadgeKind[] = [];
-
-  if (isOnSale(input.price, input.compareAtPrice) && !suppressed("sale")) {
-    autoCandidates.push("sale");
-  }
-
-  if (
-    !suppressed("new") &&
-    isNewProduct(input.createdAt, config.newProductDays, now)
-  ) {
-    autoCandidates.push("new");
-  }
-
-  if (input.stock <= config.lowStockThreshold && !suppressed("low_stock")) {
-    autoCandidates.push("low_stock");
-  }
-
   const reviewCount = input.reviewCount ?? 0;
   const averageRating = input.averageRating ?? 0;
-  if (
-    input.reviewsEnabled !== false &&
-    reviewCount >= config.topRatedMinReviews &&
-    averageRating >= config.topRatedMinRating &&
-    !suppressed("top_rated")
-  ) {
-    autoCandidates.push("top_rated");
-  }
-
   const unitsSold = Math.max(0, input.unitsSold ?? 0);
-  if (
-    unitsSold >= config.bestSellerMinUnitsSold &&
-    !suppressed("best_seller")
-  ) {
-    autoCandidates.push("best_seller");
+
+  for (const kind of AUTO_PRODUCT_BADGE_PRIORITY_ORDER) {
+    if (suppressed(kind)) {
+      continue;
+    }
+
+    switch (kind) {
+      case "sale":
+        if (isOnSale(input.price, input.compareAtPrice)) {
+          autoCandidates.push(kind);
+        }
+        break;
+      case "low_stock":
+        if (input.stock <= config.lowStockThreshold) {
+          autoCandidates.push(kind);
+        }
+        break;
+      case "sold_out":
+        break;
+      case "top_rated":
+        if (
+          input.reviewsEnabled !== false &&
+          reviewCount >= config.topRatedMinReviews &&
+          averageRating >= config.topRatedMinRating
+        ) {
+          autoCandidates.push(kind);
+        }
+        break;
+      case "best_seller":
+        if (unitsSold >= config.bestSellerMinUnitsSold) {
+          autoCandidates.push(kind);
+        }
+        break;
+      case "new":
+        if (isNewProduct(input.createdAt, config.newProductDays, now)) {
+          autoCandidates.push(kind);
+        }
+        break;
+      default:
+        break;
+    }
   }
 
   return autoCandidates;

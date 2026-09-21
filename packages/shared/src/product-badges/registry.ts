@@ -3,6 +3,7 @@ import type {
   ProductBadgeRegistryEntry,
   SiteMerchandisingConfig,
 } from "../types/product-badges.js";
+import { AUTO_PRODUCT_BADGE_PRIORITY_ORDER } from "./auto-badge-order.js";
 
 export const PRODUCT_BADGE_REGISTRY: Record<
   ProductBadgeKind,
@@ -146,10 +147,9 @@ export const AUTO_PRODUCT_BADGE_KINDS = (
   .filter(([, entry]) => entry.source === "auto")
   .map(([kind]) => kind);
 
-/** Auto rules merchants can suppress in admin (includes dual manual/auto kinds). */
+/** Auto rules merchants can suppress in admin (same order as storefront priority). */
 export const SUPPRESSIBLE_AUTO_BADGE_KINDS: ProductBadgeKind[] = [
-  ...AUTO_PRODUCT_BADGE_KINDS,
-  "best_seller",
+  ...AUTO_PRODUCT_BADGE_PRIORITY_ORDER,
 ];
 
 /** Kinds that must not appear in `manualBadges` (auto-only). */

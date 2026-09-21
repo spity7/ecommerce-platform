@@ -191,7 +191,7 @@ export const beautySeedData: SiteSeedData = {
       images: [productImage("beauty-product-st-07.webp")],
       metadata: {
         merchandising: {
-          manualBadges: [{ kind: "clearance" }],
+          manualBadges: [{ kind: "limited_offer" }],
         },
       },
     },
@@ -292,7 +292,7 @@ export const beautySeedData: SiteSeedData = {
       images: [productImage("beauty-product-st-14.webp")],
       metadata: {
         merchandising: {
-          manualBadges: [{ kind: "best_seller" }, { kind: "clearance" }],
+          manualBadges: [{ kind: "best_seller" }],
         },
       },
     },
@@ -311,7 +311,7 @@ export const beautySeedData: SiteSeedData = {
       images: [productImage("beauty-product-st-15.webp")],
       metadata: {
         merchandising: {
-          manualBadges: [{ kind: "clearance" }],
+          manualBadges: [{ kind: "limited_offer" }],
         },
       },
     },
@@ -330,7 +330,7 @@ export const beautySeedData: SiteSeedData = {
       images: [productImage("beauty-product-st-09.webp")],
       metadata: {
         merchandising: {
-          manualBadges: [{ kind: "limited_offer" }, { kind: "clearance" }],
+          manualBadges: [{ kind: "limited_offer" }],
         },
       },
     },
@@ -403,7 +403,7 @@ export const beautySeedData: SiteSeedData = {
       images: [productImage("beauty-product-st-02.webp")],
       metadata: {
         merchandising: {
-          manualBadges: [{ kind: "clearance" }],
+          manualBadges: [{ kind: "limited_offer" }],
         },
       },
     },
@@ -422,7 +422,7 @@ export const beautySeedData: SiteSeedData = {
       images: [productImage("beauty-product-st-01.webp")],
       metadata: {
         merchandising: {
-          manualBadges: [{ kind: "clearance" }, { kind: "limited_offer" }],
+          manualBadges: [{ kind: "limited_offer" }],
         },
       },
     },

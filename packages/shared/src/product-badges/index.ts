@@ -1,3 +1,4 @@
+export * from "./auto-badge-order.js";
 export * from "./registry.js";
 export * from "./sanitize.js";
 export * from "./metadata.js";
