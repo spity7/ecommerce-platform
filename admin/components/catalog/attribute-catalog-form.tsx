@@ -27,6 +27,7 @@ import {
 import { useToast } from "@/providers/toast-provider";
 import { useCatalogFormLeaveGuard } from "@/components/catalog/use-catalog-form-leave-guard";
 import { cn } from "@/utils/cn";
+import { isAttributeCatalogFormDirty } from "@/lib/catalog-form-dirty";
 import {
   createAttributeApi,
   updateAttributeApi,
@@ -84,6 +85,19 @@ export function AttributeCatalogForm({
   const { disabled } = useCatalogFormLeaveGuard({
     loading: formState.loading,
   });
+  const isDirty = useMemo(
+    () =>
+      isAttributeCatalogFormDirty({
+        description,
+        displayType,
+        initial,
+        mode,
+        name,
+        status,
+        valueRows,
+      }),
+    [description, displayType, initial, mode, name, status, valueRows]
+  );
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -211,6 +225,7 @@ export function AttributeCatalogForm({
         cancelHref={routes.attributes}
         error={formState.error}
         loading={formState.loading}
+        saveDisabled={!isDirty}
         saveLabel={catalogSaveButtonLabel("attribute", mode)}
         showDividerAboveActions={mode === "add"}
       />

@@ -633,10 +633,12 @@ export function CatalogFormError({ message }: { message: string | null }) {
 function CatalogFormActionsInner({
   cancelHref,
   loading,
+  saveDisabled = false,
   saveLabel = "Save",
 }: {
   cancelHref: string;
   loading: boolean;
+  saveDisabled?: boolean;
   saveLabel?: string;
 }) {
   const cancelClassName =
@@ -656,7 +658,7 @@ function CatalogFormActionsInner({
       <button
         aria-busy={loading}
         className="inline-flex h-10 items-center gap-2 rounded-base bg-brand-600 px-5 text-[14px] font-semibold text-white hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-60"
-        disabled={loading}
+        disabled={loading || saveDisabled}
         type="submit"
       >
         <Icon className="h-4 w-4" name="save" />
@@ -670,12 +672,14 @@ export function CatalogFormFooter({
   cancelHref,
   error,
   loading,
+  saveDisabled = false,
   saveLabel = "Save",
   showDividerAboveActions = false,
 }: {
   cancelHref: string;
   error: string | null;
   loading: boolean;
+  saveDisabled?: boolean;
   saveLabel?: string;
   showDividerAboveActions?: boolean;
 }) {
@@ -700,6 +704,7 @@ export function CatalogFormFooter({
         <CatalogFormActionsInner
           cancelHref={cancelHref}
           loading={loading}
+          saveDisabled={saveDisabled}
           saveLabel={saveLabel}
         />
       </div>
@@ -710,10 +715,12 @@ export function CatalogFormFooter({
 export function CatalogFormActions({
   cancelHref,
   loading,
+  saveDisabled = false,
   saveLabel = "Save",
 }: {
   cancelHref: string;
   loading: boolean;
+  saveDisabled?: boolean;
   saveLabel?: string;
 }) {
   return (
@@ -721,6 +728,7 @@ export function CatalogFormActions({
       <CatalogFormActionsInner
         cancelHref={cancelHref}
         loading={loading}
+        saveDisabled={saveDisabled}
         saveLabel={saveLabel}
       />
     </div>
@@ -1684,7 +1692,7 @@ export function ProductImageList({
 
   return (
     <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
-      {images.map((image) => {
+      {images.map((image, index) => {
         const previewUrl =
           image.kind === "saved" ? image.url : image.previewUrl;
         const fileName =
@@ -1693,6 +1701,7 @@ export function ProductImageList({
             : image.file.name;
         const isDragging = draggedId === image.id;
         const isDropTarget = dropTargetId === image.id;
+        const isThumbnail = index === 0;
 
         return (
           <li
@@ -1701,7 +1710,9 @@ export function ProductImageList({
               isDragging && "opacity-50",
               isDropTarget
                 ? "border-brand-500 ring-2 ring-brand-200"
-                : "border-surface-line"
+                : isThumbnail
+                  ? "border-brand-400"
+                  : "border-surface-line"
             )}
             draggable={Boolean(onReorder) && !disabled}
             key={image.id}
@@ -1719,7 +1730,7 @@ export function ProductImageList({
             previewUrl.startsWith("/") ||
             previewUrl.startsWith("blob:") ? (
               <Image
-                alt={fileName}
+                alt={isThumbnail ? `${fileName} (primary thumbnail)` : fileName}
                 className="aspect-square w-full object-cover"
                 src={previewUrl}
                 unoptimized={catalogPreviewImageUnoptimized(previewUrl)}
@@ -1730,10 +1741,23 @@ export function ProductImageList({
                 {fileName}
               </div>
             )}
-            {image.kind === "pending" ? (
-              <span className="absolute bottom-1.5 left-1.5 rounded-full bg-surface-card/95 px-2 py-0.5 text-[10px] font-semibold text-ink-500 shadow-card">
-                Pending
-              </span>
+            {isThumbnail || image.kind === "pending" ? (
+              <div className="absolute bottom-1.5 left-1.5 z-10 flex max-w-[calc(100%-12px)] flex-wrap gap-1">
+                {isThumbnail ? (
+                  <span
+                    className="inline-flex items-center gap-1 rounded-full bg-brand-600 px-2 py-0.5 text-[10px] font-semibold text-white shadow-card"
+                    title="Used as the primary thumbnail"
+                  >
+                    <Icon className="h-3 w-3" name="image" />
+                    Thumbnail
+                  </span>
+                ) : null}
+                {image.kind === "pending" ? (
+                  <span className="rounded-full bg-surface-card/95 px-2 py-0.5 text-[10px] font-semibold text-ink-500 shadow-card">
+                    Pending
+                  </span>
+                ) : null}
+              </div>
             ) : null}
             <button
               aria-label={`Remove ${fileName}`}

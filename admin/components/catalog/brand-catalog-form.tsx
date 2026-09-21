@@ -29,6 +29,7 @@ import {
   normalizeBrandInitials,
   resolveBrandInitials,
 } from "@/lib/brand-tile";
+import { isBrandCatalogFormDirty } from "@/lib/catalog-form-dirty";
 import {
   createBrandApi,
   updateBrandApi,
@@ -113,6 +114,20 @@ export function BrandCatalogForm({
   const { disabled } = useCatalogFormLeaveGuard({
     loading: formState.loading,
   });
+  const isDirty = useMemo(
+    () =>
+      isBrandCatalogFormDirty({
+        initials,
+        initial,
+        mode,
+        name,
+        status,
+        tileClass,
+        visibility,
+        website,
+      }),
+    [initials, initial, mode, name, status, tileClass, visibility, website]
+  );
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -241,6 +256,7 @@ export function BrandCatalogForm({
         cancelHref={routes.brands}
         error={formState.error}
         loading={formState.loading}
+        saveDisabled={!isDirty}
         saveLabel={catalogSaveButtonLabel("brand", mode)}
         showDividerAboveActions={mode === "add"}
       />

@@ -28,6 +28,7 @@ import {
 } from "@/lib/catalog-feedback";
 import { useCatalogFormLeaveGuard } from "@/components/catalog/use-catalog-form-leave-guard";
 import { useToast } from "@/providers/toast-provider";
+import { isCategoryCatalogFormDirty } from "@/lib/catalog-form-dirty";
 import {
   createCategoryApi,
   updateCategoryApi,
@@ -95,6 +96,18 @@ export function CategoryCatalogForm({
   const { disabled } = useCatalogFormLeaveGuard({
     loading: formState.loading,
   });
+  const isDirty = useMemo(
+    () =>
+      isCategoryCatalogFormDirty({
+        initial,
+        mode,
+        name,
+        pendingImageFile,
+        savedImageUrl,
+        status,
+      }),
+    [initial, mode, name, pendingImageFile, savedImageUrl, status]
+  );
 
   useEffect(() => {
     return () => {
@@ -232,6 +245,7 @@ export function CategoryCatalogForm({
         cancelHref={routes.categories}
         error={formState.error}
         loading={formState.loading}
+        saveDisabled={!isDirty}
         saveLabel={catalogSaveButtonLabel("category", mode)}
         showDividerAboveActions={mode === "add"}
       />

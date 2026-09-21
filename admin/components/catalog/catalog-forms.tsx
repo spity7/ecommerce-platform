@@ -47,6 +47,7 @@ import {
 } from "@/lib/product-form-options";
 import { useToast } from "@/providers/toast-provider";
 import { useCatalogFormLeaveGuard } from "@/components/catalog/use-catalog-form-leave-guard";
+import { isProductCatalogFormDirty } from "@/lib/catalog-form-dirty";
 import {
   ProductMerchandisingFields,
   type MerchandisingBadgePreviewInput,
@@ -375,6 +376,54 @@ export function ProductCatalogForm({
   const { disabled } = useCatalogFormLeaveGuard({
     loading: formState.loading,
   });
+  const merchandisingBaseline = useMemo(() => {
+    const sanitizeOptions = manualBadgeKinds.length
+      ? { allowedManualKinds: manualBadgeKinds }
+      : undefined;
+    return (
+      initial?.merchandising ??
+      parseProductMerchandising(initial?.metadata ?? {}, sanitizeOptions)
+    );
+  }, [initial?.merchandising, initial?.metadata, manualBadgeKinds]);
+  const isDirty = useMemo(
+    () =>
+      isProductCatalogFormDirty({
+        attributeValues,
+        brandId,
+        categoryId,
+        compareAtPrice,
+        defaultBrandId,
+        defaultCategoryId,
+        description,
+        imageEntries,
+        initial,
+        merchandising,
+        merchandisingBaseline,
+        mode,
+        name,
+        price,
+        status,
+        stock,
+      }),
+    [
+      attributeValues,
+      brandId,
+      categoryId,
+      compareAtPrice,
+      defaultBrandId,
+      defaultCategoryId,
+      description,
+      imageEntries,
+      initial,
+      merchandising,
+      merchandisingBaseline,
+      mode,
+      name,
+      price,
+      status,
+      stock,
+    ]
+  );
 
   const badgePreview = useMemo(():
     MerchandisingBadgePreviewInput | undefined => {
@@ -807,6 +856,7 @@ export function ProductCatalogForm({
         cancelHref={routes.products}
         error={formState.error}
         loading={formState.loading}
+        saveDisabled={!isDirty}
         saveLabel={catalogSaveButtonLabel("product", mode)}
         showDividerAboveActions
       />
