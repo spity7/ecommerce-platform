@@ -3,6 +3,7 @@ import multer from "multer";
 import { env } from "../config/env.js";
 import { requireAuth, requireAdmin } from "../middleware/auth.js";
 import { AppError } from "../middleware/errorHandler.js";
+import { CATALOG_UPLOAD_MAX_BYTES } from "@platform/shared";
 import { uploadFile, deleteFileIfExists } from "../services/storage.service.js";
 import { getManagedCatalogObjectPath } from "../utils/managed-catalog-path.js";
 import { deleteUploadSchema } from "@platform/shared";
@@ -28,7 +29,7 @@ const ALLOWED_UPLOAD_MIME_TYPES = new Set([
 
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 10 * 1024 * 1024 },
+  limits: { fileSize: CATALOG_UPLOAD_MAX_BYTES },
 });
 
 export const apiRouter = Router();

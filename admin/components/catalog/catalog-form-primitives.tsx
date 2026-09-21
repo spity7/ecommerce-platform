@@ -26,6 +26,13 @@ import {
   platformInstance,
   type ApiValidationDetails,
 } from "@platform/api-client";
+import {
+  CATALOG_UPLOAD_MAX_BYTES,
+  CATALOG_UPLOAD_MAX_LABEL,
+  CATALOG_UPLOAD_TIMEOUT_LABEL,
+  CATALOG_UPLOAD_TIMEOUT_MS,
+} from "@platform/shared";
+import { isAxiosError } from "axios";
 import { cn } from "@/utils/cn";
 
 export const CATALOG_IMAGE_ACCEPT = ".png,.jpg,.jpeg,.webp";
@@ -38,6 +45,38 @@ const CATALOG_IMAGE_MIME_TYPES = new Set([
 
 export function isCatalogImageFile(file: File): boolean {
   return CATALOG_IMAGE_MIME_TYPES.has(file.type);
+}
+
+export function getCatalogImageFileSizeError(file: File): string | undefined {
+  if (file.size <= CATALOG_UPLOAD_MAX_BYTES) {
+    return undefined;
+  }
+  return `"${file.name}" exceeds the ${CATALOG_UPLOAD_MAX_LABEL} upload limit. Compress or resize it before saving.`;
+}
+
+export function filterCatalogImageFiles(files: File[]): {
+  accepted: File[];
+  rejectedMessage: string | null;
+} {
+  const accepted: File[] = [];
+  const oversized: string[] = [];
+  for (const file of files) {
+    if (!isCatalogImageFile(file)) {
+      continue;
+    }
+    if (getCatalogImageFileSizeError(file)) {
+      oversized.push(file.name);
+      continue;
+    }
+    accepted.push(file);
+  }
+
+  const rejectedMessage =
+    oversized.length > 0
+      ? `${oversized.map((name) => `"${name}"`).join(", ")} exceed the ${CATALOG_UPLOAD_MAX_LABEL} upload limit. Compress or resize before saving.`
+      : null;
+
+  return { accepted, rejectedMessage };
 }
 
 export function getCatalogImageFilesFromDataTransfer(
@@ -205,11 +244,28 @@ export async function uploadCatalogImage(
   const formData = new FormData();
   formData.append("file", file);
   formData.append("folder", folder);
-  const result = await platformInstance.post<{ publicUrl: string }>(
-    "/api/uploads",
-    formData
-  );
-  return result.data.publicUrl;
+  try {
+    const result = await platformInstance.post<{ publicUrl: string }>(
+      "/api/uploads",
+      formData,
+      { timeout: CATALOG_UPLOAD_TIMEOUT_MS }
+    );
+    return result.data.publicUrl;
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 408) {
+      throw new ApiError(
+        `"${file.name}" upload timed out after ${CATALOG_UPLOAD_TIMEOUT_LABEL}. Try resizing the photo or saving with fewer images.`,
+        408
+      );
+    }
+    if (isAxiosError(error) && error.code === "ECONNABORTED") {
+      throw new ApiError(
+        `"${file.name}" upload timed out after ${CATALOG_UPLOAD_TIMEOUT_LABEL}. Try a smaller image or save again.`,
+        408
+      );
+    }
+    throw error;
+  }
 }
 
 export async function uploadCatalogImages(
@@ -219,7 +275,27 @@ export async function uploadCatalogImages(
   if (files.length === 0) {
     return [];
   }
-  return Promise.all(files.map((file) => uploadCatalogImage(file, folder)));
+
+  const urls: string[] = [];
+  const uploadedUrls: string[] = [];
+
+  for (const file of files) {
+    try {
+      const url = await uploadCatalogImage(file, folder);
+      urls.push(url);
+      uploadedUrls.push(url);
+    } catch (error) {
+      await deleteHostedCatalogImages(uploadedUrls);
+      if (error instanceof ApiError) {
+        throw error;
+      }
+      throw error instanceof Error
+        ? error
+        : new Error("Failed to upload one or more catalog images.");
+    }
+  }
+
+  return urls;
 }
 
 export function getSavedCatalogImageUrls(
@@ -292,8 +368,13 @@ export function collectRemovedHostedImages(
   );
 }
 
+const CATALOG_DELETE_TIMEOUT_MS = 30_000;
+
 export async function deleteCatalogImage(url: string): Promise<void> {
-  await platformInstance.delete("/api/uploads", { data: { url } });
+  await platformInstance.delete("/api/uploads", {
+    data: { url },
+    timeout: CATALOG_DELETE_TIMEOUT_MS,
+  });
 }
 
 export async function deleteHostedCatalogImages(urls: string[]): Promise<void> {

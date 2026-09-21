@@ -68,11 +68,21 @@ platformInstance.interceptors.response.use(
         }
       }
 
+      if (error.code === "ECONNABORTED") {
+        throw new ApiError(
+          "The request timed out before the server finished. Try a smaller image or save again.",
+          408
+        );
+      }
+
       let message = `Request failed (${status})`;
       const body = error.response?.data as
         { error?: string; details?: ApiValidationDetails } | undefined;
       if (body?.error) {
         message = body.error;
+      } else if (status === 0 && error.request) {
+        message =
+          "Could not reach the API. Check that the server is running and try again.";
       }
       throw new ApiError(message, status, body?.details);
     }

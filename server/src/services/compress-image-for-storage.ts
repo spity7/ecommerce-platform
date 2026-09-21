@@ -1,6 +1,7 @@
 import sharp from "sharp";
 import {
   GCS_IMAGE_COMPRESS_MAX_BYTES,
+  GCS_IMAGE_COMPRESS_MAX_DIMENSION,
   GCS_IMAGE_COMPRESS_MIN_BYTES,
   GCS_IMAGE_COMPRESS_THRESHOLD_BYTES,
 } from "@platform/shared";
@@ -26,6 +27,23 @@ function replaceFileExtension(fileName: string, extension: string): string {
 }
 
 export { replaceFileExtension };
+
+function fitInsideMaxDimension(
+  originalWidth: number,
+  originalHeight: number,
+  maxDimension: number
+): { width: number; height: number } {
+  const longEdge = Math.max(originalWidth, originalHeight);
+  if (longEdge <= maxDimension) {
+    return { width: originalWidth, height: originalHeight };
+  }
+
+  const scale = maxDimension / longEdge;
+  return {
+    width: Math.max(1, Math.round(originalWidth * scale)),
+    height: Math.max(1, Math.round(originalHeight * scale)),
+  };
+}
 
 export async function compressImageForStorage(
   buffer: Buffer
@@ -69,36 +87,54 @@ async function compressImageToStorageRange(
   originalWidth: number,
   originalHeight: number
 ): Promise<Buffer> {
-  let targetWidth = originalWidth;
+  let dims = fitInsideMaxDimension(
+    originalWidth,
+    originalHeight,
+    GCS_IMAGE_COMPRESS_MAX_DIMENSION
+  );
+  let source: Buffer = buffer;
+  let decodedFromOriginal = false;
 
-  while (targetWidth >= MIN_RESIZE_WIDTH) {
-    const resized = sharp(buffer)
-      .rotate()
-      .resize({
-        width: targetWidth,
-        height: Math.max(
-          1,
-          Math.round((originalHeight / originalWidth) * targetWidth)
-        ),
-        fit: "inside",
-        withoutEnlargement: true,
-      });
+  while (dims.width >= MIN_RESIZE_WIDTH) {
+    const resizeOptions = {
+      width: dims.width,
+      height: dims.height,
+      fit: "inside" as const,
+      withoutEnlargement: true,
+    };
 
-    const candidate = await findBestWebpBuffer(resized);
+    const resizeStep: sharp.Sharp = decodedFromOriginal
+      ? sharp(source).resize(resizeOptions)
+      : sharp(source, { failOn: "none" }).rotate().resize(resizeOptions);
+
+    const resizedBuffer = await resizeStep.toBuffer();
+    decodedFromOriginal = true;
+    source = resizedBuffer;
+
+    const candidate = await findBestWebpBuffer(sharp(resizedBuffer));
     if (candidate) {
       return candidate;
     }
 
-    targetWidth = Math.floor(targetWidth * 0.85);
+    const nextWidth = Math.max(MIN_RESIZE_WIDTH, Math.floor(dims.width * 0.85));
+    dims = {
+      width: nextWidth,
+      height: Math.max(
+        1,
+        Math.round((originalHeight / originalWidth) * nextWidth)
+      ),
+    };
   }
 
-  return forceCompressToMax(
-    sharp(buffer).rotate().resize({
+  const tinyBuffer = await sharp(source)
+    .resize({
       width: MIN_RESIZE_WIDTH,
       fit: "inside",
       withoutEnlargement: true,
     })
-  );
+    .toBuffer();
+
+  return forceCompressToMax(sharp(tinyBuffer));
 }
 
 async function findBestWebpBuffer(input: sharp.Sharp): Promise<Buffer | null> {

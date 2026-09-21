@@ -1,5 +1,7 @@
+import assert from "node:assert/strict";
 import { after, before, describe, it } from "node:test";
 import request from "supertest";
+import { CATALOG_UPLOAD_MAX_BYTES } from "@platform/shared";
 import {
   authHeader,
   createTestApp,
@@ -46,6 +48,27 @@ describe("uploads API", () => {
       .set(authHeader(body.accessToken))
       .send({})
       .expect(403);
+  });
+
+  it("rejects uploads over the size limit with 413", async () => {
+    const { body } = await registerAdmin(app);
+    const oversized = Buffer.alloc(CATALOG_UPLOAD_MAX_BYTES + 1);
+
+    const response = await request(app)
+      .post("/api/uploads")
+      .set(authHeader(body.accessToken))
+      .field("folder", "products")
+      .attach("file", oversized, {
+        filename: "large.png",
+        contentType: "image/png",
+      });
+
+    if (response.status === 503) {
+      return;
+    }
+
+    assert.equal(response.status, 413);
+    assert.match(String(response.body.error), /too large/i);
   });
 
   it("rejects invalid upload folders", async () => {

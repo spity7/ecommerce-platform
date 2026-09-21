@@ -54,6 +54,31 @@ describe("compressImageForStorage", () => {
     assert.ok(result.buffer.length >= GCS_IMAGE_COMPRESS_MIN_BYTES);
   });
 
+  it("compresses very large pixel dimensions without re-decoding the full source each pass", async () => {
+    const wideLandscape = await sharp({
+      create: {
+        width: 6000,
+        height: 3375,
+        channels: 3,
+        background: { r: 64, g: 120, b: 180 },
+        noise: {
+          type: "gaussian",
+          mean: 128,
+          sigma: 30,
+        },
+      },
+    })
+      .jpeg({ quality: 90 })
+      .toBuffer();
+
+    assert.ok(wideLandscape.length > GCS_IMAGE_COMPRESS_THRESHOLD_BYTES);
+
+    const result = await compressImageForStorage(wideLandscape);
+
+    assert.ok(result);
+    assert.ok(result.buffer.length <= GCS_IMAGE_COMPRESS_MAX_BYTES);
+  });
+
   it("compresses images slightly above the 800 KB limit", async () => {
     const slightlyLargeWebp = await sharp({
       create: {

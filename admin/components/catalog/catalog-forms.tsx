@@ -12,6 +12,7 @@ import {
   collectRemovedHostedImages,
   createPendingCatalogFile,
   deleteHostedCatalogImages,
+  filterCatalogImageFiles,
   catalogSubmitErrorState,
   resolveCatalogFieldErrors,
   useFocusFirstCatalogFieldError,
@@ -56,6 +57,7 @@ import {
   updateProductApi,
   type ApiValidationDetails,
 } from "@platform/api-client";
+import { CATALOG_UPLOAD_MAX_LABEL } from "@platform/shared";
 import {
   getCompareAtPriceValidationError,
   parseProductMerchandising,
@@ -476,7 +478,16 @@ export function ProductCatalogForm({
         (entry): entry is Extract<CatalogImagePreview, { kind: "pending" }> =>
           entry.kind === "pending"
       );
-      const savedImages = getSavedCatalogImageUrls(imageEntries);
+      let finalImages = getSavedCatalogImageUrls(imageEntries);
+      if (hasPendingCatalogImages(imageEntries)) {
+        const uploaded = await uploadPendingCatalogImageUrls(
+          imageEntries,
+          "products"
+        );
+        uploadedInThisAttempt = uploaded.uploadedUrls;
+        finalImages = uploaded.urls;
+      }
+
       const payload = {
         name,
         price: Number(price),
@@ -489,32 +500,20 @@ export function ProductCatalogForm({
         status,
         categoryId,
         brandId: brandId || undefined,
-        images: savedImages,
+        images: finalImages,
         attributes: attributesPayload,
         merchandising,
       };
 
-      let productId: string;
       if (mode === "add") {
-        const created = await createProductApi(payload);
-        productId = created.id;
+        await createProductApi(payload);
       } else if (initial) {
         await updateProductApi(initial.id, payload);
-        productId = initial.id;
       } else {
         throw new Error("Save failed");
       }
 
-      let finalImages = savedImages;
-      if (hasPendingCatalogImages(imageEntries)) {
-        const uploaded = await uploadPendingCatalogImageUrls(
-          imageEntries,
-          "products"
-        );
-        uploadedInThisAttempt = uploaded.uploadedUrls;
-        finalImages = uploaded.urls;
-        await updateProductApi(productId, { images: finalImages });
-
+      if (pendingEntries.length > 0) {
         for (const entry of pendingEntries) {
           revokeImageEntry(entry);
         }
@@ -545,14 +544,26 @@ export function ProductCatalogForm({
   }
 
   function handleAddImages(files: File[]) {
-    setFormState((current) => ({
-      ...current,
-      error: null,
-      validationDetails: null,
-    }));
+    const { accepted, rejectedMessage } = filterCatalogImageFiles(files);
+    if (rejectedMessage) {
+      setFormState({
+        error: rejectedMessage,
+        loading: false,
+        validationDetails: null,
+      });
+    } else {
+      setFormState((current) => ({
+        ...current,
+        error: null,
+        validationDetails: null,
+      }));
+    }
+    if (accepted.length === 0) {
+      return;
+    }
     setImageEntries((previous) => [
       ...previous,
-      ...files.map((file) =>
+      ...accepted.map((file) =>
         toPendingImageEntry(createPendingCatalogFile(file))
       ),
     ]);
@@ -621,8 +632,8 @@ export function ProductCatalogForm({
                   formState.loading
                     ? "Saving…"
                     : imagePreviews.length > 0
-                      ? `${imagePreviews.length} image${imagePreviews.length === 1 ? "" : "s"} selected. Files upload to storage when you save.`
-                      : "Add PNG, JPG, or WebP images. Uploads on save."
+                      ? `${imagePreviews.length} image${imagePreviews.length === 1 ? "" : "s"} selected. Files upload to storage when you save (max ${CATALOG_UPLOAD_MAX_LABEL} each).`
+                      : `Add PNG, JPG, or WebP up to ${CATALOG_UPLOAD_MAX_LABEL} each. Large photos (e.g. 16K) are downscaled for storage on save.`
                 }
                 images={imagePreviews}
                 onAddFiles={handleAddImages}

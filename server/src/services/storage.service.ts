@@ -1,7 +1,14 @@
-import { GCS_IMAGE_COMPRESS_MAX_BYTES } from "@platform/shared";
-import { getGcsBucket } from "../config/gcs.js";
+import {
+  CATALOG_UPLOAD_MAX_LABEL,
+  CATALOG_UPLOAD_TIMEOUT_LABEL,
+  CATALOG_UPLOAD_TIMEOUT_MS,
+  GCS_IMAGE_COMPRESS_MAX_BYTES,
+} from "@platform/shared";
 import { AppError } from "../middleware/errorHandler.js";
+import { getGcsBucket } from "../config/gcs.js";
 import { rethrowMappedGcsError } from "../utils/gcs-errors.js";
+import { runSerialized } from "../utils/run-serialized.js";
+import { withTimeout } from "../utils/with-timeout.js";
 import {
   compressImageForStorage,
   replaceFileExtension,
@@ -17,12 +24,21 @@ export async function uploadFile(
   originalName: string,
   options: UploadFileOptions = {}
 ): Promise<{ fileName: string; publicUrl: string }> {
-  const compressed = await compressImageForStorage(buffer);
+  const compressed = await runSerialized(() =>
+    withTimeout(
+      compressImageForStorage(buffer),
+      CATALOG_UPLOAD_TIMEOUT_MS,
+      `Image processing timed out after ${CATALOG_UPLOAD_TIMEOUT_LABEL}. Try a smaller file or fewer images at once.`
+    )
+  );
   const uploadBuffer = compressed?.buffer ?? buffer;
   const contentType = compressed?.contentType ?? options.contentType;
 
   if (compressed && uploadBuffer.length > GCS_IMAGE_COMPRESS_MAX_BYTES) {
-    throw new Error("Compressed image exceeds the GCS storage size limit.");
+    throw new AppError(
+      413,
+      `Image could not be compressed below the storage limit. Try a smaller source file (max upload ${CATALOG_UPLOAD_MAX_LABEL}).`
+    );
   }
 
   const bucket = getGcsBucket();
