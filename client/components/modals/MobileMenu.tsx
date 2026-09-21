@@ -21,7 +21,7 @@ import type { MenuItem } from "@/types";
 import { usePathname } from "next/navigation";
 import { isInternalHref, isPathActive } from "@/lib/nav";
 import { mobileMenuSocialLinks } from "@/data/socials";
-import { contactInfo } from "@/data/contact";
+import { getSiteContactInfo } from "@/lib/site-branding";
 import { getStackedModalZIndex } from "@/lib/modalStack";
 import { CATEGORIES_PAGE_PATH } from "@/lib/category-paths";
 import { allElectronocsProducts } from "@/data/products/electronics";
@@ -95,6 +95,7 @@ function MenuItemLink({
 }
 
 export default function MobileMenu() {
+  const contactInfo = getSiteContactInfo();
   const {
     activeBsModal,
     isAnimatedOpen: mobileMenuOpen,

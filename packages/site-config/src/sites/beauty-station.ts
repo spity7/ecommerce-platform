@@ -44,7 +44,7 @@ export const beautyStationConfig = {
   defaultPhoneCountry: "LB",
   contact: {
     email: "hello@beautystation.com",
-    phone: "+1 (555) 123-4567",
+    phone: "+961 81 712 851",
   },
   branding: {
     logo: "/assets/sites/beauty-station/logo.png",

@@ -1,3 +1,4 @@
+/** Demo/static fallback — production chrome uses `getSiteContactInfo()` from site config. */
 export const contactInfo = {
   email: "example@gmail.com",
   emailHref: "mailto:hello@example.com",
