@@ -12,6 +12,7 @@ import type { Metadata } from "next";
 import "../public/assets/scss/main.scss";
 
 const site = getStorefrontSiteConfig();
+const faviconPath = site.branding.favicon ?? site.branding.logo;
 
 const cabin = Cabin({
   subsets: ["latin"],
@@ -53,6 +54,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: site.seo.title,
     description: site.seo.description,
+  },
+  icons: {
+    icon: [{ url: faviconPath, type: "image/png" }],
   },
 };
 

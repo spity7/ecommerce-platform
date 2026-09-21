@@ -55,7 +55,9 @@ export function Sidebar() {
             alt={siteConfig.displayName}
             className="logo-mark hidden h-9 w-9 shrink-0 rounded-lg object-contain"
             height={36}
+            priority
             src={`${baseURL}${(siteConfig.branding.favicon ?? siteConfig.branding.logo).replace(/^\//, "")}`}
+            unoptimized
             width={36}
           />
         </Link>

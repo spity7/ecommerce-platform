@@ -47,9 +47,9 @@ export const beautyStationConfig = {
     phone: "+1 (555) 123-4567",
   },
   branding: {
-    logo: "/assets/images/logo/logo.webp",
-    logoDark: "/assets/images/logo/logo-blackbg.webp",
-    favicon: "/assets/images/favicon.png",
+    logo: "/assets/sites/beauty-station/logo.png",
+    logoDark: "/assets/sites/beauty-station/logo-dark.png",
+    favicon: "/assets/sites/beauty-station/favicon.png",
     signInBanner: "/assets/images/banner/signin-banner.webp",
     signInBannerMobile:
       "/assets/images/banner/signin-banner-small-devices.webp",

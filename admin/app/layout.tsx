@@ -5,6 +5,10 @@ import { AppProviders } from "@/providers/app-providers";
 import "./globals.css";
 import { baseURL } from "@/utils/cn";
 
+const faviconPath = (
+  siteConfig.branding.favicon ?? siteConfig.branding.logo
+).replace(/^\//, "");
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
@@ -16,7 +20,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: `${baseURL}assets/images/favicon.png`,
+        url: `${baseURL}${faviconPath}`,
         type: "image/png",
       },
     ],
