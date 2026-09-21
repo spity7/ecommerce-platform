@@ -123,7 +123,7 @@ export default function ShopDefault({
     catalogQuery ?? createShopCatalogQuery({ page: 1 });
   const [searchValue, setSearchValue] = useState(initialFilters?.search ?? "");
   const [showSearchSkeleton, setShowSearchSkeleton] = useState(false);
-  const searchDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const searchDebounceRef = useRef<number | null>(null);
   const { navigate, clearFilters, isPending } =
     useShopCatalogNavigation(resolvedCatalogQuery);
 

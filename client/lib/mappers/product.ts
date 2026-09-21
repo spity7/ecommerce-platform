@@ -1,4 +1,7 @@
-import type { ProductCardBadgeDto, ProductDto } from "@platform/shared";
+import type {
+  ProductCardBadgeDto,
+  StorefrontProductDto,
+} from "@platform/shared";
 import type { Product, ProductBadge } from "@/types/product";
 
 const DEFAULT_PRODUCT_IMAGE =
@@ -18,7 +21,9 @@ export function getProductReviewCount(
   return product.reviewCount ?? product.ratingCount ?? 0;
 }
 
-export function mapProductDtoToStorefront(product: ProductDto): Product {
+export function mapProductDtoToStorefront(
+  product: StorefrontProductDto
+): Product {
   const images =
     product.images.length > 0 ? product.images : [DEFAULT_PRODUCT_IMAGE];
   const reviewCount = product.reviewCount ?? 0;
@@ -52,6 +57,8 @@ export function mapProductDtoToStorefront(product: ProductDto): Product {
   };
 }
 
-export function mapProductDtosToStorefront(products: ProductDto[]): Product[] {
+export function mapProductDtosToStorefront(
+  products: StorefrontProductDto[]
+): Product[] {
   return products.map(mapProductDtoToStorefront);
 }
