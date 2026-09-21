@@ -7,7 +7,8 @@ import {
   type EntityColumn,
   EntityTable,
 } from "@/components/admin/entity-table";
-import { StatusBadge } from "@/components/ui/status-badge";
+import { CustomerAccountStatusBadge } from "@/components/customers/customer-account-status-badge";
+import { CustomerAccountStatusFilterSelect } from "@/components/customers/customer-account-status-filter-select";
 import { useBusyActionGuard } from "@platform/react-busy";
 
 function initials(value: string): string {
@@ -115,14 +116,7 @@ export function ApiCustomersPanel() {
       key: "status",
       label: "Status",
       render: (customer) => (
-        <StatusBadge
-          className={
-            customer.isActive
-              ? "bg-success-50 text-success-700"
-              : "bg-error-50 text-error-700"
-          }
-          label={customer.isActive ? "Active" : "Disabled"}
-        />
+        <CustomerAccountStatusBadge isActive={customer.isActive} />
       ),
       sortValue: (customer) => (customer.isActive ? 1 : 0),
     },
@@ -169,6 +163,13 @@ export function ApiCustomersPanel() {
             value: "disabled",
           },
         ]}
+        renderFilterSelect={({ onValueChange, value }) => (
+          <CustomerAccountStatusFilterSelect
+            className="min-w-0 w-full md:w-[160px]"
+            onValueChange={onValueChange}
+            value={value}
+          />
+        )}
         items={customers}
         searchLabel="Search customers"
         searchPlaceholder="Search customers"

@@ -13,11 +13,11 @@ import {
   catalogSubmitErrorState,
   resolveCatalogFieldErrors,
   useFocusFirstCatalogFieldError,
-  StatusDot,
   type AssignedProductPreview,
   type AttributeValueRow,
 } from "@/components/catalog/catalog-form-primitives";
 import { FormCard } from "@/components/forms/admin-form-primitives";
+import { CatalogStatusSelect } from "@/components/products/catalog-status-select";
 import { routes } from "@/config/routes";
 import { productsListPath } from "@/lib/paths";
 import {
@@ -76,10 +76,7 @@ export function AttributeCatalogForm({
 
   const fieldErrors = useMemo(
     () =>
-      resolveCatalogFieldErrors(
-        formState.error,
-        formState.validationDetails
-      ),
+      resolveCatalogFieldErrors(formState.error, formState.validationDetails),
     [formState.error, formState.validationDetails]
   );
 
@@ -194,24 +191,19 @@ export function AttributeCatalogForm({
           />
         ) : null}
         <aside className="min-w-0 space-y-4">
-          <FormCard
-            title="Status"
-            titleEnd={
-              <StatusDot active={status === "published"} variant={status} />
-            }
-          >
-            <ControlledSelect
+          <FormCard title="Status">
+            <CatalogStatusSelect
               disabled={disabled}
-              help="Draft attributes are hidden from product forms. Published attributes appear in the product attribute picker."
-              hideLabel
-              label="Status"
-              onChange={(value) => setStatus(value as AttributeDto["status"])}
-              options={[
-                { label: "Draft", value: "draft" },
-                { label: "Published", value: "published" },
-              ]}
+              onValueChange={(value) =>
+                setStatus(value as AttributeDto["status"])
+              }
+              statuses={["draft", "published"]}
               value={status}
             />
+            <p className="mt-2 text-[13px] leading-snug text-ink-500">
+              Draft attributes are hidden from product forms. Published
+              attributes appear in the product attribute picker.
+            </p>
           </FormCard>
         </aside>
       </div>

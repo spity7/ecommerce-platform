@@ -6,7 +6,6 @@ import {
   AssignedProductsSection,
   CatalogFormFooter,
   ControlledField,
-  ControlledSelect,
   collectRemovedHostedImages,
   deleteHostedCatalogImages,
   catalogSubmitErrorState,
@@ -15,12 +14,12 @@ import {
   getThumbnailPreviewState,
   isHostedCatalogImageUrl,
   revokeBlobPreviewUrl,
-  StatusDot,
   ThumbnailUploadCard,
   uploadCatalogImage,
   type AssignedProductPreview,
 } from "@/components/catalog/catalog-form-primitives";
 import { FormCard } from "@/components/forms/admin-form-primitives";
+import { CatalogStatusSelect } from "@/components/products/catalog-status-select";
 import { routes } from "@/config/routes";
 import { addProductPath, productsListPath } from "@/lib/paths";
 import {
@@ -208,24 +207,16 @@ export function CategoryCatalogForm({
             value={name}
           />
         </FormCard>
-        <FormCard
-          title="Status"
-          titleEnd={
-            <StatusDot active={status === "published"} variant={status} />
-          }
-        >
-          <ControlledSelect
+        <FormCard title="Status">
+          <CatalogStatusSelect
             disabled={disabled}
-            help="Draft categories are hidden from published storefront views."
-            hideLabel
-            label="Status"
-            onChange={(value) => setStatus(value as CategoryDto["status"])}
-            options={[
-              { label: "Draft", value: "draft" },
-              { label: "Published", value: "published" },
-            ]}
+            onValueChange={(value) => setStatus(value as CategoryDto["status"])}
+            statuses={["draft", "published"]}
             value={status}
           />
+          <p className="mt-2 text-[13px] leading-snug text-ink-500">
+            Draft categories are hidden from published storefront views.
+          </p>
         </FormCard>
         <ThumbnailUploadCard
           alt={name || "Category thumbnail"}

@@ -91,19 +91,7 @@ export function CategoryForm({ mode }: CategoryFormProps) {
               </p>
             </div>
           </FormCard>
-          <FormCard
-            title="Status"
-            titleEnd={
-              <span
-                aria-label={`Current status: ${status}`}
-                className={cn(
-                  "h-2.5 w-2.5 rounded-full",
-                  status === "Published" ? "bg-success-500" : "bg-warning-500"
-                )}
-                role="status"
-              />
-            }
-          >
+          <FormCard title="Status">
             <SelectField
               defaultValue={status}
               help="Set the category status."

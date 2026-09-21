@@ -19,6 +19,8 @@ import {
   ADMIN_PRODUCT_GALLERY_GRID,
   catalogPreviewImageUnoptimized,
 } from "@/lib/catalog-image-display";
+import { CatalogStatusBadge } from "@/components/products/catalog-status-badge";
+import { catalogStatusDotClass } from "@/lib/catalog-status-ui";
 import { productsListPath } from "@/lib/paths";
 
 export type AssignedProductsListFilter = {
@@ -743,10 +745,8 @@ export function StatusDot({
     <span
       aria-hidden
       className={cn(
-        "h-2.5 w-2.5 rounded-full",
-        resolvedVariant === "published" && "bg-success-500",
-        resolvedVariant === "draft" && "bg-warning-500",
-        resolvedVariant === "archived" && "bg-surface-muted"
+        "h-2.5 w-2.5 rounded-full ring-2 ring-surface-card",
+        catalogStatusDotClass(resolvedVariant)
       )}
     />
   );
@@ -1186,24 +1186,6 @@ export function BrandTileStylePicker({
 
 export type { AssignedProductPreview };
 
-const assignedProductStatusClass: Record<
-  AssignedProductPreview["status"],
-  string
-> = {
-  draft: "bg-surface-muted text-ink-600",
-  published: "bg-success-50 text-success-600",
-  archived: "bg-surface-muted text-ink-500",
-};
-
-const assignedProductStatusLabel: Record<
-  AssignedProductPreview["status"],
-  string
-> = {
-  draft: "Draft",
-  published: "Published",
-  archived: "Archived",
-};
-
 function CatalogNavAction({
   children,
   className,
@@ -1286,14 +1268,11 @@ function AssignedProductRow({
           {product.name}
         </span>
       </span>
-      <span
-        className={cn(
-          "justify-self-center rounded-full px-2 py-0.5 text-center text-[10px] font-semibold leading-none",
-          assignedProductStatusClass[product.status]
-        )}
-      >
-        {assignedProductStatusLabel[product.status]}
-      </span>
+      <CatalogStatusBadge
+        className="justify-self-center"
+        size="sm"
+        status={product.status}
+      />
       <span
         className={cn(
           "justify-self-end text-right text-[11px] tabular-nums text-ink-500",

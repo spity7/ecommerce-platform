@@ -74,6 +74,14 @@ type EntityTableProps<T extends { id: string }> = {
     onValueChange: (value: string) => void;
     value: string;
   }) => React.ReactNode;
+  renderFilterGroupSelect?: (
+    group: FilterGroup<T>,
+    props: {
+      defaultValue: string;
+      onValueChange: (value: string) => void;
+      value: string;
+    }
+  ) => React.ReactNode | null | undefined;
   getRowLabel?: (row: T) => string;
   items: T[];
   onDelete?: (ids: string[]) => Promise<void>;
@@ -174,6 +182,7 @@ export function EntityTable<T extends { id: string }>({
   filterOptionsAriaLabel = "Filter list",
   filterOptionsFirst = false,
   renderFilterSelect,
+  renderFilterGroupSelect,
   getRowLabel,
   items,
   onDelete,
@@ -499,18 +508,29 @@ export function EntityTable<T extends { id: string }>({
       </button>
     ) : null;
 
-  const groupFilterControls = filterGroups?.map((group) => (
-    <ListFilterSelect
-      ariaLabel={group.ariaLabel}
-      className={group.className ?? listFilterSelectClassName()}
-      defaultValue={group.defaultValue}
-      key={group.key}
-      onValueChange={(value) => setGroupFilter(group.key, value)}
-      options={group.options}
-      size="lg"
-      value={groupFilters[group.key] ?? group.defaultValue}
-    />
-  ));
+  const groupFilterControls = filterGroups?.map((group) => {
+    const groupValue = groupFilters[group.key] ?? group.defaultValue;
+    const customGroupSelect = renderFilterGroupSelect?.(group, {
+      defaultValue: group.defaultValue,
+      onValueChange: (value) => setGroupFilter(group.key, value),
+      value: groupValue,
+    });
+    if (customGroupSelect) {
+      return <div key={group.key}>{customGroupSelect}</div>;
+    }
+    return (
+      <ListFilterSelect
+        ariaLabel={group.ariaLabel}
+        className={group.className ?? listFilterSelectClassName()}
+        defaultValue={group.defaultValue}
+        key={group.key}
+        onValueChange={(value) => setGroupFilter(group.key, value)}
+        options={group.options}
+        size="lg"
+        value={groupValue}
+      />
+    );
+  });
 
   const primaryFilterControl = filterOptions ? (
     renderFilterSelect ? (

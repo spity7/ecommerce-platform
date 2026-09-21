@@ -8,6 +8,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  adminStatusBadgeRootClass,
+  adminStatusBadgeSizeClass,
+  withBadgeBorderOpacity,
+} from "@/lib/admin-status-badge-layout";
 import { cn } from "@/utils/cn";
 
 export const ORDER_API_STATUSES: OrderStatus[] = [
@@ -52,7 +57,8 @@ export function orderStatusBadgeClass(
       classes = "border-surface-line bg-surface-muted text-ink-600";
   }
 
-  return options?.important ? withImportant(classes) : classes;
+  const toned = withBadgeBorderOpacity(classes);
+  return options?.important ? withImportant(toned) : toned;
 }
 
 export function orderStatusDotClass(status: OrderStatus): string {
@@ -122,6 +128,40 @@ type OrderStatusSelectProps = {
   size?: "sm" | "default";
   value: OrderStatus;
 };
+
+type OrderStatusBadgeProps = {
+  className?: string;
+  size?: "md" | "sm";
+  status: OrderStatus;
+};
+
+export function OrderStatusBadge({
+  className,
+  size = "md",
+  status,
+}: OrderStatusBadgeProps) {
+  const sizing = adminStatusBadgeSizeClass[size];
+  const label = capitalize(status);
+
+  return (
+    <span
+      aria-label={`Status: ${label}`}
+      className={cn(
+        adminStatusBadgeRootClass,
+        sizing.root,
+        orderStatusBadgeClass(status),
+        className
+      )}
+      role="status"
+    >
+      <span
+        aria-hidden
+        className={cn("rounded-full", sizing.dot, orderStatusDotClass(status))}
+      />
+      <span className={sizing.text}>{label}</span>
+    </span>
+  );
+}
 
 export function OrderStatusSelect({
   ariaLabel = "Order status",

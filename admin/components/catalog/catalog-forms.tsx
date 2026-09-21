@@ -21,7 +21,6 @@ import {
   isHostedCatalogImageUrl,
   ProductAttributesFields,
   revokePendingCatalogFile,
-  StatusDot,
   uploadPendingCatalogImageUrls,
   type CatalogImagePreview,
   type PendingCatalogFile,
@@ -34,6 +33,7 @@ export {
   type ProductFormAttribute,
 } from "@/lib/product-form-attributes";
 import { FormCard } from "@/components/forms/admin-form-primitives";
+import { CatalogStatusSelect } from "@/components/products/catalog-status-select";
 import { routes } from "@/config/routes";
 import {
   catalogSaveButtonLabel,
@@ -368,6 +368,10 @@ export function ProductCatalogForm({
     ],
     [mode]
   );
+  const selectableStatuses = useMemo(
+    () => statusOptions.map((option) => option.value as ProductDto["status"]),
+    [statusOptions]
+  );
   const { disabled } = useCatalogFormLeaveGuard({
     loading: formState.loading,
   });
@@ -588,21 +592,16 @@ export function ProductCatalogForm({
       <CatalogFormLayout
         aside={
           <>
-            <FormCard
-              title="Status"
-              titleEnd={
-                <StatusDot active={status === "published"} variant={status} />
-              }
-            >
-              <ControlledSelect
+            <FormCard title="Status">
+              <CatalogStatusSelect
                 disabled={disabled}
-                help={statusHelp}
-                hideLabel
-                label="Status"
-                onChange={(value) => setStatus(value as ProductDto["status"])}
-                options={statusOptions}
+                onValueChange={setStatus}
+                statuses={selectableStatuses}
                 value={status}
               />
+              <p className="mt-2 text-[13px] leading-snug text-ink-500">
+                {statusHelp}
+              </p>
             </FormCard>
             <ProductAttributesFields
               attributes={attributes}

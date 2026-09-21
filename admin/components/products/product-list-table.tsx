@@ -24,7 +24,11 @@ import {
   sliceListTablePage,
 } from "@/lib/list-table-pagination";
 import { ProductListBadgeChips } from "@/components/products/product-list-badge-chips";
-import { StatusBadge } from "@/components/products/status-badge";
+import {
+  CatalogStatusBadge,
+  ProductInventoryBadge,
+} from "@/components/products/catalog-status-badge";
+import { CatalogStatusFilterSelect } from "@/components/products/catalog-status-select";
 import { routes } from "@/config/routes";
 import { ADMIN_LIST_ROW_THUMB } from "@/lib/catalog-image-display";
 import { productEditPath, storefrontProductPath } from "@/lib/paths";
@@ -76,18 +80,6 @@ function resolveInitialListFilter(
 function productKey(product: Product): string {
   return product.id ?? product.sku;
 }
-
-const statusClass: Record<CatalogStatus, string> = {
-  archived: "bg-surface-muted text-ink-600",
-  draft: "bg-surface-muted text-ink-600",
-  published: "bg-success-50 text-success-600",
-};
-
-const statusLabel: Record<CatalogStatus, string> = {
-  archived: "Archived",
-  draft: "Draft",
-  published: "Published",
-};
 
 export function ProductListTable({
   attributeFilters,
@@ -427,19 +419,9 @@ export function ProductListTable({
                 size="lg"
                 value={attributeSlug}
               />
-              <ListFilterSelect
-                ariaLabel="Filter by status"
+              <CatalogStatusFilterSelect
                 className="min-w-0 w-full md:w-[160px]"
-                defaultValue="all"
                 onValueChange={(value) => setStatus(value as StatusFilter)}
-                options={[
-                  { label: "All statuses", value: "all" },
-                  { label: "Published", value: "published" },
-                  { label: "Draft", value: "draft" },
-                  { label: "Archived", value: "archived" },
-                  { label: "Low stock", value: "low stock" },
-                ]}
-                size="lg"
                 value={status}
               />
               <ListClearFiltersButton
@@ -566,33 +548,23 @@ export function ProductListTable({
                     <td className="py-4 pr-4 text-ink-700">
                       ${product.price.toFixed(2)}
                     </td>
-                    <td
-                      className={cn(
-                        "py-4 pr-4 tabular-nums",
-                        outOfStock
-                          ? "font-semibold text-danger-600"
-                          : lowStock
-                            ? "font-semibold text-warning-600"
-                            : "text-ink-700"
+                    <td className="py-4 pr-4">
+                      {outOfStock || lowStock ? (
+                        <ProductInventoryBadge
+                          stock={product.stock}
+                          variant={outOfStock ? "out" : "low"}
+                        />
+                      ) : (
+                        <span className="tabular-nums text-[14px] text-ink-700">
+                          {product.stock}
+                        </span>
                       )}
-                      title={
-                        outOfStock
-                          ? "Out of stock"
-                          : lowStock
-                            ? `Low stock — at or below ${lowStockThreshold} units`
-                            : undefined
-                      }
-                    >
-                      {product.stock}
                     </td>
                     <td className="w-[7.25rem] py-4 pr-4 align-middle">
                       <ProductListBadgeChips badges={product.badges} />
                     </td>
                     <td className="py-4 pr-4">
-                      <StatusBadge
-                        className={statusClass[catalogStatus]}
-                        label={statusLabel[catalogStatus]}
-                      />
+                      <CatalogStatusBadge status={catalogStatus} />
                     </td>
                     <td className="entity-table-actions-col w-[8.25rem] min-w-[8.25rem] max-w-[8.25rem] whitespace-nowrap px-2 py-4 text-right">
                       <div className="inline-flex items-center gap-1">

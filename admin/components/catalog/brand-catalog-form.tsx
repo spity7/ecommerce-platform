@@ -11,10 +11,10 @@ import {
   catalogSubmitErrorState,
   resolveCatalogFieldErrors,
   useFocusFirstCatalogFieldError,
-  StatusDot,
   type AssignedProductPreview,
 } from "@/components/catalog/catalog-form-primitives";
 import { FormCard } from "@/components/forms/admin-form-primitives";
+import { CatalogStatusSelect } from "@/components/products/catalog-status-select";
 import { routes } from "@/config/routes";
 import { addProductPath, productsListPath } from "@/lib/paths";
 import {
@@ -95,23 +95,17 @@ export function BrandCatalogForm({
         return "Draft brands are hidden from published storefront views.";
     }
   }, [status]);
-  const statusOptions = useMemo(
-    () => [
-      { label: "Draft", value: "draft" },
-      { label: "Published", value: "published" },
-      ...(mode === "edit"
-        ? [{ label: "Archived", value: "archived" as const }]
-        : []),
-    ],
-    [mode]
-  );
+  const selectableStatuses = useMemo((): BrandDto["status"][] => {
+    const statuses: BrandDto["status"][] = ["draft", "published"];
+    if (mode === "edit") {
+      statuses.push("archived");
+    }
+    return statuses;
+  }, [mode]);
 
   const fieldErrors = useMemo(
     () =>
-      resolveCatalogFieldErrors(
-        formState.error,
-        formState.validationDetails
-      ),
+      resolveCatalogFieldErrors(formState.error, formState.validationDetails),
     [formState.error, formState.validationDetails]
   );
 
@@ -204,21 +198,20 @@ export function BrandCatalogForm({
         <FormCard title="Publishing & links">
           <div className="space-y-4">
             <div>
-              <div className="mb-1.5 flex items-center justify-between gap-2">
-                <span className="text-[13px] font-semibold text-ink-700">
-                  Status
-                </span>
-                <StatusDot active={status === "published"} variant={status} />
-              </div>
-              <ControlledSelect
+              <span className="mb-1.5 block text-[13px] font-semibold text-ink-700">
+                Status
+              </span>
+              <CatalogStatusSelect
                 disabled={disabled}
-                help={statusHelp}
-                hideLabel
-                label="Status"
-                onChange={(value) => setStatus(value as BrandDto["status"])}
-                options={statusOptions}
+                onValueChange={(value) =>
+                  setStatus(value as BrandDto["status"])
+                }
+                statuses={selectableStatuses}
                 value={status}
               />
+              <p className="mt-2 text-[13px] leading-snug text-ink-500">
+                {statusHelp}
+              </p>
             </div>
             <ControlledSelect
               disabled={disabled}

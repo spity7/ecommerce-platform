@@ -7,7 +7,10 @@ import {
   type EntityColumn,
   EntityTable,
 } from "@/components/admin/entity-table";
+import { CatalogStatusBadge } from "@/components/products/catalog-status-badge";
+import { CatalogStatusFilterSelect } from "@/components/products/catalog-status-select";
 import { StatusBadge } from "@/components/ui/status-badge";
+import type { ProductStatus } from "@platform/shared";
 import { routes } from "@/config/routes";
 import { ADMIN_LIST_ROW_THUMB } from "@/lib/catalog-image-display";
 import {
@@ -39,11 +42,44 @@ type CustomerRow = Customer & { id: string };
 
 const statusClass = {
   active: "bg-success-50 text-success-600",
-  archived: "bg-surface-muted text-ink-600",
-  draft: "bg-warning-50 text-warning-600",
-  published: "bg-success-50 text-success-600",
   review: "bg-warning-50 text-warning-600",
 };
+
+const catalogStatusFilterClassName = "min-w-0 w-full md:w-[160px]";
+
+const categoryStatusFilters = [
+  "published",
+  "draft",
+] as const satisfies readonly ProductStatus[];
+const brandStatusFilters = [
+  "published",
+  "draft",
+  "archived",
+] as const satisfies readonly ProductStatus[];
+const attributeStatusFilters = [
+  "published",
+  "draft",
+] as const satisfies readonly ProductStatus[];
+
+function catalogStatusFilterRenderer(
+  catalogStatuses: readonly ProductStatus[]
+) {
+  return ({
+    onValueChange,
+    value,
+  }: {
+    onValueChange: (value: string) => void;
+    value: string;
+  }) => (
+    <CatalogStatusFilterSelect
+      catalogStatuses={catalogStatuses}
+      className={catalogStatusFilterClassName}
+      includeLowStock={false}
+      onValueChange={onValueChange}
+      value={value}
+    />
+  );
+}
 
 export function CategoryListTable({
   categories,
@@ -88,12 +124,7 @@ export function CategoryListTable({
       hideable: true,
       key: "status",
       label: "Status",
-      render: (category) => (
-        <StatusBadge
-          className={statusClass[category.status]}
-          label={capitalize(category.status)}
-        />
-      ),
+      render: (category) => <CatalogStatusBadge status={category.status} />,
       sortValue: (category) => category.status,
     },
   ];
@@ -128,6 +159,8 @@ export function CategoryListTable({
           value: "draft",
         },
       ]}
+      filterOptionsAriaLabel="Filter categories by status"
+      renderFilterSelect={catalogStatusFilterRenderer(categoryStatusFilters)}
       items={rows}
       searchLabel="Search categories"
       searchPlaceholder="Search categories"
@@ -192,12 +225,7 @@ export function BrandListTable({
       hideable: true,
       key: "status",
       label: "Status",
-      render: (brand) => (
-        <StatusBadge
-          className={statusClass[brand.status]}
-          label={capitalize(brand.status)}
-        />
-      ),
+      render: (brand) => <CatalogStatusBadge status={brand.status} />,
       sortValue: (brand) => brand.status,
     },
   ];
@@ -237,6 +265,8 @@ export function BrandListTable({
           value: "archived",
         },
       ]}
+      filterOptionsAriaLabel="Filter brands by status"
+      renderFilterSelect={catalogStatusFilterRenderer(brandStatusFilters)}
       items={rows}
       searchLabel="Search brands"
       searchPlaceholder="Search brands"
@@ -293,12 +323,7 @@ export function AttributeListTable({
       hideable: true,
       key: "status",
       label: "Status",
-      render: (attribute) => (
-        <StatusBadge
-          className={statusClass[attribute.status]}
-          label={capitalize(attribute.status)}
-        />
-      ),
+      render: (attribute) => <CatalogStatusBadge status={attribute.status} />,
       sortValue: (attribute) => attribute.status,
     },
   ];
@@ -320,10 +345,15 @@ export function AttributeListTable({
       resolvePreflightDeleteError={(ids) =>
         resolveCatalogReferenceDeleteError("attribute", ids, rows)
       }
+      renderFilterGroupSelect={(group, props) =>
+        group.key === "status"
+          ? catalogStatusFilterRenderer(attributeStatusFilters)(props)
+          : null
+      }
       filterGroups={[
         {
           ariaLabel: "Filter by status",
-          className: "min-w-0 w-full md:w-[160px]",
+          className: catalogStatusFilterClassName,
           defaultValue: "all",
           key: "status",
           options: [

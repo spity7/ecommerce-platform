@@ -12,7 +12,8 @@ import {
 } from "@/components/admin/entity-table";
 import { Icon } from "@/components/layout/icon";
 import { ConfirmDialog } from "@/components/ui/confirm-dialog";
-import { StatusBadge } from "@/components/ui/status-badge";
+import { ReviewStatusBadge } from "@/components/reviews/review-status-badge";
+import { ReviewStatusFilterSelect } from "@/components/reviews/review-status-filter-select";
 import { routes } from "@/config/routes";
 import {
   mapReviewDtoToApiReviewRow,
@@ -20,16 +21,6 @@ import {
 } from "@/lib/mappers/reviews";
 import { ProductReviewsTableSkeleton } from "@/components/reviews/product-reviews-skeleton";
 import { useBusyActionGuard } from "@platform/react-busy";
-
-const statusClass: Record<ApiReviewRow["status"], string> = {
-  approved: "bg-success-50 text-success-700",
-  pending: "bg-warning-50 text-warning-700",
-  rejected: "bg-error-50 text-error-700",
-};
-
-function capitalize(value: string): string {
-  return value.charAt(0).toUpperCase() + value.slice(1);
-}
 
 export function ApiReviewsPanel({
   onLoadingChange,
@@ -191,12 +182,7 @@ export function ApiReviewsPanel({
         hideable: true,
         key: "status",
         label: "Status",
-        render: (review) => (
-          <StatusBadge
-            className={statusClass[review.status]}
-            label={capitalize(review.status)}
-          />
-        ),
+        render: (review) => <ReviewStatusBadge status={review.status} />,
         sortValue: (review) => review.status,
       },
     ],
@@ -306,6 +292,13 @@ export function ApiReviewsPanel({
             value: "rejected",
           },
         ]}
+        renderFilterSelect={({ onValueChange, value }) => (
+          <ReviewStatusFilterSelect
+            className="min-w-0 w-full md:w-[180px]"
+            onValueChange={onValueChange}
+            value={value}
+          />
+        )}
         items={reviews}
         onDelete={async (ids) => {
           for (const id of ids) {

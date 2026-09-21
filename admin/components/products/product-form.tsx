@@ -9,6 +9,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { SelectField } from "@/components/forms/admin-form-primitives";
 import { Icon } from "@/components/layout/icon";
+import { CatalogStatusSelect } from "@/components/products/catalog-status-select";
 import { AppSelect } from "@/components/ui/app-select";
 import { routes } from "@/config/routes";
 import { baseURL, cn } from "@/utils/cn";
@@ -80,16 +81,19 @@ export function ProductForm({
     }
   }, [status]);
 
-  const statusOptions = useMemo(
-    () => [
+  const statusOptions = useMemo((): {
+    label: string;
+    value: ProductStatus;
+  }[] => {
+    const options: { label: string; value: ProductStatus }[] = [
       { label: "Draft", value: "draft" },
       { label: "Published", value: "published" },
-      ...(mode === "edit"
-        ? [{ label: "Archived", value: "archived" as const }]
-        : []),
-    ],
-    [mode]
-  );
+    ];
+    if (mode === "edit") {
+      options.push({ label: "Archived", value: "archived" });
+    }
+    return options;
+  }, [mode]);
 
   function updateFiles(files: FileList | null, target: "media" | "thumb") {
     if (!files?.length) {
@@ -534,31 +538,16 @@ export function ProductForm({
             </div>
           </Card>
 
-          <Card
-            title="Status"
-            titleEnd={
-              <span
-                aria-label={`Current status: ${status}`}
-                className={cn(
-                  "h-2.5 w-2.5 rounded-full",
-                  status === "published"
-                    ? "bg-success-500"
-                    : status === "draft"
-                      ? "bg-warning-500"
-                      : "bg-ink-300"
-                )}
-                role="status"
-              />
-            }
-            titleTag="h3"
-          >
-            <AppSelect
+          <Card title="Status" titleTag="h3">
+            <CatalogStatusSelect
               name="status"
-              onValueChange={(value) => setStatus(value as ProductStatus)}
-              options={statusOptions}
+              onValueChange={(value) => setStatus(value)}
+              statuses={statusOptions.map((option) => option.value)}
               value={status}
             />
-            <p className="mt-2 text-[12px] text-ink-400">{statusHelp}</p>
+            <p className="mt-2 text-[13px] leading-snug text-ink-500">
+              {statusHelp}
+            </p>
           </Card>
 
           <Card title="Product Details" titleTag="h3">

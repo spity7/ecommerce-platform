@@ -205,7 +205,7 @@ textarea:focus-visible {
   display: inline-flex;
   font-size: 12px;
   font-weight: 700;
-  line-height: 1;
+  line-height: 1.375;
   padding: 6px 10px;
   white-space: nowrap;
 }

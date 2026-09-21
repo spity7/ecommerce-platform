@@ -6,7 +6,11 @@ import {
   EntityTable,
 } from "@/components/admin/entity-table";
 import { Icon } from "@/components/layout/icon";
+import { CatalogStatusBadge } from "@/components/products/catalog-status-badge";
+import { ReviewStatusBadge } from "@/components/reviews/review-status-badge";
+import { ReviewStatusFilterSelect } from "@/components/reviews/review-status-filter-select";
 import { StatusBadge } from "@/components/ui/status-badge";
+import { isReviewStatus } from "@/lib/review-status-ui";
 import { routes } from "@/config/routes";
 import type {
   Coupon,
@@ -422,12 +426,17 @@ export function ProductReviewListTable({
       hideable: true,
       key: "status",
       label: "Status",
-      render: (review) => (
-        <StatusBadge
-          className={statusClass[review.status]}
-          label={capitalize(review.status)}
-        />
-      ),
+      render: (review) =>
+        isReviewStatus(review.status) ? (
+          <ReviewStatusBadge status={review.status} />
+        ) : review.status === "draft" ? (
+          <CatalogStatusBadge status="draft" />
+        ) : (
+          <StatusBadge
+            className={statusClass[review.status]}
+            label={capitalize(review.status)}
+          />
+        ),
       sortValue: (review) => review.status,
     },
   ];
@@ -456,6 +465,14 @@ export function ProductReviewListTable({
           value: "draft",
         },
       ]}
+      renderFilterSelect={({ onValueChange, value }) => (
+        <ReviewStatusFilterSelect
+          className="min-w-0 w-full md:w-[180px]"
+          includeDraftCatalogOption
+          onValueChange={onValueChange}
+          value={value}
+        />
+      )}
       items={rows}
       searchLabel="Search reviews"
       searchPlaceholder="Search product or customer"
