@@ -1,5 +1,8 @@
-import { fetchProducts } from "@platform/api-client";
-import type { ProductDto, ProductStatus } from "@platform/shared";
+import {
+  fetchProducts,
+  type ListProduct200DataItem,
+} from "@platform/api-client";
+import type { ProductStatus } from "@platform/shared";
 
 const PLACEHOLDER_IMAGE = "/assets/products/oat-biscuit.svg";
 export const ASSIGNED_PRODUCTS_PAGE_SIZE = 3;
@@ -19,7 +22,9 @@ function resolveProductImage(images: string[]): string {
   return first ?? PLACEHOLDER_IMAGE;
 }
 
-function toAssignedProductPreview(product: ProductDto): AssignedProductPreview {
+function toAssignedProductPreview(
+  product: ListProduct200DataItem
+): AssignedProductPreview {
   return {
     id: product.id,
     image: resolveProductImage(product.images),
@@ -35,7 +40,7 @@ export type AssignedProductsSnapshot = {
 };
 
 async function fetchAssignedProducts(
-  predicate: (product: ProductDto) => boolean
+  predicate: (product: ListProduct200DataItem) => boolean
 ): Promise<AssignedProductsSnapshot> {
   const response = await fetchProducts({ limit: 100 });
   const assigned = response.data.filter(predicate);
