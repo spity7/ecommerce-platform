@@ -271,7 +271,7 @@ textarea:focus-visible {
 @keyframes admin-list-table-empty-in {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px);
   }
 
   to {
@@ -353,7 +353,7 @@ textarea:focus-visible {
 }
 
 .admin-list-table-empty-animate {
-  animation: admin-list-table-empty-in 260ms cubic-bezier(0.22, 1, 0.36, 1)
+  animation: admin-list-table-empty-in 280ms cubic-bezier(0.22, 1, 0.36, 1)
     backwards;
 }
 

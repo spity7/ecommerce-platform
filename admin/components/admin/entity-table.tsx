@@ -14,8 +14,10 @@ import { LinkedProductsViewAction } from "@/components/ui/linked-products-view-a
 import { ListDeleteConfirmDialog } from "@/components/ui/list-delete-confirm-dialog";
 import { CrudBusyShield } from "@/components/ui/crud-busy-shield";
 import {
+  getListTableEmptyCopy,
   ListTableBody,
   ListTableEmptyMessage,
+  pluralizeListEntityName,
 } from "@/components/ui/list-table-body";
 import { ListTablePagination } from "@/components/ui/list-table-pagination";
 import {
@@ -834,14 +836,19 @@ export function EntityTable<T extends { id: string }>({
         </div>
 
         {filteredRows.length === 0 ? (
-          <ListTableEmptyMessage filterSignature={filterSignature}>
-            No {singularName}s match your search.
-          </ListTableEmptyMessage>
+          <ListTableEmptyMessage
+            {...getListTableEmptyCopy({
+              hasActiveFilters,
+              itemLabel: pluralizeListEntityName(singularName),
+            })}
+            filterSignature={filterSignature}
+            onClearFilters={hasActiveFilters ? clearAllFilters : undefined}
+          />
         ) : null}
 
         <ListTablePagination
           disabled={deleting}
-          itemLabel={`${singularName}s`}
+          itemLabel={pluralizeListEntityName(singularName)}
           onPageChange={setPage}
           page={safePage}
           totalItems={filteredRows.length}

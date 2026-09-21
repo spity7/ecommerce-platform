@@ -23,18 +23,20 @@ export function ListTablePagination({
   pageSize = ADMIN_LIST_TABLE_PAGE_SIZE,
   totalItems,
 }: ListTablePaginationProps) {
+  if (totalItems === 0) {
+    return null;
+  }
+
   const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
   const safePage = clampListTablePage(page, totalItems, pageSize);
-  const rangeStart = totalItems === 0 ? 0 : (safePage - 1) * pageSize + 1;
+  const rangeStart = (safePage - 1) * pageSize + 1;
   const rangeEnd = Math.min(safePage * pageSize, totalItems);
   const canPaginate = totalItems > pageSize;
 
   return (
     <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
       <p className="text-[13px] text-ink-500">
-        {totalItems === 0
-          ? `Showing 0 ${itemLabel}`
-          : `Showing ${rangeStart}–${rangeEnd} of ${totalItems} ${itemLabel}`}
+        Showing {rangeStart}–{rangeEnd} of {totalItems} {itemLabel}
       </p>
       {canPaginate ? (
         <div className="flex items-center gap-2">

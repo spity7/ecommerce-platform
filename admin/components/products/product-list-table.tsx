@@ -13,6 +13,7 @@ import {
 import { ListDeleteConfirmDialog } from "@/components/ui/list-delete-confirm-dialog";
 import { CrudBusyShield } from "@/components/ui/crud-busy-shield";
 import {
+  getListTableEmptyCopy,
   ListTableBody,
   ListTableEmptyMessage,
 } from "@/components/ui/list-table-body";
@@ -625,9 +626,14 @@ export function ProductListTable({
         </div>
 
         {filteredProducts.length === 0 ? (
-          <ListTableEmptyMessage filterSignature={filterSignature}>
-            No products match your search.
-          </ListTableEmptyMessage>
+          <ListTableEmptyMessage
+            {...getListTableEmptyCopy({
+              hasActiveFilters,
+              itemLabel: "products",
+            })}
+            filterSignature={filterSignature}
+            onClearFilters={hasActiveFilters ? clearAllFilters : undefined}
+          />
         ) : null}
 
         <ListTablePagination
