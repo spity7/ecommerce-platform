@@ -1,28 +1,52 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getPdpThumbSlidesPerView } from "@/lib/product-card-image";
+import {
+  getPdpThumbSlidesPerView,
+  PDP_GALLERY_THUMB_DESKTOP_MAX,
+} from "@/lib/product-card-image";
 
-function thumbNavNeeded(imageCount: number): boolean {
-  if (typeof window === "undefined") {
-    return false;
-  }
-  const visible = getPdpThumbSlidesPerView(imageCount, window.innerWidth);
-  return imageCount > visible;
+export type PdpThumbStripLayout = {
+  showNavigation: boolean;
+  slidesPerView: number;
+};
+
+function getThumbStripLayout(imageCount: number, viewportWidth: number): PdpThumbStripLayout {
+  const slidesPerView = getPdpThumbSlidesPerView(imageCount, viewportWidth);
+  return {
+    slidesPerView,
+    showNavigation: imageCount > slidesPerView,
+  };
 }
 
-/** True when the thumb strip has more images than fit in the current viewport row. */
-export function usePdpThumbNavVisible(imageCount: number): boolean {
-  const [visible, setVisible] = useState(() => thumbNavNeeded(imageCount));
+function getInitialThumbStripLayout(imageCount: number): PdpThumbStripLayout {
+  if (typeof window === "undefined") {
+    const slidesPerView = Math.min(imageCount, PDP_GALLERY_THUMB_DESKTOP_MAX);
+    return {
+      slidesPerView,
+      showNavigation: imageCount > slidesPerView,
+    };
+  }
+  return getThumbStripLayout(imageCount, window.innerWidth);
+}
+
+/** Layout for the PDP thumb row (visible slots + whether prev/next is needed). */
+export function usePdpThumbStripLayout(imageCount: number): PdpThumbStripLayout {
+  const [layout, setLayout] = useState(() => getInitialThumbStripLayout(imageCount));
 
   useEffect(() => {
     const update = () => {
-      setVisible(thumbNavNeeded(imageCount));
+      setLayout(getThumbStripLayout(imageCount, window.innerWidth));
     };
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
   }, [imageCount]);
 
-  return visible;
+  return layout;
+}
+
+/** True when the thumb strip has more images than fit in the current viewport row. */
+export function usePdpThumbNavVisible(imageCount: number): boolean {
+  return usePdpThumbStripLayout(imageCount).showNavigation;
 }

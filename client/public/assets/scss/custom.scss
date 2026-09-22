@@ -56,6 +56,18 @@
 }
 
 .rbt-single-product-media-area-dflt {
+  /* Fixed square PDP thumb cells (1:1); row does not stretch to full gallery width. */
+  --rbt-pdp-thumb-size: 56px;
+  --rbt-pdp-thumb-gap: 12px;
+
+  @media (min-width: 576px) {
+    --rbt-pdp-thumb-size: 64px;
+  }
+
+  @media (min-width: 992px) {
+    --rbt-pdp-thumb-size: 72px;
+  }
+
   .rbt-medea-lg-img-area {
     .rbt-product-single-slider-twolayout-activation {
       @include rbt-swiper-ssr-layout(
@@ -127,10 +139,13 @@
   .rbt-pdp-thumb-strip {
     .swiper-slide {
       box-sizing: border-box;
+      width: var(--rbt-pdp-thumb-size) !important;
+      flex-shrink: 0;
     }
 
     button.thumbnail {
-      width: 100%;
+      width: var(--rbt-pdp-thumb-size);
+      max-width: var(--rbt-pdp-thumb-size);
     }
   }
 
@@ -147,19 +162,25 @@
     max-width: 100% !important;
   }
 
+  .rbt-pdp-thumb-grid {
+    display: grid;
+    gap: var(--rbt-pdp-thumb-gap);
+    width: max-content;
+    max-width: 100%;
+    justify-content: start;
+  }
+
+  &.rbt-single-product-media-area .rbt-thumb-slide-part {
+    .swiper-slide-thumb-active button.thumbnail {
+      border-color: transparent !important;
+    }
+  }
+
   .rbt-pdp-thumb-strip {
     max-width: 100%;
 
-    // Two-up main gallery marks two Swiper thumb slides active; only highlight the
-    // slide that matches `activeMainIndex` (rbt-pdp-thumb-is-active).
-    &.rbt-thumb-slide-part
-      .swiper-slide-thumb-active
-      button.thumbnail:not(.rbt-pdp-thumb-is-active) {
-      border-color: transparent !important;
-    }
-
     button.thumbnail.rbt-pdp-thumb-is-active {
-      border-color: var(--color-primary);
+      border-color: var(--color-primary) !important;
     }
 
     .rbt-pdp-thumb-strip-inner {

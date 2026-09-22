@@ -60,6 +60,8 @@ const nextConfig: NextConfig = {
   },
   // Image optimization: serve AVIF (smaller) then WebP, tuned device breakpoints.
   images: {
+    // Catalog/PDP use quality 85 via `product-card-image.ts`; Next 16 requires explicit allowlist.
+    qualities: [75, 85],
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 500],

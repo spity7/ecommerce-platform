@@ -3,7 +3,7 @@ import type { Swiper as SwiperClass } from "swiper";
 import Image from "next/image";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { FreeMode, Navigation, Thumbs } from "swiper/modules";
+import { FreeMode, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import LightGallery from "lightgallery/react";
 import lgThumbnail from "lightgallery/plugins/thumbnail";
@@ -17,14 +17,10 @@ const DEFAULT_PRODUCT_IMAGES = [
 ];
 
 import { getCatalogImageLightGalleryDownloadAttrs } from "@/lib/catalog-image-download";
-import { usePdpThumbNavVisible } from "@/hooks/use-pdp-thumb-nav-visible";
+import { usePdpThumbStripLayout } from "@/hooks/use-pdp-thumb-nav-visible";
 import {
   PDP_GALLERY_SQUARE_IMAGE,
-  PDP_GALLERY_THUMB_DESKTOP_MAX,
   PDP_GALLERY_THUMB_IMAGE,
-  PDP_GALLERY_THUMB_LARGE_PHONE_MAX,
-  PDP_GALLERY_THUMB_MOBILE_MAX,
-  PDP_GALLERY_THUMB_TABLET_MAX,
 } from "@/lib/product-card-image";
 import "@/lib/lightgallery-styles";
 
@@ -85,10 +81,44 @@ function unbindThumbNavigation(swiper: SwiperClass) {
   }
 }
 
+function PdpThumbButton({
+  active,
+  alt,
+  index,
+  onSelect,
+  src,
+}: {
+  active: boolean;
+  alt: string;
+  index: number;
+  onSelect: (index: number) => void;
+  src: string;
+}) {
+  return (
+    <button
+      className={`thumbnail d-block position-relative${
+        active ? " rbt-pdp-thumb-is-active" : ""
+      }`}
+      onClick={() => onSelect(index)}
+      type="button"
+    >
+      <span className="rbt-thumb-img-sm">
+        <GalleryImage
+          alt={alt}
+          frameClassName="rbt-rounded--4"
+          sizes={PDP_GALLERY_THUMB_IMAGE.sizes}
+          src={src}
+        />
+      </span>
+    </button>
+  );
+}
+
 export default function Slider3({
   alt = "Product image",
   images,
 }: Slider3Props) {
+  const [mainSwiper, setMainSwiper] = useState<SwiperClass | null>(null);
   const [swiperThumb, setSwiperThumb] = useState<SwiperClass | null>(null);
   const [activeMainIndex, setActiveMainIndex] = useState(0);
   const thumbPrevRef = useRef<HTMLButtonElement>(null);
@@ -104,29 +134,17 @@ export default function Slider3({
   );
 
   const imageCount = productImages.length;
-  const showThumbNavigation = usePdpThumbNavVisible(imageCount);
+  const { showNavigation: showThumbNavigation } =
+    usePdpThumbStripLayout(imageCount);
 
-  const thumbSwiperBreakpoints = useMemo(
-    () => ({
-      0: {
-        direction: "horizontal" as const,
-        slidesPerView: Math.min(imageCount, PDP_GALLERY_THUMB_MOBILE_MAX),
-      },
-      576: {
-        direction: "horizontal" as const,
-        slidesPerView: Math.min(imageCount, PDP_GALLERY_THUMB_LARGE_PHONE_MAX),
-      },
-      768: {
-        direction: "horizontal" as const,
-        slidesPerView: Math.min(imageCount, PDP_GALLERY_THUMB_TABLET_MAX),
-      },
-      992: {
-        direction: "horizontal" as const,
-        slidesPerView: Math.min(imageCount, PDP_GALLERY_THUMB_DESKTOP_MAX),
-      },
-    }),
-    [imageCount]
-  );
+  const selectMainSlide = (index: number) => {
+    mainSwiper?.slideTo(index);
+  };
+
+  const handleMainSwiper = (swiper: SwiperClass) => {
+    setMainSwiper(swiper);
+    syncActiveMainIndex(swiper);
+  };
 
   useEffect(() => {
     if (!swiperThumb) {
@@ -173,13 +191,10 @@ export default function Slider3({
                 prevEl: ".rbt-arrow-left",
                 nextEl: ".rbt-arrow-right",
               },
-              thumbs: {
-                swiper: swiperThumb,
-              },
             }}
-            modules={[Thumbs, Navigation]}
+            modules={[Navigation]}
             onSlideChange={syncActiveMainIndex}
-            onSwiper={syncActiveMainIndex}
+            onSwiper={handleMainSwiper}
           >
             <div className="swiper-wrapper rbt-store-thumb-main-1">
               {productImages.map((src, index) => (
@@ -237,65 +252,66 @@ export default function Slider3({
               <i aria-hidden className="fa-regular fa-arrow-left" />
             </button>
           ) : null}
-          <Swiper
-            className="swiper rbt-product-thumb-slider-twolayout-activation mt--24 mt_sm--12 mlr--0"
-            {...{
-              spaceBetween: 16,
-              slidesPerView: Math.min(imageCount, PDP_GALLERY_THUMB_MOBILE_MAX),
-              freeMode: showThumbNavigation,
-              watchSlidesProgress: true,
-              breakpoints: thumbSwiperBreakpoints,
-              ...(showThumbNavigation
-                ? {
-                    navigation: {
-                      prevEl: thumbPrevRef.current,
-                      nextEl: thumbNextRef.current,
-                    },
-                  }
-                : {}),
-            }}
-            modules={[Thumbs, FreeMode, Navigation]}
-            onBeforeInit={(swiper) => {
-              if (!showThumbNavigation) {
-                return;
-              }
-              const navigation = swiper.params.navigation;
-              if (navigation && typeof navigation !== "boolean") {
-                navigation.prevEl = thumbPrevRef.current;
-                navigation.nextEl = thumbNextRef.current;
-              }
-            }}
-            onSwiper={setSwiperThumb}
-          >
-            <div className="swiper-wrapper rbt-store-thumb-variation-1">
-              {productImages.map((src, index) => (
-                <SwiperSlide
-                  className={`swiper-slide rbt-scroll-trigger fade_in animation-order-${
-                    index + 1
-                  }`}
-                  key={`thumb-${src}-${index}`}
-                >
-                  <button
-                    className={`thumbnail d-block position-relative${
-                      index === activeMainIndex
-                        ? " rbt-pdp-thumb-is-active"
-                        : ""
+          {showThumbNavigation ? (
+            <Swiper
+              className="swiper rbt-product-thumb-slider-twolayout-activation mt--24 mt_sm--12 mlr--0"
+              {...{
+                spaceBetween: 12,
+                slidesPerView: "auto",
+                freeMode: true,
+                navigation: {
+                  prevEl: thumbPrevRef.current,
+                  nextEl: thumbNextRef.current,
+                },
+              }}
+              modules={[FreeMode, Navigation]}
+              onBeforeInit={(swiper) => {
+                const navigation = swiper.params.navigation;
+                if (navigation && typeof navigation !== "boolean") {
+                  navigation.prevEl = thumbPrevRef.current;
+                  navigation.nextEl = thumbNextRef.current;
+                }
+              }}
+              onSwiper={setSwiperThumb}
+            >
+              <div className="swiper-wrapper rbt-store-thumb-variation-1">
+                {productImages.map((src, index) => (
+                  <SwiperSlide
+                    className={`swiper-slide rbt-scroll-trigger fade_in animation-order-${
+                      index + 1
                     }`}
-                    type="button"
+                    key={`thumb-${src}-${index}`}
                   >
-                    <span className="rbt-thumb-img-sm">
-                      <GalleryImage
-                        alt={alt}
-                        frameClassName="rbt-rounded--4"
-                        sizes={PDP_GALLERY_THUMB_IMAGE.sizes}
-                        src={src}
-                      />
-                    </span>
-                  </button>
-                </SwiperSlide>
+                    <PdpThumbButton
+                      active={index === activeMainIndex}
+                      alt={alt}
+                      index={index}
+                      onSelect={selectMainSlide}
+                      src={src}
+                    />
+                  </SwiperSlide>
+                ))}
+              </div>
+            </Swiper>
+          ) : (
+            <div
+              className="rbt-pdp-thumb-grid mt--24 mt_sm--12 mlr--0"
+              style={{
+                gridTemplateColumns: `repeat(${imageCount}, var(--rbt-pdp-thumb-size))`,
+              }}
+            >
+              {productImages.map((src, index) => (
+                <PdpThumbButton
+                  active={index === activeMainIndex}
+                  alt={alt}
+                  index={index}
+                  key={`thumb-${src}-${index}`}
+                  onSelect={selectMainSlide}
+                  src={src}
+                />
               ))}
             </div>
-          </Swiper>
+          )}
           {showThumbNavigation ? (
             <button
               ref={thumbNextRef}

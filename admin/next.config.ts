@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
   ...(basePath ? { basePath } : {}),
   transpilePackages: ["@platform/shared", "@platform/site-config"],
   images: {
+    qualities: [75, 85],
     remotePatterns: [
       {
         protocol: "https",
