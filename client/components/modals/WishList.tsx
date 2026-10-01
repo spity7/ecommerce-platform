@@ -80,7 +80,6 @@ export default function WishList() {
                     </div>
                   ) : (
                     <WishlistProductTable
-                      removeIcon="heart"
                       showStock={false}
                       wrapperClassName="rbt-transparent-table-one-wrapper rbt-has-bg-gray pt--0 pb--0 mb--0"
                       tableClassName="rbt-transparent-table-one mb--0 rbt-wishlist-table"

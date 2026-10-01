@@ -424,6 +424,14 @@
   box-shadow: 0 10px 28px rgba(8, 10, 18, 0.06);
 }
 
+.rbt-wishlist-page-empty__title {
+  margin: 0 0 8px;
+  font-size: var(--font-size-h5);
+  font-weight: var(--f-bold);
+  line-height: var(--line-height-b2);
+  color: var(--color-heading);
+}
+
 .rbt-wishlist-page-empty__hint {
   max-width: 420px;
   line-height: var(--line-height-b2);
@@ -499,10 +507,9 @@
 
       tbody tr {
         display: grid;
-        grid-template-columns: 76px minmax(0, 1fr) minmax(
-            max-content,
-            86px
-          ) 36px;
+        grid-template-columns:
+          76px minmax(0, 1fr) minmax(max-content, 86px)
+          36px;
         align-items: start;
         width: 100%;
         border-bottom: 2px solid var(--color-gray-200);
@@ -573,7 +580,7 @@
           margin: 0;
         }
 
-        .rbt-wishlist-unsave-btn {
+        .rbt-wishlist-remove-btn {
           width: 28px;
           height: 28px;
           line-height: 28px;
@@ -596,14 +603,6 @@
             opacity: 0;
             visibility: hidden;
           }
-        }
-
-        .rbt-product-remove-btn:not(.rbt-wishlist-unsave-btn) {
-          width: 28px;
-          height: 28px;
-          line-height: 28px;
-          background: rgba(255, 255, 255, 0.94);
-          box-shadow: 0 2px 8px rgba(8, 10, 18, 0.12);
         }
       }
 
@@ -719,14 +718,14 @@
     }
   }
 
-  .rbt-product-remove-btn-wrapper .rbt-wishlist-unsave-btn,
-  .rbt-wishlist-thumb-remove .rbt-wishlist-unsave-btn {
+  .rbt-product-remove-btn-wrapper .rbt-wishlist-remove-btn,
+  .rbt-wishlist-thumb-remove .rbt-wishlist-remove-btn {
     left: 0;
     margin-left: 0;
-    color: var(--color-primary);
+    color: var(--color-danger);
 
     span i {
-      color: var(--color-primary);
+      color: var(--color-danger);
       font-size: 17px;
       transition: var(--transition);
     }
@@ -741,6 +740,7 @@
     &:hover {
       color: var(--color-danger);
       transform: none;
+      background: none;
 
       span i {
         color: var(--color-danger);

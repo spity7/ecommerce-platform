@@ -55,7 +55,9 @@ export default function WishlistProductTable({
           <div aria-hidden="true" className="rbt-wishlist-page-empty__icon">
             <i className="fa-sharp fa-regular fa-heart" />
           </div>
-          <h3 className="rbt-title rbt-text-bold mb--8">{emptyTitle}</h3>
+          <h3 className="rbt-wishlist-page-empty__title rbt-title rbt-text-bold mb--8">
+            {emptyTitle}
+          </h3>
           <p className="b2 mb--0 rbt-text-color-gray-500 rbt-wishlist-page-empty__hint">
             {emptyHint}
           </p>
@@ -214,9 +216,7 @@ function WishlistRemoveButton({
       placement="top"
     >
       <button
-        className={`rbt-product-remove-btn rbt-round-btn tooltips${
-          removeIcon === "heart" ? " rbt-wishlist-unsave-btn" : ""
-        }`}
+        className="rbt-product-remove-btn rbt-round-btn tooltips rbt-wishlist-remove-btn"
         type="button"
         onClick={onRemove}
       >

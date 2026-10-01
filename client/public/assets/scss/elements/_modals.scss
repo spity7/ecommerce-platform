@@ -419,11 +419,11 @@ body {
 }
 
 .rbt-wishlist-modal {
-  .rbt-product-remove-btn-wrapper .rbt-wishlist-unsave-btn {
-    color: var(--rbt-wishlist-heart-color);
+  .rbt-product-remove-btn-wrapper .rbt-wishlist-remove-btn {
+    color: var(--color-danger);
 
     span i {
-      color: var(--rbt-wishlist-heart-color);
+      color: var(--color-danger);
       font-size: 17px;
       transition: var(--transition);
     }
@@ -438,6 +438,7 @@ body {
     &:hover {
       color: var(--color-danger);
       transform: none;
+      background: none;
 
       span i {
         color: var(--color-danger);
