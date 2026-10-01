@@ -11,17 +11,24 @@ import type { Product } from "@/types";
 const FALLBACK_IMAGE = "/assets/images/wishlist/wishlist-prd-1.webp";
 
 type WishlistProductTableProps = {
+  browseHref?: string;
+  emptyHint?: string;
+  showEmptyBrowseButton?: boolean;
   showStock?: boolean;
   tableClassName?: string;
   wrapperClassName?: string;
-  browseHref?: string;
 };
 
+const DEFAULT_EMPTY_HINT =
+  "Nothing saved yet. Tap the heart on a product to add it here.";
+
 export default function WishlistProductTable({
+  browseHref = "/shop",
+  emptyHint = DEFAULT_EMPTY_HINT,
+  showEmptyBrowseButton = true,
   showStock = true,
   tableClassName = "rbt-transparent-table-one rbt-wishlist-table mb--0",
   wrapperClassName = "rbt-transparent-table-one-wrapper pt--0 pb--0 mb--0",
-  browseHref = "/shop",
 }: WishlistProductTableProps) {
   const { wishList, removeFromWishlist } = useContextElement();
   const { handleAddToCart, isAddedToCartProducts, mounted } =
@@ -29,14 +36,18 @@ export default function WishlistProductTable({
 
   if (mounted && wishList.length === 0) {
     return (
-      <div className={`${wrapperClassName} text-center py-5`}>
-        <p className="rbt-text-color-gray-600 mb--0">Your wishlist is empty.</p>
-        <Link
-          href={browseHref}
-          className="rbt-btn rbt-btn-md rbt-btn-primary mt--16"
-        >
-          Browse Products
-        </Link>
+      <div className={`${wrapperClassName} text-center py-5 px-3`}>
+        <p className="b3 mb--0 rbt-text-color-gray-500 mx-auto rbt-wishlist-empty-hint">
+          {emptyHint}
+        </p>
+        {showEmptyBrowseButton ? (
+          <Link
+            href={browseHref}
+            className="rbt-btn rbt-btn-md rbt-btn-primary mt--16"
+          >
+            Browse Products
+          </Link>
+        ) : null}
       </div>
     );
   }

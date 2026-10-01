@@ -4,8 +4,10 @@ import {
   buildShopCatalogHref,
   createShopCatalogQuery,
   DEFAULT_SHOP_CATALOG_LIMIT,
+  formatShopPageSizeLabel,
   parseShopCatalogQuery,
   shopCatalogQueryToProductParams,
+  sortApiValueToCompactLabel,
 } from "../lib/shop-query.js";
 
 describe("shop-query", () => {
@@ -41,5 +43,10 @@ describe("shop-query", () => {
     assert.equal(params.search, "missing-product");
     assert.equal(params.categoryId, "abc");
     assert.equal(params.limit, DEFAULT_SHOP_CATALOG_LIMIT);
+  });
+
+  it("uses compact sort and page-size labels for mobile shop tools", () => {
+    assert.equal(sortApiValueToCompactLabel("price_asc"), "Price ↑");
+    assert.equal(formatShopPageSizeLabel(15, true), "15");
   });
 });

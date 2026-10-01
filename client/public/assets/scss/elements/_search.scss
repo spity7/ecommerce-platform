@@ -162,7 +162,15 @@
         background: transparent;
       }
       .submit-btn {
+        flex-shrink: 0;
         .rbt-btn {
+        }
+      }
+      .input-section {
+        flex: 1 1 auto;
+        min-width: 0;
+        .search-input {
+          width: 100%;
         }
       }
     }
@@ -443,6 +451,11 @@ body::before {
       border-bottom-right-radius: 0;
     }
   }
+
+  &--header-dropdown.is-suggestions-open .input-section .search-input {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 }
 
 .rbt-product-search-suggestions {
@@ -459,6 +472,12 @@ body::before {
   max-height: min(360px, 50vh);
   overflow: auto;
   padding: 6px 0;
+
+  .rbt-product-search-field--header-dropdown & {
+    left: 0;
+    right: 0;
+    margin-right: 0;
+  }
 
   .rbt-search-form & {
     margin-right: 12px;

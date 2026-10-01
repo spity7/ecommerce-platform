@@ -451,6 +451,7 @@ export default function ShopDefault({
                       <StorefrontProductSearchField
                         enableSuggestions={isServerCatalog}
                         placeholder="Search for products"
+                        scrollOnShopSearch={false}
                         value={searchValue}
                         onChange={setSearchValue}
                         onSubmitSearch={commitSearchNavigation}

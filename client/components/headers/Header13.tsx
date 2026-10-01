@@ -154,7 +154,7 @@ export default function Header13({ sticky = true, branding }: Header13Props) {
         </div>
       </div>
       {/* End Header Top */}
-      <SearchDropdown />
+      <SearchDropdown variant="production" />
       <div
         className={`rbt-header-common-sticky-activation rbt-header-wrapper-common justify-content-between rbt-bg-color-white${stickyClass}`}
       >
@@ -280,7 +280,7 @@ export default function Header13({ sticky = true, branding }: Header13Props) {
           </div>
         </div>
         {/* Start Search Dropdown  */}
-        <SearchDropdownCommon />
+        <SearchDropdownCommon variant="production" />
         {/* End Search Dropdown  */}
       </div>
     </header>

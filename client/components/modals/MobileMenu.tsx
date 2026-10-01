@@ -22,6 +22,8 @@ import { usePathname } from "next/navigation";
 import { isInternalHref, isPathActive } from "@/lib/nav";
 import { mobileMenuSocialLinks } from "@/data/socials";
 import { getSiteContactInfo } from "@/lib/site-branding";
+import { getStorefrontSiteConfig } from "@/lib/site";
+import StorefrontProductSearchField from "@/components/store/StorefrontProductSearchField";
 import { getStackedModalZIndex } from "@/lib/modalStack";
 import { CATEGORIES_PAGE_PATH } from "@/lib/category-paths";
 import { allElectronocsProducts } from "@/data/products/electronics";
@@ -96,6 +98,8 @@ function MenuItemLink({
 
 export default function MobileMenu() {
   const contactInfo = getSiteContactInfo();
+  const siteConfig = getStorefrontSiteConfig();
+  const [mobileSearchValue, setMobileSearchValue] = useState("");
   const {
     activeBsModal,
     isAnimatedOpen: mobileMenuOpen,
@@ -186,19 +190,15 @@ export default function MobileMenu() {
                 </button>
               </div>
             </div>
-            <p className="description">
-              Beauty Station is a E-commerce Template. Worldwide electronics
-              store since 1978.
-            </p>
-            <div className="rbt-inner-search-field style-one rbt-search-field-rounded rbt-search-field-sm-width">
-              <input type="text" placeholder="Search for products" />
-              <button
-                className="rbt-round-btn search-btn rbt-text-color-gray-500"
-                type="submit"
-              >
-                <i className="fa-solid fa-magnifying-glass" />
-              </button>
-            </div>
+            <p className="description">{siteConfig.description}</p>
+            <StorefrontProductSearchField
+              className="rbt-inner-search-field style-one rbt-search-field-rounded rbt-search-field-sm-width"
+              enableSuggestions
+              placeholder="Search for products"
+              value={mobileSearchValue}
+              onChange={setMobileSearchValue}
+              onSubmitted={closeMenu}
+            />
           </div>
           <div className="rbt-tab rbt-round-shape-tab">
             <ul

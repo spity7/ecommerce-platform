@@ -1,8 +1,7 @@
 "use client";
 
 import StorefrontProductSearchField from "@/components/store/StorefrontProductSearchField";
-import { buildShopCatalogHref, createShopCatalogQuery } from "@/lib/shop-query";
-import { useRouter } from "next/navigation";
+import { STOREFRONT_PRODUCT_DETAILS_PATH } from "@/lib/storefront-search-navigation";
 import { useState } from "react";
 
 type StorefrontProductSearchFormProps = {
@@ -10,6 +9,7 @@ type StorefrontProductSearchFormProps = {
   inputClassName?: string;
   placeholder?: string;
   onSubmitted?: () => void;
+  scrollOnShopSearch?: boolean;
 };
 
 export default function StorefrontProductSearchForm({
@@ -17,30 +17,21 @@ export default function StorefrontProductSearchForm({
   inputClassName = "search-input",
   placeholder = "What Are You Looking For?",
   onSubmitted,
+  scrollOnShopSearch = true,
 }: StorefrontProductSearchFormProps) {
-  const router = useRouter();
   const [query, setQuery] = useState("");
 
   return (
     <StorefrontProductSearchField
       className={className}
-      fieldWrapperClassName="input-section position-relative w-100 mr--12 mr_sm--4"
       inputClassName={inputClassName}
+      layout="headerDropdown"
       placeholder={placeholder}
-      productDetailsPath="/product"
+      productDetailsPath={STOREFRONT_PRODUCT_DETAILS_PATH}
+      scrollOnShopSearch={scrollOnShopSearch}
       value={query}
       onChange={setQuery}
       onSubmitted={onSubmitted}
-      onSubmitSearch={(search) => {
-        router.push(
-          buildShopCatalogHref(
-            createShopCatalogQuery({
-              page: 1,
-              search: search || undefined,
-            })
-          )
-        );
-      }}
     />
   );
 }

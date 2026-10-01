@@ -6,6 +6,11 @@ import {
   PRODUCT_SEARCH_SUGGESTION_MIN_LENGTH,
   type ProductSearchSuggestion,
 } from "@/lib/product-search-suggestions";
+import {
+  navigateStorefrontCatalogSearch,
+  navigateStorefrontProduct,
+  STOREFRONT_PRODUCT_DETAILS_PATH,
+} from "@/lib/storefront-search-navigation";
 import { useRouter } from "next/navigation";
 import {
   useEffect,
@@ -13,21 +18,26 @@ import {
   useRef,
   useState,
   type FormEvent,
+  type ChangeEvent,
   type KeyboardEvent,
 } from "react";
+
+type StorefrontProductSearchLayout = "inline" | "headerDropdown";
 
 type StorefrontProductSearchFieldProps = {
   className?: string;
   enableSuggestions?: boolean;
   fieldWrapperClassName?: string;
   inputClassName?: string;
+  layout?: StorefrontProductSearchLayout;
   onChange: (value: string) => void;
   onSubmitted?: () => void;
   onSubmitSearch?: (query: string) => void;
   placeholder?: string;
   productDetailsPath?: string;
-  shopSearchPath?: string;
+  scrollOnShopSearch?: boolean;
   submitOnSuggestionPick?: "product" | "shop";
+  submitButtonLabel?: string;
   value: string;
 };
 
@@ -36,13 +46,15 @@ export default function StorefrontProductSearchField({
   enableSuggestions = true,
   fieldWrapperClassName,
   inputClassName,
+  layout = "inline",
   onChange,
   onSubmitted,
   onSubmitSearch,
   placeholder = "Search for products",
-  productDetailsPath = "/product",
-  shopSearchPath = "/shop",
+  productDetailsPath: _productDetailsPath = STOREFRONT_PRODUCT_DETAILS_PATH,
+  scrollOnShopSearch = true,
   submitOnSuggestionPick = "product",
+  submitButtonLabel = "Search",
   value,
 }: StorefrontProductSearchFieldProps) {
   const router = useRouter();
@@ -83,13 +95,9 @@ export default function StorefrontProductSearchField({
   }, [isOpen]);
 
   function navigateToShopSearch(query: string) {
-    const params = new URLSearchParams();
-    if (query) {
-      params.set("search", query);
-    }
-    const href =
-      params.size > 0 ? `${shopSearchPath}?${params}` : shopSearchPath;
-    router.push(href);
+    navigateStorefrontCatalogSearch(router, query, {
+      scroll: scrollOnShopSearch,
+    });
     onSubmitted?.();
   }
 
@@ -108,7 +116,7 @@ export default function StorefrontProductSearchField({
       submitSearch(suggestion.name);
       return;
     }
-    router.push(`${productDetailsPath}/${suggestion.slug}`);
+    navigateStorefrontProduct(router, suggestion.slug);
     onSubmitted?.();
   }
 
@@ -177,96 +185,89 @@ export default function StorefrontProductSearchField({
   const activeDescendant =
     activeIndex >= 0 ? `${listId}-option-${activeIndex}` : undefined;
 
+  const inputProps = {
+    "aria-activedescendant": activeDescendant,
+    "aria-autocomplete": "list" as const,
+    "aria-controls": showSuggestionsPanel ? listId : undefined,
+    "aria-expanded": showSuggestionsPanel,
+    "aria-label": placeholder,
+    autoComplete: "off" as const,
+    className: inputClassName,
+    placeholder,
+    role: "combobox" as const,
+    type: "search" as const,
+    value,
+    onChange: (event: ChangeEvent<HTMLInputElement>) => {
+      onChange(event.target.value);
+      setIsOpen(true);
+    },
+    onFocus: () => {
+      if (trimmedValue.length >= PRODUCT_SEARCH_SUGGESTION_MIN_LENGTH) {
+        setIsOpen(true);
+      }
+    },
+    onKeyDown: handleKeyDown,
+  };
+
+  const suggestionsPanel = showSuggestionsPanel ? (
+    <StorefrontProductSearchSuggestions
+      activeIndex={activeIndex}
+      isLoading={isLoading}
+      listId={listId}
+      query={value}
+      suggestions={suggestions}
+      onSelect={pickSuggestion}
+    />
+  ) : null;
+
+  const inlineSearchButton = (
+    <button
+      aria-label="Search"
+      className="rbt-round-btn search-btn"
+      type="submit"
+    >
+      <i className="fa-solid fa-magnifying-glass" />
+    </button>
+  );
+
   return (
     <div
       ref={rootRef}
       className={`rbt-product-search-field position-relative w-100${
         showSuggestionsPanel ? " is-suggestions-open" : ""
-      }`}
+      }${layout === "headerDropdown" ? " rbt-product-search-field--header-dropdown" : ""}`}
     >
       <form className={className} onSubmit={handleSubmit}>
-        {fieldWrapperClassName ? (
+        {layout === "headerDropdown" ? (
+          <>
+            <div className="input-section position-relative w-100 mr--12 mr_sm--4">
+              <input {...inputProps} />
+              <i
+                aria-hidden="true"
+                className="fa-sharp fa-regular inner-search-icon fa-magnifying-glass"
+              />
+              {suggestionsPanel}
+            </div>
+            <div className="submit-btn">
+              <button className="rbt-btn btn-md" type="submit">
+                {submitButtonLabel}
+              </button>
+            </div>
+          </>
+        ) : fieldWrapperClassName ? (
           <div className={fieldWrapperClassName}>
-            <input
-              aria-activedescendant={activeDescendant}
-              aria-autocomplete="list"
-              aria-controls={showSuggestionsPanel ? listId : undefined}
-              aria-expanded={showSuggestionsPanel}
-              aria-label={placeholder}
-              autoComplete="off"
-              className={inputClassName}
-              placeholder={placeholder}
-              role="combobox"
-              type="search"
-              value={value}
-              onChange={(event) => {
-                onChange(event.target.value);
-                setIsOpen(true);
-              }}
-              onFocus={() => {
-                if (
-                  trimmedValue.length >= PRODUCT_SEARCH_SUGGESTION_MIN_LENGTH
-                ) {
-                  setIsOpen(true);
-                }
-              }}
-              onKeyDown={handleKeyDown}
-            />
-            <button
-              aria-label="Search"
-              className="rbt-round-btn search-btn"
-              type="submit"
-            >
-              <i className="fa-solid fa-magnifying-glass" />
-            </button>
+            <input {...inputProps} />
+            {inlineSearchButton}
+            {suggestionsPanel}
           </div>
         ) : (
           <>
-            <input
-              aria-activedescendant={activeDescendant}
-              aria-autocomplete="list"
-              aria-controls={showSuggestionsPanel ? listId : undefined}
-              aria-expanded={showSuggestionsPanel}
-              aria-label={placeholder}
-              autoComplete="off"
-              className={inputClassName}
-              placeholder={placeholder}
-              role="combobox"
-              type="search"
-              value={value}
-              onChange={(event) => {
-                onChange(event.target.value);
-                setIsOpen(true);
-              }}
-              onFocus={() => {
-                if (
-                  trimmedValue.length >= PRODUCT_SEARCH_SUGGESTION_MIN_LENGTH
-                ) {
-                  setIsOpen(true);
-                }
-              }}
-              onKeyDown={handleKeyDown}
-            />
-            <button
-              aria-label="Search"
-              className="rbt-round-btn search-btn"
-              type="submit"
-            >
-              <i className="fa-solid fa-magnifying-glass" />
-            </button>
+            <input {...inputProps} />
+            {inlineSearchButton}
           </>
         )}
       </form>
-      {showSuggestionsPanel ? (
-        <StorefrontProductSearchSuggestions
-          activeIndex={activeIndex}
-          isLoading={isLoading}
-          listId={listId}
-          query={value}
-          suggestions={suggestions}
-          onSelect={pickSuggestion}
-        />
-      ) : null}
+      {layout === "inline" && !fieldWrapperClassName ? suggestionsPanel : null}
     </div>
   );
 }
