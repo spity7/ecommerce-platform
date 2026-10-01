@@ -99,6 +99,40 @@ describe("commerce API", () => {
     );
   });
 
+  it("does not persist a guest cart on GET before the first line item", async () => {
+    const guestSessionId = `guest-lazy-${Date.now()}`;
+
+    const cartResponse = await request(app)
+      .get("/api/cart")
+      .set("X-Guest-Cart-Id", guestSessionId)
+      .expect(200);
+
+    assert.equal(cartResponse.body.itemCount, 0);
+    assert.equal(cartResponse.body.guestSessionId, guestSessionId);
+    assert.equal(await Cart.findOne({ guestSessionId }), null);
+  });
+
+  it("creates a guest cart on first add and deletes it on clear", async () => {
+    const product = await seedPublishedProduct();
+    const guestSessionId = `guest-clear-${Date.now()}`;
+
+    await request(app)
+      .post("/api/cart/items")
+      .set("X-Guest-Cart-Id", guestSessionId)
+      .send({ productId: product._id.toString(), quantity: 1 })
+      .expect(201);
+
+    assert.ok(await Cart.findOne({ guestSessionId }));
+
+    const clearResponse = await request(app)
+      .delete("/api/cart")
+      .set("X-Guest-Cart-Id", guestSessionId)
+      .expect(200);
+
+    assert.equal(clearResponse.body.itemCount, 0);
+    assert.equal(await Cart.findOne({ guestSessionId }), null);
+  });
+
   it("supports guest cart with X-Guest-Cart-Id header", async () => {
     const product = await seedPublishedProduct();
     const guestSessionId = `guest-${Date.now()}`;

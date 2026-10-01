@@ -1,8 +1,9 @@
 import { Product } from "../models/Product.js";
+import type { CartDocument } from "../models/Cart.js";
+import { deleteEmptyGuestCart } from "./cart-guest-cleanup.js";
 import type { getOrCreateUserWishlist } from "./wishlist.service.js";
-import type { resolveCart } from "./cart.service.js";
 
-type MutableCart = Awaited<ReturnType<typeof resolveCart>>;
+type MutableCart = CartDocument;
 type MutableWishlist = Awaited<ReturnType<typeof getOrCreateUserWishlist>>;
 
 export async function refreshCartLineItems(
@@ -51,6 +52,9 @@ export async function refreshCartLineItems(
 
   if (modified) {
     await cart.save();
+    if (cart.items.length === 0) {
+      await deleteEmptyGuestCart(cart);
+    }
   }
 
   return modified;

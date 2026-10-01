@@ -39,6 +39,17 @@ export function toCartDto(doc: CartDocument): CartDto {
   };
 }
 
+/** In-memory guest cart before the first persisted line item. */
+export function toEphemeralGuestCartDto(guestSessionId: string): CartDto {
+  return {
+    id: `guest-ephemeral:${guestSessionId}`,
+    items: [],
+    itemCount: 0,
+    subtotal: 0,
+    guestSessionId,
+  };
+}
+
 export function toOrderDto(
   doc: OrderDocument,
   customer?: { name: string; email: string; avatarUrl?: string }

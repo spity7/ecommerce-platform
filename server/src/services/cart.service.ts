@@ -1,9 +1,9 @@
 import type { Request } from "express";
 import type { AuthenticatedRequest } from "../middleware/auth.js";
-import { Cart } from "../models/Cart.js";
+import { Cart, type CartDocument } from "../models/Cart.js";
 import { Product } from "../models/Product.js";
 import { AppError } from "../middleware/errorHandler.js";
-import { toCartDto } from "./commerce.serializers.js";
+import { toCartDto, toEphemeralGuestCartDto } from "./commerce.serializers.js";
 import { refreshCartLineItems } from "./commerce-hygiene.service.js";
 
 export const GUEST_CART_HEADER = "x-guest-cart-id";
@@ -13,16 +13,25 @@ export function getGuestSessionId(req: Request): string | undefined {
   return header?.trim() || undefined;
 }
 
-export async function resolveCart(req: AuthenticatedRequest) {
+export async function getOrCreateUserCart(userId: string) {
+  let cart = await Cart.findOne({ userId });
+  if (!cart) {
+    cart = await Cart.create({ userId, items: [] });
+  }
+  return cart;
+}
+
+export async function findGuestCart(guestSessionId: string) {
+  return Cart.findOne({ guestSessionId });
+}
+
+/** Mutating cart routes: create user/guest cart documents when missing. */
+export async function resolveCartForMutation(req: AuthenticatedRequest) {
   const userId = req.auth?.userId;
   const guestSessionId = getGuestSessionId(req);
 
   if (userId) {
-    let cart = await Cart.findOne({ userId });
-    if (!cart) {
-      cart = await Cart.create({ userId, items: [] });
-    }
-    return cart;
+    return getOrCreateUserCart(userId);
   }
 
   if (!guestSessionId) {
@@ -36,15 +45,7 @@ export async function resolveCart(req: AuthenticatedRequest) {
   return cart;
 }
 
-export async function getOrCreateUserCart(userId: string) {
-  let cart = await Cart.findOne({ userId });
-  if (!cart) {
-    cart = await Cart.create({ userId, items: [] });
-  }
-  return cart;
-}
-
-async function assertPublishedProductStock(
+export async function assertPublishedProductStock(
   productId: string,
   quantity: number,
   productName?: string
@@ -70,7 +71,7 @@ async function assertPublishedProductStock(
 }
 
 export async function addProductToCart(
-  cart: Awaited<ReturnType<typeof resolveCart>>,
+  cart: CartDocument,
   productId: string,
   quantity: number
 ) {
@@ -100,7 +101,7 @@ export async function addProductToCart(
 }
 
 export async function updateCartItemQuantity(
-  cart: Awaited<ReturnType<typeof resolveCart>>,
+  cart: CartDocument,
   itemId: string,
   quantity: number
 ) {
@@ -183,3 +184,9 @@ export async function mergeGuestCartIntoUser(
   await refreshCartLineItems(userCart);
   return toCartDto(userCart);
 }
+
+export {
+  deleteEmptyGuestCart,
+  deleteGuestCartDocument,
+} from "./cart-guest-cleanup.js";
+export { toEphemeralGuestCartDto };

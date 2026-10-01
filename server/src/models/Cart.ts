@@ -1,4 +1,5 @@
 import mongoose, { Schema, type InferSchemaType, Types } from "mongoose";
+import { applyGuestCartExpiry } from "../services/cart-guest-retention.js";
 
 const cartItemSchema = new Schema(
   {
@@ -22,13 +23,28 @@ const cartSchema = new Schema(
     },
     guestSessionId: { type: String, unique: true, sparse: true, index: true },
     items: { type: [cartItemSchema], default: [] },
+    expiresAt: { type: Date },
   },
   { timestamps: true }
 );
 
-export type CartDocument = InferSchemaType<typeof cartSchema> & {
-  _id: mongoose.Types.ObjectId;
-};
+cartSchema.pre("save", function applyGuestCartTtl() {
+  if (this.guestSessionId) {
+    applyGuestCartExpiry(this as CartDocument);
+  }
+});
+
+cartSchema.index(
+  { expiresAt: 1 },
+  {
+    expireAfterSeconds: 0,
+    partialFilterExpression: { guestSessionId: { $type: "string" } },
+  }
+);
+
+export type CartDocument = mongoose.HydratedDocument<
+  InferSchemaType<typeof cartSchema>
+>;
 
 export type CartItemDocument = InferSchemaType<typeof cartItemSchema> & {
   _id: Types.ObjectId;

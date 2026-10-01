@@ -236,7 +236,7 @@ See [ROUTES.md](ROUTES.md) for the full table. Summary:
 - `GET/POST /api/brands`, `GET/PATCH/DELETE /api/brands/:id` (`image` required on create; cannot clear on update; managed GCS cleanup on image replace/delete; delete **409** when products reference it; rename propagates `brandName`; slug server-derived)
 - `GET/POST /api/attributes`, `GET/PATCH/DELETE /api/attributes/:id` (delete **409** when products use attribute slug; rename re-slugs and migrates product keys; **409** when removing attribute values still used by products; `productCount` maintained on product CRUD)
 - `POST /api/uploads`, `DELETE /api/uploads` (managed catalog folders only)
-- `GET /api/cart` refreshes line snapshots and prunes unavailable products; guest cart merge runs on login/registration and when an authenticated session is restored (`POST /api/cart/merge`); guest cart rows are deleted after merge
+- `GET /api/cart` refreshes line snapshots and prunes unavailable products; **guest carts are not inserted on GET** (empty DTO until the first `POST /api/cart/items`); clearing a guest cart or removing the last line deletes the guest row; guest cart merge runs on login/registration and when an authenticated session is restored (`POST /api/cart/merge`); guest cart rows are deleted after merge; persisted guest carts carry `expiresAt` with a partial MongoDB TTL index (3 days when empty, 60 days when items remain — see `server/src/services/cart-guest-retention.ts`); optional batch purge: `npm run purge:guest-carts -w @platform/server` (`--dry-run`, `--limit=`)
 - `GET /api/health`
 
 Catalog **GET** routes are public (no auth). Catalog **POST/PATCH/DELETE** and **uploads** require admin JWT (`bearerAuth` in OpenAPI).
@@ -246,7 +246,7 @@ Catalog **GET** routes are public (no auth). Catalog **POST/PATCH/DELETE** and *
 ## Database
 
 - **MongoDB** via Mongoose 9 — one database per site (`MONGODB_URI`)
-- Models: `Product`, `Category`, `Brand`, `Attribute` in `server/src/models/`
+- Models: `Product`, `Category`, `Brand`, `Attribute`, `Cart`, … in `server/src/models/`
 - Seed: `npm run seed` → `server/src/scripts/seed.ts` (dataset from `SITE_ID` + `homeLayout`: beauty, sport, or general). Each seed product declares `categorySlug` (required, same as API `categoryId`); `seed-catalog.ts` throws if the slug is unknown. Sets `productCount` on categories, brands, and attributes. Sample reviews follow the dataset (beauty-specific slugs vs generic catalog products).
 - Optional media: Google Cloud Storage (`POST /api/uploads` returns 503 if not configured; `DELETE /api/uploads` removes managed catalog images). Server deletes managed GCS objects when products/categories are deleted or when image fields change on PATCH. Image uploads above **800 KB** are automatically re-encoded to WebP between **400 KB and 800 KB** before storage (applies to all GCS uploads, including profile photos).
 
