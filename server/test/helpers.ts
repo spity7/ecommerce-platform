@@ -12,6 +12,7 @@ import type { ProductDocument } from "../src/models/Product.js";
 
 export const TEST_PHONE = "+12025550100";
 export const TEST_CATEGORY_IMAGE = "https://example.com/category.jpg";
+export const TEST_BRAND_IMAGE = "https://example.com/brand.jpg";
 
 export function createTestApp(): Express {
   return createApp();

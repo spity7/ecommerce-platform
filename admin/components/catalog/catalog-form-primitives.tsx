@@ -587,6 +587,13 @@ function parseCatalogFormError(message: string | null): ParsedCatalogFormError {
     };
   }
 
+  if (normalized.includes("brand image is required")) {
+    return {
+      summary: "Brand image is required.",
+      fieldErrors: { image: "Required" },
+    };
+  }
+
   return {
     summary: message,
     fieldErrors: {},
@@ -1122,76 +1129,6 @@ export function ThumbnailUploadCard({
   );
 }
 
-export function BrandTileStylePicker({
-  disabled = false,
-  initials,
-  onChange,
-  options,
-  value,
-}: {
-  disabled?: boolean;
-  initials: string;
-  onChange: (value: string) => void;
-  options: Array<{ label: string; shortLabel?: string; value: string }>;
-  value: string;
-}) {
-  const preview = initials.trim() || "?";
-
-  return (
-    <fieldset className="block min-w-0" disabled={disabled}>
-      <legend className="text-[13px] font-semibold text-ink-700">
-        Tile style
-      </legend>
-      <div className="mt-1.5 grid grid-cols-4 gap-2" role="radiogroup">
-        {options.map((option) => {
-          const selected = value === option.value;
-          const caption = option.shortLabel ?? option.label;
-
-          return (
-            <button
-              aria-checked={selected}
-              aria-label={option.label}
-              className={cn(
-                "flex flex-col items-center gap-1.5 rounded-base border p-2 transition-shadow",
-                selected
-                  ? "border-brand-600 bg-brand-50/40 ring-2 ring-brand-200"
-                  : "border-surface-line hover:border-brand-300 hover:bg-surface-muted/40",
-                disabled && "cursor-not-allowed opacity-60"
-              )}
-              disabled={disabled}
-              key={option.value}
-              onClick={() => onChange(option.value)}
-              role="radio"
-              title={option.label}
-              type="button"
-            >
-              <span
-                className={cn(
-                  "grid h-12 w-12 place-items-center rounded-base text-[14px] font-semibold",
-                  option.value
-                )}
-              >
-                {preview}
-              </span>
-              <span
-                className={cn(
-                  "text-[11px] font-medium leading-none",
-                  selected ? "text-brand-700" : "text-ink-500"
-                )}
-              >
-                {caption}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-      <p className="mt-2 text-[12px] text-ink-400">
-        Preview uses your initials — same tile size as admin lists.
-      </p>
-    </fieldset>
-  );
-}
-
 export type { AssignedProductPreview };
 
 function CatalogNavAction({
@@ -1614,8 +1551,6 @@ export function CatalogFormLayout({
     </div>
   );
 }
-
-export { deriveInitials } from "@/lib/brand-tile";
 
 export function createAttributeValueRows(
   values: string[]

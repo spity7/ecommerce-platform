@@ -60,21 +60,13 @@ export default function FilterByBrand({
             <label htmlFor={inputId}>
               <span className="rbt-label-content">
                 <span className="rbt-label-img">
-                  {brand.initials ? (
-                    <span
-                      className={`${brand.avatarClass ?? "rbt-shop-brand-avatar"} text-uppercase`}
-                    >
-                      {brand.initials}
-                    </span>
-                  ) : (
-                    <Image
-                      alt={`${brand.name} logo`}
-                      height={49}
-                      loading="lazy"
-                      src="/assets/images/sidebar/catagory-brand/catagory-brand-img-01.webp"
-                      width={48}
-                    />
-                  )}
+                  <Image
+                    alt={`${brand.name} logo`}
+                    height={49}
+                    loading="lazy"
+                    src={brand.image}
+                    width={48}
+                  />
                 </span>
                 <span className="rbt-label-text">{brand.name}</span>
               </span>

@@ -50,7 +50,7 @@ export function mapBrandDto(brand: BrandDto): Brand & { id: string } {
   return {
     id: brand.id,
     count: brand.productCount,
-    initials: brand.initials,
+    image: brand.image || PLACEHOLDER_IMAGE,
     name: brand.name,
     slug: brand.slug,
     status:
@@ -59,7 +59,6 @@ export function mapBrandDto(brand: BrandDto): Brand & { id: string } {
         : brand.status === "published"
           ? "published"
           : "draft",
-    tileClass: brand.tileClass,
     visibility: brand.visibility,
     website: brand.website,
   };

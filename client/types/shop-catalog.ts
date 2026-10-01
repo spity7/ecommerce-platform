@@ -7,12 +7,10 @@ export type ShopCategoryFilterOption = {
 import type { ShopPriceFilterMeta } from "@/lib/shop-price-ranges";
 
 export type ShopBrandFilterOption = {
-  avatarClass?: string;
   id: string;
-  initials?: string;
+  image: string;
   name: string;
   productCount?: number;
-  tileClass?: string;
 };
 
 export type ShopCatalogFilters = {

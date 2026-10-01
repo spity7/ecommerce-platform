@@ -225,7 +225,7 @@ See [ROUTES.md](ROUTES.md) for the full table. Summary:
 
 - `GET/POST /api/products`, `GET /api/products/slug/:slug`, `GET/PATCH/DELETE /api/products/:id` (PATCH validates category/brand FKs and attribute keys/values; maintains `productCount`; **slug is immutable after create**; deleting a product removes managed GCS images)
 - `GET/POST /api/categories`, `GET/PATCH/DELETE /api/categories/:id` (delete **409** when products reference it; rename propagates `categoryName`; slug server-derived from name; deleting or replacing a category image removes the old managed GCS object)
-- `GET/POST /api/brands`, `GET/PATCH/DELETE /api/brands/:id` (delete **409** when products reference it; rename propagates `brandName`; slug server-derived)
+- `GET/POST /api/brands`, `GET/PATCH/DELETE /api/brands/:id` (`image` required on create; cannot clear on update; managed GCS cleanup on image replace/delete; delete **409** when products reference it; rename propagates `brandName`; slug server-derived)
 - `GET/POST /api/attributes`, `GET/PATCH/DELETE /api/attributes/:id` (delete **409** when products use attribute slug; rename re-slugs and migrates product keys; **409** when removing attribute values still used by products; `productCount` maintained on product CRUD)
 - `POST /api/uploads`, `DELETE /api/uploads` (managed catalog folders only)
 - `GET /api/cart` refreshes line snapshots and prunes unavailable products; guest cart merge runs on login/registration and when an authenticated session is restored (`POST /api/cart/merge`); guest cart rows are deleted after merge

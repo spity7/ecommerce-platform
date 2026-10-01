@@ -5,6 +5,8 @@ const productImage = (file: string) =>
 
 const categoryImage = (file: string) => `/assets/images/catagory-img/${file}`;
 
+const brandImage = (file: string) => `/assets/images/catagory-img/${file}`;
+
 export const beautySeedData: SiteSeedData = {
   label: "beauty",
   primaryCategorySlug: "skincare",
@@ -40,8 +42,7 @@ export const beautySeedData: SiteSeedData = {
       name: "Glow Lab",
       slug: "glow-lab",
       website: "glowlab.com",
-      initials: "GL",
-      tileClass: "bg-brand-50 text-brand-600",
+      image: brandImage("cat-transp-img-05.webp"),
       visibility: "Featured",
       status: "published",
     },
@@ -49,8 +50,7 @@ export const beautySeedData: SiteSeedData = {
       name: "Pure Skin",
       slug: "pure-skin",
       website: "pureskin.com",
-      initials: "PS",
-      tileClass: "bg-success-50 text-success-600",
+      image: brandImage("cat-transp-img-06.webp"),
       visibility: "Standard",
       status: "published",
     },

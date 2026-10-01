@@ -11,6 +11,9 @@ import {
   type StorefrontCategoryItem,
 } from "@/lib/catalog";
 
+const PLACEHOLDER_BRAND_IMAGE =
+  "/assets/images/sidebar/catagory-brand/catagory-brand-img-01.webp";
+
 export function mapStorefrontCategoriesToFilterOptions(
   categories: StorefrontCategoryItem[]
 ): ShopCategoryFilterOption[] {
@@ -21,26 +24,13 @@ export function mapStorefrontCategoriesToFilterOptions(
   }));
 }
 
-/** Maps admin tileClass tokens to storefront SCSS avatar variants. */
-export function resolveShopBrandAvatarClass(tileClass?: string): string {
-  if (!tileClass) {
-    return "rbt-shop-brand-avatar";
-  }
-  if (tileClass.includes("success")) {
-    return "rbt-shop-brand-avatar rbt-shop-brand-avatar--muted";
-  }
-  return "rbt-shop-brand-avatar";
-}
-
 export function mapStorefrontBrandsToFilterOptions(
   brands: BrandDto[]
 ): ShopBrandFilterOption[] {
   return brands.map((brand) => ({
     id: brand.id,
     name: brand.name,
-    initials: brand.initials,
-    tileClass: brand.tileClass,
-    avatarClass: resolveShopBrandAvatarClass(brand.tileClass),
+    image: brand.image?.trim() || PLACEHOLDER_BRAND_IMAGE,
     productCount: brand.productCount,
   }));
 }

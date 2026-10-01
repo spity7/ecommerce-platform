@@ -9,8 +9,7 @@ export type SeedBrand = {
   name: string;
   slug: string;
   website: string;
-  initials: string;
-  tileClass: string;
+  image: string;
   visibility: "Featured" | "Standard";
   status: "published" | "draft";
 };

@@ -15,14 +15,17 @@ import {
 import { catalogReadRateLimiter } from "../middleware/rateLimit.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { isUniqueKeyError, toBrandDto } from "../utils/serializers.js";
-import { getInitials, slugify } from "../utils/strings.js";
+import { slugify } from "../utils/strings.js";
+import {
+  collectRemovedManagedCatalogImages,
+  deleteManagedCatalogImageIfPresent,
+  deleteManagedCatalogImagesIfPresent,
+} from "../services/managed-catalog-storage.js";
 
-function normalizeInitials(value: string | undefined): string | undefined {
-  if (value === undefined) {
-    return undefined;
+function assertBrandHasImage(image: string | undefined | null): void {
+  if (!image?.trim()) {
+    throw new AppError(400, "Brand image is required");
   }
-  const normalized = value.trim().toUpperCase().slice(0, 4);
-  return normalized || undefined;
 }
 
 export const brandsRouter = Router();
@@ -79,15 +82,13 @@ brandsRouter.post(
   asyncHandler(async (req, res) => {
     const payload = createBrandSchema.parse(req.body);
     const slug = slugify(payload.name);
-    const initials =
-      normalizeInitials(payload.initials) ?? getInitials(payload.name);
+    assertBrandHasImage(payload.image);
 
     try {
       const brand = await Brand.create({
         name: payload.name,
         website: payload.website,
-        initials,
-        tileClass: payload.tileClass,
+        image: payload.image,
         visibility: payload.visibility,
         status: payload.status,
         slug,
@@ -114,23 +115,17 @@ brandsRouter.patch(
     }
 
     const previousName = brand.name;
+    const previousImage = brand.image;
 
     if (payload.name) {
       brand.name = payload.name;
       brand.slug = slugify(payload.name);
-      if (!normalizeInitials(payload.initials)) {
-        brand.initials = getInitials(payload.name);
-      }
     }
     if (payload.website !== undefined) {
       brand.website = payload.website;
     }
-    if (payload.initials !== undefined) {
-      brand.initials =
-        normalizeInitials(payload.initials) ?? getInitials(brand.name);
-    }
-    if (payload.tileClass !== undefined) {
-      brand.tileClass = payload.tileClass;
+    if (payload.image !== undefined) {
+      brand.image = payload.image;
     }
     if (payload.visibility !== undefined) {
       brand.visibility = payload.visibility;
@@ -138,6 +133,8 @@ brandsRouter.patch(
     if (payload.status !== undefined) {
       brand.status = payload.status;
     }
+
+    assertBrandHasImage(brand.image);
 
     try {
       await brand.save();
@@ -150,6 +147,15 @@ brandsRouter.patch(
 
     if (payload.name && payload.name !== previousName) {
       await syncProductBrandNames(brand._id, brand.name);
+    }
+
+    if (payload.image !== undefined) {
+      await deleteManagedCatalogImagesIfPresent(
+        collectRemovedManagedCatalogImages(
+          previousImage ? [previousImage] : [],
+          brand.image ? [brand.image] : []
+        )
+      );
     }
 
     res.json(toBrandDto(brand));
@@ -176,6 +182,7 @@ brandsRouter.delete(
       );
     }
 
+    await deleteManagedCatalogImageIfPresent(brand.image);
     await brand.deleteOne();
     res.status(204).send();
   })

@@ -1,16 +1,22 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   AssignedProductsSection,
-  BrandTileStylePicker,
   CatalogFormFooter,
   ControlledField,
   ControlledSelect,
+  collectRemovedHostedImages,
+  deleteHostedCatalogImages,
   catalogSubmitErrorState,
   resolveCatalogFieldErrors,
   useFocusFirstCatalogFieldError,
+  getThumbnailPreviewState,
+  isHostedCatalogImageUrl,
+  revokeBlobPreviewUrl,
+  ThumbnailUploadCard,
+  uploadCatalogImage,
   type AssignedProductPreview,
 } from "@/components/catalog/catalog-form-primitives";
 import { FormCard } from "@/components/forms/admin-form-primitives";
@@ -23,12 +29,6 @@ import {
 } from "@/lib/catalog-feedback";
 import { useToast } from "@/providers/toast-provider";
 import { useCatalogFormLeaveGuard } from "@/components/catalog/use-catalog-form-leave-guard";
-import {
-  brandTileClassOptions,
-  DEFAULT_BRAND_TILE_CLASS,
-  normalizeBrandInitials,
-  resolveBrandInitials,
-} from "@/lib/brand-tile";
 import { isBrandCatalogFormDirty } from "@/lib/catalog-form-dirty";
 import {
   createBrandApi,
@@ -50,6 +50,13 @@ type BrandCatalogFormProps = {
   mode: "add" | "edit";
 };
 
+function hasBrandImage(
+  savedImageUrl: string,
+  pendingImageFile: File | null
+): boolean {
+  return Boolean(savedImageUrl.trim() || pendingImageFile);
+}
+
 export function BrandCatalogForm({
   assignedProducts = [],
   initial,
@@ -60,12 +67,9 @@ export function BrandCatalogForm({
   const { showToast } = useToast();
   const [name, setName] = useState(initial?.name ?? "");
   const [website, setWebsite] = useState(initial?.website ?? "");
-  const [initials, setInitials] = useState(
-    normalizeBrandInitials(initial?.initials ?? "")
-  );
-  const [tileClass, setTileClass] = useState(
-    initial?.tileClass ?? DEFAULT_BRAND_TILE_CLASS
-  );
+  const [savedImageUrl, setSavedImageUrl] = useState(initial?.image ?? "");
+  const [pendingImageFile, setPendingImageFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState(initial?.image ?? "");
   const [visibility, setVisibility] = useState<BrandDto["visibility"]>(
     initial?.visibility ?? "Standard"
   );
@@ -77,15 +81,16 @@ export function BrandCatalogForm({
     loading: false,
     validationDetails: null,
   });
+  const initialHostedImage =
+    mode === "edit" && initial && isHostedCatalogImageUrl(initial.image)
+      ? initial.image
+      : "";
 
-  const previewInitials = useMemo(
-    () => resolveBrandInitials(initials, name),
-    [initials, name]
+  const previewState = useMemo(
+    () => getThumbnailPreviewState(savedImageUrl, pendingImageFile !== null),
+    [pendingImageFile, savedImageUrl]
   );
-  const tileClassOptions = useMemo(
-    () => brandTileClassOptions(tileClass),
-    [tileClass]
-  );
+
   const statusHelp = useMemo(() => {
     switch (status) {
       case "published":
@@ -117,37 +122,98 @@ export function BrandCatalogForm({
   const isDirty = useMemo(
     () =>
       isBrandCatalogFormDirty({
-        initials,
         initial,
         mode,
         name,
+        pendingImageFile,
+        savedImageUrl,
         status,
-        tileClass,
         visibility,
         website,
       }),
-    [initials, initial, mode, name, status, tileClass, visibility, website]
+    [
+      initial,
+      mode,
+      name,
+      pendingImageFile,
+      savedImageUrl,
+      status,
+      visibility,
+      website,
+    ]
   );
+
+  useEffect(() => {
+    return () => {
+      if (pendingImageFile) {
+        revokeBlobPreviewUrl(previewUrl);
+      }
+    };
+  }, [pendingImageFile, previewUrl]);
+
+  function handleImageUpload(file: File) {
+    setFormState((current) => ({
+      ...current,
+      error: null,
+      validationDetails: null,
+    }));
+    if (pendingImageFile) {
+      revokeBlobPreviewUrl(previewUrl);
+    }
+    setPendingImageFile(file);
+    setPreviewUrl(URL.createObjectURL(file));
+  }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if (!hasBrandImage(savedImageUrl, pendingImageFile)) {
+      setFormState({
+        error: "Brand image is required",
+        loading: false,
+        validationDetails: null,
+      });
+      return;
+    }
+
     setFormState({ error: null, loading: true, validationDetails: null });
 
-    const payload = {
-      name,
-      website,
-      status,
-      visibility,
-      initials: normalizeBrandInitials(initials) || undefined,
-      tileClass,
-    };
+    let finalImage = savedImageUrl.trim();
+    const uploadedInThisAttempt: string[] = [];
 
     try {
+      if (pendingImageFile) {
+        finalImage = await uploadCatalogImage(pendingImageFile, "brands");
+        uploadedInThisAttempt.push(finalImage);
+        revokeBlobPreviewUrl(previewUrl);
+        setPendingImageFile(null);
+        setPreviewUrl(finalImage);
+        setSavedImageUrl(finalImage);
+      }
+
+      const payload = {
+        name,
+        website,
+        status,
+        visibility,
+        image: finalImage,
+      };
+
       if (mode === "add") {
         await createBrandApi(payload);
       } else if (initial) {
         await updateBrandApi(initial.id, payload);
+      } else {
+        throw new Error("Save failed");
       }
+
+      await deleteHostedCatalogImages(
+        collectRemovedHostedImages(
+          initialHostedImage ? [initialHostedImage] : [],
+          finalImage ? [finalImage] : []
+        )
+      );
+
       finishCatalogSave({
         entity: "brand",
         listHref: routes.brands,
@@ -157,6 +223,9 @@ export function BrandCatalogForm({
         showToast,
       });
     } catch (error) {
+      if (uploadedInThisAttempt.length > 0) {
+        await deleteHostedCatalogImages(uploadedInThisAttempt);
+      }
       setFormState({
         ...catalogSubmitErrorState(error),
         loading: false,
@@ -170,45 +239,25 @@ export function BrandCatalogForm({
       className="min-w-0 max-w-full space-y-4"
       onSubmit={handleSubmit}
     >
-      <div className="grid min-w-0 max-w-full items-start gap-4 lg:grid-cols-2">
+      <div className="grid min-w-0 max-w-full items-start gap-4 md:grid-cols-2 lg:grid-cols-3">
         <FormCard title="General">
-          <div className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <ControlledField
-                disabled={disabled}
-                error={fieldErrors.name}
-                fieldKey="name"
-                label="Brand name"
-                onChange={(value) => {
-                  setName(value);
-                  setFormState((current) => ({
-                    ...current,
-                    error: null,
-                    validationDetails: null,
-                  }));
-                }}
-                placeholder="Brand name"
-                required
-                value={name}
-              />
-              <ControlledField
-                disabled={disabled}
-                help="Leave blank to auto-generate from the brand name."
-                label="Initials"
-                maxLength={4}
-                onChange={(value) => setInitials(normalizeBrandInitials(value))}
-                placeholder="e.g. BS"
-                value={initials}
-              />
-            </div>
-            <BrandTileStylePicker
-              disabled={disabled}
-              initials={previewInitials}
-              onChange={setTileClass}
-              options={tileClassOptions}
-              value={tileClass}
-            />
-          </div>
+          <ControlledField
+            disabled={disabled}
+            error={fieldErrors.name}
+            fieldKey="name"
+            label="Brand name"
+            onChange={(value) => {
+              setName(value);
+              setFormState((current) => ({
+                ...current,
+                error: null,
+                validationDetails: null,
+              }));
+            }}
+            placeholder="Brand name"
+            required
+            value={name}
+          />
         </FormCard>
         <FormCard title="Publishing & links">
           <div className="space-y-4">
@@ -251,6 +300,17 @@ export function BrandCatalogForm({
             />
           </div>
         </FormCard>
+        <ThumbnailUploadCard
+          alt={name || "Brand logo"}
+          disabled={disabled}
+          error={fieldErrors.image}
+          help="Upload a square logo for brand tiles and filters."
+          onUpload={handleImageUpload}
+          previewState={previewState}
+          previewUrl={previewUrl}
+          required
+          title="Brand logo"
+        />
       </div>
       <CatalogFormFooter
         cancelHref={routes.brands}

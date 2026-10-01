@@ -12,6 +12,7 @@ import {
   seedPublishedProduct,
   setupTestDatabase,
   teardownTestDatabase,
+  TEST_BRAND_IMAGE,
   TEST_CATEGORY_IMAGE,
 } from "./helpers.js";
 
@@ -201,6 +202,7 @@ describe("catalog API", () => {
     const brand = await Brand.create({
       name: "Filter Brand",
       slug: `filter-brand-${Date.now()}`,
+      image: TEST_BRAND_IMAGE,
       status: "published",
     });
 
@@ -326,6 +328,7 @@ describe("catalog API", () => {
       .set(authHeader(body.accessToken))
       .send({
         name: `Draft Brand ${suffix}`,
+        image: TEST_BRAND_IMAGE,
         status: "draft",
       })
       .expect(201);
@@ -392,6 +395,63 @@ describe("catalog API", () => {
       .expect(200);
 
     assert.equal(patchResponse.body.status, "published");
+  });
+
+  it("rejects brand create without image", async () => {
+    const { body } = await registerAdmin(app);
+
+    await request(app)
+      .post("/api/brands")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: `Missing Image Brand ${Date.now()}`,
+        status: "draft",
+      })
+      .expect(400);
+  });
+
+  it("keeps brand status when patching image only", async () => {
+    const { body } = await registerAdmin(app);
+
+    const createResponse = await request(app)
+      .post("/api/brands")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: `Published Image Brand ${Date.now()}`,
+        image: TEST_BRAND_IMAGE,
+        status: "published",
+      })
+      .expect(201);
+
+    assert.equal(createResponse.body.status, "published");
+
+    const patchResponse = await request(app)
+      .patch(`/api/brands/${createResponse.body.id}`)
+      .set(authHeader(body.accessToken))
+      .send({ image: "https://example.com/brand-updated.jpg" })
+      .expect(200);
+
+    assert.equal(patchResponse.body.status, "published");
+  });
+
+  it("rejects clearing brand image on update", async () => {
+    const { body } = await registerAdmin(app);
+
+    const createResponse = await request(app)
+      .post("/api/brands")
+      .set(authHeader(body.accessToken))
+      .send({
+        name: `Protected Image Brand ${Date.now()}`,
+        image: TEST_BRAND_IMAGE,
+        status: "published",
+      })
+      .expect(201);
+
+    await request(app)
+      .patch(`/api/brands/${createResponse.body.id}`)
+      .set(authHeader(body.accessToken))
+      .send({ image: "" })
+      .expect(400);
   });
 
   it("rejects clearing category image on update", async () => {
@@ -463,7 +523,11 @@ describe("catalog API", () => {
     await request(app)
       .post("/api/brands")
       .set(authHeader(body.accessToken))
-      .send({ name: `Test Brand ${Date.now()}`, status: "published" })
+      .send({
+        name: `Test Brand ${Date.now()}`,
+        image: TEST_BRAND_IMAGE,
+        status: "published",
+      })
       .expect(201);
 
     const categories = await request(app)
@@ -567,7 +631,11 @@ describe("catalog API", () => {
     const brandResponse = await request(app)
       .post("/api/brands")
       .set(authHeader(body.accessToken))
-      .send({ name: `Blocked Brand ${Date.now()}`, status: "published" })
+      .send({
+        name: `Blocked Brand ${Date.now()}`,
+        image: TEST_BRAND_IMAGE,
+        status: "published",
+      })
       .expect(201);
 
     const brandId = brandResponse.body.id;
@@ -784,6 +852,7 @@ describe("catalog API", () => {
       .set(authHeader(body.accessToken))
       .send({
         name: `Original Brand ${suffix}`,
+        image: TEST_BRAND_IMAGE,
         status: "published",
         visibility: "Standard",
       })

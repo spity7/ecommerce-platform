@@ -5,8 +5,7 @@ const brandSchema = new Schema(
     name: { type: String, required: true, trim: true },
     slug: { type: String, required: true, unique: true, trim: true },
     website: { type: String, default: "" },
-    initials: { type: String, default: "" },
-    tileClass: { type: String, default: "bg-brand-50 text-brand-600" },
+    image: { type: String, required: true, trim: true },
     visibility: {
       type: String,
       enum: ["Featured", "Standard", "Hidden"],

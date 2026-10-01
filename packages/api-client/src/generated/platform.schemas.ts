@@ -274,8 +274,7 @@ export interface BrandDto {
   name: string;
   slug: string;
   website: string;
-  initials: string;
-  tileClass: string;
+  image: string;
   visibility: BrandDtoVisibility;
   status: BrandDtoStatus;
   productCount: number;
@@ -636,9 +635,8 @@ export interface CreateBrandInput {
   slug?: string;
   /** @maxLength 500 */
   website?: string;
-  /** @maxLength 4 */
-  initials?: string;
-  tileClass?: string;
+  /** @minLength 1 */
+  image: string;
   visibility?: CreateBrandInputVisibility;
   status?: CreateBrandInputStatus;
 }
@@ -676,9 +674,8 @@ export interface UpdateBrandInput {
   slug?: string;
   /** @maxLength 500 */
   website?: string;
-  /** @maxLength 4 */
-  initials?: string;
-  tileClass?: string;
+  /** @minLength 1 */
+  image?: string;
   visibility?: UpdateBrandInputVisibility;
   status?: UpdateBrandInputStatus;
 }
@@ -1017,8 +1014,7 @@ export type PaginatedBrandsDataItem = {
   name: string;
   slug: string;
   website: string;
-  initials: string;
-  tileClass: string;
+  image: string;
   visibility: PaginatedBrandsDataItemVisibility;
   status: PaginatedBrandsDataItemStatus;
   productCount: number;
@@ -2934,8 +2930,7 @@ export type ListBrand200DataItem = {
   name: string;
   slug: string;
   website: string;
-  initials: string;
-  tileClass: string;
+  image: string;
   visibility: ListBrand200DataItemVisibility;
   status: ListBrand200DataItemStatus;
   productCount: number;
@@ -2983,9 +2978,8 @@ export type CreateBrandBody = {
   slug?: string;
   /** @maxLength 500 */
   website?: string;
-  /** @maxLength 4 */
-  initials?: string;
-  tileClass?: string;
+  /** @minLength 1 */
+  image: string;
   visibility?: CreateBrandBodyVisibility;
   status?: CreateBrandBodyStatus;
 };
@@ -3015,8 +3009,7 @@ export type CreateBrand201 = {
   name: string;
   slug: string;
   website: string;
-  initials: string;
-  tileClass: string;
+  image: string;
   visibility: CreateBrand201Visibility;
   status: CreateBrand201Status;
   productCount: number;
@@ -3064,8 +3057,7 @@ export type GetBrand200 = {
   name: string;
   slug: string;
   website: string;
-  initials: string;
-  tileClass: string;
+  image: string;
   visibility: GetBrand200Visibility;
   status: GetBrand200Status;
   productCount: number;
@@ -3110,9 +3102,8 @@ export type UpdateBrandBody = {
   slug?: string;
   /** @maxLength 500 */
   website?: string;
-  /** @maxLength 4 */
-  initials?: string;
-  tileClass?: string;
+  /** @minLength 1 */
+  image?: string;
   visibility?: UpdateBrandBodyVisibility;
   status?: UpdateBrandBodyStatus;
 };
@@ -3142,8 +3133,7 @@ export type UpdateBrand200 = {
   name: string;
   slug: string;
   website: string;
-  initials: string;
-  tileClass: string;
+  image: string;
   visibility: UpdateBrand200Visibility;
   status: UpdateBrand200Status;
   productCount: number;

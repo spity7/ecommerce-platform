@@ -439,10 +439,7 @@
           "website": {
             "type": "string"
           },
-          "initials": {
-            "type": "string"
-          },
-          "tileClass": {
+          "image": {
             "type": "string"
           },
           "visibility": {
@@ -470,8 +467,7 @@
           "name",
           "slug",
           "website",
-          "initials",
-          "tileClass",
+          "image",
           "visibility",
           "status",
           "productCount",
@@ -898,13 +894,9 @@
             "maxLength": 500,
             "default": ""
           },
-          "initials": {
+          "image": {
             "type": "string",
-            "maxLength": 4
-          },
-          "tileClass": {
-            "type": "string",
-            "default": "bg-brand-50 text-brand-600"
+            "minLength": 1
           },
           "visibility": {
             "type": "string",
@@ -917,7 +909,7 @@
             "default": "draft"
           }
         },
-        "required": ["name"]
+        "required": ["name", "image"]
       },
       "UpdateBrandInput": {
         "type": "object",
@@ -936,12 +928,9 @@
             "type": "string",
             "maxLength": 500
           },
-          "initials": {
+          "image": {
             "type": "string",
-            "maxLength": 4
-          },
-          "tileClass": {
-            "type": "string"
+            "minLength": 1
           },
           "visibility": {
             "type": "string",
@@ -1415,10 +1404,7 @@
                 "website": {
                   "type": "string"
                 },
-                "initials": {
-                  "type": "string"
-                },
-                "tileClass": {
+                "image": {
                   "type": "string"
                 },
                 "visibility": {
@@ -1446,8 +1432,7 @@
                 "name",
                 "slug",
                 "website",
-                "initials",
-                "tileClass",
+                "image",
                 "visibility",
                 "status",
                 "productCount",
@@ -5212,10 +5197,7 @@
                           "website": {
                             "type": "string"
                           },
-                          "initials": {
-                            "type": "string"
-                          },
-                          "tileClass": {
+                          "image": {
                             "type": "string"
                           },
                           "visibility": {
@@ -5243,8 +5225,7 @@
                           "name",
                           "slug",
                           "website",
-                          "initials",
-                          "tileClass",
+                          "image",
                           "visibility",
                           "status",
                           "productCount",
@@ -5300,13 +5281,9 @@
                     "maxLength": 500,
                     "default": ""
                   },
-                  "initials": {
+                  "image": {
                     "type": "string",
-                    "maxLength": 4
-                  },
-                  "tileClass": {
-                    "type": "string",
-                    "default": "bg-brand-50 text-brand-600"
+                    "minLength": 1
                   },
                   "visibility": {
                     "type": "string",
@@ -5319,7 +5296,7 @@
                     "default": "draft"
                   }
                 },
-                "required": ["name"]
+                "required": ["name", "image"]
               }
             }
           }
@@ -5344,10 +5321,7 @@
                     "website": {
                       "type": "string"
                     },
-                    "initials": {
-                      "type": "string"
-                    },
-                    "tileClass": {
+                    "image": {
                       "type": "string"
                     },
                     "visibility": {
@@ -5375,8 +5349,7 @@
                     "name",
                     "slug",
                     "website",
-                    "initials",
-                    "tileClass",
+                    "image",
                     "visibility",
                     "status",
                     "productCount",
@@ -5484,10 +5457,7 @@
                     "website": {
                       "type": "string"
                     },
-                    "initials": {
-                      "type": "string"
-                    },
-                    "tileClass": {
+                    "image": {
                       "type": "string"
                     },
                     "visibility": {
@@ -5515,8 +5485,7 @@
                     "name",
                     "slug",
                     "website",
-                    "initials",
-                    "tileClass",
+                    "image",
                     "visibility",
                     "status",
                     "productCount",
@@ -5586,12 +5555,9 @@
                     "type": "string",
                     "maxLength": 500
                   },
-                  "initials": {
+                  "image": {
                     "type": "string",
-                    "maxLength": 4
-                  },
-                  "tileClass": {
-                    "type": "string"
+                    "minLength": 1
                   },
                   "visibility": {
                     "type": "string",
@@ -5626,10 +5592,7 @@
                     "website": {
                       "type": "string"
                     },
-                    "initials": {
-                      "type": "string"
-                    },
-                    "tileClass": {
+                    "image": {
                       "type": "string"
                     },
                     "visibility": {
@@ -5657,8 +5620,7 @@
                     "name",
                     "slug",
                     "website",
-                    "initials",
-                    "tileClass",
+                    "image",
                     "visibility",
                     "status",
                     "productCount",

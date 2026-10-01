@@ -186,14 +186,12 @@ export function BrandListTable({
       label: "Brand",
       render: (brand) => (
         <div className="flex items-center gap-3">
-          <span
-            className={cn(
-              "grid h-12 w-12 shrink-0 place-items-center rounded-base text-[14px] font-semibold",
-              brand.tileClass
-            )}
-          >
-            {brand.initials}
-          </span>
+          <Image
+            alt={brand.name}
+            className="h-12 w-12 shrink-0 rounded-base bg-surface-body object-cover"
+            src={brand.image}
+            {...ADMIN_LIST_ROW_THUMB}
+          />
           <div>
             <Link
               className="font-semibold text-ink-900 hover:text-brand-600"

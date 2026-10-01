@@ -24,9 +24,7 @@ const compareAtPriceFieldSchema = z
   .positive(COMPARE_AT_MUST_BE_POSITIVE_MESSAGE)
   .optional();
 
-const productCategoryIdSchema = z
-  .string()
-  .min(1, CATEGORY_REQUIRED_MESSAGE);
+const productCategoryIdSchema = z.string().min(1, CATEGORY_REQUIRED_MESSAGE);
 
 export function assertProductCategoryIdPresent(
   categoryId: string | undefined | null
@@ -153,6 +151,8 @@ const categoryImageSchema = z
   .trim()
   .min(1, "Category image is required");
 
+const brandImageSchema = z.string().trim().min(1, "Brand image is required");
+
 export const createCategorySchema = z.object({
   name: z.string().min(1).max(200),
   slug: z.string().min(1).max(200).optional(),
@@ -171,8 +171,7 @@ export const createBrandSchema = z.object({
   name: z.string().min(1).max(200),
   slug: z.string().min(1).max(200).optional(),
   website: z.string().max(500).default(""),
-  initials: z.string().max(4).optional(),
-  tileClass: z.string().default("bg-brand-50 text-brand-600"),
+  image: brandImageSchema,
   visibility: z.enum(BRAND_VISIBILITY).default("Standard"),
   status: z.enum(BRAND_STATUSES).default("draft"),
 });
@@ -181,8 +180,7 @@ export const updateBrandSchema = z.object({
   name: z.string().min(1).max(200).optional(),
   slug: z.string().min(1).max(200).optional(),
   website: z.string().max(500).optional(),
-  initials: z.string().max(4).optional(),
-  tileClass: z.string().optional(),
+  image: brandImageSchema.optional(),
   visibility: z.enum(BRAND_VISIBILITY).optional(),
   status: z.enum(BRAND_STATUSES).optional(),
 });

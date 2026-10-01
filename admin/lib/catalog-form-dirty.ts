@@ -6,10 +6,6 @@ import {
   getSavedCatalogImageUrls,
   hasPendingCatalogImages,
 } from "@/components/catalog/catalog-form-primitives";
-import {
-  DEFAULT_BRAND_TILE_CLASS,
-  normalizeBrandInitials,
-} from "@/lib/brand-tile";
 import type {
   AttributeDto,
   BrandDto,
@@ -72,22 +68,25 @@ function attributeSnapshotFromDto(initial: AttributeDto): {
 }
 
 export function isBrandCatalogFormDirty(options: {
-  initials: string;
-  mode: "add" | "edit";
   initial?: BrandDto;
+  mode: "add" | "edit";
   name: string;
+  pendingImageFile: File | null;
+  savedImageUrl: string;
   status: BrandDto["status"];
-  tileClass: string;
   visibility: BrandDto["visibility"];
   website: string;
 }): boolean {
+  if (options.pendingImageFile) {
+    return true;
+  }
+
   const current = {
     name: options.name,
     website: options.website,
     status: options.status,
     visibility: options.visibility,
-    initials: normalizeBrandInitials(options.initials) || undefined,
-    tileClass: options.tileClass,
+    image: options.savedImageUrl.trim(),
   };
 
   const baseline =
@@ -97,17 +96,14 @@ export function isBrandCatalogFormDirty(options: {
           website: options.initial.website ?? "",
           status: options.initial.status,
           visibility: options.initial.visibility,
-          initials:
-            normalizeBrandInitials(options.initial.initials ?? "") || undefined,
-          tileClass: options.initial.tileClass ?? DEFAULT_BRAND_TILE_CLASS,
+          image: options.initial.image ?? "",
         }
       : {
           name: "",
           website: "",
           status: "draft" as const,
           visibility: "Standard" as const,
-          initials: undefined,
-          tileClass: DEFAULT_BRAND_TILE_CLASS,
+          image: "",
         };
 
   return !recordsEqual(current, baseline);
