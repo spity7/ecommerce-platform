@@ -1,17 +1,25 @@
 "use client";
 import { WaveFatIcon } from "../svg-icons";
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import StorefrontProductSearchField from "@/components/store/StorefrontProductSearchField";
 import { useRouter } from "next/navigation";
 import { useShopCatalogNavigation } from "@/hooks/useShopCatalogNavigation";
 import type { ShopProductsLoadError } from "@/lib/shop-catalog-load";
 import {
   createShopCatalogQuery,
   SHOP_CATALOG_PAGE_SIZE_OPTIONS,
+  sortApiValueToCompactLabel,
   sortApiValueToLabel,
   sortLabelToApiValue,
+  formatShopPageSizeLabel,
   type ShopCatalogQuery,
 } from "@/lib/shop-query";
+import { useIsMobileShopToolsLayout } from "@/hooks/useIsMobileShopToolsLayout";
+import {
+  scrollToShopProductGrid,
+  SHOP_PRODUCT_GRID_SCROLL_ID,
+} from "@/lib/shop-catalog-scroll";
 
 import {
   clearAllFilters,
@@ -49,7 +57,8 @@ import ProductCard4 from "../product-cards/ProductCard4";
 import ProductSmallCard from "../product-cards/ProductCardElectronicsList";
 import ProductCard22 from "../product-cards/ProductCard22";
 
-const SHOP_SEARCH_DEBOUNCE_MS = 400;
+/** Debounced grid refresh while typing in shop search (keeps stale cards visible until fetch completes). */
+const SHOP_SEARCH_DEBOUNCE_MS = 350;
 
 type CardVariant =
   | "default"
@@ -122,22 +131,12 @@ export default function ShopDefault({
   const resolvedCatalogQuery =
     catalogQuery ?? createShopCatalogQuery({ page: 1 });
   const [searchValue, setSearchValue] = useState(initialFilters?.search ?? "");
-  const [showSearchSkeleton, setShowSearchSkeleton] = useState(false);
   const searchDebounceRef = useRef<number | null>(null);
   const { navigate, clearFilters, isPending } =
     useShopCatalogNavigation(resolvedCatalogQuery);
 
-  const applySearchNavigation = useMemo(
-    () => (query: string) => {
-      setShowSearchSkeleton(true);
-      navigate({ search: query || undefined });
-    },
-    [navigate]
-  );
-
   useEffect(() => {
     setSearchValue(catalogQuery?.search ?? "");
-    setShowSearchSkeleton(false);
   }, [catalogQuery?.search]);
 
   useEffect(() => {
@@ -149,7 +148,6 @@ export default function ShopDefault({
     const currentSearch = catalogQuery?.search ?? "";
 
     if (trimmed === currentSearch) {
-      setShowSearchSkeleton(false);
       return;
     }
 
@@ -157,10 +155,12 @@ export default function ShopDefault({
       window.clearTimeout(searchDebounceRef.current);
     }
 
+    const delay = trimmed.length === 0 ? 0 : SHOP_SEARCH_DEBOUNCE_MS;
+
     searchDebounceRef.current = window.setTimeout(() => {
       searchDebounceRef.current = null;
-      applySearchNavigation(trimmed);
-    }, SHOP_SEARCH_DEBOUNCE_MS);
+      navigate({ search: trimmed || undefined });
+    }, delay);
 
     return () => {
       if (searchDebounceRef.current) {
@@ -168,14 +168,20 @@ export default function ShopDefault({
         searchDebounceRef.current = null;
       }
     };
-  }, [
-    applySearchNavigation,
-    catalogQuery?.search,
-    isServerCatalog,
-    searchValue,
-  ]);
+  }, [catalogQuery?.search, isServerCatalog, navigate, searchValue]);
 
-  const isCatalogLoading = isServerCatalog && (isPending || showSearchSkeleton);
+  const isMobileShopTools = useIsMobileShopToolsLayout();
+  const serverSortLabel = sortApiValueToLabel(catalogQuery?.sort);
+  const serverSortButtonLabel = isMobileShopTools
+    ? sortApiValueToCompactLabel(catalogQuery?.sort)
+    : undefined;
+  const serverPageSize = resolvedCatalogQuery.limit ?? itemPerPage;
+  const serverPageSizeLabel = formatShopPageSizeLabel(serverPageSize);
+  const serverPageSizeButtonLabel = isMobileShopTools
+    ? formatShopPageSizeLabel(serverPageSize, true)
+    : undefined;
+
+  const isCatalogUpdating = isServerCatalog && isPending;
   const skeletonCount =
     catalogPagination?.limit ?? resolvedCatalogQuery.limit ?? 15;
 
@@ -208,8 +214,7 @@ export default function ShopDefault({
       }
     : undefined;
 
-  function handleSearchSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  function commitSearchNavigation(query: string) {
     if (!isServerCatalog) {
       return;
     }
@@ -217,7 +222,7 @@ export default function ShopDefault({
       window.clearTimeout(searchDebounceRef.current);
       searchDebounceRef.current = null;
     }
-    applySearchNavigation(searchValue.trim());
+    navigate({ search: query.trim() || undefined });
   }
   const columnClass = useMemo(() => {
     if (activeColumn <= 4) {
@@ -250,6 +255,8 @@ export default function ShopDefault({
   }, [wider]);
 
   const hasNoFilteredItems = state.sorted.length === 0;
+  const showGridSkeleton =
+    isCatalogUpdating && visibleProducts.length === 0 && !productsLoadError;
   const hasMultiplePages = catalogPagination
     ? catalogPagination.total > catalogPagination.limit
     : state.sorted.length > state.itemPerPage;
@@ -373,7 +380,7 @@ export default function ShopDefault({
                 <div className="rbt-shop-tools-wrapper rbt-shop-tools-wrapper-var-one mt--20">
                   <div className="rbt-shop-tool-content rbt-shop-view-var-wrapper">
                     <h6 className="rbt-shop-tools-title">
-                      {isCatalogLoading
+                      {isCatalogUpdating
                         ? "Updating results…"
                         : `Showing ${fromResult}–${toResult} of ${resultTotal} results`}
                     </h6>
@@ -385,70 +392,76 @@ export default function ShopDefault({
                       />
                     </div>
                   </div>
-                  <div className="rbt-shop-tool-content rbt-shop-view-sort-wrapper">
-                    <div className="rbt-tools-select-single">
-                      <h6 className="rbt-shop-tools-title">Sort :</h6>
-                      <div className="rbt-modern-select rbt-shop-view-sort-select-one">
-                        <DropdownSelect
-                          selected={
-                            isServerCatalog
-                              ? sortApiValueToLabel(catalogQuery?.sort)
-                              : state.sortingOption
-                          }
-                          onChange={(value) => {
-                            if (isServerCatalog) {
-                              navigate({
-                                sort: sortLabelToApiValue(value),
-                              });
-                              return;
+                  <div className="rbt-shop-tools-sort-search-row">
+                    <div className="rbt-shop-tool-content rbt-shop-view-sort-wrapper">
+                      <div className="rbt-tools-select-single">
+                        <h6 className="rbt-shop-tools-title">Sort :</h6>
+                        <div className="rbt-modern-select rbt-shop-view-sort-select-one">
+                          <DropdownSelect
+                            buttonLabel={
+                              isServerCatalog
+                                ? serverSortButtonLabel
+                                : undefined
                             }
-                            setSorting(value, dispatch);
-                          }}
-                        />
+                            selected={
+                              isServerCatalog
+                                ? serverSortLabel
+                                : state.sortingOption
+                            }
+                            onChange={(value) => {
+                              if (isServerCatalog) {
+                                navigate({
+                                  sort: sortLabelToApiValue(value),
+                                });
+                                return;
+                              }
+                              setSorting(value, dispatch);
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <div className="rbt-tools-select-single">
+                        <h6 className="rbt-shop-tools-title">Show :</h6>
+                        <div className="rbt-modern-select rbt-shop-view-sort-select-two">
+                          <DropdownSelect
+                            buttonLabel={
+                              isServerCatalog
+                                ? serverPageSizeButtonLabel
+                                : undefined
+                            }
+                            selected={
+                              isServerCatalog
+                                ? serverPageSizeLabel
+                                : `${state.itemPerPage} Items`
+                            }
+                            options={pageSizeOptions}
+                            onChange={(value) => {
+                              const nextLimit = Number(value.split(" ")[0]);
+                              if (isServerCatalog) {
+                                navigate({ limit: nextLimit });
+                                return;
+                              }
+                              setItemPerPage(nextLimit, dispatch);
+                            }}
+                          />
+                        </div>
                       </div>
                     </div>
-                    <div className="rbt-tools-select-single">
-                      <h6 className="rbt-shop-tools-title">Show :</h6>
-                      <div className="rbt-modern-select rbt-shop-view-sort-select-two">
-                        <DropdownSelect
-                          selected={`${isServerCatalog ? resolvedCatalogQuery.limit : state.itemPerPage} Items`}
-                          options={pageSizeOptions}
-                          onChange={(value) => {
-                            const nextLimit = Number(value.split(" ")[0]);
-                            if (isServerCatalog) {
-                              navigate({ limit: nextLimit });
-                              return;
-                            }
-                            setItemPerPage(nextLimit, dispatch);
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="rbt-shop-tool-content rbt-shop-view-var-wrapper">
-                    <form
-                      className="rbt-inner-search-field style-one rbt-search-field-rounded"
-                      onSubmit={handleSearchSubmit}
-                    >
-                      <input
-                        type="search"
+                    <div className="rbt-shop-tool-content rbt-shop-view-var-wrapper rbt-shop-tools-search-slot">
+                      <StorefrontProductSearchField
+                        enableSuggestions={isServerCatalog}
                         placeholder="Search for products"
                         value={searchValue}
-                        onChange={(event) => setSearchValue(event.target.value)}
+                        onChange={setSearchValue}
+                        onSubmitSearch={commitSearchNavigation}
                       />
-                      <button
-                        className="rbt-round-btn search-btn"
-                        type="submit"
-                      >
-                        <i className="fa-solid fa-magnifying-glass" />
-                      </button>
-                    </form>
+                    </div>
                   </div>
                 </div>
                 {isServerCatalog &&
                 catalogFilters &&
-                !(hasNoFilteredItems && !isCatalogLoading) ? (
-                  <div className="rbt-shop-tools-wrapper">
+                !(hasNoFilteredItems && !isCatalogUpdating) ? (
+                  <div className="rbt-shop-tools-wrapper rbt-shop-tools-filters-row">
                     <div className="rbt-shop-tool-content rbt-shop-filter-tag-wrapper">
                       <ShopServerFilterMeta
                         catalogFilters={catalogFilters}
@@ -460,7 +473,7 @@ export default function ShopDefault({
                     </div>
                   </div>
                 ) : !isServerCatalog ? (
-                  <div className="rbt-shop-tools-wrapper">
+                  <div className="rbt-shop-tools-wrapper rbt-shop-tools-filters-row">
                     <div className="rbt-shop-tool-content rbt-shop-filter-tag-wrapper">
                       <FilterMeta state={state} dispatch={dispatch} />
                     </div>
@@ -478,10 +491,15 @@ export default function ShopDefault({
             </div>
             {/* Start Card Area */}
             <div
-              aria-busy={isCatalogLoading}
-              className={`row row--12 ${hasCardBorder ? "mt--24" : ""}`}
+              aria-busy={isCatalogUpdating}
+              className={`row row--12 rbt-shop-product-grid${
+                isCatalogUpdating && visibleProducts.length > 0
+                  ? " is-updating"
+                  : ""
+              } ${hasCardBorder ? "mt--24" : ""}`}
+              id={isServerCatalog ? SHOP_PRODUCT_GRID_SCROLL_ID : undefined}
             >
-              {isCatalogLoading ? (
+              {showGridSkeleton ? (
                 <ShopProductGridSkeleton
                   columnClass={columnClass}
                   count={skeletonCount}
@@ -564,11 +582,14 @@ export default function ShopDefault({
             {/* End Card Area */}
             <div className="row mt--40 mt_sm--16">
               <div className="col-12">
-                {isCatalogLoading ||
+                {showGridSkeleton ||
                 hasNoFilteredItems ? null : catalogPagination ? (
                   <ShopServerPagination
                     {...catalogPagination}
-                    onPageChange={(page) => navigate({ page })}
+                    onPageChange={(page) => {
+                      navigate({ page });
+                      scrollToShopProductGrid();
+                    }}
                   />
                 ) : !hasMultiplePages ? null : !isLoadMore ? (
                   <ShopPagination

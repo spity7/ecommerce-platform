@@ -11,7 +11,7 @@ export function useShopCatalogNavigation(initialQuery: ShopCatalogQuery) {
   const pushCatalog = useCallback(
     (nextQuery: ShopCatalogQuery) => {
       startTransition(() => {
-        router.push(buildShopCatalogHref(nextQuery));
+        router.push(buildShopCatalogHref(nextQuery), { scroll: false });
       });
     },
     [router]

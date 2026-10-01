@@ -23,6 +23,14 @@ const SORT_LABELS: Record<ProductSort, string> = {
   title_desc: "Title Descending",
 };
 
+const SORT_LABELS_COMPACT: Record<ProductSort, string> = {
+  newest: "Default",
+  price_asc: "Price ↑",
+  price_desc: "Price ↓",
+  title_asc: "A–Z",
+  title_desc: "Z–A",
+};
+
 const LABEL_TO_SORT = Object.fromEntries(
   Object.entries(SORT_LABELS).map(([sort, label]) => [label, sort])
 ) as Record<string, ProductSort>;
@@ -36,6 +44,22 @@ export function sortApiValueToLabel(sort: ProductSort | undefined): string {
     return SORT_LABELS.newest;
   }
   return SORT_LABELS[sort] ?? SORT_LABELS.newest;
+}
+
+export function sortApiValueToCompactLabel(
+  sort: ProductSort | undefined
+): string {
+  if (!sort) {
+    return SORT_LABELS_COMPACT.newest;
+  }
+  return SORT_LABELS_COMPACT[sort] ?? SORT_LABELS_COMPACT.newest;
+}
+
+export function formatShopPageSizeLabel(
+  limit: number,
+  compact = false
+): string {
+  return compact ? String(limit) : `${limit} Items`;
 }
 
 function parsePositiveInt(value: string | undefined, fallback: number): number {

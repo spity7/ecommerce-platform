@@ -50,7 +50,7 @@ ecommerce-platform/
 | [../GEMINI.md](../GEMINI.md)                                                     | Antigravity / Gemini overrides                            | 2026-08-20    |
 | [../README.md](../README.md)                                                     | Human quick start                                         | 2026-08-28    |
 | [../.github/copilot-instructions.md](../.github/copilot-instructions.md)         | GitHub Copilot entry                                      | 2026-08-20    |
-| [../client/backend_features_analysis.md](../client/backend_features_analysis.md) | API roadmap / planned endpoints (partial)                 | 2026-09-15    |
+| [../client/backend_features_analysis.md](../client/backend_features_analysis.md) | API roadmap / planned endpoints (partial)                 | 2026-10-01    |
 
 ## Cursor rules
 

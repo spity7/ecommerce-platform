@@ -23,34 +23,31 @@ export default function ShopActiveFilterChipList({
   }
 
   return (
-    <div
-      className={`rbt-shop-filter-tag-list rbt-tag-list rbt-tag-list-sm rbt-tag-list-bg-var-one rbt-tag-list-rounded rbt-tag-cancel-var ${className}`.trim()}
-    >
-      {chips.map((chip) => (
-        <a
-          className="rbt-text-capitalize"
-          href="#"
-          key={chip.key}
-          onClick={(event) => {
-            event.preventDefault();
-            onNavigate(chip.removePatch);
-          }}
-        >
-          {chip.label}
-          <i className="fa-solid fa-xmark" />
-        </a>
-      ))}
+    <div className={`rbt-shop-active-filters-row ${className}`.trim()}>
+      <div className="rbt-shop-filter-tag-list rbt-tag-list rbt-tag-list-sm rbt-tag-list-bg-var-one rbt-tag-list-rounded rbt-tag-cancel-var rbt-shop-active-filters-chips">
+        {chips.map((chip) => (
+          <a
+            className="rbt-text-capitalize"
+            href="#"
+            key={chip.key}
+            onClick={(event) => {
+              event.preventDefault();
+              onNavigate(chip.removePatch);
+            }}
+          >
+            {chip.label}
+            <i className="fa-solid fa-xmark" />
+          </a>
+        ))}
+      </div>
       {showClearAll && onClearAll ? (
-        <a
-          className="text-decoration-underline rbt-text-capitalize"
-          href="#"
-          onClick={(event) => {
-            event.preventDefault();
-            onClearAll();
-          }}
+        <button
+          className="rbt-shop-clear-all-btn"
+          type="button"
+          onClick={() => onClearAll()}
         >
           Clear All
-        </a>
+        </button>
       ) : null}
     </div>
   );

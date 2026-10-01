@@ -10,15 +10,18 @@ const filterOptions = [
 export default function DropdownSelect({
   options = filterOptions,
   selected,
+  buttonLabel,
   onChange = (_value: string) => {},
   extraClass = "",
 }: {
   options?: string[];
   selected: string;
+  buttonLabel?: string;
   onChange?: (value: string) => void;
   extraClass?: string;
 }) {
   const handleSelect = (value: string) => onChange(value);
+  const visibleLabel = buttonLabel ?? selected;
   return (
     <div
       className={`dropdown bootstrap-select rbt-select-activation ${extraClass}`}
@@ -30,11 +33,11 @@ export default function DropdownSelect({
         data-bs-toggle="dropdown"
         aria-haspopup="listbox"
         aria-expanded="true"
-        title={selected}
+        title={visibleLabel}
       >
         <div className="filter-option">
           <div className="filter-option-inner">
-            <div className="filter-option-inner-inner">{selected}</div>
+            <div className="filter-option-inner-inner">{visibleLabel}</div>
           </div>{" "}
         </div>
       </button>

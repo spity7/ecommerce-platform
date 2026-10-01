@@ -32,7 +32,7 @@ export default function ShopServerPagination({
       params.set("page", String(nextPage));
     }
     const query = params.toString();
-    router.push(query ? `/shop?${query}` : "/shop");
+    router.push(query ? `/shop?${query}` : "/shop", { scroll: false });
   };
 
   const pages = Array.from({ length: totalPages }, (_, index) => index + 1);

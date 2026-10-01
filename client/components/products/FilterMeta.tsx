@@ -38,122 +38,120 @@ export default function FilterMeta({
 
   return (
     <div
-      className={`rbt-shop-filter-tag-list rbt-tag-list rbt-tag-list-sm rbt-tag-list-bg-var-one rbt-tag-list-rounded rbt-tag-cancel-var ${state.tags.length > 0 ? "mt--20" : ""}`}
+      className={`rbt-shop-active-filters-row ${state.tags.length > 0 ? "mt--20" : ""}`.trim()}
     >
-      {state.tags.map((t) => (
-        <a
-          className="rbt-text-capitalize"
-          href="#"
-          key={t}
-          onClick={(e) => {
-            e.preventDefault();
-            toggleTag(t, dispatch, state.tags);
-          }}
-        >
-          {t}
-          <i className="fa-solid fa-xmark" />
-        </a>
-      ))}
+      <div className="rbt-shop-filter-tag-list rbt-tag-list rbt-tag-list-sm rbt-tag-list-bg-var-one rbt-tag-list-rounded rbt-tag-cancel-var rbt-shop-active-filters-chips">
+        {state.tags.map((t) => (
+          <a
+            className="rbt-text-capitalize"
+            href="#"
+            key={t}
+            onClick={(e) => {
+              e.preventDefault();
+              toggleTag(t, dispatch, state.tags);
+            }}
+          >
+            {t}
+            <i className="fa-solid fa-xmark" />
+          </a>
+        ))}
 
-      {state.colors.map((color) => (
-        <a
-          className="rbt-text-capitalize"
-          href="#"
-          key={color}
-          onClick={(e) => {
-            e.preventDefault();
-            toggleColor(color, dispatch, state.colors);
-          }}
-        >
-          {color}
-          <i className="fa-solid fa-xmark" />
-        </a>
-      ))}
+        {state.colors.map((color) => (
+          <a
+            className="rbt-text-capitalize"
+            href="#"
+            key={color}
+            onClick={(e) => {
+              e.preventDefault();
+              toggleColor(color, dispatch, state.colors);
+            }}
+          >
+            {color}
+            <i className="fa-solid fa-xmark" />
+          </a>
+        ))}
 
-      {state.categories.map((category) => (
-        <a
-          className="rbt-text-capitalize"
-          href="#"
-          key={category}
-          onClick={(e) => {
-            e.preventDefault();
-            toggleCategory(category, dispatch, state.categories);
-          }}
-        >
-          {category}
-          <i className="fa-solid fa-xmark" />
-        </a>
-      ))}
+        {state.categories.map((category) => (
+          <a
+            className="rbt-text-capitalize"
+            href="#"
+            key={category}
+            onClick={(e) => {
+              e.preventDefault();
+              toggleCategory(category, dispatch, state.categories);
+            }}
+          >
+            {category}
+            <i className="fa-solid fa-xmark" />
+          </a>
+        ))}
 
-      {state.brands.map((brand) => (
-        <a
-          className="rbt-text-capitalize"
-          href="#"
-          key={brand}
-          onClick={(e) => {
-            e.preventDefault();
-            toggleBrand(brand, dispatch, state.brands);
-          }}
-        >
-          {brand}
-          <i className="fa-solid fa-xmark" />
-        </a>
-      ))}
+        {state.brands.map((brand) => (
+          <a
+            className="rbt-text-capitalize"
+            href="#"
+            key={brand}
+            onClick={(e) => {
+              e.preventDefault();
+              toggleBrand(brand, dispatch, state.brands);
+            }}
+          >
+            {brand}
+            <i className="fa-solid fa-xmark" />
+          </a>
+        ))}
 
-      {state.ratings.map((rating) => (
-        <a
-          href="#"
-          className="rbt-text-capitalize"
-          key={rating}
-          onClick={(e) => {
-            e.preventDefault();
-            toggleRating(rating, dispatch, state.ratings);
-          }}
-        >
-          {rating} star up
-          <i className="fa-solid fa-xmark" />
-        </a>
-      ))}
+        {state.ratings.map((rating) => (
+          <a
+            href="#"
+            className="rbt-text-capitalize"
+            key={rating}
+            onClick={(e) => {
+              e.preventDefault();
+              toggleRating(rating, dispatch, state.ratings);
+            }}
+          >
+            {rating} star up
+            <i className="fa-solid fa-xmark" />
+          </a>
+        ))}
 
-      {!isDefaultPrice && (
-        <a
-          href="#"
-          className="rbt-text-capitalize"
-          onClick={(e) => {
-            e.preventDefault();
-            setPriceRange([20, 300], dispatch);
-          }}
-        >
-          ${state.price[0]} to ${state.price[1]}
-          <i className="fa-solid fa-xmark" />
-        </a>
-      )}
+        {!isDefaultPrice && (
+          <a
+            href="#"
+            className="rbt-text-capitalize"
+            onClick={(e) => {
+              e.preventDefault();
+              setPriceRange([20, 300], dispatch);
+            }}
+          >
+            ${state.price[0]} to ${state.price[1]}
+            <i className="fa-solid fa-xmark" />
+          </a>
+        )}
 
-      {state.services.map((service) => (
-        <a
-          href="#"
-          className="rbt-text-capitalize"
-          key={service}
-          onClick={(e) => {
-            e.preventDefault();
-            toggleService(service, dispatch, state.services);
-          }}
-        >
-          {service}
-          <i className="fa-solid fa-xmark" />
-        </a>
-      ))}
-
-      <a
-        href="#"
-        className="text-decoration-underline rbt-text-capitalize"
-        onClick={(e) => {
-          e.preventDefault();
-          clearAllFilters(dispatch);
-        }}
+        {state.services.map((service) => (
+          <a
+            href="#"
+            className="rbt-text-capitalize"
+            key={service}
+            onClick={(e) => {
+              e.preventDefault();
+              toggleService(service, dispatch, state.services);
+            }}
+          >
+            {service}
+            <i className="fa-solid fa-xmark" />
+          </a>
+        ))}
+      </div>
+      <button
+        className="rbt-shop-clear-all-btn"
+        type="button"
+        onClick={() => clearAllFilters(dispatch)}
       >
         Clear All
-      </a>
+      </button>
     </div>
   );
 }
