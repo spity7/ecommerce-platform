@@ -4,8 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useContextElement } from "@/context/store";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
+import { CustomerAccountLink } from "@/components/auth/customer-account-link";
 import { formatCurrency } from "@/lib/price";
 import { getCheckoutPath } from "@/lib/checkout";
+import { STOREFRONT_CHECKOUT_ADMIN_HINT } from "@/lib/storefront-customer-access";
 
 export default function MiniCartDropdown() {
   const { cartProducts, totalPrice, removeFromCart } = useContextElement();
@@ -138,9 +140,14 @@ export default function MiniCartDropdown() {
                   >
                     View Cart
                   </Link>
-                  <Link href={checkoutPath} className="rbt-btn rbt-btn-sm">
+                  <CustomerAccountLink
+                    className="rbt-btn rbt-btn-sm"
+                    disabledHint={STOREFRONT_CHECKOUT_ADMIN_HINT}
+                    href={checkoutPath}
+                    tooltipPlacement="top"
+                  >
                     <span className="btn-text">Checkout</span>
-                  </Link>
+                  </CustomerAccountLink>
                 </div>
                 <div className="share-btn-grp rbt-link-hover">
                   <ModalTriggerButton

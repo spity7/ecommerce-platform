@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useContextElement } from "@/context/Context";
 import { useManagedModalPanel } from "@/hooks/useManagedModalPanel";
 import WishlistProductTable from "@/components/store/WishlistProductTable";
+import { CustomerAccountLink } from "@/components/auth/customer-account-link";
 import { WISHLIST_PAGE_PATH } from "@/lib/wishlist-paths";
+import { STOREFRONT_WISHLIST_PAGE_ADMIN_HINT } from "@/lib/storefront-customer-access";
 
 export default function WishList() {
   const { close } = useManagedModalPanel("wishlistModal");
@@ -88,14 +90,16 @@ export default function WishList() {
                 </div>
 
                 <div className="rbt-wishlist-modal-footer d-flex flex-column flex-sm-row rbt-gap--12">
-                  <Link
+                  <CustomerAccountLink
                     className="rbt-btn rbt-btn-md rbt-btn-border has-left-icon flex-fill text-center"
+                    disabledHint={STOREFRONT_WISHLIST_PAGE_ADMIN_HINT}
                     href={WISHLIST_PAGE_PATH}
                     onClick={close}
+                    tooltipPlacement="top"
                   >
                     <i className="fa-sharp fa-regular fa-heart mr--4" />
                     View full wishlist
-                  </Link>
+                  </CustomerAccountLink>
                   <Link
                     className="rbt-btn rbt-btn-md rbt-btn-primary flex-fill text-center"
                     href="/shop"

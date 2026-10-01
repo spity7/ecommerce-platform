@@ -97,7 +97,14 @@ export async function placeOrderFromCart(
     throw new AppError(404, "User not found");
   }
 
-  if (context.role !== "admin" && !user.emailVerified) {
+  if (context.role === "admin") {
+    throw new AppError(
+      403,
+      "Admin accounts cannot checkout on the storefront. Use a customer account or manage orders in the admin app."
+    );
+  }
+
+  if (!user.emailVerified) {
     throw new AppError(403, "Verify your email before placing an order");
   }
 

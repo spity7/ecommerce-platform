@@ -1,16 +1,20 @@
 "use client";
 import { CloseIcon, FireSolidIcon } from "../svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { CustomerAccountLink } from "@/components/auth/customer-account-link";
 import { useContextElement } from "@/context/Context";
+import { useStorefrontAdminBlocksCustomerUi } from "@/hooks/use-storefront-admin-blocks-customer-ui";
 import { useManagedModalPanel } from "@/hooks/useManagedModalPanel";
+import { getCartSummary } from "@/lib/cartSummaryUtils";
+import { getCheckoutPath } from "@/lib/checkout";
+import { STOREFRONT_CHECKOUT_ADMIN_HINT } from "@/lib/storefront-customer-access";
 
 import CartNotePopup from "./cart/CartNotePopup";
 import CartShippingPopup from "./cart/CartShippingPopup";
 import CartCouponPopup from "./cart/CartCouponPopup";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
-import { getCartSummary } from "@/lib/cartSummaryUtils";
 
 export default function CartModal2() {
   const [openTool, setOpenTool] = useState(1);
@@ -23,7 +27,15 @@ export default function CartModal2() {
     setActiveCartProduct,
     updateQuantity,
   } = useContextElement();
-  const { close } = useManagedModalPanel("popup-cartModal");
+  const { close, isOpen } = useManagedModalPanel("popup-cartModal");
+  const { refreshSession } = useStorefrontAdminBlocksCustomerUi();
+  const checkoutPath = getCheckoutPath();
+
+  useEffect(() => {
+    if (isOpen) {
+      void refreshSession();
+    }
+  }, [isOpen, refreshSession]);
 
   const removeItem = (id: string | number) => {
     setCartProducts((pre) => [...pre.filter((elm) => elm.id != id)]);
@@ -289,12 +301,14 @@ export default function CartModal2() {
                   </div>
                   <div className="rbt-minicart-bottom mt--24">
                     <div className="checkout-btn mt--20">
-                      <Link
-                        href={`/checkout-delivery-step-one`}
+                      <CustomerAccountLink
                         className="rbt-btn w-100 text-center"
+                        disabledHint={STOREFRONT_CHECKOUT_ADMIN_HINT}
+                        href={checkoutPath}
+                        tooltipPlacement="top"
                       >
                         <span className="btn-text">Checkout</span>
-                      </Link>
+                      </CustomerAccountLink>
                     </div>
                     <div className="share-btn-grp rbt-link-hover">
                       <Link href={`/cart`} className="share-btn">

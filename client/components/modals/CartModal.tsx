@@ -1,6 +1,6 @@
 "use client";
 import { FireOrangeIcon } from "../svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useContextElement } from "@/context/Context";
@@ -9,8 +9,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import Tooltip from "@/components/common/ui/Tooltip";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
+import { CustomerAccountLink } from "@/components/auth/customer-account-link";
+import { useStorefrontAdminBlocksCustomerUi } from "@/hooks/use-storefront-admin-blocks-customer-ui";
 import { getCartSummary } from "@/lib/cartSummaryUtils";
 import { getCheckoutPath } from "@/lib/checkout";
+import { STOREFRONT_CHECKOUT_ADMIN_HINT } from "@/lib/storefront-customer-access";
 import { getStackedModalZIndex } from "@/lib/modalStack";
 import { useManagedModalPanel } from "@/hooks/useManagedModalPanel";
 
@@ -24,6 +27,13 @@ export default function CartModal() {
     useState("Select your City");
   const { activeBsModal, isAnimatedOpen, close } =
     useManagedModalPanel("cartSidebar");
+  const { refreshSession } = useStorefrontAdminBlocksCustomerUi();
+
+  useEffect(() => {
+    if (isAnimatedOpen) {
+      void refreshSession();
+    }
+  }, [isAnimatedOpen, refreshSession]);
 
   const {
     cartProducts,
@@ -352,9 +362,14 @@ export default function CartModal() {
             </div>
             <div className="rbt-minicart-bottom mt--24">
               <div className="checkout-btn mt--20">
-                <Link className="rbt-btn w-100 text-center" href={checkoutPath}>
+                <CustomerAccountLink
+                  className="rbt-btn w-100 text-center"
+                  disabledHint={STOREFRONT_CHECKOUT_ADMIN_HINT}
+                  href={checkoutPath}
+                  tooltipPlacement="top"
+                >
                   <span className="btn-text">Checkout</span>
-                </Link>
+                </CustomerAccountLink>
               </div>
               <div className="share-btn-grp rbt-link-hover">
                 <Link href={`/cart`} className="share-btn">

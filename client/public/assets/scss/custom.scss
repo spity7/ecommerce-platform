@@ -714,3 +714,42 @@ input:not(:placeholder-shown) + .cd-headline.clip {
     font-weight: 600;
   }
 }
+
+/* Admin on storefront: customer-only CTAs (checkout, full wishlist). */
+[data-storefront-customer-blocked="true"].rbt-btn,
+.checkout-btn [data-storefront-customer-blocked="true"].rbt-btn,
+.rbt-cart-side-menu
+  .checkout-btn
+  [data-storefront-customer-blocked="true"].rbt-btn,
+.checkout-btn .rbt-customer-action-disabled.rbt-btn,
+.rbt-cart-side-menu .checkout-btn .rbt-customer-action-disabled.rbt-btn,
+.rbt-customer-action-disabled.rbt-btn {
+  cursor: not-allowed !important;
+  pointer-events: auto !important;
+  background: var(--color-gray-200) !important;
+  color: var(--color-gray-500) !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background: var(--color-gray-200) !important;
+    color: var(--color-gray-500) !important;
+    box-shadow: none !important;
+  }
+
+  .btn-text {
+    color: inherit;
+  }
+}
+
+.rbt-cart-side-menu .checkout-btn .rbt-customer-action-disabled.rbt-btn-border,
+.rbt-customer-action-disabled.rbt-btn-border {
+  cursor: not-allowed !important;
+  pointer-events: auto !important;
+  border-color: var(--color-gray-300) !important;
+  color: var(--color-gray-500) !important;
+  background: var(--color-white) !important;
+  opacity: 1 !important;
+}

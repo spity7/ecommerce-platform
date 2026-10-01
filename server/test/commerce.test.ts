@@ -69,6 +69,36 @@ describe("commerce API", () => {
     assert.equal(ordersResponse.body.total, 1);
   });
 
+  it("rejects storefront checkout for admin accounts", async () => {
+    const product = await seedPublishedProduct();
+    const { body } = await registerAdmin(app);
+
+    await request(app)
+      .post("/api/cart/items")
+      .set(authHeader(body.accessToken))
+      .send({ productId: product._id.toString(), quantity: 1 })
+      .expect(201);
+
+    const orderResponse = await request(app)
+      .post("/api/orders")
+      .set(authHeader(body.accessToken))
+      .send({
+        shippingAddress: {
+          name: "Admin User",
+          line1: "123 Test Street",
+          city: "Austin",
+          country: "United States",
+          phone: TEST_PHONE,
+        },
+      })
+      .expect(403);
+
+    assert.match(
+      orderResponse.body.error ?? "",
+      /Admin accounts cannot checkout/i
+    );
+  });
+
   it("supports guest cart with X-Guest-Cart-Id header", async () => {
     const product = await seedPublishedProduct();
     const guestSessionId = `guest-${Date.now()}`;

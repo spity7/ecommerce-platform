@@ -42,7 +42,7 @@ export default function StorefrontGoogleSignIn() {
       setAccessToken(body.accessToken);
       await mergeGuestCartIfNeeded();
 
-      await completeStorefrontAuthRedirect(router.push);
+      await completeStorefrontAuthRedirect(router.push, { user: body.user });
       router.refresh();
     } catch (err) {
       setError(

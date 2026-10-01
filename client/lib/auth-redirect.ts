@@ -1,3 +1,7 @@
+import {
+  isStorefrontAccountPath,
+  isStorefrontCheckoutFlowPath,
+} from "@/lib/admin-app-link";
 import { storefrontPath } from "@/lib/paths";
 
 export const RETURN_TO_PARAM = "returnTo";
@@ -14,6 +18,14 @@ function sanitizeReturnPath(path: string | null | undefined): string | null {
   }
 
   if (path === "/signin" || path === "/signup") {
+    return null;
+  }
+
+  const pathname = path.split("?")[0] ?? path;
+  if (
+    isStorefrontCheckoutFlowPath(pathname) ||
+    isStorefrontAccountPath(pathname)
+  ) {
     return null;
   }
 

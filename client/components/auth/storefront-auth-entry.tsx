@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
 import Popover from "@/components/common/ui/Popover";
 import Tooltip from "@/components/common/ui/Tooltip";
+import { getAdminAppBaseUrl } from "@/lib/admin-app-link";
 import { getStorefrontSiteConfig } from "@/lib/site";
 import { clearSession } from "@/lib/session";
 import { useAuthSession } from "@/providers/auth-session-provider";
@@ -30,6 +31,38 @@ function useStorefrontAuthEntry() {
   };
 }
 
+function AdminDashboardLink({ className }: { className?: string }) {
+  const adminUrl = getAdminAppBaseUrl();
+  if (!adminUrl) {
+    return null;
+  }
+
+  return (
+    <a
+      className={className ?? "rbt-link-hover b3"}
+      href={adminUrl}
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      Admin dashboard
+    </a>
+  );
+}
+
+function SignedInAccountLink({ className }: { className?: string }) {
+  const { user } = useStorefrontAuthEntry();
+
+  if (user?.role === "admin") {
+    return <AdminDashboardLink className={className} />;
+  }
+
+  return (
+    <Link className={className ?? "rbt-link-hover b3"} href="/account-info">
+      My account
+    </Link>
+  );
+}
+
 function SignedInMenu({
   className,
   children,
@@ -44,9 +77,7 @@ function SignedInMenu({
       placement="bottom"
       content={
         <div className="d-flex flex-column gap-2">
-          <Link className="rbt-link-hover b3" href="/account-info">
-            My account
-          </Link>
+          <SignedInAccountLink />
           <button
             className="rbt-link-hover b3 border-0 bg-transparent p-0 text-start"
             onClick={() => void handleLogout()}
@@ -156,6 +187,7 @@ export function AuthAccessBox({
   }
 
   if (user) {
+    const subtitle = user.role === "admin" ? "Admin dashboard" : "My account";
     return (
       <SignedInMenu className={wrapperClassName}>
         <div className={iconClassName}>
@@ -163,7 +195,7 @@ export function AuthAccessBox({
         </div>
         <div className="content">
           <p>{user.name}</p>
-          <span>My account</span>
+          <span>{subtitle}</span>
         </div>
       </SignedInMenu>
     );
@@ -214,7 +246,24 @@ export function AuthSignInTrigger({
     return <span className={className}>{children}</span>;
   }
 
-  const targetHref = user ? signedInHref : href;
+  const targetHref = user
+    ? user.role === "admin"
+      ? getAdminAppBaseUrl() || "/"
+      : signedInHref
+    : href;
+
+  if (user?.role === "admin" && getAdminAppBaseUrl()) {
+    return (
+      <a
+        className={className}
+        href={targetHref}
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        {children}
+      </a>
+    );
+  }
 
   return (
     <Link className={className} href={targetHref}>
@@ -258,9 +307,7 @@ export function ToolbarProfileAction({
         placement="top"
         content={
           <div className="d-flex flex-column gap-2">
-            <Link className="rbt-link-hover b3" href="/account-info">
-              My account
-            </Link>
+            <SignedInAccountLink />
             <button
               className="rbt-link-hover b3 border-0 bg-transparent p-0 text-start"
               onClick={() => void handleLogout()}

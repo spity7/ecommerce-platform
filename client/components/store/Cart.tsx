@@ -7,11 +7,13 @@ import Link from "next/link";
 
 import { useContextElement } from "@/context/Context";
 import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
+import { CustomerAccountLink } from "@/components/auth/customer-account-link";
 import Tooltip from "@/components/common/ui/Tooltip";
 import useCopyToClipboard from "@/hooks/useCopyToClipboard";
 import SearchableDropdown from "@/components/common/select/SearchableDropdown";
 import { getCartSummary } from "../../lib/cartSummaryUtils";
 import { getCheckoutPath } from "@/lib/checkout";
+import { STOREFRONT_CHECKOUT_ADMIN_HINT } from "@/lib/storefront-customer-access";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Scrollbar } from "swiper/modules";
 
@@ -311,12 +313,14 @@ export default function Cart() {
                                 />
                               </div>
                               <div className="rbt-button-group m--0 mt--16">
-                                <Link
-                                  href={checkoutPath}
+                                <CustomerAccountLink
                                   className="rbt-btn rbt-btn-md rbt-btn-primary"
+                                  disabledHint={STOREFRONT_CHECKOUT_ADMIN_HINT}
+                                  href={checkoutPath}
+                                  tooltipPlacement="top"
                                 >
                                   Calculate shipping
-                                </Link>
+                                </CustomerAccountLink>
                                 <a
                                   href="#!"
                                   className="rbt-btn rbt-btn-md rbt-btn-gray-light text-center"
@@ -666,12 +670,14 @@ export default function Cart() {
                   </div>
                   <div className="rbt-minicart-bottom mt--24">
                     <div className="checkout-btn mt--20">
-                      <Link
+                      <CustomerAccountLink
                         className="rbt-btn w-100 text-center"
+                        disabledHint={STOREFRONT_CHECKOUT_ADMIN_HINT}
                         href={cartProducts.length > 0 ? checkoutPath : "/cart"}
+                        tooltipPlacement="top"
                       >
                         <span className="btn-text">Checkout</span>
-                      </Link>
+                      </CustomerAccountLink>
                     </div>
                     <div className="share-btn-grp rbt-link-hover">
                       <Link href="/cart" className="share-btn">

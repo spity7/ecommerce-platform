@@ -8,6 +8,7 @@ import { isAuthPublicPath } from "@/lib/auth-public-paths";
 import { tryRefreshSession } from "@/lib/refresh-session";
 import { clearSessionAndRedirectToSignIn } from "@/lib/session";
 import { AuthSessionProvider } from "@/providers/auth-session-provider";
+import { StorefrontCustomerUiGateProvider } from "@/providers/storefront-customer-ui-gate-provider";
 import { CartSessionSync } from "@/providers/cart-session-sync";
 import { CartSyncErrorListener } from "@/providers/cart-sync-error-listener";
 import { WishlistSessionSync } from "@/providers/wishlist-session-sync";
@@ -36,11 +37,13 @@ export function AppProviders({ children }: AppProvidersProps) {
   const session = (
     <BusyProvider>
       <AuthSessionProvider>
-        <CartSessionSync />
-        <CartSyncErrorListener />
-        <WishlistSessionSync />
-        <WishlistSyncErrorListener />
-        {children}
+        <StorefrontCustomerUiGateProvider>
+          <CartSessionSync />
+          <CartSyncErrorListener />
+          <WishlistSessionSync />
+          <WishlistSyncErrorListener />
+          {children}
+        </StorefrontCustomerUiGateProvider>
       </AuthSessionProvider>
       <BusyViewportOverlay zIndex={1040} />
     </BusyProvider>

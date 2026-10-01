@@ -1,37 +1,15 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import {
+  getAdminAppBaseUrl,
+  isStorefrontCheckoutFlowPath,
+  isStorefrontCustomerProtectedPath,
+} from "@/lib/admin-app-link";
 import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from "@/lib/auth";
 import { fetchCustomerUser } from "@/lib/validate-customer-session";
 import { getStorefrontSiteConfig } from "@/lib/site";
 
-const ACCOUNT_PATHS = [
-  "/account-info",
-  "/account-notifications",
-  "/my-order-history",
-  "/my-wishlist",
-  "/my-reviews",
-  "/my-payment-methods",
-];
-
-const CHECKOUT_PATHS = ["/checkout"];
-
 const AUTH_PATHS = ["/signin", "/signup"];
-
-function isAccountPath(pathname: string): boolean {
-  return ACCOUNT_PATHS.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`)
-  );
-}
-
-function isCheckoutPath(pathname: string): boolean {
-  return CHECKOUT_PATHS.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`)
-  );
-}
-
-function isProtectedPath(pathname: string): boolean {
-  return isAccountPath(pathname) || isCheckoutPath(pathname);
-}
 
 function isAuthPath(pathname: string): boolean {
   return AUTH_PATHS.some(
@@ -56,23 +34,43 @@ function redirectToSignIn(
   return response;
 }
 
+function redirectAdminToAdminApp(
+  request: NextRequest,
+  adminUrl: string
+): NextResponse {
+  const base = adminUrl.replace(/\/$/, "");
+  if (base) {
+    return NextResponse.redirect(base);
+  }
+  return NextResponse.redirect(new URL("/", request.url));
+}
+
 export async function proxy(request: NextRequest) {
   const site = getStorefrontSiteConfig();
   if (!site.features.customerAuth) {
     return NextResponse.next();
   }
 
+  const adminUrl = getAdminAppBaseUrl() || site.adminUrl || "";
   const { pathname } = request.nextUrl;
-  const token = request.cookies.get(ACCESS_TOKEN_COOKIE)?.value;
   const onAuthPage = isAuthPath(pathname);
-  const onProtectedPage = isProtectedPath(pathname);
+  const requiresSignIn = isStorefrontCustomerProtectedPath(pathname);
+  const adminCheckoutBlocked = isStorefrontCheckoutFlowPath(pathname);
 
-  if (!onAuthPage && !onProtectedPage) {
+  if (!onAuthPage && !requiresSignIn && !adminCheckoutBlocked) {
     return NextResponse.next();
   }
 
+  const token = request.cookies.get(ACCESS_TOKEN_COOKIE)?.value;
+
   if (!token) {
-    return onAuthPage ? NextResponse.next() : redirectToSignIn(request);
+    if (onAuthPage) {
+      return NextResponse.next();
+    }
+    if (requiresSignIn) {
+      return redirectToSignIn(request);
+    }
+    return NextResponse.next();
   }
 
   const session = await fetchCustomerUser(token);
@@ -88,15 +86,16 @@ export async function proxy(request: NextRequest) {
       response.cookies.delete(REFRESH_TOKEN_COOKIE);
       return response;
     }
-    return redirectToSignIn(request, true);
+    if (requiresSignIn) {
+      return redirectToSignIn(request, true);
+    }
+    return NextResponse.next();
   }
 
-  if (
-    session.status === "ok" &&
-    session.user.role === "admin" &&
-    (pathname === "/my-reviews" || pathname.startsWith("/my-reviews/"))
-  ) {
-    return NextResponse.redirect(new URL("/account-info", request.url));
+  if (session.status === "ok" && session.user.role === "admin") {
+    if (onAuthPage || requiresSignIn || adminCheckoutBlocked) {
+      return redirectAdminToAdminApp(request, adminUrl);
+    }
   }
 
   if (onAuthPage) {
@@ -117,10 +116,17 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
+  // Keep in sync with path lists in lib/admin-app-link.ts
   matcher: [
     "/signin",
     "/signup",
     "/checkout",
+    "/checkout-delivery-step-one",
+    "/checkout-delivery-step-two",
+    "/checkout-payment",
+    "/checkout-shipping",
+    "/checkout-thankyou",
+    "/multi-step-checkout",
     "/account-info",
     "/account-notifications",
     "/my-order-history",

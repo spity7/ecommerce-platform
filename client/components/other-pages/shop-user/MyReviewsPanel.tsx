@@ -9,6 +9,7 @@ import {
   updateReview,
 } from "@platform/api-client";
 import { mapReviewDtoToStorefront } from "@/lib/mappers/reviews";
+import { getAdminAppBaseUrl } from "@/lib/admin-app-link";
 import {
   canManageOwnReviews,
   getAdminReviewsModerationUrl,
@@ -189,14 +190,15 @@ export default function MyReviewsPanel() {
 
   if (!authLoading && user?.role === "admin") {
     const adminReviewsUrl = getAdminReviewsModerationUrl();
+    const adminDashboardUrl = getAdminAppBaseUrl();
     return (
       <div className="rbt-profile-content-area">
         <ReviewsEmptyState
           description="Admin accounts moderate reviews in the admin dashboard, not here. Sign in with a customer account to write or manage your own product reviews on the storefront."
           primaryHref={adminReviewsUrl}
           primaryLabel="Open review moderation"
-          secondaryHref="/account-info"
-          secondaryLabel="Account settings"
+          secondaryHref={adminDashboardUrl || undefined}
+          secondaryLabel={adminDashboardUrl ? "Admin dashboard" : undefined}
           title="Customer account required"
         />
       </div>

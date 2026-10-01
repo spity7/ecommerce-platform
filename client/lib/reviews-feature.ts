@@ -1,3 +1,4 @@
+import { getAdminAppBaseUrl } from "@/lib/admin-app-link";
 import { getStorefrontSiteConfig } from "@/lib/site";
 import type { UserDto } from "@platform/shared";
 
@@ -13,6 +14,6 @@ export function canManageOwnReviews(user: UserDto | null | undefined): boolean {
 }
 
 export function getAdminReviewsModerationUrl(): string {
-  const base = site.adminUrl?.replace(/\/$/, "") ?? "";
+  const base = getAdminAppBaseUrl();
   return base ? `${base}/product-reviews` : "/product-reviews";
 }

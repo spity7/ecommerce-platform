@@ -1,8 +1,12 @@
 "use client";
 import { CheckmarkIcon } from "../svg-icons";
+import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { CustomerAccountLink } from "@/components/auth/customer-account-link";
+import { useStorefrontAdminBlocksCustomerUi } from "@/hooks/use-storefront-admin-blocks-customer-ui";
 import { getCheckoutPath } from "@/lib/checkout";
+import { STOREFRONT_CHECKOUT_ADMIN_HINT } from "@/lib/storefront-customer-access";
 import { useContextElement } from "@/context/Context";
 import { useManagedModalPanel } from "@/hooks/useManagedModalPanel";
 import { electronicsCardData } from "@/data/products/electronics";
@@ -12,7 +16,14 @@ import { Swiper, SwiperSlide } from "swiper/react";
 export default function AddedCart() {
   const { cartProducts, totalPrice } = useContextElement();
   const checkoutPath = getCheckoutPath();
-  const { close } = useManagedModalPanel("addedCartModal");
+  const { close, isOpen } = useManagedModalPanel("addedCartModal");
+  const { refreshSession } = useStorefrontAdminBlocksCustomerUi();
+
+  useEffect(() => {
+    if (isOpen) {
+      void refreshSession();
+    }
+  }, [isOpen, refreshSession]);
 
   const lastItem =
     cartProducts.length > 0 ? cartProducts[cartProducts.length - 1] : undefined;
@@ -97,12 +108,14 @@ export default function AddedCart() {
                     </span>
                   </div>
 
-                  <Link
+                  <CustomerAccountLink
                     className="rbt-btn rbt-btn-sm d-block mt--16"
+                    disabledHint={STOREFRONT_CHECKOUT_ADMIN_HINT}
                     href={checkoutPath}
+                    tooltipPlacement="top"
                   >
                     Checkout
-                  </Link>
+                  </CustomerAccountLink>
                   <Link
                     className="rbt-btn rbt-btn-sm d-block rbt-btn-naked b3 text-decoration-underline mt--8 rbt-text-semi-bold"
                     href={`/cart`}
