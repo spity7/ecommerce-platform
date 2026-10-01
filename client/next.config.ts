@@ -81,6 +81,15 @@ const nextConfig: NextConfig = {
   },
   // Enable gzip/brotli compression.
   compress: true,
+  // Browsers request /favicon.ico by default; serve the dynamic site icon from app/icon.tsx.
+  async rewrites() {
+    return [
+      {
+        source: "/favicon.ico",
+        destination: "/icon",
+      },
+    ];
+  },
   // Long-term cache headers for public static assets.
   async headers() {
     return [

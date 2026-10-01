@@ -8,17 +8,24 @@ import {
 type StorefrontChromeProps = {
   children: React.ReactNode;
   branding?: SiteChromeBranding;
+  /** Use false on account-style pages without a hero (avoids content underlap). */
+  headerTransparent?: boolean;
 };
 
 export function StorefrontChrome({
   children,
   branding,
+  headerTransparent = true,
 }: StorefrontChromeProps) {
   const chromeBranding = branding ?? getSiteChromeBranding();
 
   return (
     <>
-      <Header13 branding={chromeBranding} sticky={true} />
+      <Header13
+        branding={chromeBranding}
+        sticky={true}
+        transparent={headerTransparent}
+      />
       {children}
       <Footer7 branding={chromeBranding} />
     </>

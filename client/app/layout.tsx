@@ -3,6 +3,7 @@ import LayoutEffectsLoader from "@/components/common/other-components/LayoutEffe
 import BootstrapJsLoader from "@/components/common/other-components/BootstrapJsLoader";
 import { SiteThemeStyles } from "@/components/site/SiteThemeStyles";
 import { getStorefrontSiteConfig } from "@/lib/site";
+import { getSiteFaviconMetadataUrl } from "@/lib/site-favicon";
 
 import LayoutModals from "@/components/common/other-components/LayoutModals";
 import Toolbar from "@/components/modals/Toolbar";
@@ -12,7 +13,7 @@ import type { Metadata } from "next";
 import "../public/assets/scss/main.scss";
 
 const site = getStorefrontSiteConfig();
-const faviconPath = site.branding.favicon ?? site.branding.logo;
+const faviconUrl = getSiteFaviconMetadataUrl();
 
 const cabin = Cabin({
   subsets: ["latin"],
@@ -56,7 +57,11 @@ export const metadata: Metadata = {
     description: site.seo.description,
   },
   icons: {
-    icon: [{ url: faviconPath, type: "image/png" }],
+    icon: [
+      { url: "/icon", type: "image/png" },
+      { url: faviconUrl, type: "image/png" },
+    ],
+    shortcut: [{ url: "/icon", type: "image/png" }],
   },
 };
 

@@ -1,9 +1,22 @@
 @use "../default/variables" as *;
 
-/* Account / profile pages: no breadcrumb bar — keep content close to header */
+/* Account / profile pages: no breadcrumb bar — keep content close to solid header */
+.rbt-header-solid {
+  position: relative;
+
+  .rbt-header-wrapper {
+    background-color: var(--color-white) !important;
+    box-shadow: var(--shadow-1);
+  }
+
+  .rbt-header-middle {
+    background-color: var(--color-white) !important;
+  }
+}
+
 .rbt-shop-user-area {
   .rbt-component-area.rbt-section-gap {
-    padding-top: 24px;
+    padding-top: 32px;
 
     @media #{$md-layout, $lg-layout} {
       padding-top: 20px;

@@ -1,8 +1,8 @@
 "use client";
 
 import Nav from "./Nav";
-import Image from "next/image";
 import Link from "next/link";
+import SiteLogo from "@/components/site/SiteLogo";
 import LanguageSelect from "../common/select/LanguageSelect";
 import CurrencySelect from "../common/select/CurrencySelect";
 import CompareItemLength from "../store/CompareItemLength";
@@ -30,17 +30,28 @@ import {
 type Header13Props = {
   sticky?: boolean;
   branding?: SiteChromeBranding;
+  /** When false, header stays in document flow (account / inner pages without a hero). */
+  transparent?: boolean;
 };
 
-export default function Header13({ sticky = true, branding }: Header13Props) {
+export default function Header13({
+  sticky = true,
+  branding,
+  transparent = true,
+}: Header13Props) {
   const brand = branding ?? getSiteChromeBranding();
   const isSticky = useSticky();
   const stickyClass = sticky && isSticky ? " rbt-sticky" : "";
+  const headerClassName = transparent
+    ? "rbt-header rbt-header-10 rbt-transparent-header rbt-header-tr-white"
+    : "rbt-header rbt-header-10 rbt-header-solid";
+  const topWrapperClassName = transparent
+    ? `rbt-header-wrapper rbt-header-sticky-activation rbt-header-wrapper-three header-space-between header-not-transparent header-sticky plr--0${stickyClass}`
+    : `rbt-header-wrapper rbt-header-sticky-activation rbt-header-wrapper-three header-space-between header-not-transparent header-sticky plr--0 rbt-bg-color-white${stickyClass}`;
+
   return (
-    <header className="rbt-header rbt-header-10 rbt-transparent-header rbt-header-tr-white">
-      <div
-        className={`rbt-header-wrapper rbt-header-sticky-activation rbt-header-wrapper-three header-space-between header-not-transparent header-sticky plr--0${stickyClass}`}
-      >
+    <header className={headerClassName}>
+      <div className={topWrapperClassName}>
         <div className="rbt-header-campaign rbt-header-campaign-1 rbt-header-top-news rbt-topbar-bg-img rbt-topbar-bg-three">
           <div className="rbt-corner-portion-wrapper">
             <div className="container">
@@ -92,14 +103,10 @@ export default function Header13({ sticky = true, branding }: Header13Props) {
               </div>
               {/* Start Mobile-Menu-Bar */}
               <div className="logo">
-                <Link href={`/`}>
-                  <Image
-                    alt={`${brand.siteName} logo`}
-                    src={brand.logoDark}
-                    width={1487}
-                    height={334}
-                  />
-                </Link>
+                <SiteLogo
+                  variant={transparent ? "dark" : "default"}
+                  branding={brand}
+                />
               </div>
               <div className="header-right rbt-gap--32">
                 {/* Navbar Icons */}
@@ -183,14 +190,7 @@ export default function Header13({ sticky = true, branding }: Header13Props) {
                 </div>
                 <div className="header-info d-xl-block d-none">
                   <div className="logo rbt-logo-height-sm">
-                    <Link href={`/`}>
-                      <Image
-                        alt={`${brand.siteName} logo`}
-                        src={brand.logo}
-                        width={1487}
-                        height={334}
-                      />
-                    </Link>
+                    <SiteLogo branding={brand} />
                   </div>
                 </div>
               </div>
@@ -204,14 +204,7 @@ export default function Header13({ sticky = true, branding }: Header13Props) {
             </div>
             <div className="header-info d-xl-none d-block">
               <div className="logo">
-                <Link href={`/`}>
-                  <Image
-                    alt={`${brand.siteName} logo`}
-                    src={brand.logo}
-                    width={1487}
-                    height={334}
-                  />
-                </Link>
+                <SiteLogo branding={brand} />
               </div>
             </div>
             <div className="rbt-header-content d-none d-xl-block">

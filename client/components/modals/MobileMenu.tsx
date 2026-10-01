@@ -28,6 +28,7 @@ import { getStackedModalZIndex } from "@/lib/modalStack";
 import { CATEGORIES_PAGE_PATH } from "@/lib/category-paths";
 import { allElectronocsProducts } from "@/data/products/electronics";
 import { formatCurrency } from "@/lib/price";
+import SiteLogo from "@/components/site/SiteLogo";
 
 const menuBannerProduct =
   allElectronocsProducts.find((product) => product.id === 132) ??
@@ -172,14 +173,7 @@ export default function MobileMenu() {
           <div className="inner-top">
             <div className="content">
               <div className="logo">
-                <Link href={`/`}>
-                  <Image
-                    alt="Beauty Station Logo Images"
-                    src="/assets/images/logo/logo.webp"
-                    width={1487}
-                    height={334}
-                  />
-                </Link>
+                <SiteLogo />
               </div>
               <div className="rbt-btn-close">
                 <button
