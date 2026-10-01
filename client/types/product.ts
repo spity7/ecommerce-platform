@@ -179,6 +179,9 @@ export interface Product {
   /** MongoDB product id when loaded from API (cart/checkout). */
   apiProductId?: string;
 
+  /** Catalog SKU when loaded from API. */
+  sku?: string;
+
   /** Full gallery when loaded from API. */
   images?: string[];
   brandName?: string;

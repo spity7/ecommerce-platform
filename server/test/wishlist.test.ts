@@ -50,6 +50,8 @@ describe("wishlist API", () => {
     assert.equal(addResponse.body.itemCount, 1);
     assert.equal(addResponse.body.items[0].productId, product._id.toString());
     assert.equal(addResponse.body.items[0].productSlug, product.slug);
+    assert.equal(addResponse.body.items[0].sku, product.sku);
+    assert.ok(Array.isArray(addResponse.body.items[0].badges));
     assert.equal(addResponse.body.items[0].inStock, true);
 
     const duplicateResponse = await request(app)

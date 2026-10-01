@@ -46,6 +46,7 @@ export function mapProductDtoToStorefront(
     filterCategory: product.categoryName ? [product.categoryName] : [],
     description: product.description || undefined,
     attributes: product.attributes,
+    sku: product.sku,
     inStock: product.stock > 0,
     availableQuantity: product.stock,
     isStockOut: product.stock <= 0,

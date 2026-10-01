@@ -1247,12 +1247,49 @@ export interface MergeCartInput {
   guestSessionId: string;
 }
 
+export type WishlistDtoItemsItemBadgesItemKind =
+  (typeof WishlistDtoItemsItemBadgesItemKind)[keyof typeof WishlistDtoItemsItemBadgesItemKind];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const WishlistDtoItemsItemBadgesItemKind = {
+  sale: "sale",
+  clearance: "clearance",
+  limited_offer: "limited_offer",
+  bundle: "bundle",
+  free_gift: "free_gift",
+  new: "new",
+  preorder: "preorder",
+  coming_soon: "coming_soon",
+  sold_out: "sold_out",
+  low_stock: "low_stock",
+  back_in_stock: "back_in_stock",
+  best_seller: "best_seller",
+  trending: "trending",
+  top_rated: "top_rated",
+  staff_pick: "staff_pick",
+  exclusive: "exclusive",
+  hot: "hot",
+  cruelty_free: "cruelty_free",
+  vegan: "vegan",
+  organic: "organic",
+} as const;
+
+export type WishlistDtoItemsItemBadgesItem = {
+  kind: WishlistDtoItemsItemBadgesItemKind;
+  text: string;
+  bg: string;
+};
+
 export type WishlistDtoItemsItem = {
   productId: string;
   productName: string;
   productSlug: string;
   productImage: string;
   price: number;
+  compareAtPrice?: number;
+  sku: string;
+  /** @maxItems 2 */
+  badges: WishlistDtoItemsItemBadgesItem[];
   inStock: boolean;
   addedAt: string;
 };
@@ -1278,12 +1315,49 @@ export interface MoveWishlistItemInput {
   quantity?: number;
 }
 
+export type MoveWishlistToCartResponseWishlistItemsItemBadgesItemKind =
+  (typeof MoveWishlistToCartResponseWishlistItemsItemBadgesItemKind)[keyof typeof MoveWishlistToCartResponseWishlistItemsItemBadgesItemKind];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const MoveWishlistToCartResponseWishlistItemsItemBadgesItemKind = {
+  sale: "sale",
+  clearance: "clearance",
+  limited_offer: "limited_offer",
+  bundle: "bundle",
+  free_gift: "free_gift",
+  new: "new",
+  preorder: "preorder",
+  coming_soon: "coming_soon",
+  sold_out: "sold_out",
+  low_stock: "low_stock",
+  back_in_stock: "back_in_stock",
+  best_seller: "best_seller",
+  trending: "trending",
+  top_rated: "top_rated",
+  staff_pick: "staff_pick",
+  exclusive: "exclusive",
+  hot: "hot",
+  cruelty_free: "cruelty_free",
+  vegan: "vegan",
+  organic: "organic",
+} as const;
+
+export type MoveWishlistToCartResponseWishlistItemsItemBadgesItem = {
+  kind: MoveWishlistToCartResponseWishlistItemsItemBadgesItemKind;
+  text: string;
+  bg: string;
+};
+
 export type MoveWishlistToCartResponseWishlistItemsItem = {
   productId: string;
   productName: string;
   productSlug: string;
   productImage: string;
   price: number;
+  compareAtPrice?: number;
+  sku: string;
+  /** @maxItems 2 */
+  badges: MoveWishlistToCartResponseWishlistItemsItemBadgesItem[];
   inStock: boolean;
   addedAt: string;
 };
@@ -3935,12 +4009,49 @@ export type MergeCart200 = {
   guestSessionId?: string;
 };
 
+export type GetWishlist200ItemsItemBadgesItemKind =
+  (typeof GetWishlist200ItemsItemBadgesItemKind)[keyof typeof GetWishlist200ItemsItemBadgesItemKind];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetWishlist200ItemsItemBadgesItemKind = {
+  sale: "sale",
+  clearance: "clearance",
+  limited_offer: "limited_offer",
+  bundle: "bundle",
+  free_gift: "free_gift",
+  new: "new",
+  preorder: "preorder",
+  coming_soon: "coming_soon",
+  sold_out: "sold_out",
+  low_stock: "low_stock",
+  back_in_stock: "back_in_stock",
+  best_seller: "best_seller",
+  trending: "trending",
+  top_rated: "top_rated",
+  staff_pick: "staff_pick",
+  exclusive: "exclusive",
+  hot: "hot",
+  cruelty_free: "cruelty_free",
+  vegan: "vegan",
+  organic: "organic",
+} as const;
+
+export type GetWishlist200ItemsItemBadgesItem = {
+  kind: GetWishlist200ItemsItemBadgesItemKind;
+  text: string;
+  bg: string;
+};
+
 export type GetWishlist200ItemsItem = {
   productId: string;
   productName: string;
   productSlug: string;
   productImage: string;
   price: number;
+  compareAtPrice?: number;
+  sku: string;
+  /** @maxItems 2 */
+  badges: GetWishlist200ItemsItemBadgesItem[];
   inStock: boolean;
   addedAt: string;
 };
@@ -3951,12 +4062,49 @@ export type GetWishlist200 = {
   itemCount: number;
 };
 
+export type ClearWishlist200ItemsItemBadgesItemKind =
+  (typeof ClearWishlist200ItemsItemBadgesItemKind)[keyof typeof ClearWishlist200ItemsItemBadgesItemKind];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ClearWishlist200ItemsItemBadgesItemKind = {
+  sale: "sale",
+  clearance: "clearance",
+  limited_offer: "limited_offer",
+  bundle: "bundle",
+  free_gift: "free_gift",
+  new: "new",
+  preorder: "preorder",
+  coming_soon: "coming_soon",
+  sold_out: "sold_out",
+  low_stock: "low_stock",
+  back_in_stock: "back_in_stock",
+  best_seller: "best_seller",
+  trending: "trending",
+  top_rated: "top_rated",
+  staff_pick: "staff_pick",
+  exclusive: "exclusive",
+  hot: "hot",
+  cruelty_free: "cruelty_free",
+  vegan: "vegan",
+  organic: "organic",
+} as const;
+
+export type ClearWishlist200ItemsItemBadgesItem = {
+  kind: ClearWishlist200ItemsItemBadgesItemKind;
+  text: string;
+  bg: string;
+};
+
 export type ClearWishlist200ItemsItem = {
   productId: string;
   productName: string;
   productSlug: string;
   productImage: string;
   price: number;
+  compareAtPrice?: number;
+  sku: string;
+  /** @maxItems 2 */
+  badges: ClearWishlist200ItemsItemBadgesItem[];
   inStock: boolean;
   addedAt: string;
 };
@@ -3972,12 +4120,49 @@ export type AddWishlistItemBody = {
   productId: string;
 };
 
+export type AddWishlistItem201ItemsItemBadgesItemKind =
+  (typeof AddWishlistItem201ItemsItemBadgesItemKind)[keyof typeof AddWishlistItem201ItemsItemBadgesItemKind];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const AddWishlistItem201ItemsItemBadgesItemKind = {
+  sale: "sale",
+  clearance: "clearance",
+  limited_offer: "limited_offer",
+  bundle: "bundle",
+  free_gift: "free_gift",
+  new: "new",
+  preorder: "preorder",
+  coming_soon: "coming_soon",
+  sold_out: "sold_out",
+  low_stock: "low_stock",
+  back_in_stock: "back_in_stock",
+  best_seller: "best_seller",
+  trending: "trending",
+  top_rated: "top_rated",
+  staff_pick: "staff_pick",
+  exclusive: "exclusive",
+  hot: "hot",
+  cruelty_free: "cruelty_free",
+  vegan: "vegan",
+  organic: "organic",
+} as const;
+
+export type AddWishlistItem201ItemsItemBadgesItem = {
+  kind: AddWishlistItem201ItemsItemBadgesItemKind;
+  text: string;
+  bg: string;
+};
+
 export type AddWishlistItem201ItemsItem = {
   productId: string;
   productName: string;
   productSlug: string;
   productImage: string;
   price: number;
+  compareAtPrice?: number;
+  sku: string;
+  /** @maxItems 2 */
+  badges: AddWishlistItem201ItemsItemBadgesItem[];
   inStock: boolean;
   addedAt: string;
 };
@@ -3988,12 +4173,49 @@ export type AddWishlistItem201 = {
   itemCount: number;
 };
 
+export type RemoveWishlistItem200ItemsItemBadgesItemKind =
+  (typeof RemoveWishlistItem200ItemsItemBadgesItemKind)[keyof typeof RemoveWishlistItem200ItemsItemBadgesItemKind];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const RemoveWishlistItem200ItemsItemBadgesItemKind = {
+  sale: "sale",
+  clearance: "clearance",
+  limited_offer: "limited_offer",
+  bundle: "bundle",
+  free_gift: "free_gift",
+  new: "new",
+  preorder: "preorder",
+  coming_soon: "coming_soon",
+  sold_out: "sold_out",
+  low_stock: "low_stock",
+  back_in_stock: "back_in_stock",
+  best_seller: "best_seller",
+  trending: "trending",
+  top_rated: "top_rated",
+  staff_pick: "staff_pick",
+  exclusive: "exclusive",
+  hot: "hot",
+  cruelty_free: "cruelty_free",
+  vegan: "vegan",
+  organic: "organic",
+} as const;
+
+export type RemoveWishlistItem200ItemsItemBadgesItem = {
+  kind: RemoveWishlistItem200ItemsItemBadgesItemKind;
+  text: string;
+  bg: string;
+};
+
 export type RemoveWishlistItem200ItemsItem = {
   productId: string;
   productName: string;
   productSlug: string;
   productImage: string;
   price: number;
+  compareAtPrice?: number;
+  sku: string;
+  /** @maxItems 2 */
+  badges: RemoveWishlistItem200ItemsItemBadgesItem[];
   inStock: boolean;
   addedAt: string;
 };
@@ -4014,12 +4236,49 @@ export type MoveWishlistItemToCartBody = {
   quantity?: number;
 };
 
+export type MoveWishlistItemToCart200WishlistItemsItemBadgesItemKind =
+  (typeof MoveWishlistItemToCart200WishlistItemsItemBadgesItemKind)[keyof typeof MoveWishlistItemToCart200WishlistItemsItemBadgesItemKind];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const MoveWishlistItemToCart200WishlistItemsItemBadgesItemKind = {
+  sale: "sale",
+  clearance: "clearance",
+  limited_offer: "limited_offer",
+  bundle: "bundle",
+  free_gift: "free_gift",
+  new: "new",
+  preorder: "preorder",
+  coming_soon: "coming_soon",
+  sold_out: "sold_out",
+  low_stock: "low_stock",
+  back_in_stock: "back_in_stock",
+  best_seller: "best_seller",
+  trending: "trending",
+  top_rated: "top_rated",
+  staff_pick: "staff_pick",
+  exclusive: "exclusive",
+  hot: "hot",
+  cruelty_free: "cruelty_free",
+  vegan: "vegan",
+  organic: "organic",
+} as const;
+
+export type MoveWishlistItemToCart200WishlistItemsItemBadgesItem = {
+  kind: MoveWishlistItemToCart200WishlistItemsItemBadgesItemKind;
+  text: string;
+  bg: string;
+};
+
 export type MoveWishlistItemToCart200WishlistItemsItem = {
   productId: string;
   productName: string;
   productSlug: string;
   productImage: string;
   price: number;
+  compareAtPrice?: number;
+  sku: string;
+  /** @maxItems 2 */
+  badges: MoveWishlistItemToCart200WishlistItemsItemBadgesItem[];
   inStock: boolean;
   addedAt: string;
 };

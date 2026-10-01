@@ -391,6 +391,67 @@ body {
   margin-bottom: 20px;
 }
 
+.rbt-wishlist-modal {
+  --rbt-wishlist-heart-color: var(--color-primary);
+}
+
+.rbt-wishlist-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: var(--h4);
+  line-height: 1.5;
+}
+
+.rbt-wishlist-modal-title__icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--rbt-wishlist-heart-color);
+  color: var(--color-white);
+  font-size: 22px;
+  line-height: 1;
+  box-shadow: 0 6px 16px rgba(8, 10, 18, 0.08);
+}
+
+.rbt-wishlist-modal {
+  .rbt-product-remove-btn-wrapper .rbt-wishlist-unsave-btn {
+    color: var(--rbt-wishlist-heart-color);
+
+    span i {
+      color: var(--rbt-wishlist-heart-color);
+      font-size: 17px;
+      transition: var(--transition);
+    }
+
+    &::after {
+      background: var(--color-brand-50);
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+    }
+
+    &:hover {
+      color: var(--color-danger);
+      transform: none;
+
+      span i {
+        color: var(--color-danger);
+      }
+
+      &::after {
+        background: rgba(220, 53, 69, 0.12);
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  }
+}
+
 .rbt-wishlist-modal-body {
   flex: 1 1 auto;
   min-height: 220px;
@@ -423,11 +484,11 @@ body {
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
-  background: var(--color-white);
-  color: var(--color-primary);
-  font-size: 28px;
+  background: var(--color-brand-50);
+  color: var(--rbt-wishlist-heart-color, var(--color-primary));
+  font-size: 30px;
   box-shadow: 0 8px 24px rgba(8, 10, 18, 0.06);
-  border: 1px solid var(--color-gray-200);
+  border: 1px solid var(--color-brand-100);
 }
 
 .rbt-wishlist-modal-footer {
@@ -437,6 +498,18 @@ body {
 
   .rbt-btn {
     justify-content: center;
+  }
+
+  .rbt-btn-border.has-left-icon {
+    i {
+      color: var(--rbt-wishlist-heart-color, var(--color-primary));
+      transition: var(--transition);
+    }
+
+    &:hover i,
+    &:focus-visible i {
+      color: var(--color-white);
+    }
   }
 }
 

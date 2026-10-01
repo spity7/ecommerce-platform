@@ -1876,6 +1876,53 @@
                 "price": {
                   "type": "number"
                 },
+                "compareAtPrice": {
+                  "type": "number"
+                },
+                "sku": {
+                  "type": "string"
+                },
+                "badges": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "enum": [
+                          "sale",
+                          "clearance",
+                          "limited_offer",
+                          "bundle",
+                          "free_gift",
+                          "new",
+                          "preorder",
+                          "coming_soon",
+                          "sold_out",
+                          "low_stock",
+                          "back_in_stock",
+                          "best_seller",
+                          "trending",
+                          "top_rated",
+                          "staff_pick",
+                          "exclusive",
+                          "hot",
+                          "cruelty_free",
+                          "vegan",
+                          "organic"
+                        ]
+                      },
+                      "text": {
+                        "type": "string"
+                      },
+                      "bg": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["kind", "text", "bg"]
+                  },
+                  "maxItems": 2
+                },
                 "inStock": {
                   "type": "boolean"
                 },
@@ -1890,6 +1937,8 @@
                 "productSlug",
                 "productImage",
                 "price",
+                "sku",
+                "badges",
                 "inStock",
                 "addedAt"
               ]
@@ -1955,6 +2004,53 @@
                     "price": {
                       "type": "number"
                     },
+                    "compareAtPrice": {
+                      "type": "number"
+                    },
+                    "sku": {
+                      "type": "string"
+                    },
+                    "badges": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "kind": {
+                            "type": "string",
+                            "enum": [
+                              "sale",
+                              "clearance",
+                              "limited_offer",
+                              "bundle",
+                              "free_gift",
+                              "new",
+                              "preorder",
+                              "coming_soon",
+                              "sold_out",
+                              "low_stock",
+                              "back_in_stock",
+                              "best_seller",
+                              "trending",
+                              "top_rated",
+                              "staff_pick",
+                              "exclusive",
+                              "hot",
+                              "cruelty_free",
+                              "vegan",
+                              "organic"
+                            ]
+                          },
+                          "text": {
+                            "type": "string"
+                          },
+                          "bg": {
+                            "type": "string"
+                          }
+                        },
+                        "required": ["kind", "text", "bg"]
+                      },
+                      "maxItems": 2
+                    },
                     "inStock": {
                       "type": "boolean"
                     },
@@ -1969,6 +2065,8 @@
                     "productSlug",
                     "productImage",
                     "price",
+                    "sku",
+                    "badges",
                     "inStock",
                     "addedAt"
                   ]
@@ -7948,6 +8046,53 @@
                           "price": {
                             "type": "number"
                           },
+                          "compareAtPrice": {
+                            "type": "number"
+                          },
+                          "sku": {
+                            "type": "string"
+                          },
+                          "badges": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "type": "string",
+                                  "enum": [
+                                    "sale",
+                                    "clearance",
+                                    "limited_offer",
+                                    "bundle",
+                                    "free_gift",
+                                    "new",
+                                    "preorder",
+                                    "coming_soon",
+                                    "sold_out",
+                                    "low_stock",
+                                    "back_in_stock",
+                                    "best_seller",
+                                    "trending",
+                                    "top_rated",
+                                    "staff_pick",
+                                    "exclusive",
+                                    "hot",
+                                    "cruelty_free",
+                                    "vegan",
+                                    "organic"
+                                  ]
+                                },
+                                "text": {
+                                  "type": "string"
+                                },
+                                "bg": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["kind", "text", "bg"]
+                            },
+                            "maxItems": 2
+                          },
                           "inStock": {
                             "type": "boolean"
                           },
@@ -7962,6 +8107,8 @@
                           "productSlug",
                           "productImage",
                           "price",
+                          "sku",
+                          "badges",
                           "inStock",
                           "addedAt"
                         ]
@@ -8018,6 +8165,53 @@
                           "price": {
                             "type": "number"
                           },
+                          "compareAtPrice": {
+                            "type": "number"
+                          },
+                          "sku": {
+                            "type": "string"
+                          },
+                          "badges": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "type": "string",
+                                  "enum": [
+                                    "sale",
+                                    "clearance",
+                                    "limited_offer",
+                                    "bundle",
+                                    "free_gift",
+                                    "new",
+                                    "preorder",
+                                    "coming_soon",
+                                    "sold_out",
+                                    "low_stock",
+                                    "back_in_stock",
+                                    "best_seller",
+                                    "trending",
+                                    "top_rated",
+                                    "staff_pick",
+                                    "exclusive",
+                                    "hot",
+                                    "cruelty_free",
+                                    "vegan",
+                                    "organic"
+                                  ]
+                                },
+                                "text": {
+                                  "type": "string"
+                                },
+                                "bg": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["kind", "text", "bg"]
+                            },
+                            "maxItems": 2
+                          },
                           "inStock": {
                             "type": "boolean"
                           },
@@ -8032,6 +8226,8 @@
                           "productSlug",
                           "productImage",
                           "price",
+                          "sku",
+                          "badges",
                           "inStock",
                           "addedAt"
                         ]
@@ -8106,6 +8302,53 @@
                           "price": {
                             "type": "number"
                           },
+                          "compareAtPrice": {
+                            "type": "number"
+                          },
+                          "sku": {
+                            "type": "string"
+                          },
+                          "badges": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "type": "string",
+                                  "enum": [
+                                    "sale",
+                                    "clearance",
+                                    "limited_offer",
+                                    "bundle",
+                                    "free_gift",
+                                    "new",
+                                    "preorder",
+                                    "coming_soon",
+                                    "sold_out",
+                                    "low_stock",
+                                    "back_in_stock",
+                                    "best_seller",
+                                    "trending",
+                                    "top_rated",
+                                    "staff_pick",
+                                    "exclusive",
+                                    "hot",
+                                    "cruelty_free",
+                                    "vegan",
+                                    "organic"
+                                  ]
+                                },
+                                "text": {
+                                  "type": "string"
+                                },
+                                "bg": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["kind", "text", "bg"]
+                            },
+                            "maxItems": 2
+                          },
                           "inStock": {
                             "type": "boolean"
                           },
@@ -8120,6 +8363,8 @@
                           "productSlug",
                           "productImage",
                           "price",
+                          "sku",
+                          "badges",
                           "inStock",
                           "addedAt"
                         ]
@@ -8190,6 +8435,53 @@
                           "price": {
                             "type": "number"
                           },
+                          "compareAtPrice": {
+                            "type": "number"
+                          },
+                          "sku": {
+                            "type": "string"
+                          },
+                          "badges": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "kind": {
+                                  "type": "string",
+                                  "enum": [
+                                    "sale",
+                                    "clearance",
+                                    "limited_offer",
+                                    "bundle",
+                                    "free_gift",
+                                    "new",
+                                    "preorder",
+                                    "coming_soon",
+                                    "sold_out",
+                                    "low_stock",
+                                    "back_in_stock",
+                                    "best_seller",
+                                    "trending",
+                                    "top_rated",
+                                    "staff_pick",
+                                    "exclusive",
+                                    "hot",
+                                    "cruelty_free",
+                                    "vegan",
+                                    "organic"
+                                  ]
+                                },
+                                "text": {
+                                  "type": "string"
+                                },
+                                "bg": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["kind", "text", "bg"]
+                            },
+                            "maxItems": 2
+                          },
                           "inStock": {
                             "type": "boolean"
                           },
@@ -8204,6 +8496,8 @@
                           "productSlug",
                           "productImage",
                           "price",
+                          "sku",
+                          "badges",
                           "inStock",
                           "addedAt"
                         ]
@@ -8286,6 +8580,53 @@
                               "price": {
                                 "type": "number"
                               },
+                              "compareAtPrice": {
+                                "type": "number"
+                              },
+                              "sku": {
+                                "type": "string"
+                              },
+                              "badges": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "kind": {
+                                      "type": "string",
+                                      "enum": [
+                                        "sale",
+                                        "clearance",
+                                        "limited_offer",
+                                        "bundle",
+                                        "free_gift",
+                                        "new",
+                                        "preorder",
+                                        "coming_soon",
+                                        "sold_out",
+                                        "low_stock",
+                                        "back_in_stock",
+                                        "best_seller",
+                                        "trending",
+                                        "top_rated",
+                                        "staff_pick",
+                                        "exclusive",
+                                        "hot",
+                                        "cruelty_free",
+                                        "vegan",
+                                        "organic"
+                                      ]
+                                    },
+                                    "text": {
+                                      "type": "string"
+                                    },
+                                    "bg": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": ["kind", "text", "bg"]
+                                },
+                                "maxItems": 2
+                              },
                               "inStock": {
                                 "type": "boolean"
                               },
@@ -8300,6 +8641,8 @@
                               "productSlug",
                               "productImage",
                               "price",
+                              "sku",
+                              "badges",
                               "inStock",
                               "addedAt"
                             ]

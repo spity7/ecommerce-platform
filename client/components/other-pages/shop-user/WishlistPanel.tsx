@@ -9,6 +9,7 @@ import {
 } from "@/lib/wishlist-sync";
 import { applyServerWishlistToStoreWhenIdle } from "@/context/store";
 import Wishlist from "./Wishlist";
+import WishlistSectionSkeleton from "@/components/store/WishlistSectionSkeleton";
 
 export default function WishlistPanel() {
   const site = getStorefrontSiteConfig();
@@ -58,7 +59,11 @@ export default function WishlistPanel() {
   }
 
   if (loading) {
-    return <p className="mb--0">Loading wishlist…</p>;
+    return (
+      <div className="rbt-profile-content-area rbt-scrollable-content">
+        <WishlistSectionSkeleton />
+      </div>
+    );
   }
 
   if (error) {

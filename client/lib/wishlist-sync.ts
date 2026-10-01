@@ -25,8 +25,27 @@ export function mapWishlistDtoToProducts(wishlist: WishlistDto): Product[] {
     apiProductId: item.productId,
     title: item.productName,
     price: item.price,
+    oldPrice: item.compareAtPrice ?? null,
+    sku: item.sku || undefined,
     imgSrc: item.productImage || FALLBACK_IMAGE,
     inStock: item.inStock,
+    isStockOut: !item.inStock,
+    badges:
+      item.badges.length > 0
+        ? item.badges.map((badge) => ({
+            text: badge.text,
+            bg: badge.bg,
+            kind: badge.kind,
+          }))
+        : undefined,
+    badge:
+      item.badges[0] != null
+        ? {
+            text: item.badges[0].text,
+            bg: item.badges[0].bg,
+            kind: item.badges[0].kind,
+          }
+        : null,
   }));
 }
 

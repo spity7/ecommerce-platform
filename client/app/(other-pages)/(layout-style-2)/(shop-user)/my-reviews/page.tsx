@@ -1,4 +1,3 @@
-import Breadcrumb from "@/components/common/other-components/Breadcrumb";
 import Sidebar from "@/components/other-pages/shop-user/Sidebar";
 import MyReviewsPanel from "@/components/other-pages/shop-user/MyReviewsPanel";
 
@@ -12,11 +11,6 @@ export const metadata: Metadata = {
 export default function page() {
   return (
     <>
-      <Breadcrumb
-        className="rbt-breadcrumb-two rbt-bg-color-gray-100"
-        title="Account Info"
-        subtitle="Profile"
-      />
       <div className="rbt-component-area rbt-section-gap rbt-bg-color-gray-light">
         <div className="container">
           <div className="row row--12 mt_dec--24">

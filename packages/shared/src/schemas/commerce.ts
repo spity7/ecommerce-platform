@@ -1,6 +1,7 @@
 import { z } from "../zod.js";
 import { ORDER_STATUSES } from "../types/commerce.js";
 import { optionalPhoneSchema } from "./auth.js";
+import { productCardBadgeDtoSchema } from "./product-badges.js";
 
 export const cartItemInputSchema = z.object({
   productId: z.string().min(1),
@@ -120,6 +121,9 @@ export const wishlistItemDtoSchema = z.object({
   productSlug: z.string(),
   productImage: z.string(),
   price: z.number(),
+  compareAtPrice: z.number().optional(),
+  sku: z.string(),
+  badges: z.array(productCardBadgeDtoSchema).max(2),
   inStock: z.boolean(),
   addedAt: z.string().datetime(),
 });

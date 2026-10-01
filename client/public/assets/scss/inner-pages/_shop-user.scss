@@ -1,0 +1,16 @@
+@use "../default/variables" as *;
+
+/* Account / profile pages: no breadcrumb bar — keep content close to header */
+.rbt-shop-user-area {
+  .rbt-component-area.rbt-section-gap {
+    padding-top: 24px;
+
+    @media #{$md-layout, $lg-layout} {
+      padding-top: 20px;
+    }
+
+    @media #{$sm-layout, $large-mobile} {
+      padding-top: 16px;
+    }
+  }
+}

@@ -40,12 +40,18 @@ export default function WishList() {
             <div className="rbt-bg-color-white rbt-content-trs-portion">
               <div className="rbt-wishlist-modal-content">
                 <div className="rbt-wishlist-modal-header">
-                  <h5
-                    className="rbt-title rbt-text-bold mb--8"
+                  <h4
+                    className="rbt-wishlist-modal-title rbt-title rbt-text-bold mb--8"
                     id="wishlistModalLabel"
                   >
+                    <span
+                      aria-hidden="true"
+                      className="rbt-wishlist-modal-title__icon"
+                    >
+                      <i className="fa-sharp fa-solid fa-heart" />
+                    </span>
                     Product Wishlist
-                  </h5>
+                  </h4>
                   <p className="b3 mb--0 rbt-text-color-gray-500">
                     {mounted && savedCount > 0
                       ? `${savedCount} saved item${savedCount === 1 ? "" : "s"}`
@@ -74,6 +80,7 @@ export default function WishList() {
                     </div>
                   ) : (
                     <WishlistProductTable
+                      removeIcon="heart"
                       showStock={false}
                       wrapperClassName="rbt-transparent-table-one-wrapper rbt-has-bg-gray pt--0 pb--0 mb--0"
                       tableClassName="rbt-transparent-table-one mb--0 rbt-wishlist-table"

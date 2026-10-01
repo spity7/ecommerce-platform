@@ -1,6 +1,7 @@
 import type { WishlistDto } from "@platform/shared";
 import type { WishlistDocument } from "../models/Wishlist.js";
 import { Product, type ProductDocument } from "../models/Product.js";
+import { toStorefrontProductDto } from "../utils/serializers.js";
 
 function toIsoString(value: Date | string | undefined): string {
   if (!value) {
@@ -19,22 +20,28 @@ export async function toWishlistDto(
   const products = productIds.length
     ? await Product.find({ _id: { $in: productIds } })
     : [];
-  const stockByProductId = new Map(
-    products.map((product) => [
-      product._id.toString(),
-      product.status === "published" && product.stock > 0,
-    ])
+  const productById = new Map<string, ProductDocument>(
+    products.map((product) => [product._id.toString(), product])
   );
 
   const items = doc.items.map((item) => {
     const productId = item.productId.toString();
+    const product = productById.get(productId);
+    const storefront = product ? toStorefrontProductDto(product) : null;
+
     return {
       productId,
       productName: item.productName,
       productSlug: item.productSlug,
       productImage: item.productImage,
-      price: item.price,
-      inStock: stockByProductId.get(productId) ?? false,
+      price: storefront?.price ?? item.price,
+      compareAtPrice: storefront?.compareAtPrice,
+      sku: storefront?.sku ?? "",
+      badges: storefront?.badges ?? [],
+      inStock:
+        storefront != null
+          ? storefront.status === "published" && storefront.stock > 0
+          : false,
       addedAt: toIsoString(item.addedAt),
     };
   });
