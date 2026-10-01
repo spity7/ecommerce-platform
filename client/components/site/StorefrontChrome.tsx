@@ -8,14 +8,14 @@ import {
 type StorefrontChromeProps = {
   children: React.ReactNode;
   branding?: SiteChromeBranding;
-  /** Use false on account-style pages without a hero (avoids content underlap). */
+  /** Opt in to overlay header only on full-bleed hero pages; default keeps header in flow. */
   headerTransparent?: boolean;
 };
 
 export function StorefrontChrome({
   children,
   branding,
-  headerTransparent = true,
+  headerTransparent = false,
 }: StorefrontChromeProps) {
   const chromeBranding = branding ?? getSiteChromeBranding();
 

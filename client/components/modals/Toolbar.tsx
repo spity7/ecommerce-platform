@@ -9,6 +9,9 @@ import ModalTriggerButton from "@/components/action-buttons/ModalTriggerButton";
 import { ToolbarProfileAction } from "@/components/auth/storefront-auth-entry";
 import { toolbarItems } from "@/data/toolbar";
 
+/** Show bottom toolbar after any scroll; hidden only at page top. */
+const MOBILE_TOOLBAR_MIN_SCROLL = 1;
+
 export default function Toolbar() {
   const [isVisible, setIsVisible] = useState(false);
   const { toggleCommonSearch, closeCommonSearch } = useUiElement();
@@ -20,7 +23,7 @@ export default function Toolbar() {
       const scrollTop =
         window.scrollY || document.documentElement.scrollTop || 0;
 
-      setIsVisible(scrollTop >= 400);
+      setIsVisible(scrollTop >= MOBILE_TOOLBAR_MIN_SCROLL);
     };
 
     handleScroll();
