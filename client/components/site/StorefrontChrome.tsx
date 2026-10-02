@@ -1,5 +1,8 @@
 import Footer7 from "@/components/footers/Footer7";
-import Header13 from "@/components/headers/Header13";
+import {
+  ProductionHeader13,
+  ProductionStorefrontShell,
+} from "@/components/site/ProductionStorefrontShell";
 import {
   getSiteChromeBranding,
   type SiteChromeBranding,
@@ -20,14 +23,14 @@ export function StorefrontChrome({
   const chromeBranding = branding ?? getSiteChromeBranding();
 
   return (
-    <>
-      <Header13
+    <ProductionStorefrontShell>
+      <ProductionHeader13
         branding={chromeBranding}
         sticky={true}
         transparent={headerTransparent}
       />
       {children}
       <Footer7 branding={chromeBranding} />
-    </>
+    </ProductionStorefrontShell>
   );
 }

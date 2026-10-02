@@ -59,4 +59,20 @@ export const beautyStationConfig = {
     description:
       "Discover premium cosmetics and skincare products at Beauty Station.",
   },
+  header: {
+    announcements: [
+      {
+        text: "Premium cosmetics & skincare — shop the latest arrivals",
+        href: "/shop",
+      },
+      {
+        text: "Questions? Email us anytime",
+        href: "mailto:Beautystation961@gmail.com",
+      },
+      {
+        text: "Cosmetics & Skincare for every routine",
+        href: "/categories",
+      },
+    ],
+  },
 } as const satisfies SiteConfig;

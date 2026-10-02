@@ -34,6 +34,15 @@ export type SiteTheme = {
   fontFamily: string;
 };
 
+export type SiteHeaderAnnouncement = {
+  text: string;
+  href?: string;
+};
+
+export type SiteHeaderConfig = {
+  announcements?: SiteHeaderAnnouncement[];
+};
+
 export type SiteConfig = {
   id: string;
   name: string;
@@ -57,4 +66,5 @@ export type SiteConfig = {
     description: string;
   };
   merchandising?: SiteMerchandisingConfig;
+  header?: SiteHeaderConfig;
 };

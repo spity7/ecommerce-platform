@@ -618,7 +618,7 @@ export const innerPageMenuColumns: import("@/types").MenuSection[] = [
   {
     title: "Inner Pages",
     items: [
-      { href: "/contact", label: "Contact Page One" },
+      { href: "/contact-style-1", label: "Contact Page One" },
       { href: "/about", label: "About Us One" },
       { href: "/faq-page-01", label: "FAQs One" },
       { href: "/contact-two", label: "Contact Page Two" },

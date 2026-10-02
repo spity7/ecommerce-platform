@@ -1,16 +1,14 @@
 import Breadcrumb from "@/components/other-pages/Breadcrumb";
 import Contact from "@/components/other-pages/contact/Contact";
 import ContactMap from "@/components/other-pages/contact/ContactMap";
-
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact Us | Beauty Station | Cosmetics & Skincare",
-  description:
-    "Get in touch with the Beauty Station team via our contact page.",
+  title: "Contact Us (Style 1) | Theme Demo",
+  description: "Demo contact layout with Header2 chrome.",
 };
 
-export default function page() {
+export default function ContactStyleOneDemoPage() {
   return (
     <>
       <Breadcrumb />

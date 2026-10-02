@@ -1,8 +1,9 @@
 "use client";
 
 import Nav from "./Nav";
-import Link from "next/link";
+import NavProduction from "./NavProduction";
 import SiteLogo from "@/components/site/SiteLogo";
+import { SiteContactEmailLink } from "@/components/site/SiteContactLinks";
 import LanguageSelect from "../common/select/LanguageSelect";
 import CurrencySelect from "../common/select/CurrencySelect";
 import CompareItemLength from "../store/CompareItemLength";
@@ -12,6 +13,7 @@ import CategorySidebarToggler from "./headerComponents/CategorySidebarToggler";
 import SearchDropdownCommon from "./headerComponents/SearchDropdownCommon";
 import SearchDropdown from "./headerComponents/SearchDropdown";
 import TopbarSwiper from "./headerComponents/TopbarSwiper";
+import StorefrontHeaderTopbar from "./headerComponents/StorefrontHeaderTopbar";
 import CommonSearchToggler from "./headerComponents/CommonSearchToggler";
 import CartSidebarToggler from "./headerComponents/CartSidebarToggler";
 import MobileMenuToggler from "../action-buttons/MobileMenuToggler";
@@ -26,20 +28,54 @@ import {
   getSiteChromeBranding,
   type SiteChromeBranding,
 } from "@/lib/site-branding";
+import {
+  isStorefrontCustomerAuthEnabled,
+  isStorefrontWishlistEnabled,
+  type StorefrontNavVariant,
+} from "@/lib/storefront-nav";
+import type { StorefrontSearchPanelVariant } from "@/components/store/StorefrontSearchPanelContent";
 
 type Header13Props = {
   sticky?: boolean;
   branding?: SiteChromeBranding;
   /** When false, header stays in document flow (account / inner pages without a hero). */
   transparent?: boolean;
+  navVariant?: StorefrontNavVariant;
 };
+
+function HeaderTopbar({
+  navVariant,
+  position,
+  navigationKey,
+}: {
+  navVariant: StorefrontNavVariant;
+  position?: "start" | "center";
+  navigationKey?: "primary" | "sticky";
+}) {
+  if (navVariant === "production") {
+    return (
+      <StorefrontHeaderTopbar
+        navigationKey={navigationKey ?? "primary"}
+        position={position ?? "center"}
+      />
+    );
+  }
+  return <TopbarSwiper position={position ?? "center"} />;
+}
 
 export default function Header13({
   sticky = true,
   branding,
   transparent = true,
+  navVariant = "demo",
 }: Header13Props) {
   const brand = branding ?? getSiteChromeBranding();
+  const isProduction = navVariant === "production";
+  const showWishlist = isProduction ? isStorefrontWishlistEnabled() : true;
+  const showAuth = isProduction ? isStorefrontCustomerAuthEnabled() : true;
+  const searchVariant: StorefrontSearchPanelVariant = isProduction
+    ? "production"
+    : "demo";
   const isSticky = useSticky();
   const stickyClass = sticky && isSticky ? " rbt-sticky" : "";
   const headerClassName = transparent
@@ -48,6 +84,8 @@ export default function Header13({
   const topWrapperClassName = transparent
     ? `rbt-header-wrapper rbt-header-sticky-activation rbt-header-wrapper-three header-space-between header-not-transparent header-sticky plr--0${stickyClass}`
     : `rbt-header-wrapper rbt-header-sticky-activation rbt-header-wrapper-three header-space-between header-not-transparent header-sticky plr--0 rbt-bg-color-white${stickyClass}`;
+
+  const navMenu = isProduction ? <NavProduction /> : <Nav />;
 
   return (
     <header className={headerClassName}>
@@ -58,7 +96,11 @@ export default function Header13({
               <div className="row justify-content-center">
                 <div className="col-lg-6">
                   <div className="inner justify-content-center">
-                    <TopbarSwiper position="start" />
+                    <HeaderTopbar
+                      navVariant={navVariant}
+                      navigationKey="primary"
+                      position="start"
+                    />
                   </div>
                 </div>
               </div>
@@ -85,12 +127,20 @@ export default function Header13({
                           </div>
                         </a>
                       </div>
-                      <div className="header-info">
-                        <LanguageSelect />
-                      </div>
-                      <div className="header-info">
-                        <CurrencySelect />
-                      </div>
+                      {isProduction ? (
+                        <div className="header-info">
+                          <SiteContactEmailLink className="rbt-access-link" />
+                        </div>
+                      ) : (
+                        <>
+                          <div className="header-info">
+                            <LanguageSelect />
+                          </div>
+                          <div className="header-info">
+                            <CurrencySelect />
+                          </div>
+                        </>
+                      )}
                     </li>
                   </ul>
                 </div>
@@ -118,14 +168,18 @@ export default function Header13({
                       </div>
                     </Tooltip>
                   </li>
-                  <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-3 d-none d-lg-flex">
-                    <div className="tooltips tooltip-distance-lg">
-                      <AuthIconButton className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg" />
-                    </div>
-                  </li>
-                  <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-4 rbt-wishlist d-none d-lg-flex">
-                    <WishlistHeaderAccess />
-                  </li>
+                  {showAuth ? (
+                    <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-3 d-none d-lg-flex">
+                      <div className="tooltips tooltip-distance-lg">
+                        <AuthIconButton className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg" />
+                      </div>
+                    </li>
+                  ) : null}
+                  {showWishlist ? (
+                    <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-4 rbt-wishlist d-none d-lg-flex">
+                      <WishlistHeaderAccess />
+                    </li>
+                  ) : null}
                   <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-5 rbt-mini-cart">
                     <Tooltip content="Cart" placement="bottom">
                       <CartSidebarToggler className="rbt-cart-sidenav-activation rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg">
@@ -151,7 +205,7 @@ export default function Header13({
                 <div className="rbt-main-navigation d-none d-xl-block">
                   <nav className="rbt-mainmenu-nav">
                     <ul className="mainmenu has-nav-bg-shape-hover">
-                      <Nav />
+                      {navMenu}
                     </ul>
                   </nav>
                 </div>
@@ -161,7 +215,7 @@ export default function Header13({
         </div>
       </div>
       {/* End Header Top */}
-      <SearchDropdown variant="production" />
+      <SearchDropdown variant={searchVariant} />
       <div
         className={`rbt-header-common-sticky-activation rbt-header-wrapper-common justify-content-between rbt-bg-color-white${stickyClass}`}
       >
@@ -171,7 +225,10 @@ export default function Header13({
               <div className="row justify-content-center">
                 <div className="col-lg-6">
                   <div className="inner justify-content-center">
-                    <TopbarSwiper />
+                    <HeaderTopbar
+                      navVariant={navVariant}
+                      navigationKey="sticky"
+                    />
                   </div>
                 </div>
               </div>
@@ -211,7 +268,7 @@ export default function Header13({
               <div className="header-info">
                 <nav className="rbt-mainmenu-nav">
                   <ul className="mainmenu mainmenu has-nav-bg-shape-hover">
-                    <Nav />
+                    {navMenu}
                   </ul>
                 </nav>
               </div>
@@ -226,29 +283,35 @@ export default function Header13({
                     </div>
                   </Tooltip>
                 </li>
-                <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-3 d-none d-lg-flex">
-                  <div className="tooltips tooltip-distance-lg">
-                    <AuthIconButton className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg" />
-                  </div>
-                </li>
-                <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-4 d-none d-lg-flex">
-                  <Tooltip content="Compare" placement="bottom">
-                    <ModalTriggerButton
-                      as="div"
-                      className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg"
-                      openModalName="compareReviewModal"
-                    >
-                      <i className="fa-regular fa-code-compare" />
-                      <div className="access-box-count">
-                        {" "}
-                        <CompareItemLength />
-                      </div>
-                    </ModalTriggerButton>
-                  </Tooltip>
-                </li>
-                <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-5 rbt-wishlist d-none d-lg-flex">
-                  <WishlistHeaderAccess />
-                </li>
+                {showAuth ? (
+                  <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-3 d-none d-lg-flex">
+                    <div className="tooltips tooltip-distance-lg">
+                      <AuthIconButton className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg" />
+                    </div>
+                  </li>
+                ) : null}
+                {!isProduction ? (
+                  <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-4 d-none d-lg-flex">
+                    <Tooltip content="Compare" placement="bottom">
+                      <ModalTriggerButton
+                        as="div"
+                        className="rbt-round-btn has-rbt-md-fsize tooltips tooltip-distance-lg"
+                        openModalName="compareReviewModal"
+                      >
+                        <i className="fa-regular fa-code-compare" />
+                        <div className="access-box-count">
+                          {" "}
+                          <CompareItemLength />
+                        </div>
+                      </ModalTriggerButton>
+                    </Tooltip>
+                  </li>
+                ) : null}
+                {showWishlist ? (
+                  <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-5 rbt-wishlist d-none d-lg-flex">
+                    <WishlistHeaderAccess />
+                  </li>
+                ) : null}
                 <li className="rbt-access-box rbt-scroll-trigger fade_in animation-order-5 rbt-access-box-has-bg-hover rbt-mini-cart">
                   <Tooltip content="Cart" placement="bottom">
                     <span>
@@ -273,7 +336,7 @@ export default function Header13({
           </div>
         </div>
         {/* Start Search Dropdown  */}
-        <SearchDropdownCommon variant="production" />
+        <SearchDropdownCommon variant={searchVariant} />
         {/* End Search Dropdown  */}
       </div>
     </header>

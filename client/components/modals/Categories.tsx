@@ -1,10 +1,12 @@
 "use client";
 
+import CategorySidebarProduction from "@/components/modals/CategorySidebarProduction";
 import { useManagedModalPanel } from "@/hooks/useManagedModalPanel";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { AuthAccessBox } from "@/components/auth/storefront-auth-entry";
+import { useStorefrontNavVariant } from "@/providers/storefront-nav-variant-provider";
 import {
   categorySidebarData,
   sidebarQuickLinks,
@@ -14,6 +16,14 @@ import {
 import { getStackedModalZIndex } from "@/lib/modalStack";
 
 export default function Categories() {
+  const navVariant = useStorefrontNavVariant();
+  if (navVariant === "production") {
+    return <CategorySidebarProduction />;
+  }
+  return <CategoriesDemoSidebar />;
+}
+
+function CategoriesDemoSidebar() {
   const { activeBsModal, isAnimatedOpen, close } =
     useManagedModalPanel("categorySidebar");
   const defaultCategoryId = categorySidebarData[0]?.id ?? "";
