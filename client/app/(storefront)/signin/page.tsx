@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 const site = getStorefrontSiteConfig();
 
 export const metadata: Metadata = {
-  title: `Sign In | ${site.name}`,
+  title: `Sign In | ${site.seo.title}`,
   description: `Sign in to your ${site.name} account.`,
 };
 

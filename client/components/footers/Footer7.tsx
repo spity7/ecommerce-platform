@@ -1,11 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
-import { footerData, footerDataStores, socialLinks } from "../../data/footer";
+import { socialLinks } from "../../data/footer";
 import FooterNewsletterForm from "./FooterNewsletterForm";
 import {
   getSiteChromeBranding,
   type SiteChromeBranding,
 } from "@/lib/site-branding";
+import { getStorefrontFooterWidgets } from "@/lib/storefront-footer-nav";
+import { getStorefrontSiteConfig } from "@/lib/site";
 
 type Footer7Props = {
   branding?: SiteChromeBranding;
@@ -13,6 +15,10 @@ type Footer7Props = {
 
 export default function Footer7({ branding }: Footer7Props) {
   const brand = branding ?? getSiteChromeBranding();
+  const site = getStorefrontSiteConfig();
+  const footerWidgets = getStorefrontFooterWidgets(site);
+  const siteUrl = site.url.replace(/\/$/, "");
+
   return (
     <>
       {/* Start Component Area */}
@@ -28,9 +34,9 @@ export default function Footer7({ branding }: Footer7Props) {
                         <i className="fa-light fa-truck-fast" />
                       </div>
                       <div className="rbt-inf-box-content align-items-start">
-                        <h6 className="rbt-inf-box-title">Free Shipping</h6>
+                        <h6 className="rbt-inf-box-title">Online catalog</h6>
                         <p className="rbt-inf-box-desc">
-                          From all orders over $100
+                          Shop the latest from {site.name}
                         </p>
                       </div>
                     </div>
@@ -42,10 +48,10 @@ export default function Footer7({ branding }: Footer7Props) {
                       </div>
                       <div className="rbt-inf-box-content align-items-start">
                         <h6 className="rbt-inf-box-title">
-                          Return &amp; Refund
+                          Returns &amp; refunds
                         </h6>
                         <p className="rbt-inf-box-desc">
-                          Return money within 30 days
+                          See our return policy for details
                         </p>
                       </div>
                     </div>
@@ -56,8 +62,10 @@ export default function Footer7({ branding }: Footer7Props) {
                         <i className="fa-light fa-headset" />
                       </div>
                       <div className="rbt-inf-box-content align-items-start">
-                        <h6 className="rbt-inf-box-title">Quality Support</h6>
-                        <p className="rbt-inf-box-desc">24/7 online feedback</p>
+                        <h6 className="rbt-inf-box-title">Support</h6>
+                        <p className="rbt-inf-box-desc">
+                          Contact us by phone or email
+                        </p>
                       </div>
                     </div>
                   </li>
@@ -67,10 +75,8 @@ export default function Footer7({ branding }: Footer7Props) {
                         <i className="fa-light fa-ticket" />
                       </div>
                       <div className="rbt-inf-box-content align-items-start">
-                        <h6 className="rbt-inf-box-title">Gift Voucher</h6>
-                        <p className="rbt-inf-box-desc">
-                          20% off when you shop online
-                        </p>
+                        <h6 className="rbt-inf-box-title">{site.tagline}</h6>
+                        <p className="rbt-inf-box-desc">{site.description}</p>
                       </div>
                     </div>
                   </li>
@@ -86,16 +92,16 @@ export default function Footer7({ branding }: Footer7Props) {
         <div className="rbt-footer-top pt--48">
           <div className="container">
             <div className="row justify-content-between row--12 mt_dec--24">
-              {footerData.map((widget, index) => (
+              {footerWidgets.map((widget) => (
                 <div
-                  key={index}
+                  key={widget.title}
                   className="col-lg-2 col-md-6 col-sm-6 col-12 mt--24"
                 >
                   <div className="footer-widget rbt-link-hover">
                     <h5 className="ft-title">{widget.title}</h5>
                     <ul className="ft-link">
-                      {widget.items.map((item, i) => (
-                        <li key={i}>
+                      {widget.items.map((item) => (
+                        <li key={item.href + item.label}>
                           <Link href={item.href}>{item.label}</Link>
                         </li>
                       ))}
@@ -103,56 +109,12 @@ export default function Footer7({ branding }: Footer7Props) {
                   </div>
                 </div>
               ))}
-              <div className="col-lg-2 col-md-6 col-sm-6 col-12 mt--24">
-                <div className="footer-widget rbt-link-hover">
-                  <h5 className="ft-title">{footerDataStores.title}</h5>
-                  <ul className="ft-link">
-                    {footerDataStores.items.map((item, i) => (
-                      <li key={i}>
-                        <Link href={item.href}>{item.label}</Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
               <div className="col-xl-4 col-lg-5 col-md-12 col-sm-12 col-12 mt--24">
                 <div className="footer-widget">
-                  <h5 className="ft-title">Download App on Mobile:</h5>
+                  <h5 className="ft-title">Stay in touch</h5>
                   <ul className="ft-link">
                     <li>
-                      <p>15% discount on your first purchase</p>
-                    </li>
-                  </ul>
-                  <div className="rbt-app-store-area mt--24">
-                    <ul className="rbt-app-store-list has-larger-img">
-                      <li>
-                        <a href="#">
-                          <Image
-                            alt="App Store"
-                            src="/assets/images/footer/play-store-logo.webp"
-                            width={271}
-                            height={80}
-                          />
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <Image
-                            alt="App Store"
-                            src="/assets/images/footer/apple-store-logo.webp"
-                            width={249}
-                            height={80}
-                          />
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div className="footer-widget mt--24">
-                  <h5 className="ft-title">Subscribe our newsletter</h5>
-                  <ul className="ft-link">
-                    <li>
-                      <p>Subscribe and get discount 20% Off</p>
+                      <p>Updates and offers from {site.name}</p>
                     </li>
                   </ul>
                   <FooterNewsletterForm />
@@ -290,15 +252,19 @@ export default function Footer7({ branding }: Footer7Props) {
               <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-12 col-12 mt--24">
                 <p className="rbt-link-hover text-center text-lg-start">
                   Copyright {new Date().getFullYear()} ®
-                  <a
-                    className="rbt-text-semi-bold mr--4"
-                    href="https://rainbowthemes.net/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {brand.siteName}
-                  </a>
-                  Nextjs Template.
+                  {siteUrl ? (
+                    <a
+                      className="rbt-text-semi-bold ml--4"
+                      href={siteUrl}
+                      rel="noopener noreferrer"
+                    >
+                      {brand.siteName}
+                    </a>
+                  ) : (
+                    <span className="rbt-text-semi-bold ml--4">
+                      {brand.siteName}
+                    </span>
+                  )}
                 </p>
               </div>
               <div className="col-xxl-4 col-xl-4 col-lg-5 col-md-12 col-12 mt--24">

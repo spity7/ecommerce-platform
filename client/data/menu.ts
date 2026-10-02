@@ -637,7 +637,7 @@ export const innerPageMenuColumns: import("@/types").MenuSection[] = [
       { href: "/team-page-two", label: "Team Two" },
       { href: "/team-page-three", label: "Team Three" },
       { href: "/team-page-four", label: "Team Four" },
-      { href: "/privacy-policy", label: "Privacy Policy" },
+      { href: "/privacy-policy-style-1", label: "Privacy Policy" },
       { href: "/error-404", label: "Error 404" },
       { href: "/error-maintanance", label: "Maintanace" },
       { href: "/portfolio-default", label: "Portfolio Default" },

@@ -14,6 +14,15 @@ import {
 const PLACEHOLDER_BRAND_IMAGE =
   "/assets/images/sidebar/catagory-brand/catagory-brand-img-01.webp";
 
+/** Maps shop sidebar brand tile classes to avatar wrapper modifiers. */
+export function resolveShopBrandAvatarClass(tileClassName: string): string {
+  const base = "rbt-shop-brand-avatar";
+  if (tileClassName.includes("success")) {
+    return `${base} rbt-shop-brand-avatar--muted`;
+  }
+  return base;
+}
+
 export function mapStorefrontCategoriesToFilterOptions(
   categories: StorefrontCategoryItem[]
 ): ShopCategoryFilterOption[] {
