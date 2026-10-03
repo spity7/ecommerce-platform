@@ -9,11 +9,11 @@ import { Suspense } from "react";
 const site = getStorefrontSiteConfig();
 
 export const metadata: Metadata = {
-  title: `Checkout Thank You | ${site.name}`,
-  description: `Your ${site.name} order confirmation.`,
+  title: `Checkout Thank You (demo) | ${site.name}`,
+  description: `Demo order confirmation layout for ${site.name}.`,
 };
 
-export default function page() {
+export default function CheckoutThankYouStyleOnePage() {
   const showRecommendations = !site.features.customerAuth;
 
   return (

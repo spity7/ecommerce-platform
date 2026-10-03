@@ -2,7 +2,6 @@ import Breadcrumb from "@/components/products/Breadcrumb";
 import Categories from "@/components/products/Categories";
 import ShopDefault from "@/components/products/ShopDefault";
 import ShopProductionBanner from "@/components/products/ShopProductionBanner";
-import { StorefrontChrome } from "@/components/site/StorefrontChrome";
 import { parseShopCatalogQuery } from "@/lib/shop-query";
 import {
   loadShopCatalogFiltersForPage,
@@ -46,7 +45,7 @@ export default async function ShopPage({
   const showBrandFilter = site.features.brands !== false;
 
   return (
-    <StorefrontChrome>
+    <>
       <Breadcrumb title="Shop" />
       <ShopProductionBanner />
       <Categories productionStrip />
@@ -67,6 +66,6 @@ export default async function ShopPage({
         productsLoadError={productsLoadError}
         showBrandFilter={showBrandFilter}
       />
-    </StorefrontChrome>
+    </>
   );
 }

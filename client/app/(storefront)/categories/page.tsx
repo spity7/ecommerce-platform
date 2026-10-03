@@ -1,6 +1,5 @@
 import { StorefrontCategoryGrid } from "@/components/catalog/StorefrontCategoryGrid";
 import Breadcrumb from "@/components/products/Breadcrumb";
-import { StorefrontChrome } from "@/components/site/StorefrontChrome";
 import { loadStorefrontCategories } from "@/lib/catalog";
 import { getStorefrontSiteConfig } from "@/lib/site";
 import type { Metadata } from "next";
@@ -16,7 +15,7 @@ export default async function CategoriesPage() {
   const categories = await loadStorefrontCategories();
 
   return (
-    <StorefrontChrome>
+    <>
       <Breadcrumb title="Categories" />
       <div className="rbt-component-area rbt-categories-area rbt-categories-area--large-circles rbt-section-gapBottom rbt-bg-color-white">
         <div className="container">
@@ -32,6 +31,6 @@ export default async function CategoriesPage() {
           <StorefrontCategoryGrid categories={categories} showProductCount />
         </div>
       </div>
-    </StorefrontChrome>
+    </>
   );
 }

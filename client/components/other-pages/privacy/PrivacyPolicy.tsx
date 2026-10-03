@@ -2,8 +2,11 @@ import {
   SiteContactEmailLink,
   SiteContactPhoneLink,
 } from "@/components/site/SiteContactLinks";
+import { getStorefrontSiteConfig } from "@/lib/site";
 
 export default function PrivacyPolicy() {
+  const siteName = getStorefrontSiteConfig().name;
+
   return (
     <div className="rbt-privacy-area rbt-bg-color-gray-light rbt-section-gap">
       <div className="container">
@@ -11,9 +14,9 @@ export default function PrivacyPolicy() {
           <div className="col-lg-8">
             <div className="rbt-article-content-wrapper">
               <div className="content">
-                <h3>Welcome to Beauty Station Privacy Policy</h3>
+                <h3>Welcome to {siteName} Privacy Policy</h3>
                 <p>
-                  Your privacy is very important to us at Beauty Station. This
+                  Your privacy is very important to us at {siteName}. This
                   Privacy Policy explains how we collect, use, disclose, and
                   protect your personal information when you visit our website,
                   make purchases, or use our services. By accessing our website
@@ -116,7 +119,7 @@ export default function PrivacyPolicy() {
                 </p>
                 <h5>5. Your Rights and Choices</h5>
                 <p>
-                  As a user of Beauty Station, you have the following rights
+                  As a user of {siteName}, you have the following rights
                   regarding your personal information:
                 </p>
                 <ul>
@@ -144,7 +147,7 @@ export default function PrivacyPolicy() {
                 </ul>
                 <h5>6. Children’s Privacy</h5>
                 <p>
-                  Beauty Station does not knowingly collect or solicit personal
+                  {siteName} does not knowingly collect or solicit personal
                   information from anyone under the age of 13. If we learn that
                   we have inadvertently collected personal information from a
                   child under the age of 13, we will delete such information as

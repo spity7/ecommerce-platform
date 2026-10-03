@@ -1,4 +1,4 @@
-import ContactMap from "@/components/other-pages/contact/ContactMap";
+import ContactMapProduction from "@/components/other-pages/contact/ContactMapProduction";
 import ContactProduction from "@/components/other-pages/contact/ContactProduction";
 import Breadcrumb from "@/components/products/Breadcrumb";
 import { getStorefrontSiteConfig } from "@/lib/site";
@@ -16,7 +16,7 @@ export default function ContactPage() {
     <>
       <Breadcrumb title="Contact" />
       <ContactProduction />
-      <ContactMap />
+      <ContactMapProduction />
     </>
   );
 }

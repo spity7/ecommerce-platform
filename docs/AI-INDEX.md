@@ -41,8 +41,8 @@ ecommerce-platform/
 | Document                                                                         | Purpose                                                   | Last reviewed |
 | -------------------------------------------------------------------------------- | --------------------------------------------------------- | ------------- |
 | [ARCHITECTURE.md](ARCHITECTURE.md)                                               | Monorepo layout, multi-site, OpenAPI/Orval, CI, new sites | 2026-10-01    |
-| [ROUTES.md](ROUTES.md)                                                           | HTTP API + admin/storefront route inventory               | 2026-10-02    |
-| [CONVENTIONS.md](CONVENTIONS.md)                                                 | Naming, UI stacks, patterns per workspace                 | 2026-10-02    |
+| [ROUTES.md](ROUTES.md)                                                           | HTTP API + admin/storefront route inventory               | 2026-10-03    |
+| [CONVENTIONS.md](CONVENTIONS.md)                                                 | Naming, UI stacks, patterns per workspace                 | 2026-10-03    |
 | [../admin/README.md](../admin/README.md)                                         | Admin workspace scope + API integration                   | 2026-09-21    |
 | [site-registry.json](site-registry.json)                                         | Deployed sites metadata (DB, GCS, URLs, features)         | 2026-09-21    |
 | [../AGENTS.md](../AGENTS.md)                                                     | Cross-tool agent entry                                    | 2026-08-24    |

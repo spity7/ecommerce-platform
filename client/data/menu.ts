@@ -583,7 +583,7 @@ export const featureMenuColumns: import("@/types").MenuSection[] = [
       { href: "/checkout-delivery-step-two", label: "Checkout Delivery Info" },
       { href: "/checkout-payment", label: "Checkout Payment" },
       { href: "/checkout-shipping", label: "Checkout Shipping" },
-      { href: "/checkout-thankyou", label: "Thank You" },
+      { href: "/checkout-thankyou-style-1", label: "Thank You" },
       { href: "/my-order-history", label: "Order History" },
       { href: "/my-reviews", label: "My Reviews" },
       {
@@ -708,7 +708,7 @@ export const innerPageMenuColumns: import("@/types").MenuSection[] = [
       { href: "/checkout-delivery-step-two", label: "Checkout Delivery Info" },
       { href: "/checkout-payment", label: "Checkout Payment" },
       { href: "/checkout-shipping", label: "Checkout Shipping" },
-      { href: "/checkout-thankyou", label: "Thank You" },
+      { href: "/checkout-thankyou-style-1", label: "Thank You" },
       { href: "/categories-list", label: "Categories List" },
       { href: "/offer-list-page", label: "Offer List" },
     ],

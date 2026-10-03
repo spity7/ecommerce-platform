@@ -3,7 +3,6 @@ import BreadCrumb from "@/components/product-details/BreadCrumb";
 import Description4 from "@/components/product-details/descriptions/Description4";
 import DetailsCosmetic from "@/components/product-details/details/DetailsCosmetic";
 import SimillerProducts4 from "@/components/product-details/others/SimillerProducts4";
-import { StorefrontChrome } from "@/components/site/StorefrontChrome";
 import { mapProductDtoToStorefront } from "@/lib/mappers/product";
 import { getStorefrontSiteConfig } from "@/lib/site";
 import {
@@ -57,24 +56,22 @@ export async function generateMetadata({
 
 function ProductUnavailable() {
   return (
-    <StorefrontChrome>
-      <div className="rbt-component-area rbt-section-gap">
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-lg-8 text-center">
-              <h1 className="title mb--16">Product unavailable</h1>
-              <p className="description mb--24">
-                This product is no longer available on the storefront. It may be
-                unpublished, archived, or removed from the catalog.
-              </p>
-              <Link className="rbt-btn" href="/shop">
-                Back to shop
-              </Link>
-            </div>
+    <div className="rbt-component-area rbt-section-gap">
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-lg-8 text-center">
+            <h1 className="title mb--16">Product unavailable</h1>
+            <p className="description mb--24">
+              This product is no longer available on the storefront. It may be
+              unpublished, archived, or removed from the catalog.
+            </p>
+            <Link className="rbt-btn" href="/shop">
+              Back to shop
+            </Link>
           </div>
         </div>
       </div>
-    </StorefrontChrome>
+    </div>
   );
 }
 
@@ -128,7 +125,7 @@ export default async function ProductPage({ params }: PageProps) {
   }
 
   return (
-    <StorefrontChrome>
+    <>
       <BreadCrumb product={product} />
       <DetailsCosmetic product={product} />
       <Description4
@@ -139,6 +136,6 @@ export default async function ProductPage({ params }: PageProps) {
       />
       <SimillerProducts4 />
       <BottomStickyProduct />
-    </StorefrontChrome>
+    </>
   );
 }

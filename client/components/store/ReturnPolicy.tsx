@@ -2,8 +2,11 @@ import {
   SiteContactEmailLink,
   SiteContactPhoneLink,
 } from "@/components/site/SiteContactLinks";
+import { getStorefrontSiteConfig } from "@/lib/site";
 
 export default function ReturnPolicy() {
+  const siteName = getStorefrontSiteConfig().name;
+
   return (
     <div className="rbt-privacy-area rbt-bg-color-gray-light rbt-section-gap">
       <div className="container">
@@ -11,9 +14,9 @@ export default function ReturnPolicy() {
           <div className="col-lg-8">
             <div className="rbt-article-content-wrapper">
               <div className="content">
-                <h2>Welcome to Beauty Station Return Policy</h2>
+                <h2>Welcome to {siteName} Return Policy</h2>
                 <p>
-                  At Beauty Station, we want you to be completely satisfied with
+                  At {siteName}, we want you to be completely satisfied with
                   your purchase. If you&apos;re not happy with your order, you
                   can return it within 30 days for a full refund or exchange.
                 </p>
@@ -35,8 +38,7 @@ export default function ReturnPolicy() {
                 </p>
                 <ol>
                   <li>
-                    Contact our customer service at{" "}
-                    <SiteContactEmailLink />
+                    Contact our customer service at <SiteContactEmailLink />
                     to initiate the return.
                   </li>
                   <li>

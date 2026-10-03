@@ -59,6 +59,8 @@ export type SiteConfig = {
   contact: {
     email: string;
     phone: string;
+    /** Google Maps embed `src` URL for the contact page; omit to hide the map. */
+    mapEmbedUrl?: string;
   };
   branding: SiteBranding;
   seo: {
