@@ -1,4 +1,8 @@
 import { ModalName } from "@/types/modal";
+import {
+  isStorefrontWishlistEnabled,
+  type StorefrontNavVariant,
+} from "@/lib/storefront-nav";
 
 export type { ToolbarItem } from "@/types/misc";
 
@@ -35,3 +39,17 @@ export const toolbarItems = [
     modalTarget: ModalName.signinModal,
   },
 ];
+
+export function getToolbarItemsForNavVariant(
+  variant: StorefrontNavVariant
+): typeof toolbarItems {
+  return toolbarItems.filter((item) => {
+    if (variant === "production" && item.id === "compare") {
+      return false;
+    }
+    if (item.id === "wishlist" && !isStorefrontWishlistEnabled()) {
+      return false;
+    }
+    return true;
+  });
+}

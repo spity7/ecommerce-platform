@@ -1,4 +1,3 @@
-import Breadcrumb from "@/components/products/Breadcrumb";
 import Categories from "@/components/products/Categories";
 import ShopDefault from "@/components/products/ShopDefault";
 import ShopProductionBanner from "@/components/products/ShopProductionBanner";
@@ -46,7 +45,6 @@ export default async function ShopPage({
 
   return (
     <>
-      <Breadcrumb title="Shop" />
       <ShopProductionBanner />
       <Categories productionStrip />
       <div className="rbt-component-area ptb--32 ptb_sm--12">

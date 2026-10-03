@@ -1,8 +1,50 @@
 import type { SiteConfig, SiteFeatures } from "@platform/shared";
+import { AUTH_PUBLIC_PATHS } from "@/lib/auth-public-paths";
+import { STOREFRONT_ACCOUNT_PATHS } from "@/lib/admin-app-link";
 import { CATEGORIES_PAGE_PATH } from "@/lib/category-paths";
 import { getStorefrontSiteConfig } from "@/lib/site";
 
 export type StorefrontNavVariant = "demo" | "production";
+
+/** Category rows in header off-canvas + mobile “shop by category” (same fetch cap). */
+export const STOREFRONT_HEADER_CATEGORY_PREVIEW_LIMIT = 50;
+
+/**
+ * Paths that use production header chrome and production mobile menu / category drawer.
+ * Keep aligned with `app/(storefront)/`, `/`, and account layout routes in docs/ROUTES.md.
+ */
+const STOREFRONT_PRODUCTION_NAV_PATHS: readonly string[] = [
+  "/",
+  "/shop",
+  CATEGORIES_PAGE_PATH,
+  "/product",
+  "/contact",
+  "/checkout",
+  "/checkout-thankyou",
+  "/privacy-policy",
+  "/terms-policy",
+  "/return-policy",
+  ...AUTH_PUBLIC_PATHS,
+  ...STOREFRONT_ACCOUNT_PATHS,
+];
+
+function matchesProductionNavPath(pathname: string, path: string): boolean {
+  return pathname === path || pathname.startsWith(`${path}/`);
+}
+
+export function resolveStorefrontNavVariant(
+  pathname: string
+): StorefrontNavVariant {
+  const normalized = pathname.split("?")[0]?.split("#")[0] || "/";
+  if (
+    STOREFRONT_PRODUCTION_NAV_PATHS.some((path) =>
+      matchesProductionNavPath(normalized, path)
+    )
+  ) {
+    return "production";
+  }
+  return "demo";
+}
 
 export type StorefrontNavItem = {
   label: string;

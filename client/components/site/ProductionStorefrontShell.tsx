@@ -1,5 +1,4 @@
 import Header13 from "@/components/headers/Header13";
-import { StorefrontNavVariantProvider } from "@/providers/storefront-nav-variant-provider";
 import type { ComponentProps } from "react";
 
 export type ProductionHeader13Props = Omit<
@@ -7,17 +6,13 @@ export type ProductionHeader13Props = Omit<
   "navVariant"
 >;
 
-/** Keeps mobile menu and Header13 on the same production nav mode. */
+/** Layout wrapper for production home chrome; nav variant for modals comes from `StorefrontNavVariantRoot`. */
 export function ProductionStorefrontShell({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <StorefrontNavVariantProvider variant="production">
-      {children}
-    </StorefrontNavVariantProvider>
-  );
+  return children;
 }
 
 export function ProductionHeader13(props: ProductionHeader13Props) {

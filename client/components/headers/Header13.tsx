@@ -242,7 +242,7 @@ export default function Header13({
           <div className="mainbar-row rbt-mainbar-row-md-height @@navigationEnd align-items-center">
             <div className="header-left">
               <div className="rbt-header-content d-flex">
-                <div className="header-info p-0 d-none d-xxl-flex mr--24">
+                <div className="header-info p-0 d-none d-xl-flex mr--24">
                   <CategorySidebarToggler />
                 </div>
                 <div className="header-info d-xl-block d-none">

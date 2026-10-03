@@ -6,24 +6,34 @@ import { usePathname } from "next/navigation";
 import { CATEGORIES_PAGE_PATH } from "@/lib/category-paths";
 import { loadPublishedCategories } from "@/lib/catalog";
 import type { StorefrontCategoryItem } from "@/lib/mappers/catalog";
-import { getStorefrontProductionNavItems } from "@/lib/storefront-nav";
+import {
+  getStorefrontProductionNavItems,
+  STOREFRONT_HEADER_CATEGORY_PREVIEW_LIMIT,
+} from "@/lib/storefront-nav";
 import { isPathActive } from "@/lib/nav";
 
-const CATEGORY_PREVIEW_LIMIT = 8;
 const CATEGORY_MENU_ID = "production-shop-by-category";
 
-export default function MobileMenuProduction() {
+type MobileMenuProductionProps = {
+  onNavigate?: () => void;
+};
+
+export default function MobileMenuProduction({
+  onNavigate,
+}: MobileMenuProductionProps) {
   const pathname = usePathname();
   const [categories, setCategories] = useState<StorefrontCategoryItem[]>([]);
   const [openMenuIds, setOpenMenuIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     let cancelled = false;
-    void loadPublishedCategories(CATEGORY_PREVIEW_LIMIT).then((items) => {
-      if (!cancelled) {
-        setCategories(items);
+    void loadPublishedCategories(STOREFRONT_HEADER_CATEGORY_PREVIEW_LIMIT).then(
+      (items) => {
+        if (!cancelled) {
+          setCategories(items);
+        }
       }
-    });
+    );
     return () => {
       cancelled = true;
     };
@@ -55,7 +65,11 @@ export default function MobileMenuProduction() {
           const active = isPathActive(pathname, item.href);
           return (
             <li key={item.href}>
-              <Link href={item.href} className={active ? "active" : undefined}>
+              <Link
+                href={item.href}
+                className={active ? "active" : undefined}
+                onClick={onNavigate}
+              >
                 {item.label}
               </Link>
             </li>
@@ -78,11 +92,15 @@ export default function MobileMenuProduction() {
             <ul className={`submenu ${categoriesOpen ? "active" : ""}`}>
               {categories.map((category) => (
                 <li key={category.id}>
-                  <Link href={category.href}>{category.name}</Link>
+                  <Link href={category.href} onClick={onNavigate}>
+                    {category.name}
+                  </Link>
                 </li>
               ))}
               <li>
-                <Link href={CATEGORIES_PAGE_PATH}>View all categories</Link>
+                <Link href={CATEGORIES_PAGE_PATH} onClick={onNavigate}>
+                  View all categories
+                </Link>
               </li>
             </ul>
           </li>
@@ -95,6 +113,7 @@ export default function MobileMenuProduction() {
                   ? "active"
                   : undefined
               }
+              onClick={onNavigate}
             >
               Categories
             </Link>

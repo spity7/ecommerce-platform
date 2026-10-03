@@ -4,6 +4,7 @@ import type { SiteConfig } from "@platform/shared";
 import {
   getStorefrontProductionNavItems,
   isStorefrontWishlistEnabled,
+  resolveStorefrontNavVariant,
 } from "../lib/storefront-nav.js";
 
 const baseSite = {
@@ -54,6 +55,26 @@ describe("storefront-nav", () => {
       features: { ...baseSite.features, blog: true },
     }).map((i) => i.href);
     assert.ok(withBlog.includes("/blog-default"));
+  });
+
+  it("resolves production nav variant for storefront routes only", () => {
+    assert.equal(resolveStorefrontNavVariant("/"), "production");
+    assert.equal(resolveStorefrontNavVariant("/shop"), "production");
+    assert.equal(resolveStorefrontNavVariant("/product/foo"), "production");
+    assert.equal(resolveStorefrontNavVariant("/contact"), "production");
+    assert.equal(
+      resolveStorefrontNavVariant("/checkout-thankyou?orderId=1"),
+      "production"
+    );
+    assert.equal(
+      resolveStorefrontNavVariant("/checkout-thankyou-style-1"),
+      "demo"
+    );
+    assert.equal(
+      resolveStorefrontNavVariant("/home-cosmetic-beauty-two"),
+      "demo"
+    );
+    assert.equal(resolveStorefrontNavVariant("/contact-style-1"), "demo");
   });
 
   it("requires customerAuth and wishlist for wishlist chrome", () => {

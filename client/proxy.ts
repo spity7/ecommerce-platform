@@ -125,7 +125,7 @@ export const config = {
     "/checkout-delivery-step-two",
     "/checkout-payment",
     "/checkout-shipping",
-    "/checkout-thankyou",
+    "/checkout-thankyou-style-1",
     "/multi-step-checkout",
     "/account-info",
     "/account-notifications",

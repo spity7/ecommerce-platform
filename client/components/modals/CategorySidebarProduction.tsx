@@ -8,7 +8,10 @@ import { CATEGORIES_PAGE_PATH } from "@/lib/category-paths";
 import { loadPublishedCategories } from "@/lib/catalog";
 import type { StorefrontCategoryItem } from "@/lib/mappers/catalog";
 import { getSiteContactInfo } from "@/lib/site-branding";
-import { getStorefrontProductionNavItems } from "@/lib/storefront-nav";
+import {
+  getStorefrontProductionNavItems,
+  STOREFRONT_HEADER_CATEGORY_PREVIEW_LIMIT,
+} from "@/lib/storefront-nav";
 import { getStackedModalZIndex } from "@/lib/modalStack";
 
 export default function CategorySidebarProduction() {
@@ -27,11 +30,13 @@ export default function CategorySidebarProduction() {
 
   useEffect(() => {
     let cancelled = false;
-    void loadPublishedCategories(100).then((items) => {
-      if (!cancelled) {
-        setCategories(items);
+    void loadPublishedCategories(STOREFRONT_HEADER_CATEGORY_PREVIEW_LIMIT).then(
+      (items) => {
+        if (!cancelled) {
+          setCategories(items);
+        }
       }
-    });
+    );
     return () => {
       cancelled = true;
     };

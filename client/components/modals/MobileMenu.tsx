@@ -199,7 +199,7 @@ export default function MobileMenu() {
           </div>
           {navVariant === "production" ? (
             <div className="px--20 pb--16">
-              <MobileMenuProduction />
+              <MobileMenuProduction onNavigate={closeMenu} />
             </div>
           ) : (
             <div className="rbt-tab rbt-round-shape-tab">

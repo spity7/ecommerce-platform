@@ -19,7 +19,7 @@ export const STOREFRONT_DEMO_CHECKOUT_PATHS = [
   "/checkout-delivery-step-two",
   "/checkout-payment",
   "/checkout-shipping",
-  "/checkout-thankyou",
+  "/checkout-thankyou-style-1",
   "/multi-step-checkout",
 ] as const;
 

@@ -8,6 +8,7 @@ import { getSiteFaviconMetadataUrl } from "@/lib/site-favicon";
 import LayoutModals from "@/components/common/other-components/LayoutModals";
 import Toolbar from "@/components/modals/Toolbar";
 import { AppProviders } from "@/providers/app-providers";
+import { StorefrontNavVariantRoot } from "@/providers/storefront-nav-variant-root";
 import type { Metadata } from "next";
 
 import "../public/assets/scss/main.scss";
@@ -77,9 +78,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <BootstrapJsLoader />
         <LayoutEffectsLoader />
         <AppProviders>
-          <main id="main-content">{children}</main>
-          <Toolbar />
-          <LayoutModals />
+          <StorefrontNavVariantRoot>
+            <main id="main-content">{children}</main>
+            <Toolbar />
+            <LayoutModals />
+          </StorefrontNavVariantRoot>
         </AppProviders>
       </body>
     </html>
